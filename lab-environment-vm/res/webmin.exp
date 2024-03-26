@@ -1,0 +1,15 @@
+#!/usr/bin/expect
+
+spawn "/opt/console/setup.sh"
+expect "Config file directory " {send "\r"}
+expect "Log file directory " {send "\r"}
+expect "Full path to perl (default /usr/bin/perl):" {send "\r"}
+expect "Web server port (default 10000):" {send "\r"}
+expect "Login name (default admin):" {send "admin\r"}
+expect "Login password:" {send "admin\r"}
+expect "Password again:" {send "admin\r"}
+expect "Use SSL (y/n):" {send "y\r"}
+expect "Start Webmin at boot time (y/n):" {send "y\r"}
+expect "Webmin has been installed and started successfully."
+close
+wait

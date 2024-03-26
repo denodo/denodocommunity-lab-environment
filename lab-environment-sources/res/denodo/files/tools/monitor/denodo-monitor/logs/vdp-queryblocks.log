@@ -1,0 +1,14 @@
+
+
+Logging started at: 2021-09-15T12:28:14.644. Denodo Monitor 8.0 update 20210715 started at: 2021-09-15T12:28:05.096. VDP Server 8.0 update 20210715 started at: 2021-09-15T12:17:17.189
+
+SessionId	QueryId	BlockId	EffectiveTime	LeafViews	Comparable	SummariesApplied	StartTime	Duration
+24	105	290099769	148	denodo_training.bv_hr_departments,denodo_training.bv_hr_employees	true	-	2021-09-15T12:36:49.518	199
+24	106	1729768072	122	denodo_training.bv_hr_departments,denodo_training.bv_hr_employees	true	-	2021-09-15T12:37:15.339	163
+24	107	1231263323	188	denodo_training.bv_hr_departments,denodo_training.bv_hr_employees	true	-	2021-09-15T12:38:53.382	256
+24	108	2119250556	114	denodo_training.bv_hr_departments,denodo_training.bv_hr_employees	true	-	2021-09-15T12:39:13.704	160
+24	109	1247686841	154	denodo_training.bv_hr_departments,denodo_training.bv_hr_employees	true	-	2021-09-15T12:39:27.832	203
+24	110	1381256840	77	denodo_training.bv_hr_departments,denodo_training.bv_hr_employees	true	-	2021-09-15T12:39:39.636	110
+24	111	977075989	98	denodo_training.bv_hr_departments,denodo_training.bv_hr_employees	true	-	2021-09-15T12:40:05.047	133
+27	119	488829345	125	denodo_training.bv_hr_departments,denodo_training.bv_hr_employees	true	-	2021-09-15T12:42:07.318	299
+27	120	2006240474	212	denodo_training.bv_hr_departments,denodo_training.bv_hr_employees	true	-	2021-09-15T12:42:13.436	265

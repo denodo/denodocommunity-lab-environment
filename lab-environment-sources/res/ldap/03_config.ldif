@@ -1,0 +1,581 @@
+version: 1
+
+dn: cn=Daniel Cox,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Daniel Cox
+sn: Cox
+uid: dcox19
+distinguishedName: CN=Daniel Cox,OU=Users,dc=denodo,dc=loc
+givenName: Daniel
+mail: dcox19@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9N2xUYnIvWHBoZURicnZLUHR2NVd6TURtRjB0WHJmUm5sYmRHNnc9P
+ Q==
+
+dn: cn=Computer3,OU=Computers,dc=denodo,dc=loc
+objectClass: computer
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: user
+cn: Computer3
+sn: Computer3
+description: Development Server
+protocolInformation: HTTP
+serialNumber: 3
+supportedAlgorithms:: QUxM
+
+dn: cn=John Smith,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: John Smith
+sn: Smith
+uid: jsmith
+distinguishedName: CN=John Smith,OU=Users,dc=denodo,dc=loc
+givenName: John
+mail: jsmith@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9VWhLdTlpR3Z2RGxPZUYyWHE2VEwrQ1pkTnozUmVWV0xqcmgwL0E9P
+ Q==
+
+dn: cn=Computer1,OU=Computers,dc=denodo,dc=loc
+objectClass: computer
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: user
+cn: Computer1
+sn: Computer1
+description: Personal Computer
+protocolInformation: HTTP
+serialNumber: 1
+supportedAlgorithms:: QUxM
+
+dn: cn=Administrator,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Administrator
+sn: Administrator
+uid: administrator
+givenName: Administrator
+mail: denodo@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9MXVaYkh0R0tldjFxMThKWUdrY2FNR0MwcU4rMVFYWUZtbTA2aHc9P
+ Q==
+
+dn: cn=Ryan Peters,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Ryan Peters
+sn: Peters
+uid: rpetersl
+distinguishedName: CN=Ryan Peters,OU=Users,dc=denodo,dc=loc
+givenName: Ryan
+mail: rpetersl@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9Snd4bkhLKzVIOHZEZ2RYakFUUW5GQlVhZE53NmxacFBjM0JLYmc9P
+ Q==
+
+dn: cn=Frances Grant,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Frances Grant
+sn: Grant
+uid: fgrantf
+distinguishedName: CN=Frances Grant,OU=Users,dc=denodo,dc=loc
+givenName: Frances
+mail: fgrantf@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9MytzK1BnV1k4cWtod0JSaXdGNmkrWWs1WFNhREZlOW9YZDU5NVE9P
+ Q==
+
+dn: CN=Purchasing,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: Purchasing
+description: Department responsible for procuring the goods, raw materials & services required to operate the organization effectively 
+member: cn=Daniel Burns,OU=Users,dc=denodo,dc=loc
+member: cn=Frances Grant,OU=Users,dc=denodo,dc=loc
+
+dn: cn=John Hernandez,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: John Hernandez
+sn: Hernandez
+uid: jhernandez24
+distinguishedName: CN=John Hernandez,OU=Users,dc=denodo,dc=loc
+givenName: John
+mail: jhernandez24@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9RkFTM0pub1lHaURTWGs1NUNpUGFIRzdZUVd4Z2g2bnRQekJ0aEE9P
+ Q==
+
+dn: cn=Richard Cummings,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Richard Cummings
+sn: Cummings
+uid: rcummings
+distinguishedName: CN=Richard Cummings,OU=Users,dc=denodo,dc=loc
+givenName: Richard
+mail: rcummings@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9ZmdTYnpFN2ZIa0J0MDV5K0FMS2txM3VXMmtqSVpnVFpoMjNLN3c9P
+ Q==
+
+dn: cn=Chris Ward,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Chris Ward
+sn: Ward
+uid: cward3
+distinguishedName: CN=Chris Ward,OU=Users,dc=denodo,dc=loc
+givenName: Chris
+mail: cward3@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9N1dnVkJJN0ZFTWpPdmJrTURMWk9zOTNuOU1sUDlUYnZFNTk3Znc9P
+ Q==
+
+dn: cn=Benjamin Peters,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Benjamin Peters
+sn: Peters
+uid: bpeters8
+distinguishedName: CN=Benjamin Peters,OU=Users,dc=denodo,dc=loc
+givenName: Benjamin
+mail: bpeters8@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9aTY0SGxSckZnNWRPYy8xdlNxWmU4RHNVMXNsZXF4TmJqY29oK2c9P
+ Q==
+
+dn: CN=Sales,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: Sales
+description: Department responsible for selling products and services 
+member: cn=Daniel Cox,OU=Users,dc=denodo,dc=loc
+member: cn=Virginia Hicks,OU=Users,dc=denodo,dc=loc
+
+dn: cn=Scott Hunter,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Scott Hunter
+sn: Hunter
+uid: shunterk
+distinguishedName: CN=Scott Hunter,OU=Users,dc=denodo,dc=loc
+givenName: Scott
+mail: shunterk@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9SUFxNmhSbUE3Nm05YnRDL2o5dW9UNG5QUVVZLzNzeHM4ZGZUL2c9P
+ Q==
+
+dn: cn=Melissa Crawford,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Melissa Crawford
+sn: Crawford
+uid: mcrawford9
+distinguishedName: CN=Melissa Crawford,OU=Users,dc=denodo,dc=loc
+givenName: Melissa
+mail: mcrawford9@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9YWRRb2s0OFRwL1kwL3V0WG5BR0lvQnJXL1UvWE1aa3hNM3RQQWc9P
+ Q==
+
+dn: cn=Aaron Stephens,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Aaron Stephens
+sn: Stephens
+uid: astephens2i
+distinguishedName: cn=Aaron Stephens,OU=Users,dc=denodo,dc=loc
+givenName: Aaron
+mail: astephenss2i@DENODO.LOC
+ou: Users
+userPassword:: e1NTSEF9LzBIb2NldENNSGpCVi9RQUVBaS9iNUVhcWxibGdUOGo3UjRVdXc9P
+ Q==
+
+dn: cn=Christopher Collins,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Christopher Collins
+sn: Collins
+uid: ccollins2l
+distinguishedName: CN=Christopher Collins,OU=Users,dc=denodo,dc=loc
+givenName: Christopher
+mail: ccollins2l@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9SnI4QVFBTFBvdG0wRlFYZVNIV1JCb0FESmdoR3VtNklJTjRjOGc9P
+ Q==
+
+dn: cn=Virginia Hicks,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Virginia Hicks
+sn: Hicks
+uid: vhicks1a
+distinguishedName: CN=Virginia Hicks,OU=Users,dc=denodo,dc=loc
+givenName: Virginia
+mail: vhicks1a@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9TkpNSzZjMXFSUUs3ekdPY1JtSVlBMTM5OFhUQk5lWnhHWnUxU1E9P
+ Q==
+
+dn: CN=Human Resources,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: Human Resources
+description: Manages the life cycle of each employee, from recruitment and onboarding to training and termination or retirement
+member: cn=John Smith,OU=Users,dc=denodo,dc=loc
+
+dn: CN=Marketing,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: Marketing
+description: Division that helps to promote our brand, products and services
+member: cn=Debra Webb,OU=Users,dc=denodo,dc=loc
+member: cn=Raymond Burke,OU=Users,dc=denodo,dc=loc
+member: cn=Tammy Cunningham,OU=Users,dc=denodo,dc=loc
+
+dn: CN=Accounting,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: Accounting
+description: Responsible for billings, payroll, cost accounting, the production of financial statements, paying suppliers, and similar activities
+member: cn=Harry Rice,OU=Users,dc=denodo,dc=loc
+member: cn=John Hernandez,OU=Users,dc=denodo,dc=loc
+
+dn: cn=Jean Williamson,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Jean Williamson
+sn: Williamson
+uid: jwilliamson0
+distinguishedName: CN=Jean Williamson,OU=Users,dc=denodo,dc=loc
+givenName: Jean
+mail: jwilliamson0@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9NDZCTkpwUjRPSDhSaXlLZzBuYXl6Y01SN2lEUllrVHExbkhvWmc9P
+ Q==
+
+dn: CN=Shipping,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: Shipping
+description: Responsible for arranging, receiving, recording, and sending shipments of goods
+member: cn=Ryan Peters,OU=Users,dc=denodo,dc=loc
+member: cn=Scott Hunter,OU=Users,dc=denodo,dc=loc
+
+dn: CN=Finance,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: Finance
+description: This department controls the income and expenditure in addition to ensuring effective business running with minimum disruptions
+member: cn=Benjamin Peters,OU=Users,dc=denodo,dc=loc
+member: cn=Melissa Crawford,OU=Users,dc=denodo,dc=loc
+
+dn: cn=Raymond Murray,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Raymond Murray
+sn: Murray
+uid: rmurray2
+distinguishedName: CN=Raymond Murray,OU=Users,dc=denodo,dc=loc
+givenName: Raymond
+mail: rmurray2@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9eEZkMHdvT1EwNmNlamxmNHJBMzZHSUJtei9pYlJ3aThmNVNhSXc9P
+ Q==
+
+dn: cn=Brandon Stevenson,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Brandon Stevenson
+sn: Stevenson
+uid: bpeters8
+distinguishedName: CN=Brandon Stevenson,OU=Users,dc=denodo,dc=loc
+givenName: Brandon
+mail: bstevenson@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9emZYUWd3bFZCdVo4a3B5RVNzeHJjckVlWnJEQ0IxS1YxOFR6NkE9P
+ Q==
+
+dn: cn=Computer5,OU=Computers,dc=denodo,dc=loc
+objectClass: computer
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: user
+cn: Computer5
+sn: Computer5
+description: Staging Server
+protocolInformation: HTTP
+serialNumber: 5
+supportedAlgorithms:: QUxM
+
+dn: cn=Debra Webb,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Debra Webb
+sn: Webb
+uid: dwebb2k
+distinguishedName: CN=Debra Webb,OU=Users,dc=denodo,dc=loc
+givenName: Debra
+mail: dwebb2k@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9a2lVU0QzYm80ajYwcWVlS3lDWEZTd1hCb0xmbjBqcUJTN0pldWc9P
+ Q==
+
+dn: cn=Raymond Burke,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Raymond Burke
+sn: Burke
+uid: rburke2j
+distinguishedName: CN=Raymond Burke,OU=Users,dc=denodo,dc=loc
+givenName: Raymond
+mail: rburke2j@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9d0ZyWXB3aWYxeCtwK3pJSGVPeHBxNFRTeHJKYjNrc01WaDFIM1E9P
+ Q==
+
+dn: CN=IT,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: IT
+description: IT oversees the installation and maintenance of computer network systems within the company
+member: cn=Administrator,OU=Users,dc=denodo,dc=loc
+member: cn=Chris Ward,OU=Users,dc=denodo,dc=loc
+member: cn=Tammy Cunningham,OU=Users,dc=denodo,dc=loc
+
+dn: cn=Albert Anderson,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Albert Anderson
+sn: Anderson
+uid: aanderson2m
+distinguishedName: CN=Albert Anderson,OU=Users,dc=denodo,dc=loc
+givenName: Albert
+mail: aanderson2m@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9MTVuWGU2WVcvT3drTGEwN3BvbVFhQXhhcDZ1Wlg4UnlITzhSeGc9P
+ Q==
+
+dn: cn=Harry Rice,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Harry Rice
+sn: Rice
+uid: hrice23
+distinguishedName: CN=Harry Rice,OU=Users,dc=denodo,dc=loc
+givenName: Harry
+mail: hrice23@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9dDFJcnFhM1BDVTk3c0VCcE9RL0lsalB5a1FkcittOUtMS3J5M3c9P
+ Q==
+
+dn: cn=Tammy Cunningham,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Tammy Cunningham
+sn: Cunningham
+uid: tcunningham4
+distinguishedName: CN=Tammy Cunningham,OU=Users,dc=denodo,dc=loc
+givenName: Tammy
+mail: tcunningham4@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9cVVrdE5uYXJiL2dmY2FRRGJ0TVVTWVc5NGlRNWZxSDNFdE82RXc9P
+ Q==
+
+dn: CN=Data Analyst,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: Data Analyst
+description: Deep analysis of data and then determining the best way to represent it visually to managers and stakeholders
+member: cn=Accounting,OU=groups,dc=denodo,dc=loc
+member: cn=Administration,OU=groups,dc=denodo,dc=loc
+member: cn=Executive,OU=groups,dc=denodo,dc=loc
+member: cn=Finance,OU=groups,dc=denodo,dc=loc
+member: cn=Human Resources,OU=groups,dc=denodo,dc=loc
+member: cn=IT,OU=groups,dc=denodo,dc=loc
+member: cn=Marketing,OU=groups,dc=denodo,dc=loc
+member: cn=Public Relations,OU=groups,dc=denodo,dc=loc
+member: cn=Purchasing,OU=groups,dc=denodo,dc=loc
+member: cn=Sales,OU=groups,dc=denodo,dc=loc
+member: cn=Shipping,OU=groups,dc=denodo,dc=loc
+
+dn: cn=Computer4,OU=Computers,dc=denodo,dc=loc
+objectClass: computer
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: user
+cn: Computer4
+sn: Computer4
+description: Development Server
+protocolInformation: HTTP
+serialNumber: 4
+supportedAlgorithms:: QUxM
+
+dn: cn=Eric Perez,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Eric Perez
+sn: Perez
+uid: eperez1
+distinguishedName: CN=Eric Perez,OU=Users,dc=denodo,dc=loc
+givenName: Eric
+mail: eperez1@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9UktKTkxWYjU3MU55elVGMWN4R0RNamRkSURkaDUwZjJqWmdjRVE9P
+ Q==
+
+dn: CN=Public Relations,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: Public Relations
+description: It supervises and assesses public attitudes, and maintaining mutual relations and understanding between an organization and its public
+member: cn=Albert Anderson,OU=Users,dc=denodo,dc=loc
+member: cn=Christopher Collins,OU=Users,dc=denodo,dc=loc
+
+dn: CN=Executive,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: Executive
+description: This area is the administrative arms of the company. The executive key role is the CEO
+member: cn=Eric Perez,OU=Users,dc=denodo,dc=loc
+member: cn=Jean Williamson,OU=Users,dc=denodo,dc=loc
+member: cn=Raymond Murray,OU=Users,dc=denodo,dc=loc
+
+dn: cn=Daniel Burns,OU=Users,dc=denodo,dc=loc
+objectClass: extensibleObject
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: uidObject
+objectClass: user
+cn: Daniel Burns
+sn: Burns
+uid: dburnse
+distinguishedName: CN=Daniel Burns,OU=Users,dc=denodo,dc=loc
+givenName: Daniel
+mail: dburnse@DENODO.LOC
+ou: Users
+userpassword:: e1NTSEF9WndVVWM4UnBKK3VxQVlvTU0yNXZTZUpxTjdSdS92VldXVFRjYmc9P
+ Q==
+
+dn: CN=Administration,OU=groups,dc=denodo,dc=loc
+objectClass: groupOfNames
+objectClass: top
+cn: Administration
+description: It oversees the day-to-day running of the office, including managing office supplies
+member: cn=Aaron Stephens,OU=Users,dc=denodo,dc=loc
+
+dn: cn=Computer2,OU=Computers,dc=denodo,dc=loc
+objectClass: computer
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: user
+cn: Computer2
+sn: Computer2
+description: Server
+protocolInformation: FTP
+serialNumber: 2
+
+
+

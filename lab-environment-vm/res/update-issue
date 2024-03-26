@@ -1,0 +1,5 @@
+#!/bin/sh
+PREFIX=" IP addresses:"
+IPADDRS=$(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | tr '\n' ' ')
+
+perl -i -p -0777 -e "s/^$PREFIX[^\n]*\n\n//m; s/$/\n$PREFIX $IPADDRS\n/ if length('$IPADDRS')>6" /etc/issue

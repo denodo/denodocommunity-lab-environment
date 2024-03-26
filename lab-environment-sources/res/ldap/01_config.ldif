@@ -1,0 +1,86 @@
+version: 1
+
+dn: cn=denodo,ou=schema
+objectclass: metaSchema
+objectclass: top
+cn: denodo
+m-dependencies: core
+m-dependencies: system
+
+dn: ou=comparators,cn=denodo,ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: comparators
+
+dn: ou=syntaxcheckers,cn=denodo,ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: syntaxcheckers
+
+dn: ou=ditcontentrules,cn=denodo,ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: ditcontentrules
+
+dn: ou=ditstructurerules,cn=denodo,ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: ditstructurerules
+
+dn: ou=matchingruleuse,cn=denodo,ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: matchingruleuse
+
+dn: ou=objectclasses,cn=denodo,ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: objectClasses
+
+dn: ou=matchingrules,cn=denodo,ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: matchingrules
+
+dn: ou=syntaxes,cn=denodo,ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: syntaxes
+
+dn: ou=attributetypes,cn=denodo,ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: attributetypes
+
+dn: ou=nameforms,cn=denodo,ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: nameforms
+
+dn: ou=normalizers,cn=denodo,ou=schema
+objectclass: organizationalUnit
+objectclass: top
+ou: normalizers
+
+dn: m-oid=1.2.840.113556.1.5.9,ou=objectclasses,cn=denodo,ou=schema
+objectclass: metaObjectClass
+objectclass: metaTop
+objectclass: top
+m-oid: 1.2.840.113556.1.5.9
+m-must: cn
+m-name: user
+m-supobjectclass: organizationalPerson
+
+dn: m-oid=1.2.840.113556.1.3.30,ou=objectclasses,cn=denodo,ou=schema
+objectclass: metaObjectClass
+objectclass: metaTop
+objectclass: top
+m-oid: 1.2.840.113556.1.3.30
+m-may: description
+m-may: protocolInformation
+m-may: serialNumber
+m-may: supportedAlgorithms
+m-must: cn
+m-name: computer
+m-supobjectclass: user
+

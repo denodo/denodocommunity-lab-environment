@@ -1,0 +1,22 @@
+version: 1
+
+dn: dc=denodo,dc=loc
+objectclass: domain
+objectclass: top
+dc: denodo
+
+dn: OU=Computers,dc=denodo,dc=loc
+objectClass: organizationalUnit
+objectClass: top
+OU: Computers
+
+dn: OU=Users,dc=denodo,dc=loc
+objectClass: organizationalUnit
+objectClass: top
+OU: Users
+
+dn: OU=groups,dc=denodo,dc=loc
+objectClass: organizationalUnit
+objectClass: top
+OU: groups
+
