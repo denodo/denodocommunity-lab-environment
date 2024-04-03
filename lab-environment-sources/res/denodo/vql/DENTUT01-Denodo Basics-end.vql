@@ -1,0 +1,263 @@
+﻿# Generated with Denodo Platform 9.0.
+
+ENTER SINGLE USER MODE;
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+# 0 ====================================================================
+
+# #######################################
+# DATABASE
+# #######################################
+CREATE OR REPLACE DATABASE tutorial 'Database for Denodo Community Tutorials';
+
+CONNECT DATABASE tutorial;
+
+# #######################################
+# FOLDERS
+# #######################################
+CREATE OR REPLACE FOLDER '/1 - connectivity' ;
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+
+CREATE OR REPLACE FOLDER '/2 - Integration' ;
+
+# #######################################
+# RESOURCES
+# #######################################
+# No vault resources
+# #######################################
+# LISTENERS JMS
+# #######################################
+# No listeners jms
+# #######################################
+# LISTENERS KAFKA
+# #######################################
+# No listeners kafka
+# #######################################
+# DATASOURCES
+# #######################################
+CREATE OR REPLACE DATASOURCE JDBC ds_crm
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
+    DATABASEURI = 'jdbc:mariadb://localhost:3306/crm'
+    USERNAME = 'root'
+    USERPASSWORD = 'admin'
+    CLASSPATH = 'mariadb-2.7'
+    DATABASENAME = 'Generic'
+    DATABASEVERSION = ''
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = ''
+    INITIALSIZE = 1
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE tutorial
+  CHARSET DEFAULT;
+
+# #######################################
+# WRAPPERS
+# #######################################
+CREATE OR REPLACE WRAPPER JDBC bv_crm_address
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_crm
+    CATALOGNAME='crm' 
+    RELATIONNAME='address' 
+    OUTPUTSCHEMA (
+        client_fid = 'client_fid' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='50', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE,
+        street = 'street' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        city = 'city' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        zip = 'zip' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        state = 'state' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        primary_phone = 'primary_phone' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
+    )
+    CONSTRAINT 'client_address' FOREIGN KEY ( 'client_fid' ) 
+    REFERENCES 'crm'.'client'( 'client_id' )  ON UPDATE RESTRICT  ON DELETE CASCADE NOT DEFERRABLE 
+    INDEX 'client_address' OTHER ( 'client_fid' );
+
+CREATE OR REPLACE WRAPPER JDBC bv_crm_client
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_crm
+    CATALOGNAME='crm' 
+    RELATIONNAME='client' 
+    OUTPUTSCHEMA (
+        client_id = 'client_id' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='50', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE,
+        name = 'name' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE,
+        surname = 'surname' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE,
+        client_type = 'client_type' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='2', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE
+    )
+    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'client_id' )
+    CONSTRAINT 'client_type_code' FOREIGN KEY ( 'client_type' ) 
+    REFERENCES 'crm'.'client_type'( 'code' )  ON UPDATE RESTRICT  ON DELETE CASCADE NOT DEFERRABLE 
+    INDEX 'PRIMARY' OTHER UNIQUE PRIMARY ( 'client_id' )
+    INDEX 'client_type_code' OTHER ( 'client_type' );
+
+CREATE OR REPLACE WRAPPER JDBC bv_crm_client_type
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_crm
+    CATALOGNAME='crm' 
+    RELATIONNAME='client_type' 
+    OUTPUTSCHEMA (
+        code = 'code' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='2', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE,
+        type_value = 'type_value' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
+    )
+    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'code' )
+    INDEX 'PRIMARY' OTHER UNIQUE PRIMARY ( 'code' );
+
+# #######################################
+# STORED PROCEDURES
+# #######################################
+# No stored procedures
+# #######################################
+# TYPES
+# #######################################
+# No types
+# #######################################
+# MAPS
+# #######################################
+# No maps
+# #######################################
+# BASE VIEWS
+# #######################################
+CREATE OR REPLACE TABLE bv_crm_address I18N us_pst (
+        client_fid:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
+        street:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        zip:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        state:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        primary_phone:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = '')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_crm_address(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD client_fid (any) OPT ANY
+             ADD street (any) OPT ANY
+             ADD city (any) OPT ANY
+             ADD zip (any) OPT ANY
+             ADD state (any) OPT ANY
+             ADD primary_phone (any) OPT ANY
+        )
+        OUTPUTLIST (city, client_fid, primary_phone, state, street, zip
+        )
+        WRAPPER (jdbc bv_crm_address)
+    );
+
+CREATE OR REPLACE TABLE bv_crm_client I18N us_pst (
+        client_id:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
+        name:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        surname:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        client_type:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '2', description = '')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'client_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_crm_client(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD client_id (any) OPT ANY
+             ADD name (any) OPT ANY
+             ADD surname (any) OPT ANY
+             ADD client_type (any) OPT ANY
+        )
+        OUTPUTLIST (client_id, client_type, name, surname
+        )
+        WRAPPER (jdbc bv_crm_client)
+    );
+
+CREATE OR REPLACE TABLE bv_crm_client_type I18N us_pst (
+        code:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '2', description = ''),
+        type_value:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = '')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'code' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_crm_client_type(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD code (any) OPT ANY
+             ADD type_value (any) OPT ANY
+        )
+        OUTPUTLIST (code, type_value
+        )
+        WRAPPER (jdbc bv_crm_client_type)
+    );
+
+# #######################################
+# VIEWS
+# #######################################
+CREATE OR REPLACE VIEW iv_crm_personal_data FOLDER = '/2 - integration' AS SELECT bv_crm_client.client_id AS client_id, bv_crm_client.name AS name, bv_crm_client.surname AS surname, bv_crm_client.client_type AS client_type, bv_crm_address.street AS street, bv_crm_address.city AS city, bv_crm_address.zip AS zip, bv_crm_address.state AS state, bv_crm_address.primary_phone AS primary_phone, bv_crm_client_type.code AS code, bv_crm_client_type.type_value AS type_value FROM (bv_crm_client AS bv_crm_client INNER JOIN bv_crm_address AS bv_crm_address ON bv_crm_client.client_id = bv_crm_address.client_fid ) INNER JOIN bv_crm_client_type AS bv_crm_client_type ON bv_crm_client.client_type = bv_crm_client_type.code ;
+
+ALTER VIEW iv_crm_personal_data
+ LAYOUT (bv_crm_client = [132, 82, 200, 200], bv_crm_address = [521, 160, 200, 200], bv_crm_client_type = [522, 24, 200, 200]);
+
+# #######################################
+# ASSOCIATIONS
+# #######################################
+CREATE OR REPLACE ASSOCIATION bv_crm_client_bv_crm_address REFERENTIAL CONSTRAINT 
+FOLDER = '/1 - connectivity/2 - base views'
+    ENDPOINT bv_crm_address bv_crm_client PRINCIPAL (0,1)
+    ENDPOINT bv_crm_client bv_crm_address (0,*)
+    ADD MAPPING client_id=client_fid;
+
+CREATE OR REPLACE ASSOCIATION bv_crm_client_type_bv_crm_client REFERENTIAL CONSTRAINT 
+FOLDER = '/1 - connectivity/2 - base views'
+    ENDPOINT bv_crm_client bv_crm_client_type PRINCIPAL (0,1)
+    ENDPOINT bv_crm_client_type bv_crm_client (0,*)
+    ADD MAPPING code=client_type;
+
+# #######################################
+# WEBSERVICES
+# #######################################
+# #######################################
+# WEBSERVICES
+# #######################################
+# No web services
+# #######################################
+# WIDGETS
+# #######################################
+# No widgets
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS
+# #######################################
+# No deployed web services
+# #######################################
+# WEBCONTAINER WIDGET DEPLOYMENTS
+# #######################################
+# No deployed widgets
+# #######################################
+# VIEW STATISTICS
+# #######################################
+# No statistics
+# #######################################
+# Closing connection with database tutorial
+# #######################################
+CLOSE;
+
+
+
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+EXIT SINGLE USER MODE;

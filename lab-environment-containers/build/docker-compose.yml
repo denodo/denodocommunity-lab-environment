@@ -532,7 +532,7 @@ services:
   util-graphql-playground:
     container_name: denodocommunity-lab-environment-graphql-playground
     image: ${GRAPHQL_GUI_VERSION}
-    profiles: ["util-graphql","tutorial"]
+    profiles: ["util-graphql","tutorial","ds"]
     hostname: ${GRAPHQL_GUI_HOSTNAME}
     depends_on:
       denodo-vdp:

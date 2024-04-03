@@ -30,7 +30,7 @@ CREATE TABLE `products` (
 
 CREATE TABLE `sales` (
   `id` int(11) NOT NULL,
-  `date` int(11) DEFAULT NULL,
+  `dateid` int(11) DEFAULT NULL,
   `product` int(11) DEFAULT NULL,
   `ordermethod` int(11) DEFAULT NULL,
   `area` int(11) DEFAULT NULL,

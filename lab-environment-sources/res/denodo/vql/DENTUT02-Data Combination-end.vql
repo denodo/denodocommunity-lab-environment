@@ -1,0 +1,382 @@
+﻿# Generated with Denodo Platform 9.0.
+
+ENTER SINGLE USER MODE;
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+# 0 ====================================================================
+
+# #######################################
+# DATABASE
+# #######################################
+CREATE OR REPLACE DATABASE tutorial 'Database for Denodo Community Tutorials';
+
+CONNECT DATABASE tutorial;
+
+# #######################################
+# FOLDERS
+# #######################################
+CREATE OR REPLACE FOLDER '/1 - connectivity' ;
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+
+CREATE OR REPLACE FOLDER '/2 - integration' ;
+
+CREATE OR REPLACE FOLDER '/8 - stored procedures' ;
+
+# #######################################
+# RESOURCES
+# #######################################
+# No vault resources
+# #######################################
+# LISTENERS JMS
+# #######################################
+# No listeners jms
+# #######################################
+# LISTENERS KAFKA
+# #######################################
+# No listeners kafka
+# #######################################
+# DATASOURCES
+# #######################################
+CREATE OR REPLACE DATASOURCE JDBC ds_crm
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
+    DATABASEURI = 'jdbc:mariadb://localhost:3306/crm'
+    USERNAME = 'root'
+    USERPASSWORD = 'admin'
+    CLASSPATH = 'mariadb-2.7'
+    DATABASENAME = 'Generic'
+    DATABASEVERSION = ''
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = ''
+    INITIALSIZE = 1
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+CREATE OR REPLACE DATASOURCE WS ds_billing
+    FOLDER = '/1 - connectivity/1 - data sources'
+    WSDLURI = 'http://localhost:8080/billing/services/BillProvider?wsdl'
+    MAXCONNECTIONS 50
+    CONNECTIONPOOLTIMEOUT 0
+    AUTHENTICATION OFF
+    PROXY OFF;
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE tutorial
+  CHARSET DEFAULT;
+
+# #######################################
+# WRAPPERS
+# #######################################
+CREATE OR REPLACE WRAPPER JDBC bv_crm_address
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_crm
+    CATALOGNAME='crm' 
+    RELATIONNAME='address' 
+    OUTPUTSCHEMA (
+        client_fid = 'client_fid' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='50', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE,
+        street = 'street' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        city = 'city' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        zip = 'zip' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        state = 'state' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        primary_phone = 'primary_phone' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
+    )
+    CONSTRAINT 'client_address' FOREIGN KEY ( 'client_fid' ) 
+    REFERENCES 'crm'.'client'( 'client_id' )  ON UPDATE RESTRICT  ON DELETE CASCADE NOT DEFERRABLE 
+    INDEX 'client_address' OTHER ( 'client_fid' );
+
+CREATE OR REPLACE WRAPPER JDBC bv_crm_client
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_crm
+    CATALOGNAME='crm' 
+    RELATIONNAME='client' 
+    OUTPUTSCHEMA (
+        client_id = 'client_id' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='50', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE,
+        name = 'name' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE,
+        surname = 'surname' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE,
+        client_type = 'client_type' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='2', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE
+    )
+    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'client_id' )
+    CONSTRAINT 'client_type_code' FOREIGN KEY ( 'client_type' ) 
+    REFERENCES 'crm'.'client_type'( 'code' )  ON UPDATE RESTRICT  ON DELETE CASCADE NOT DEFERRABLE 
+    INDEX 'PRIMARY' OTHER UNIQUE PRIMARY ( 'client_id' )
+    INDEX 'client_type_code' OTHER ( 'client_type' );
+
+CREATE OR REPLACE WRAPPER JDBC bv_crm_client_type
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_crm
+    CATALOGNAME='crm' 
+    RELATIONNAME='client_type' 
+    OUTPUTSCHEMA (
+        code = 'code' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='2', description='', sourcetypeid='12', sourcetypename='VARCHAR')  NOT NULL SORTABLE,
+        type_value = 'type_value' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='100', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
+    )
+    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'code' )
+    INDEX 'PRIMARY' OTHER UNIQUE PRIMARY ( 'code' );
+
+CREATE OR REPLACE WRAPPER WS getbillbycustomerid
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_billing
+    SERVICENAME='BillProviderService'
+    PORTNAME='BillProvider'
+    OPERATIONNAME='getBillByCustomerID'
+    INPUTMESSAGE='getBillByCustomerIDRequest'
+    OUTPUTMESSAGE='getBillByCustomerIDResponse'
+    IMPLEMENTATION='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cGVyL3dzMTcwODYwODgyODQ3Mi9CaWxsLmphdmFQSwECFAAUAAgICAA4dFZYyRZET1YEAACeDwAAPgAAAAAAAAAAAAAAAACzCAAAY29tL2Rlbm9kby93cmFwcGVyL3dzMTcwODYwODgyODQ3Mi9JbnRlcm5hbEVycm9yRXhjZXB0aW9uLmphdmFQSwECFAAUAAgICAA4dFZYOQ4GFzIBAAAwAwAAPQAAAAAAAAAAAAAAAAB1DQAAY29tL2Rlbm9kby93cmFwcGVyL3dzMTcwODYwODgyODQ3Mi9CaWxsUHJvdmlkZXJfUG9ydFR5cGUuamF2YVBLAQIUABQACAgIADh0VlhI8Cr7AQkAAARDAABDAAAAAAAAAAAAAAAAABIPAABjb20vZGVub2RvL3dyYXBwZXIvd3MxNzA4NjA4ODI4NDcyL0JpbGxQcm92aWRlclNvYXBCaW5kaW5nU3R1Yi5qYXZhUEsBAhQAFAAICAgAOHRWWIzWd80oAQAAawIAADsAAAAAAAAAAAAAAAAAhBgAAGNvbS9kZW5vZG8vd3JhcHBlci93czE3MDg2MDg4Mjg0NzIvQmlsbFByb3ZpZGVyU2VydmljZS5qYXZhUEsBAhQAFAAICAgAOHRWWE1hMRniBAAAChYAAEIAAAAAAAAAAAAAAAAAFRoAAGNvbS9kZW5vZG8vd3JhcHBlci93czE3MDg2MDg4Mjg0NzIvQmlsbFByb3ZpZGVyU2VydmljZUxvY2F0b3IuamF2YVBLBQYAAAAABgAGAHsCAABnHwAAAAA='
+    BASE_PACKAGE='com.denodo.wrapper.ws1708608828472'
+    OUTPUTSCHEMA (
+    customer_id='$0' PARAMETER_MODE 'IN' QNAME '{http://www.w3.org/2001/XMLSchema}string' JAVA_MAPPING 'java.lang.String' (OBL),
+    return = '$$': ARRAY OF (
+        bill = 'Bill': REGISTER OF (
+            ssn='ssn',
+            billing_end_date='billing_end_date',
+            phone_center='phone_center',
+            due_date='due_date',
+            balance='balance',
+            billing_period_id='billing_period_id',
+            billing_start_date='billing_start_date',
+            billing_id='billing_id',
+            customer_id='customer_id',
+            package_id='package_id',
+            amount_due='amount_due',
+            tax_id='tax_id'
+        )
+    )
+    );
+
+# #######################################
+# STORED PROCEDURES
+# #######################################
+CREATE OR REPLACE VQL PROCEDURE sp_client_type
+    FOLDER = '/8 - stored procedures'
+(upper_limit IN INTEGER, lower_limit IN INTEGER, client_id OUT VARCHAR, total_amount OUT INTEGER, type_client OUT VARCHAR)
+AS (
+    CURSOR cdata IS 'SELECT name,
+       client_id,
+       surname,
+       total_amount
+	   FROM tutorial.iv_amount_due_by_client
+  	   ORDER BY COALESCE(total_amount, 0) DESC';
+    c cdata%ROWTYPE;
+    type_c VARCHAR;
+)
+BEGIN
+    OPEN cdata;
+    LOOP 
+        FETCH cdata INTO c;
+        CASE 
+                    WHEN c.total_amount >= upper_limit THEN                 type_c:='Important';
+                    WHEN c.total_amount >= lower_limit THEN                 type_c:='Medium';
+                    WHEN c.total_amount >= 1 THEN                 type_c:='Small';
+            ELSE 
+                type_c:='Unbilled';
+            END CASE;
+        RETURN ROW ( client_id, total_amount, type_client) VALUES (c.client_id, c.total_amount, type_c);
+        EXIT WHEN cdata%NOTFOUND;
+    END LOOP;
+    CLOSE cdata;
+
+END;
+
+# #######################################
+# TYPES
+# #######################################
+CREATE OR REPLACE TYPE getbillbycustomerid_return_bill AS REGISTER OF (ssn:text, billing_end_date:text, phone_center:text, due_date:text, balance:text, billing_period_id:text, billing_start_date:text, billing_id:text, customer_id:text, package_id:text, amount_due:text, tax_id:text);
+
+CREATE OR REPLACE TYPE getbillbycustomerid_return AS ARRAY OF getbillbycustomerid_return_bill;
+
+# #######################################
+# MAPS
+# #######################################
+# No maps
+# #######################################
+# BASE VIEWS
+# #######################################
+CREATE OR REPLACE TYPE getbillbycustomerid_return_bill AS REGISTER OF (ssn:text, billing_end_date:text, phone_center:text, due_date:text, balance:text, billing_period_id:text, billing_start_date:text, billing_id:text, customer_id:text, package_id:text, amount_due:text, tax_id:text);
+
+CREATE OR REPLACE TYPE getbillbycustomerid_return AS ARRAY OF getbillbycustomerid_return_bill;
+
+CREATE OR REPLACE TABLE bv_billing_bill_by_customer_array I18N us_pst (
+        customer_id:text,
+        return:getbillbycustomerid_return
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD getbillbycustomerid(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD customer_id (=) OBL ONE
+             ADD return NOS ZERO ()
+             ADD return NOS ZERO ()
+             ADD return.ssn NOS ZERO ()
+             ADD return.billing_end_date NOS ZERO ()
+             ADD return.phone_center NOS ZERO ()
+             ADD return.due_date NOS ZERO ()
+             ADD return.balance NOS ZERO ()
+             ADD return.billing_period_id NOS ZERO ()
+             ADD return.billing_start_date NOS ZERO ()
+             ADD return.billing_id NOS ZERO ()
+             ADD return.customer_id NOS ZERO ()
+             ADD return.package_id NOS ZERO ()
+             ADD return.amount_due NOS ZERO ()
+             ADD return.tax_id NOS ZERO ()
+        )
+        OUTPUTLIST (customer_id, return
+        )
+        WRAPPER (ws getbillbycustomerid)
+    );
+
+CREATE OR REPLACE TABLE bv_crm_address I18N us_pst (
+        client_fid:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
+        street:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        zip:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        state:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        primary_phone:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = '')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_crm_address(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD client_fid (any) OPT ANY
+             ADD street (any) OPT ANY
+             ADD city (any) OPT ANY
+             ADD zip (any) OPT ANY
+             ADD state (any) OPT ANY
+             ADD primary_phone (any) OPT ANY
+        )
+        OUTPUTLIST (city, client_fid, primary_phone, state, street, zip
+        )
+        WRAPPER (jdbc bv_crm_address)
+    );
+
+CREATE OR REPLACE TABLE bv_crm_client I18N us_pst (
+        client_id:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
+        name:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        surname:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
+        client_type:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '2', description = '')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'client_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_crm_client(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD client_id (any) OPT ANY
+             ADD name (any) OPT ANY
+             ADD surname (any) OPT ANY
+             ADD client_type (any) OPT ANY
+        )
+        OUTPUTLIST (client_id, client_type, name, surname
+        )
+        WRAPPER (jdbc bv_crm_client)
+    );
+
+CREATE OR REPLACE TABLE bv_crm_client_type I18N us_pst (
+        code:text (notnull, sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '2', description = ''),
+        type_value:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'code' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_crm_client_type(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD code (any) OPT ANY
+             ADD type_value (any) OPT ANY
+        )
+        OUTPUTLIST (code, type_value
+        )
+        WRAPPER (jdbc bv_crm_client_type)
+    );
+
+# #######################################
+# VIEWS
+# #######################################
+CREATE OR REPLACE VIEW iv_billing_information FOLDER = '/2 - integration' AS SELECT customer_id AS customer_id, amount_due AS amount_due, billing_id AS billing_id, return_customer_id AS return_customer_id, billing_end_date AS billing_end_date, due_date AS due_date, package_id AS package_id, balance AS balance, billing_start_date AS billing_start_date, billing_period_id AS billing_period_id, ssn AS ssn, phone_center AS phone_center, tax_id AS tax_id FROM FLATTEN bv_billing_bill_by_customer_array AS v ( v.return);
+
+ALTER VIEW iv_billing_information
+ LAYOUT (bv_billing_bill_by_customer_array = [48, 32, 200, 200]);
+
+CREATE OR REPLACE VIEW iv_crm_personal_data FOLDER = '/2 - integration' AS SELECT bv_crm_client.client_id AS client_id, bv_crm_client.name AS name, bv_crm_client.surname AS surname, bv_crm_client.client_type AS client_type, bv_crm_address.street AS street, bv_crm_address.city AS city, bv_crm_address.zip AS zip, bv_crm_address.state AS state, bv_crm_address.primary_phone AS primary_phone, bv_crm_client_type.code AS code, bv_crm_client_type.type_value AS type_value FROM (bv_crm_client AS bv_crm_client INNER JOIN bv_crm_address AS bv_crm_address ON bv_crm_client.client_id = bv_crm_address.client_fid ) INNER JOIN bv_crm_client_type AS bv_crm_client_type ON bv_crm_client.client_type = bv_crm_client_type.code ;
+
+ALTER VIEW iv_crm_personal_data
+ LAYOUT (bv_crm_client = [132, 82, 200, 200], bv_crm_address = [521, 160, 200, 200], bv_crm_client_type = [522, 24, 200, 200]);
+
+CREATE OR REPLACE VIEW iv_client_with_bills FOLDER = '/2 - integration' AS SELECT iv_crm_personal_data.client_id AS client_id, iv_crm_personal_data.name AS name, iv_crm_personal_data.surname AS surname, iv_crm_personal_data.client_type AS client_type, iv_crm_personal_data.street AS street, iv_crm_personal_data.city AS city, iv_crm_personal_data.zip AS zip, iv_crm_personal_data.state AS state, iv_crm_personal_data.primary_phone AS primary_phone, iv_crm_personal_data.code AS code, iv_crm_personal_data.type_value AS type_value, iv_billing_information.customer_id AS customer_id, iv_billing_information.amount_due AS amount_due, iv_billing_information.billing_id AS billing_id, iv_billing_information.billing_end_date AS billing_end_date, iv_billing_information.due_date AS due_date, iv_billing_information.package_id AS package_id, iv_billing_information.balance AS balance, iv_billing_information.billing_start_date AS billing_start_date, iv_billing_information.billing_period_id AS billing_period_id, iv_billing_information.ssn AS ssn, iv_billing_information.phone_center AS phone_center, iv_billing_information.tax_id AS tax_id FROM iv_crm_personal_data AS iv_crm_personal_data INNER JOIN iv_billing_information AS iv_billing_information ON iv_crm_personal_data.client_id = iv_billing_information.customer_id ;
+
+ALTER VIEW iv_client_with_bills
+ LAYOUT (iv_crm_personal_data = [20, 20, 200, 200], iv_billing_information = [331, 29, 200, 200]);
+
+CREATE OR REPLACE VIEW iv_amount_due_by_client FOLDER = '/2 - integration' AS SELECT name AS name, client_id AS client_id, surname AS surname, sum(cast('float', amount_due)) AS total_amount FROM iv_client_with_bills GROUP BY name, client_id, surname;
+
+ALTER VIEW iv_amount_due_by_client
+ LAYOUT (iv_client_with_bills = [20, 20, 200, 200]);
+
+# #######################################
+# ASSOCIATIONS
+# #######################################
+CREATE OR REPLACE ASSOCIATION bv_crm_client_bv_crm_address REFERENTIAL CONSTRAINT 
+FOLDER = '/1 - connectivity/2 - base views'
+    ENDPOINT bv_crm_address bv_crm_client PRINCIPAL (0,1)
+    ENDPOINT bv_crm_client bv_crm_address (0,*)
+    ADD MAPPING client_id=client_fid;
+
+CREATE OR REPLACE ASSOCIATION bv_crm_client_type_bv_crm_client REFERENTIAL CONSTRAINT 
+FOLDER = '/1 - connectivity/2 - base views'
+    ENDPOINT bv_crm_client bv_crm_client_type PRINCIPAL (0,1)
+    ENDPOINT bv_crm_client_type bv_crm_client (0,*)
+    ADD MAPPING code=client_type;
+
+# #######################################
+# WEBSERVICES
+# #######################################
+# #######################################
+# WEBSERVICES
+# #######################################
+# No web services
+# #######################################
+# WIDGETS
+# #######################################
+# No widgets
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS
+# #######################################
+# No deployed web services
+# #######################################
+# WEBCONTAINER WIDGET DEPLOYMENTS
+# #######################################
+# No deployed widgets
+# #######################################
+# Closing connection with database tutorial
+# #######################################
+CLOSE;
+
+
+
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+EXIT SINGLE USER MODE;
