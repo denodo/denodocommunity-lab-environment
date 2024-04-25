@@ -10,7 +10,7 @@ collaborators: Victoria Margret, Ajay Kumar, Sarath Chandran
 
 # Denodo Community Lab Environment
 
-[Denodo](https://community.denodo.com/express/download) is the leading logical data management platform. It establishes a unified data accessibility framework that provides data consumers with real-time insights from diverse data sources.
+[Denodo](https://www.denodo.com/) is the leading logical data management platform. It establishes a unified data accessibility framework that provides data consumers with real-time insights from diverse data sources.
 
 This project mantains some sample data sources that can be used to build a local testing environment of different technologies that can be used later for Denodo training, for testing purposes or for having a base for your Denodo projects.
 
@@ -24,14 +24,15 @@ In case you don't have a VirtualBox of Hyper-V environment, you are still able t
 
 Please read the documentation of each subproject to get more information: 
 
-* [Denodo Community Lab Environment Data Sources](./lab-environment-sources/README)
-* [Denodo Community Lab Environment Containers](./lab-environment-containers/README)
-* [Denodo Community Lab Environment Virtual Machines](./lab-environment-vm/README)
+* [Denodo Community Lab Environment Data Sources](./lab-environment-sources/README.md)
+* [Denodo Community Lab Environment Containers](./lab-environment-containers/README.md)
+* [Denodo Community Lab Environment Virtual Machines](./lab-environment-vm/README.md)
 
 # Join the Denodo Community
 
 - Star the repo
-- Join the [Denodo Community](https://community.denodo.com/) and ask questions on the [Q&A](https://community.denodo.com/answers) 
+- Join the [Denodo Community](https://community.denodo.com/) and ask questions on the [Q&A](https://community.denodo.com/answers)
+- Download [Denodo Express](https://community.denodo.com/express/download)
 - [Contributions](https://github.com/denodo/denodocommunity-lab-environment/contribute) are, of course, most welcome! 
 - Track [issues](https://github.com/denodo/denodocommunity-lab-environment/issues/new/choose) 
 
