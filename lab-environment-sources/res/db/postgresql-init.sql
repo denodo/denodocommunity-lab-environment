@@ -105,3 +105,21 @@ COPY "CUSTOMER"   FROM '/mnt/data/web-orders/customers.csv'        WITH (FORMAT 
 GRANT ALL PRIVILEGES ON "ORDERS" TO website_sys;
 GRANT ALL PRIVILEGES ON "ORDER_ITEM" TO website_sys;
 GRANT ALL PRIVILEGES ON "CUSTOMER" TO website_sys;
+
+/*************************
+ METER_READING DATASET 
+ *************************/
+CREATE USER udstutorial WITH PASSWORD 'udstutorial';
+CREATE DATABASE meter_reading OWNER udstutorial;
+GRANT ALL PRIVILEGES ON DATABASE meter_reading TO udstutorial;
+
+\c meter_reading
+\i /mnt/schemas/tutorial/tutorial_meter_reading_postgresql_tables.sql
+
+/*COPY meter_reading_train FROM '/mnt/data/tutorial/competition/train.csv' CSV HEADER
+COPY meter_reading_test  FROM '/mnt/data/tutorial/competition/test.csv' CSV HEADER*/
+COPY date_dim            FROM '/mnt/data/tpc-ds/date_dim.dat'        DELIMITER '|' CSV;
+
+GRANT ALL PRIVILEGES ON meter_reading_train TO udstutorial;
+GRANT ALL PRIVILEGES ON meter_reading_test TO udstutorial;
+GRANT ALL PRIVILEGES ON date_dim TO udstutorial;

@@ -1,7 +1,12 @@
-CREATE USER 'denodo'@'%' IDENTIFIED BY 'denodo';
-CREATE DATABASE tpc_ds;
+CREATE USER 'denodo'@'%'   IDENTIFIED BY 'denodo';
+CREATE USER 'uweather'@'%' IDENTIFIED BY 'uweather';
 
+-- --------------
+-- TPCDS dataset
+-- --------------
+CREATE DATABASE tpc_ds;
 USE tpc_ds;
+
 source /mnt/schemas/tpc-ds/tpcds_mariadb_tables.sql
 source /mnt/schemas/tpc-ds/tpcds_mariadb_tables_ri.sql
 
@@ -25,29 +30,38 @@ LOAD DATA LOCAL INFILE '/mnt/data/tpc-ds/household_demographics.dat' INTO TABLE 
 GRANT ALL PRIVILEGES ON tpc_ds.* TO 'denodo'@'%';
 FLUSH PRIVILEGES;
 
+-- --------------
+-- SALES dataset
+-- --------------
 CREATE DATABASE sales;
-
 USE sales;
+
 source /mnt/schemas/tutorial/tutorial_sales_mariadb_tables.sql
 source /mnt/data/tutorial/tutorial_sales.sql
 
 GRANT ALL PRIVILEGES ON sales.* TO 'denodo'@'%';
 FLUSH PRIVILEGES;
 
+-- --------------
+-- CRM dataset
+-- --------------
 CREATE DATABASE crm;
-
 USE crm;
+
 source /mnt/schemas/tutorial/tutorial_crm_mariadb_tables.sql
 source /mnt/data/tutorial/tutorial_crm.sql
 
 GRANT ALL PRIVILEGES ON crm.* TO 'denodo'@'%';
 FLUSH PRIVILEGES;
 
-
+-- ----------------------
+-- CALLTRACKING dataset
+-- ----------------------
 CREATE DATABASE calltracking;
 USE calltracking;
 
 source /mnt/schemas/call-center/cc_mariadb_tables.sql
+
 LOAD DATA LOCAL INFILE '/mnt/data/call-center/agent.csv'            INTO TABLE agent            FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INFILE '/mnt/data/call-center/case_definition.csv'  INTO TABLE case_definition  FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INFILE '/mnt/data/call-center/customer.csv'         INTO TABLE customer         FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n';
@@ -59,3 +73,16 @@ LOAD DATA LOCAL INFILE '/mnt/data/call-center/status_code.csv'      INTO TABLE s
 GRANT ALL PRIVILEGES ON calltracking.* TO 'phone'@'%' identified by 'phone';
 GRANT ALL PRIVILEGES ON calltracking.* TO 'denodo'@'%';
 FLUSH PRIVILEGES;
+
+-- ---------------
+-- WEATHER dataset
+-- ---------------
+CREATE DATABASE weather;
+USE weather;
+
+source /mnt/schemas/tutorial/tutorial_weather_mariadb_tables.sql
+
+LOAD DATA LOCAL INFILE '/mnt/data/tutorial/weather/weather_test.csv'  INTO TABLE weather_test  FIELDS TERMINATED BY ',' ignore 1 lines;
+LOAD DATA LOCAL INFILE '/mnt/data/tutorial/weather/weather_train.csv' INTO TABLE weather_train FIELDS TERMINATED BY ',' ignore 1 lines;
+
+GRANT ALL PRIVILEGES ON weather.* TO 'uweather'@'%'

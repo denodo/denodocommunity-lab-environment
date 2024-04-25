@@ -25,7 +25,7 @@ The Denodo Community Lab Environment Containers subproject is based on Docker, s
  
 The first step is to install Docker based on your Operating System. You could download the appropriate version from the official site https://docs.docker.com/engine/install/. 
 
-**Note**: Docker Compose version >= 2.20.2 is required
+**Note**: Docker Compose version >= 2.20.2 is required (it is recommended to use [Compose V2](https://docs.docker.com/compose/migrate/))
 
 Once downloaded, you could install and verify the version using the following command:
 
@@ -241,22 +241,22 @@ In the table below you can find the name of all the containers included by defau
 
 ## Data Sources
 
-| Service name | Container name | Image | Description |
-| ----------- | ----------- | ----------- | ----------- |
-| ds-tomcat | denodocommunity-lab-environment-tomcat | tomcat:8.5.47 | **Apache Tomcat** server for deploying some Web services, including: *Sales WS*, *Product WS*. By default it is listening at http://localhost:8080/ |
-| ds-postgresql | denodo-commonlab-postgres | postgres:12-alpine | **PostgreSQL** database. While running this container for the first time, the SQL files from the project directory will be executed and the fact tables of the TPC-DS data set will be imported. It is to be noted that this process only happens once. The default username and password will be `postgres`/`admin`. This container runs in the host **postgres** and port number **5432**. |
-| ds-mariadb | denodocommunity-lab-environment-mariadb | mariadb:11.0.2 | **MariaDB** database. While running this container for the first time, the SQL files from the project directory will be executed and the dimension tables of the TPC-DS data set will be imported. It is to be noted that this process only happens once. You can use `root`/`admin` as default user/password and **mariadb:3306** as default host/port number for this data source. Data is persisted in the [project]_mariadb-common-lab volume. |
-| ds-mongo | denodocommunity-lab-environment-mongo | mongo:6.0 | **MongoDB** NoSQL database initialized with a support data set. This server will be launched at host/port **mongo:27017** and the default credentials are `mongoadmin`/`admin`. |
-| ds-httpd | denodocommunity-lab-environment-httpd | httpd:2.4.57 | **Apache HTTP** server which contains Excel and log files. By default it is listening at http://localhost/ |
+| Service name | Container name | Image | Hostname | Description |
+| ----------- | ----------- | ----------- | ----------- | ----------- |
+| ds-tomcat | denodocommunity-lab-environment-tomcat | tomcat:8.5.47 | tomcat | **Apache Tomcat** server for deploying some Web services, including: *Sales WS*, *Product WS*. By default it is listening at http://localhost:8080/ |
+| ds-postgresql | denodo-commonlab-postgres | postgres:12-alpine | postgres | **PostgreSQL** database. While running this container for the first time, the SQL files from the project directory will be executed and the fact tables of the TPC-DS data set will be imported. It is to be noted that this process only happens once. The default username and password will be `postgres`/`admin`. This container runs in the host **localhost** and port number **5432**. |
+| ds-mariadb | denodocommunity-lab-environment-mariadb | mariadb:11.0.2 | mariadb | **MariaDB** database. While running this container for the first time, the SQL files from the project directory will be executed and the dimension tables of the TPC-DS data set will be imported. It is to be noted that this process only happens once. You can use `root`/`admin` as default user/password and **localhost:3306** as default host/port number for this data source. Data is persisted in the [project]_mariadb-common-lab volume. |
+| ds-mongo | denodocommunity-lab-environment-mongo | mongo:6.0 | mongo | **MongoDB** NoSQL database initialized with a support data set. This server will be launched at host/port **localhost:27017** and the default credentials are `mongoadmin`/`admin`. |
+| ds-httpd | denodocommunity-lab-environment-httpd | httpd:2.4.57 | webserver | **Apache HTTP** server which contains Excel and log files. By default it is listening at http://localhost:1080/ |
 
 
 ## External Services
 
-| Service name | Container name | Image | Description |
-|---------|---------|---------|------------|
-| ext-apacheds | denodocommunity-lab-environment-apacheds | 1000kit/apacheds | **Apache Directory Services container**: Apache Directory Services is an extensible and embeddable directory server which has been certified as LDAPv3 compatible by the Open Group. The container consists of a predefined Denodo domain and some users. The default credentials for Apache DS is as follows: `uid=admin,ou=system` / `secret`. It uses by default the port **10389** |
-| ext-keycloak | denodocommunity-lab-environment-keycloak | jboss/keycloak:13.0.0 | **Keycloak container**: Keycloak is a Open Source Identity and Access Management tool. The container consists of a predefined realm for Denodo and it is connected to the **denodo-commonlab-apacheds** for user synchronization. The adminitration tool is listening at http://localhost:28443/ by default. Credentials: you can use the username `denodo` and password `denodo`. |
-| ext-git | denodocommunity-lab-environment-git | gitlab/gitlab-ce:16.2.8-ce.0 | **GitLab container**: GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. This container allows to run a Denodo Virtual DataPort server configured with Version Control System. The administration console is running at http://localhost:1080/ by default |
+| Service name | Container name | Image | Hostname | Description |
+|---------|---------|---------|---------|------------|
+| ext-apacheds | denodocommunity-lab-environment-apacheds | 1000kit/apacheds | ldapserver | **Apache Directory Services container**: Apache Directory Services is an extensible and embeddable directory server which has been certified as LDAPv3 compatible by the Open Group. The container consists of a predefined Denodo domain and some users. The default credentials for Apache DS is as follows: `uid=admin,ou=system` / `secret`. It uses by default the port **10389** |
+| ext-keycloak | denodocommunity-lab-environment-keycloak | jboss/keycloak:13.0.0 | sso | **Keycloak container**: Keycloak is a Open Source Identity and Access Management tool. The container consists of a predefined realm for Denodo and it is connected to the **denodo-commonlab-apacheds** for user synchronization. The adminitration tool is listening at http://localhost:28443/ by default. Credentials: you can use the username `denodo` and password `denodo`. |
+| ext-git | denodocommunity-lab-environment-git | gitlab/gitlab-ce:16.2.8-ce.0 | gitlab | **GitLab container**: GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. This container allows to run a Denodo Virtual DataPort server configured with Version Control System. The administration console is running at http://localhost:1080/ by default |
 
 ## Utilities
 
@@ -270,7 +270,7 @@ In the table below you can find the name of all the containers included by defau
 
 # Licenses of the containers
 
-The Denodo Commuity Lab Environment docker compose script downloads containers of third-party software (not managed by Denodo). Please know that those components are licensed under the following terms and conditions. Please refer to the specific software licenses:
+The Denodo Community Lab Environment docker compose script downloads containers of third-party software (not managed by Denodo). Please know that those components are licensed under the following terms and conditions. Please refer to the specific software licenses:
 
 * PostgreSQL: The PostgreSQL Licence https://www.postgresql.org/about/licence/
 * MariaDB: GNU GPL 2 https://mariadb.com/kb/en/mariadb-licenses/

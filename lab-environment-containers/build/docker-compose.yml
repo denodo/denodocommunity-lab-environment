@@ -23,8 +23,7 @@ services:
     hostname: ${METADATA_DB_HOSTNAME}
     restart: unless-stopped
     networks:
-        denodo-lab-net:
-            ipv4_address: ${METADATA_DB_IP}  
+      - denodo-lab-net 
     volumes:   
       - ${METADATA_DB_INIT_SCRIPT}:/docker-entrypoint-initdb.d/init.sql
       - ${METADATA_DB_DATA_DIRECTORY}:/mnt
@@ -46,9 +45,8 @@ services:
     hostname: ${DENODO_VDP_HOSTNAME}
     depends_on:
       - denodo-postgres    
-    networks:
-        denodo-lab-net:
-            ipv4_address: ${DENODO_VDP_IP}
+    networks:        
+      - denodo-lab-net 
     volumes:
       - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"   
       - "${DENODO_VDP_INIT_VQL_DIR}:/container-entrypoint-init/"  
@@ -66,7 +64,7 @@ services:
       - DENODO_WEBCONTAINER_STARTUP=true
       - DENODO_DATABASE_PROVIDER=postgresql
       - DENODO_DATABASE_PROVIDER_VERSION=12
-      - DENODO_DATABASE_URI=jdbc:postgresql://${METADATA_DB_IP}:${METADATA_DB_PORT}/denodo
+      - DENODO_DATABASE_URI=jdbc:postgresql://${METADATA_DB_HOSTNAME}:${METADATA_DB_PORT}/denodo
       - DENODO_DATABASE_DRIVER=org.postgresql.Driver
       - DENODO_DATABASE_CLASSPATH=postgresql-12
       - DENODO_DATABASE_USER=denodo
@@ -92,8 +90,7 @@ services:
         required: false
     restart: unless-stopped
     networks:
-        denodo-lab-net:
-            ipv4_address: ${DENODO_SCHED_IP}
+      - denodo-lab-net 
     volumes:
       - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
       - "${DENODO_SCHED_INIT_ZIP_DIR}:/container-entrypoint-init/"  
@@ -104,7 +101,7 @@ services:
       - DENODO_SCHSERVER_SERVER_PORT=9999
       - DENODO_SCHSERVER_DATABASE_PROVIDER=postgresql
       - DENODO_SCHSERVER_DATABASE_PROVIDER_VERSION=12
-      - DENODO_SCHSERVER_DATABASE_URI=jdbc:postgresql://${METADATA_DB_IP}:${METADATA_DB_PORT}/denodo
+      - DENODO_SCHSERVER_DATABASE_URI=jdbc:postgresql://${METADATA_DB_HOSTNAME}:${METADATA_DB_PORT}/denodo
       - DENODO_SCHSERVER_DATABASE_DRIVER=org.postgresql.Driver
       - DENODO_SCHSERVER_DATABASE_CLASSPATH=postgresql-12
       - DENODO_SCHSERVER_DATABASE_USER=denodo
@@ -127,8 +124,7 @@ services:
         required: false
     restart: unless-stopped
     networks:
-        denodo-lab-net:
-            ipv4_address: ${DENODO_SCHED_INDEX_IP}
+      - denodo-lab-net 
     volumes:
       - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
     ports:
@@ -147,8 +143,7 @@ services:
         required: false
     restart: unless-stopped
     networks:
-        denodo-lab-net:
-            ipv4_address: ${DENODO_DS_IP}
+      - denodo-lab-net 
     ports:
       - "${DENODO_DS_EXTERNAL_PORT}:9090"
     command: --designstudio  
@@ -163,8 +158,7 @@ services:
       - denodo-vdp
     restart: unless-stopped
     networks:
-        denodo-lab-net:
-            ipv4_address: ${DENODO_DC_IP}
+      - denodo-lab-net 
     volumes:
       - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
     ports:
@@ -172,7 +166,7 @@ services:
     environment:
       - DENODO_DC_SERVER_HOST=${DENODO_VDP_HOSTNAME}
       - DENODO_DC_DATABASE_PROVIDER=postgresql
-      - DENODO_DC_DATABASE_URI=jdbc:postgresql://${METADATA_DB_IP}:${METADATA_DB_PORT}/denodo
+      - DENODO_DC_DATABASE_URI=jdbc:postgresql://${METADATA_DB_HOSTNAME}:${METADATA_DB_PORT}/denodo
       - DENODO_DC_DATABASE_DRIVER=org.postgresql.Driver
       - DENODO_DC_DATABASE_USER=denodo
       - DENODO_DC_DATABASE_PASSWORD=denodo
@@ -195,8 +189,7 @@ services:
         required: false
     restart: unless-stopped
     networks:
-        denodo-lab-net:
-            ipv4_address: ${DENODO_SCHED_ADMIN_IP}
+      - denodo-lab-net 
     ports:
       - "${DENODO_SCHED_ADMIN_EXTERNAL_PORT}:9090"
     command: --schadmin
@@ -216,8 +209,7 @@ services:
         condition: "service_started"
         required: false
     networks:
-        denodo-lab-net:
-            ipv4_address: ${RELATIONAL_DB_IP} 
+      - denodo-lab-net 
     volumes:      
       - ${RELATIONAL_DB_INIT_SCRIPT}:/docker-entrypoint-initdb.d/mariadb-init.sql
       - ${RELATIONAL_DB_DATA_DIRECTORY}:/mnt
@@ -239,8 +231,7 @@ services:
         condition: "service_started"
         required: false
     networks:
-        denodo-lab-net:
-            ipv4_address: ${ANALYTICAL_DB_IP}      
+      - denodo-lab-net   
     volumes:   
       - ${ANALYTICAL_DB_INIT_SCRIPT}:/docker-entrypoint-initdb.d/init.sql
       - ${ANALYTICAL_DB_DATA_DIRECTORY}:/mnt
@@ -263,8 +254,7 @@ services:
         condition: "service_started"
         required: false
     networks: 
-      denodo-lab-net: 
-        ipv4_address: ${APPSERVER_IP}
+      - denodo-lab-net 
     ports:
       - "${APPSERVER_EXTERNAL_PORT}:8080"
     volumes:
@@ -282,8 +272,7 @@ services:
         required: false
     restart: unless-stopped
     networks: 
-      denodo-lab-net: 
-        ipv4_address: ${HTTPSERVER_IP}
+      - denodo-lab-net 
     ports:
       - "${HTTPSERVER_EXTERNAL_PORT}:80"
     volumes:
@@ -301,8 +290,7 @@ services:
         required: false
     restart: unless-stopped
     networks:
-      denodo-lab-net:
-        ipv4_address: ${NOSQL_DB_IP} 
+      - denodo-lab-net 
     volumes:
       - ${NOSQL_DB_INIT_DIRECTORY}:/docker-entrypoint-initdb.d/:ro
       - mongodb-lab-env:/data/db      
@@ -319,8 +307,7 @@ services:
     profiles: ["ds-kafka"]
     hostname: zookeeper
     networks:
-      denodo-lab-net:
-        ipv4_address: ${KAFKA_ZOOKEEPER_IP}
+      - denodo-lab-net 
     ports:
       - "2181"
     environment:
@@ -333,8 +320,7 @@ services:
     profiles: ["ds-kafka"]
     hostname: kafka
     networks:
-      denodo-lab-net:
-        ipv4_address: ${KAFKA_BROKER_IP}
+      - denodo-lab-net 
     depends_on:
       - ds-kafka-zookeeper
     ports:
@@ -372,8 +358,7 @@ services:
         required: false
     restart: always
     networks:
-      denodo-lab-net:
-        ipv4_address: ${DFS_IP} 
+      - denodo-lab-net 
     volumes:
       - dfs-lab-env:/data      
     environment:
@@ -384,39 +369,6 @@ services:
       - '${DFS_CONSOLE_PORT}:9001'
     command: --console-address ":9001"
 
-  # SQL engine
-  ds-presto-coordinator:
-    container_name: denodocommunity-lab-environment-presto-coordinator
-    image: ${PRESTO_VERSION}
-    profiles: ["ds-presto"]
-    hostname: presto-coordinator
-    depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
-    networks:
-      denodo-lab-net:
-        ipv4_address: ${PRESTO_COORDINATOR_IP} 
-    ports:
-      - "${PRESTO_COORDINATOR_PORT}:8080"
-    volumes:
-      - ../../lab-environment-sources/res/presto/coordinator/config.properties:/opt/presto-server/etc/config.properties
-      - ../../lab-environment-sources/res/presto/coordinator/local_postgres.properties:/opt/presto-server/etc/catalog/local_postgres.properties
-    
-  ds-presto-worker:
-    container_name: denodocommunity-lab-environment-presto-worker
-    image: ${PRESTO_VERSION}
-    profiles: ["ds-presto"]
-    hostname: presto-worker
-    ports:
-      - "8083:8083"
-    volumes:
-      - ../../lab-environment-sources/res/presto/worker/config.properties:/opt/presto-server/etc/config.properties
-    depends_on:
-      - ds-presto-coordinator
-    networks:
-      denodo-lab-net:
-        ipv4_address: ${PRESTO_WORKER_IP} 
 
   # ###################
   # External Services #
@@ -433,8 +385,7 @@ services:
         required: false
     restart: unless-stopped
     networks:
-      denodo-lab-net:
-        ipv4_address: ${LDAP_IP} 
+      - denodo-lab-net 
     ports:
       - "${LDAP_EXTERNAL_PORT}:10389"
     volumes:
@@ -459,8 +410,7 @@ services:
         required: true
     restart: unless-stopped
     networks:
-      denodo-lab-net:
-        ipv4_address: ${SSO_IP} 
+      - denodo-lab-net 
     ports:
       - "${SSO_EXTERNAL_PORT}:8443"
     volumes:
@@ -469,7 +419,7 @@ services:
       KEYCLOAK_USER: ${SSO_USER}
       KEYCLOAK_PASSWORD: ${SSO_PASSWORD}
       DB_VENDOR: postgres
-      DB_ADDR: ${METADATA_DB_IP}:${METADATA_DB_PORT}
+      DB_ADDR: ${METADATA_DB_HOSTNAME}:${METADATA_DB_PORT}
       DB_DATABASE: sso
       DB_USER: ${SSO_USER}
       DB_PASSWORD: ${SSO_PASSWORD}
@@ -483,8 +433,7 @@ services:
     profiles: ["all","ext","ext-git"]
     hostname: ${VCS_HOSTNAME}
     networks:
-      denodo-lab-net:
-        ipv4_address: ${VCS_IP}
+      - denodo-lab-net 
     restart: always
     depends_on:
       denodo-vdp:
@@ -518,13 +467,12 @@ services:
         required: false
     restart: unless-stopped
     networks:
-      denodo-lab-net:
-        ipv4_address: ${NOSQL_GUI_IP}
+      - denodo-lab-net 
     environment:
       - ME_CONFIG_MONGO_SERVER=mongodb
       - ME_CONFIG_MONGODB_ADMINUSERNAME=${NOSQL_DB_ROOT_ADMIN}
       - ME_CONFIG_MONGODB_ADMINPASSWORD=${NOSQL_DB_ROOT_PWD}
-      - ME_CONFIG_MONGODB_URL=mongodb://${NOSQL_DB_ROOT_ADMIN}:${NOSQL_DB_ROOT_PWD}@${NOSQL_DB_IP}:${NOSQL_DB_EXTERNAL_PORT}/
+      - ME_CONFIG_MONGODB_URL=mongodb://${NOSQL_DB_ROOT_ADMIN}:${NOSQL_DB_ROOT_PWD}@${NOSQL_DB_HOSTNAME}:${NOSQL_DB_EXTERNAL_PORT}/
     ports:
       - '${NOSQL_GUI_EXTERNAL_PORT}:8081'
 
@@ -540,8 +488,7 @@ services:
         required: false
     restart: unless-stopped
     networks:
-      denodo-lab-net:
-        ipv4_address: ${GRAPHQL_GUI_IP}
+      - denodo-lab-net 
     ports:
       - '${GRAPHQL_GUI_EXTERNAL_PORT}:4000'
     environment:
@@ -566,12 +513,37 @@ services:
         required: false
     restart: always
     networks:
-      denodo-lab-net:
-        ipv4_address: ${DB_GUI_IP}
+      - denodo-lab-net 
     volumes: 
       - dbclient-lab-env:/opt/cloudbeaver/workspace
     ports:
       - '${DB_GUI_EXTERNAL_PORT}:8978'
+
+  # Jupyter Notebook
+  util-notebook:
+    container_name: denodocommunity-lab-environment-notebook
+    image: ${NOTEBOOK_VERSION}
+    profiles: ["util-notebook"]
+    hostname: ${NOTEBOOK_HOSTNAME}
+    networks:
+      - denodo-lab-net
+    depends_on: [ docker-host ]
+    restart: unless-stopped
+    volumes: 
+      - ${NOTEBOOK_DIRECTORY}:/home/jovyan/work
+    ports:
+      - '${NOTEBOOK_EXTERNAL_PORT}:8888'
+  
+  docker-host:
+    container_name: denodocommunity-lab-environment-dockerhost
+    image: qoomon/docker-host
+    profiles: ["util-notebook"]
+    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
+    restart: on-failure
+    networks:
+      denodo-lab-net:
+        aliases:
+          - ${HOST_ALIAS}
     
 volumes:
   metadatadb-lab-env: 

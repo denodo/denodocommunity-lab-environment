@@ -62,11 +62,23 @@ Each directory has the files for the specific data source:
 | Realm configuration | Keycloak | realm, users, groups | [sso/](res/sso/) |
 | Web services | Tomcat | billing, product, sales (ws) | [war/](res/war/) |
 
-## Denodo Community Lab Environment License
 
-This project is distributed under **Apache License, Version 2.0**. 
+## License
+
+### Denodo Community Lab Environment License
+
+This project is distributed under the **Apache License, Version 2.0**. 
 
 See [LICENSE](../LICENSE)
+
+### Licenses of the data sets
+
+Some Denodo Community Lab Environment Sources are based on third-party projects (not managed by Denodo). Please know that those data sets are licensed under the following terms and conditions. Please refer to the specific software licenses:
+
+* **Human_resources** dataset: it is based on https://github.com/oracle-samples/db-sample-schemas, licensed under the MIT License https://github.com/oracle-samples/db-sample-schemas/blob/main/LICENSE.txt 
+* **tpc_ds** dataset: it is based on the [TPC-DS](http://www.tpc.org/tpcds/) database benchmark. The data set included is a small part of a full dataset generated using the tpcds dsdgen script 
+
+Other data sets not listed here have been created by Denodo and are licensed under the **Apache License, Version 2.0** license, see [LICENSE](../LICENSE)
 
 ## Denodo Community Lab Environment Support
 
