@@ -1,0 +1,4 @@
+lab-environment-containers/build/.env
+lab-environment-sources/res/war/billing/
+lab-environment-sources/res/war/product-ws/
+lab-environment-sources/res/war/sales-ws/

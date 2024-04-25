@@ -15,7 +15,7 @@ collaborators: Victoria Margret, Ajay Kumar
 
 This subproject builds a Virtual Machine including the Denodo Community Lab Environment containers and all dependencies needed for launching that lab environment easily in your system. 
 
-If you do not have Docker installed in your system, but you have a virtualization software like Hyper- or VirtualBox, this is the resource you need for launching the data sources you need for completing the labs available in the Denodo Community, including the labs of the Denodo Training on-demand courses.
+If you do not have Docker installed in your system, but you have a virtualization software like Hyper-V or VirtualBox, this is the resource you need for launching the data sources you need for completing the labs available in the Denodo Community, including the labs of the Denodo Training on-demand courses.
 
 ## Prerequisites
 

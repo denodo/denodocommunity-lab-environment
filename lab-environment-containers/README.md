@@ -36,7 +36,7 @@ Docker version 24.0.5, build ced0996
 $ docker compose version
 Docker Compose version v2.21.0
 ```
-### Denodo Community lab-environment project 
+### Denodo Community Lab Environment project 
 
 You also need the source files of the lab environment. For this, you have to clone this git repository: https://github.com/denodo/denodocommunity-lab-environment 
 
@@ -123,7 +123,7 @@ $ cp .env.template .env
 $ vi .env
 ```
 
-In that file you can configure the hostname, IP address, and the port for connecting to each container **from your local machine** Please note that the connection between containers is always done using the default (internal) ports. In the example below, if you launch a Virtual DataPort container, you can connect from your machine using `//localhost:19999`. But if you are trying to connect from other container, for example, a Design Studio container, you should use the internal hostname and port, in this case `//vdp:9999` or `//172.30.0.2:9999`: 
+In that file you can configure the hostname, IP address, and the port for connecting to each container **from your local machine** Please note that the connection between containers is always done using the default (internal) ports. In the example below, if you launch a Virtual DataPort container, you can connect from your machine using `//localhost:19999`. But if you are trying to connect from other container, for example, a Design Studio container, you should use the internal hostname and port, in this case `//vdp:9999`: 
 ```properties
 # Global network configuration
 NET_SUBNET=172.30.0.0/24
@@ -131,7 +131,6 @@ NET_SUBNET=172.30.0.0/24
 # Virtual Dataport
 # ================
 DENODO_VDP_HOSTNAME=vdp
-DENODO_VDP_IP=172.30.0.2
 DENODO_VDP_EXTERNAL_PORT=19999
 # INTERNAL PORT = 9999
 ...
@@ -247,7 +246,7 @@ In the table below you can find the name of all the containers included by defau
 | ds-postgresql | denodo-commonlab-postgres | postgres:12-alpine | postgres | **PostgreSQL** database. While running this container for the first time, the SQL files from the project directory will be executed and the fact tables of the TPC-DS data set will be imported. It is to be noted that this process only happens once. The default username and password will be `postgres`/`admin`. This container runs in the host **localhost** and port number **5432**. |
 | ds-mariadb | denodocommunity-lab-environment-mariadb | mariadb:11.0.2 | mariadb | **MariaDB** database. While running this container for the first time, the SQL files from the project directory will be executed and the dimension tables of the TPC-DS data set will be imported. It is to be noted that this process only happens once. You can use `root`/`admin` as default user/password and **localhost:3306** as default host/port number for this data source. Data is persisted in the [project]_mariadb-common-lab volume. |
 | ds-mongo | denodocommunity-lab-environment-mongo | mongo:6.0 | mongo | **MongoDB** NoSQL database initialized with a support data set. This server will be launched at host/port **localhost:27017** and the default credentials are `mongoadmin`/`admin`. |
-| ds-httpd | denodocommunity-lab-environment-httpd | httpd:2.4.57 | webserver | **Apache HTTP** server which contains Excel and log files. By default it is listening at http://localhost:1080/ |
+| ds-httpd | denodocommunity-lab-environment-httpd | httpd:2.4.57 | webserver | **Apache HTTP** server which contains MS Excel, JSON and log files. By default it is listening at http://localhost:1080/ |
 
 
 ## External Services
