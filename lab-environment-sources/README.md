@@ -38,7 +38,12 @@ You will have a directory structure like this:
 │   │   ├── db
 │   │   ├── denodo
 │   │   ├── files
+│   │   |   ├── excel
+│   │   |   ├── json
+│   │   |   └── logs
 │   │   ├── ldap
+│   │   ├── nosql
+│   │   |   └── mongodb
 │   │   ├── sso
 │   │   └── war
 │   └── README.md
@@ -50,15 +55,16 @@ You will have a directory structure like this:
 
 Each directory has the files for the specific data source:
 
-| data source | vendor | databases | files |
+| Data source | Vendor | Data sets | Path |
 | ----------- | ----------- | ----------- | ----------- | 
 | database | PostgreSQL | tpc_ds, human_resources, website_sys, historical_orders | [db/postgresql-init.sql](res/db/postgresql-init.sql) |
 | database | MariaDB | tpc_ds, calltracking, sales (tutorial), crm | [db/mariadb-init.sql](res/db/postgresql-init.sql) |
 | denodo monitor logs | Denodo | vdp-queries, vdp-queryblocks | [denodo-monitor/logs/](res/denodo/files/tools/monitor/denodo-monitor/logs/) |
-| binary files | MS Excel | invoices, marketing promotions | [files/excel/](res/files/excel/) |
-| plain text files | - | logs | [files/logs/](res/files/logs/) |
+| Binary files | MS Excel | invoices, marketing promotions, zipcodes | [files/excel/](res/files/excel/) |
+| Delimited files | - | logs | [files/logs/](res/files/json/) |
+| JSON files | - | household demographics | [files/json/](res/files/logs/) |
 | LDIF files | ApacheDS | users, groups | [ldap/](res/ldap/) |
-| NoSQL | mongodb | product, support | [nosql/](res/nosql/) |
+| NoSQL | MongoDB | product, support | [nosql/](res/nosql/) |
 | Realm configuration | Keycloak | realm, users, groups | [sso/](res/sso/) |
 | Web services | Tomcat | billing, product, sales (ws) | [war/](res/war/) |
 
