@@ -1,4 +1,4 @@
-﻿# Generated with Denodo Platform 9.0.
+﻿# Generated with Denodo Platform 9.0.0 BETA.
 
 ENTER SINGLE USER MODE;
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -6,7 +6,7 @@ ENTER SINGLE USER MODE;
 # #######################################
 # USER CREATION
 # #######################################
-CREATE OR REPLACE USER local_user 'xd7cuW3MVa+ne3RGCA6xHFiYOjeFzcHT2i0M+tOVC57lEF+prF90NhAHnM8sj0/4shFlTfzMLLNyl9fL+SGwN7VlFcE74h7NcJsn7uybHlgf6hpXORVdBpF8XS45fCpPmM38YbCiuEOw5SWO2evZBGzwWgvDzUh7oLq9GqjXPbsdfbLeqdFZSDYgDjLjfvZQ1GWtNbSbIPhE2cNKjrW0dPI1hZpRWEUBTS2ATxMOGfHHnBYVOSTxVSvGEk3meqpU'  ENCRYPTED HASH SHA512  '';
+CREATE OR REPLACE USER local_user 'jghNa06xd9SIjTrtZWlq/C5UP4rz6Wp7xHRjeKcoi7nHzBVdtBC9Az1XaoD4puFqZMVkur60g0teTQZB8xw7YceYDcvWqnSHvMXFYkU8D16zaMttOg79hM03ch9kKCpV8eG//M5UhfHmSVWJl47fUeuP0pOw5LyGA65U56uBx85zc4jm1Y2hHA9cpE64UNuUP/MtMUSByrbDQ5kpBHfqL4/xDNaimwLedklYSGmPHq73/rxGc6HfMAJTvtvM3Eq2'  ENCRYPTED HASH SHA512  '';
 
 # #######################################
 # ROLE CREATION
@@ -14,53 +14,147 @@ CREATE OR REPLACE USER local_user 'xd7cuW3MVa+ne3RGCA6xHFiYOjeFzcHT2i0M+tOVC57lE
 # #######################################
 # TAG CREATION
 # #######################################
+# #######################################
+# CONFIGURATION PROPERTIES
+# #######################################
 
 # 0 ====================================================================
 
 # #######################################
-# DATABASE
+# DATABASE of admin
+# #######################################
+CONNECT DATABASE admin;
+
+# #######################################
+# RESOURCES of admin
+# #######################################
+# No vault resources in database admin
+# #######################################
+# LISTENERS JMS of admin
+# #######################################
+# No listeners jms in database admin
+# #######################################
+# LISTENERS KAFKA of admin
+# #######################################
+# No listeners kafka in database admin
+# #######################################
+# DATASOURCES of admin
+# #######################################
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE admin
+  CHARSET DEFAULT;
+
+ALTER DATABASE admin
+  AUTHENTICATION LOCAL;
+
+# #######################################
+# WRAPPERS of admin
+# #######################################
+# No wrappers in database admin
+# #######################################
+# STORED PROCEDURES of admin
+# #######################################
+# No stored procedures in database admin
+# #######################################
+# TYPES of admin
+# #######################################
+# No types in database admin
+# #######################################
+# MAPS of admin
+# #######################################
+# No maps in database admin
+# #######################################
+# BASE VIEWS of admin
+# #######################################
+# No base views in database admin
+# #######################################
+# VIEWS of admin
+# #######################################
+# No views in database admin
+# #######################################
+# ASSOCIATIONS of admin
+# #######################################
+# No associations in database admin
+# #######################################
+# WEBSERVICES of admin
+# #######################################
+# No web services in database admin
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS of admin
+# #######################################
+# No deployed web services in database admin
+# #######################################
+# VIEW STATISTICS of admin
+# #######################################
+# No statistics in database admin
+# #######################################
+# Closing connection with database admin
+# #######################################
+CLOSE;
+
+
+# 1 ====================================================================
+
+# #######################################
+# DATABASE of denodo_training
 # #######################################
 CREATE OR REPLACE DATABASE denodo_training 'Database for training purposes';
 
 CONNECT DATABASE denodo_training;
 
 # #######################################
-# FOLDERS
+# FOLDERS of denodo_training
 # #######################################
 CREATE OR REPLACE FOLDER '/1 - connectivity' ;
 
+CHOWN admin FOLDER '/1 - connectivity';
+
 CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
 
 CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
 
+CHOWN admin FOLDER '/1 - connectivity/2 - base views';
+
 CREATE OR REPLACE FOLDER '/2 - integration' ;
+
+CHOWN admin FOLDER '/2 - integration';
 
 CREATE OR REPLACE FOLDER '/6 - associations' ;
 
+CHOWN admin FOLDER '/6 - associations';
+
 CREATE OR REPLACE FOLDER '/7 - summaries' ;
 
+CHOWN admin FOLDER '/7 - summaries';
+
 # #######################################
-# RESOURCES
+# RESOURCES of denodo_training
 # #######################################
-# No vault resources
+# No vault resources in database denodo_training
 # #######################################
-# LISTENERS JMS
+# LISTENERS JMS of denodo_training
 # #######################################
-# No listeners jms
+# No listeners jms in database denodo_training
 # #######################################
-# LISTENERS KAFKA
+# LISTENERS KAFKA of denodo_training
 # #######################################
-# No listeners kafka
+# No listeners kafka in database denodo_training
 # #######################################
-# DATASOURCES
+# DATASOURCES of denodo_training
 # #######################################
 CREATE OR REPLACE DATASOURCE CUSTOM ds_invoices
     FOLDER = '/1 - connectivity/1 - data sources'
     CLASSNAME='com.denodo.vdb.contrib.wrapper.xls.ExcelWrapper';
 
+CHOWN admin DATASOURCE CUSTOM ds_invoices LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE DATASOURCE DF ds_connections
     FOLDER = '/1 - connectivity/1 - data sources'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost:1080/logs/@{LOG_DATE}.log'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'http://localhost:1080/logs/@{LOG_DATE}.log'
     CHECKCERTIFICATES
     AUTHENTICATION OFF
     PROXY OFF
@@ -68,9 +162,11 @@ CREATE OR REPLACE DATASOURCE DF ds_connections
     ENDOFLINEDELIMITER = '\n'
     HEADER = FALSE;
 
+CHOWN admin DATASOURCE DF ds_connections LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE DATASOURCE DF ds_old_invoices
     FOLDER = '/1 - connectivity/1 - data sources'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost:1080/excel/old_invoices.csv'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'http://localhost:1080/excel/old_invoices.csv'
     AUTHENTICATION OFF
     PROXY OFF
     CHARSET = 'Adobe-Standard-Encoding'
@@ -78,12 +174,14 @@ CREATE OR REPLACE DATASOURCE DF ds_old_invoices
     ENDOFLINEDELIMITER = '\n'
     HEADER = TRUE;
 
+CHOWN admin DATASOURCE DF ds_old_invoices LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE DATASOURCE JDBC ds_call_center
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
     DATABASEURI = 'jdbc:mariadb://localhost:3306/calltracking'
     USERNAME = 'phone'
-    USERPASSWORD = 'phone'
+    USERPASSWORD = 'gvd86Ry0s5Gyb7CaZN3NynDyP38eIl/nKg21sRe2f59xWzQAlfZK1LlMqEjZuffJO8EytGjV77itIdFAqrpg1ZVFz3uvH14V2SVmH6E3wvA4xW3WRFHccEZ8fSHDMhjE' ENCRYPTED
     CLASSPATH = 'mariadb-2.7'
     DATABASENAME = 'Generic'
     DATABASEVERSION = ''
@@ -106,12 +204,14 @@ CREATE OR REPLACE DATASOURCE JDBC ds_call_center
         BATCHINSERTSIZE = 200
     );
 
+CHOWN admin DATASOURCE JDBC ds_call_center LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE DATASOURCE JDBC ds_historical_orders
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/historical_orders'
     USERNAME = 'website_sys'
-    USERPASSWORD = 'website'
+    USERPASSWORD = 'yQFWhf2I/XoB0lq9q9STgcNQtQamELeW62XQlYL9YMz/7BOp1ZTexVeQDBvKm7AFk1OmcLK0fHfclQGQvs9ViwyQhkfN9e5HZeqyqGp+3JvVMlp0SHj4NmRdoGEMrtghXcQ8NI3IAEfLHxVIqVy/pQ==' ENCRYPTED
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -134,14 +234,17 @@ CREATE OR REPLACE DATASOURCE JDBC ds_historical_orders
     KERBEROSPROPERTIES ('jaasLogin'='false', 'user'='<user>')
     DATA_LOAD_CONFIGURATION (
         BATCHINSERTSIZE = 200
+        TARGET_SCHEMA = 'public'
     );
+
+CHOWN admin DATASOURCE JDBC ds_historical_orders LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE DATASOURCE JDBC ds_human_resources
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/human_resources'
     USERNAME = 'human_resources'
-    USERPASSWORD = 'human'
+    USERPASSWORD = 'yzNyCyfJEvbhO+ozpr9tSaMGyK5g/vK6whYR8BGq3WuMPTsidrmoad/TTB45lDXuqXO9hXvSEHqJ82CM1hhz6idzn3eHS5cCS6OkguOXEHsqPHkZJmp+KzRt0eVkiC25' ENCRYPTED
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -165,13 +268,15 @@ CREATE OR REPLACE DATASOURCE JDBC ds_human_resources
     DATA_LOAD_CONFIGURATION (
         BATCHINSERTSIZE = 200
     );
+
+CHOWN admin DATASOURCE JDBC ds_human_resources LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE DATASOURCE JDBC ds_tpcds
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/tpc_ds'
     USERNAME = 'denodo'
-    USERPASSWORD = 'denodo'
+    USERPASSWORD = 'p5/TZt1D9xng3eU2Smhpupom3uayaLnT4cyamjRqHCfxZb45AKX5BMNNYA0fNMaPe+D7znprCLSwZLCpKPH/ih68dfxie+kcmfgXWExYXtRu0M9VDxu5yyPGVEPh1vqBpl7HlJHu+0jr3m49T9U2vw==' ENCRYPTED
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -195,13 +300,15 @@ CREATE OR REPLACE DATASOURCE JDBC ds_tpcds
     DATA_LOAD_CONFIGURATION (
         BATCHINSERTSIZE = 200
     );
+
+CHOWN admin DATASOURCE JDBC ds_tpcds LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE DATASOURCE JDBC ds_web_orders
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/website_sys'
     USERNAME = 'website_sys'
-    USERPASSWORD = 'website'
+    USERPASSWORD = 'RCGsYiLXB2CO1sooQfNR0nMR6TBExYFQBU0TdP8b05bWzMopIa2GvEZoDDv3XPkKwJtEYWbzibfnaStqrBxvNhP7PmyXjgjNH2pablTKCd8vCVr5/ewZIJ6bCK8zSFKdDPmgECvyUjHyyUdgmRpEGw==' ENCRYPTED
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -223,20 +330,25 @@ CREATE OR REPLACE DATASOURCE JDBC ds_web_orders
     PROPERTIES ('escapeSyntaxCallMode'='callIfNoReturn')
     KERBEROSPROPERTIES ('jaasLogin'='false', 'user'='<user>')
     DATA_LOAD_CONFIGURATION (
+        USE_FOR_QUERY_OPTIMIZATION = DATA_MOVEMENT
         BATCHINSERTSIZE = 200
     );
 
+CHOWN admin DATASOURCE JDBC ds_web_orders LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE DATASOURCE JSON ds_sales
     FOLDER = '/1 - connectivity/1 - data sources'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost:8080/sales-ws/sales/'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'http://localhost:8080/sales-ws/sales/'
     HEADERS (
         'Accept'='application/json', 
         'Content-Type'='application/json'
     )
     AUTHENTICATION BASIC ( 
       USER 'admin'
-      PASSWORD 'a,dm0n;' )
+      PASSWORD '3EA/Xs+79+tmXaBfYyUheiB61z9QPmHJIFqkaQfkCxzXa1T3/1gRVcWM8gxqLbvBRIu0vD1mAuWNc5s7kFDuBR5rBKsxO5+6SUgZht4LpNDU/cjX8IF6ZMwBATDt/v8uPok8JcKI1r8Ufhez65JO7A==' ENCRYPTED )
     PROXY OFF;
+
+CHOWN admin DATASOURCE JSON ds_sales LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE DATASOURCE MONGODB ds_nosql
     FOLDER = '/1 - connectivity/1 - data sources'
@@ -246,7 +358,7 @@ CREATE OR REPLACE DATASOURCE MONGODB ds_nosql
     )
     AUTHENTICATION (
         USERNAME = 'mongoadmin'
-        USERPASSWORD = 'admin'
+        USERPASSWORD = 'Uq3tCGdK0sLcEtTsOzDliV1NpXUf/E9nyXIEo3d5fHS0DqnDO3M+2kesvgFCWyiDALjAtY1RIGvmoAjF5hMC1oadfsU36Ykmy06rkTUUIdXnO8/7TDvhavhzXaCYSwp0' ENCRYPTED
      )
     POOL (
         MAXACTIVE = 100
@@ -256,9 +368,11 @@ CREATE OR REPLACE DATASOURCE MONGODB ds_nosql
         WAITQUEUETIMEOUT = 120000
     );
 
+CHOWN admin DATASOURCE MONGODB ds_nosql LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE DATASOURCE XML ds_sales_search
     FOLDER = '/1 - connectivity/1 - data sources'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' POST 'http://localhost:8080/sales-ws/sales/'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' POST 'http://localhost:8080/sales-ws/sales/'
     POSTBODY '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <SalesPostData>
    <customerId>@{cid}</customerId>
@@ -273,8 +387,10 @@ CREATE OR REPLACE DATASOURCE XML ds_sales_search
     )
     AUTHENTICATION BASIC ( 
       USER 'admin'
-      PASSWORD 'a,dm0n;' )
+      PASSWORD 'sK3V1jeUXb0QtqbfX9/T5aBN6ZOYYyjdQDDZ1/UtDCN/KTPR+6Uz2rSnkZqIIyUGS0Z7yg5Kg+dmC5H+AEpi+BZMeIdiZi1Iu2dIPh7KNisRaI1Sx+laMTHPCu7bY+xhut+1RoWeMJdktq1cvsP/pw==' ENCRYPTED )
     PROXY OFF;
+
+CHOWN admin DATASOURCE XML ds_sales_search LASTMODIFICATIONUSER admin;
 
 # #######################################
 # DATABASE CONFIGURATION
@@ -282,16 +398,23 @@ CREATE OR REPLACE DATASOURCE XML ds_sales_search
 ALTER DATABASE denodo_training
   CHARSET DEFAULT;
 
+ALTER DATABASE denodo_training
+  CACHE ON (
+    MAINTENANCE OFF
+    MAINTAINERPERIOD 21600
+    TIMETOLIVE 0
+    DATASOURCE ds_historical_orders DATABASE denodo_training
+  );
 
 # #######################################
-# WRAPPERS
+# WRAPPERS of denodo_training
 # #######################################
 CREATE OR REPLACE WRAPPER CUSTOM ds_invoices
     FOLDER = '/1 - connectivity/1 - data sources'
     DATASOURCENAME=ds_invoices
     PARAMETERS (
       'Type of file' = 'Excel 2007 or later (*.xlsx)',
-      'File location' = ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost:1080/excel/Invoices_2015.xlsx'
+      'File location' = ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'http://localhost:1080/excel/Invoices_2015.xlsx'
         CHECKCERTIFICATES
         AUTHENTICATION OFF
         PROXY OFF,
@@ -318,6 +441,8 @@ CREATE OR REPLACE WRAPPER CUSTOM ds_invoices
         amount = 'amount' : 'java.lang.Integer' (OPT) (sourcetypeid='4')  SORTABLE
     );
 
+CHOWN admin WRAPPER CUSTOM ds_invoices LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER DF bv_old_invoices
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_old_invoices
@@ -335,6 +460,8 @@ CREATE OR REPLACE WRAPPER DF bv_old_invoices
         phone = 'phone' (OPT)
     );
 
+CHOWN admin WRAPPER DF bv_old_invoices LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER DF ds_connections
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_connections
@@ -349,6 +476,8 @@ CREATE OR REPLACE WRAPPER DF ds_connections
         size = 'Column6'
     );
 
+CHOWN admin WRAPPER DF ds_connections LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_cc_agent
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_call_center
@@ -359,6 +488,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_cc_agent
         agent_code = 'agent_code' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='13', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
         agent_name = 'agent_name' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='14', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
     );
+
+CHOWN admin WRAPPER JDBC bv_cc_agent LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_cc_case_definition
     FOLDER = '/1 - connectivity/2 - base views'
@@ -375,6 +506,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_cc_case_definition
         customer_code = 'customer_code' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='20', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
     );
 
+CHOWN admin WRAPPER JDBC bv_cc_case_definition LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_cc_customer
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_call_center
@@ -390,6 +523,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_cc_customer
         other_details = 'other_details' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='250', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
     );
 
+CHOWN admin WRAPPER JDBC bv_cc_customer LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_cc_problem
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_call_center
@@ -399,6 +534,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_cc_problem
         problem_code = 'problem_code' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
         problem_description = 'problem_description' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='41', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
     );
+
+CHOWN admin WRAPPER JDBC bv_cc_problem LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_cc_service_call
     FOLDER = '/1 - connectivity/2 - base views'
@@ -419,6 +556,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_cc_service_call
         customer_code = 'customer_code' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='20', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
     );
 
+CHOWN admin WRAPPER JDBC bv_cc_service_call LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_cc_service_location
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_call_center
@@ -433,6 +572,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_cc_service_location
         other_details = 'other_details' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='0', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
     );
 
+CHOWN admin WRAPPER JDBC bv_cc_service_location LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_cc_status_code
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_call_center
@@ -442,6 +583,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_cc_status_code
         code_id = 'code_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
         code_description = 'code_description' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='16', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
     );
+
+CHOWN admin WRAPPER JDBC bv_cc_status_code LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_employee_subquery
     FOLDER = '/1 - connectivity/2 - base views'
@@ -461,6 +604,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_employee_subquery
         department_id = 'DEPARTMENT_ID' :'java.lang.Short' (sourcetypedecimals='0', sourcetypesize='5', sourcetypeid='5', sourcetypename='int2')  ESCAPE SORTABLE NOT UPDATEABLE
     );
 
+CHOWN admin WRAPPER JDBC bv_employee_subquery LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_ho_order_item
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_historical_orders
@@ -473,6 +618,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_ho_order_item
     )
     CONSTRAINT 'ORDER_ITEM_PK' PRIMARY KEY ( 'ID' )
     INDEX 'ORDER_ITEM_PK' OTHER UNIQUE PRIMARY ( 'ID' );
+
+CHOWN admin WRAPPER JDBC bv_ho_order_item LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_ho_orders
     FOLDER = '/1 - connectivity/2 - base views'
@@ -490,6 +637,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_ho_orders
     CONSTRAINT 'ORDERS_PK' PRIMARY KEY ( 'ID' )
     INDEX 'ORDERS_PK' OTHER UNIQUE PRIMARY ( 'ID' );
 
+CHOWN admin WRAPPER JDBC bv_ho_orders LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_hr_countries
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_human_resources
@@ -504,6 +653,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_hr_countries
     CONSTRAINT 'COUNTR_REG_FK' FOREIGN KEY ( 'REGION_ID' ) 
     REFERENCES 'public'.'REGIONS'( 'REGION_ID' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
     INDEX 'COUNTRY_C_ID_PK' OTHER UNIQUE PRIMARY ( 'COUNTRY_ID' );
+
+CHOWN admin WRAPPER JDBC bv_hr_countries LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_hr_departments
     FOLDER = '/1 - connectivity/2 - base views'
@@ -520,6 +671,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_hr_departments
     CONSTRAINT 'DEPT_LOC_FK' FOREIGN KEY ( 'LOCATION_ID' ) 
     REFERENCES 'public'.'LOCATIONS'( 'LOCATION_ID' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
     INDEX 'DEPT_ID_PK' OTHER UNIQUE PRIMARY ( 'DEPARTMENT_ID' );
+
+CHOWN admin WRAPPER JDBC bv_hr_departments LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_hr_employees
     FOLDER = '/1 - connectivity/2 - base views'
@@ -549,6 +702,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_hr_employees
     INDEX 'EMP_EMAIL_UK' OTHER UNIQUE ( 'EMAIL' )
     INDEX 'EMP_EMP_ID_PK' OTHER UNIQUE PRIMARY ( 'EMPLOYEE_ID' );
 
+CHOWN admin WRAPPER JDBC bv_hr_employees LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_hr_employees_mid_tier
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_human_resources
@@ -559,7 +714,12 @@ CREATE OR REPLACE WRAPPER JDBC bv_hr_employees_mid_tier
         last_name = 'LAST_NAME' :'java.lang.String' (sourcetypedecimals='0', sourcetypesize='25', sourcetypeid='12', sourcetypename='varchar')  ESCAPE NOT NULL SORTABLE NOT UPDATEABLE,
         salary = 'SALARY' :'java.math.BigDecimal' (sourcetypedecimals='2', sourcetypesize='8', sourcetypeid='2', sourcetypename='numeric')  ESCAPE SORTABLE NOT UPDATEABLE,
         department_id = 'DEPARTMENT_ID' :'java.lang.Short' (sourcetypedecimals='0', sourcetypesize='5', sourcetypeid='5', sourcetypename='int2')  ESCAPE SORTABLE NOT UPDATEABLE
+    )
+    SOURCECONFIGURATION (
+        delegatesqlsentenceassubquery = false
     );
+
+CHOWN admin WRAPPER JDBC bv_hr_employees_mid_tier LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_hr_jobs
     FOLDER = '/1 - connectivity/2 - base views'
@@ -574,6 +734,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_hr_jobs
     )
     CONSTRAINT 'JOB_ID_PK' PRIMARY KEY ( 'JOB_ID' )
     INDEX 'JOB_ID_PK' OTHER UNIQUE PRIMARY ( 'JOB_ID' );
+
+CHOWN admin WRAPPER JDBC bv_hr_jobs LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_hr_locations
     FOLDER = '/1 - connectivity/2 - base views'
@@ -593,6 +755,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_hr_locations
     REFERENCES 'public'.'COUNTRIES'( 'COUNTRY_ID' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
     INDEX 'LOC_ID_PK' OTHER UNIQUE PRIMARY ( 'LOCATION_ID' );
 
+CHOWN admin WRAPPER JDBC bv_hr_locations LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_hr_regions
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_human_resources
@@ -604,6 +768,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_hr_regions
     )
     CONSTRAINT 'REG_ID_PK' PRIMARY KEY ( 'REGION_ID' )
     INDEX 'REG_ID_PK' OTHER UNIQUE PRIMARY ( 'REGION_ID' );
+
+CHOWN admin WRAPPER JDBC bv_hr_regions LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_tpcds_catalog_returns
     FOLDER = '/1 - connectivity/2 - base views'
@@ -645,6 +811,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_tpcds_catalog_returns
     CONSTRAINT 'cr_i' FOREIGN KEY ( 'cr_returned_time_sk' ) 
     REFERENCES 'public'.'time_dim'( 't_time_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
     INDEX 'catalog_returns_pkey' OTHER UNIQUE PRIMARY ( 'cr_item_sk' , 'cr_order_number' );
+
+CHOWN admin WRAPPER JDBC bv_tpcds_catalog_returns LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_tpcds_catalog_sales
     FOLDER = '/1 - connectivity/2 - base views'
@@ -696,6 +864,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_tpcds_catalog_sales
     REFERENCES 'public'.'time_dim'( 't_time_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
     INDEX 'catalog_sales_pkey' OTHER UNIQUE PRIMARY ( 'cs_item_sk' , 'cs_order_number' );
 
+CHOWN admin WRAPPER JDBC bv_tpcds_catalog_sales LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_tpcds_date_dim
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_tpcds
@@ -734,6 +904,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_tpcds_date_dim
     CONSTRAINT 'date_dim_pkey' PRIMARY KEY ( 'd_date_sk' )
     INDEX 'date_dim_pkey' OTHER UNIQUE PRIMARY ( 'd_date_sk' );
 
+CHOWN admin WRAPPER JDBC bv_tpcds_date_dim LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_tpcds_inventory
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_tpcds
@@ -749,6 +921,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_tpcds_inventory
     CONSTRAINT 'inv_d' FOREIGN KEY ( 'inv_date_sk' ) 
     REFERENCES 'public'.'date_dim'( 'd_date_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
     INDEX 'inventory_pkey' OTHER UNIQUE PRIMARY ( 'inv_date_sk' , 'inv_item_sk' , 'inv_warehouse_sk' );
+
+CHOWN admin WRAPPER JDBC bv_tpcds_inventory LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_tpcds_store_returns
     FOLDER = '/1 - connectivity/2 - base views'
@@ -783,6 +957,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_tpcds_store_returns
     CONSTRAINT 'sr_t' FOREIGN KEY ( 'sr_return_time_sk' ) 
     REFERENCES 'public'.'time_dim'( 't_time_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
     INDEX 'store_returns_pkey' OTHER UNIQUE PRIMARY ( 'sr_item_sk' , 'sr_ticket_number' );
+
+CHOWN admin WRAPPER JDBC bv_tpcds_store_returns LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_tpcds_store_sales
     FOLDER = '/1 - connectivity/2 - base views'
@@ -821,6 +997,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_tpcds_store_sales
     REFERENCES 'public'.'time_dim'( 't_time_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
     INDEX 'store_sales_pkey' OTHER UNIQUE PRIMARY ( 'ss_item_sk' , 'ss_ticket_number' );
 
+CHOWN admin WRAPPER JDBC bv_tpcds_store_sales LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_tpcds_time_dim
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_tpcds
@@ -840,6 +1018,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_tpcds_time_dim
     )
     CONSTRAINT 'time_dim_pkey' PRIMARY KEY ( 't_time_sk' )
     INDEX 'time_dim_pkey' OTHER UNIQUE PRIMARY ( 't_time_sk' );
+
+CHOWN admin WRAPPER JDBC bv_tpcds_time_dim LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_tpcds_web_returns
     FOLDER = '/1 - connectivity/2 - base views'
@@ -878,6 +1058,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_tpcds_web_returns
     CONSTRAINT 'wr_ret_t' FOREIGN KEY ( 'wr_returned_time_sk' ) 
     REFERENCES 'public'.'time_dim'( 't_time_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
     INDEX 'web_returns_pkey' OTHER UNIQUE PRIMARY ( 'wr_item_sk' , 'wr_order_number' );
+
+CHOWN admin WRAPPER JDBC bv_tpcds_web_returns LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_tpcds_web_sales
     FOLDER = '/1 - connectivity/2 - base views'
@@ -929,6 +1111,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_tpcds_web_sales
     REFERENCES 'public'.'time_dim'( 't_time_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
     INDEX 'web_sales_pkey' OTHER UNIQUE PRIMARY ( 'ws_item_sk' , 'ws_order_number' );
 
+CHOWN admin WRAPPER JDBC bv_tpcds_web_sales LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_wo_customer
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_web_orders
@@ -949,6 +1133,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_wo_customer
     CONSTRAINT 'CUSTOMER_PK' PRIMARY KEY ( 'ID' , 'CUSTOMER_CODE_INTERNAL' )
     INDEX 'CUSTOMER_PK' OTHER UNIQUE PRIMARY ( 'ID' , 'CUSTOMER_CODE_INTERNAL' );
 
+CHOWN admin WRAPPER JDBC bv_wo_customer LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_wo_delivery
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_web_orders
@@ -963,6 +1149,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_wo_delivery
     )
     CONSTRAINT 'DELIVERY_PK' PRIMARY KEY ( 'ID' )
     INDEX 'DELIVERY_PK' OTHER UNIQUE PRIMARY ( 'ID' );
+
+CHOWN admin WRAPPER JDBC bv_wo_delivery LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_wo_distance_from_storage
     FOLDER = '/1 - connectivity/2 - base views'
@@ -991,6 +1179,8 @@ distance asc'
         lon_input = 'LON_INPUT' :'java.lang.String' (OBL) (DEFAULTVALUE='0')  EXTERN SORTABLE
     );
 
+CHOWN admin WRAPPER JDBC bv_wo_distance_from_storage LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_wo_order_item
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_web_orders
@@ -1003,6 +1193,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_wo_order_item
     )
     CONSTRAINT 'ORDER_ITEM_PK' PRIMARY KEY ( 'ID' )
     INDEX 'ORDER_ITEM_PK' OTHER UNIQUE PRIMARY ( 'ID' );
+
+CHOWN admin WRAPPER JDBC bv_wo_order_item LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_wo_orders
     FOLDER = '/1 - connectivity/2 - base views'
@@ -1020,6 +1212,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_wo_orders
     CONSTRAINT 'ORDERS_PK' PRIMARY KEY ( 'ID' )
     INDEX 'ORDERS_PK' OTHER UNIQUE PRIMARY ( 'ID' );
 
+CHOWN admin WRAPPER JDBC bv_wo_orders LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JDBC bv_wo_stock
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_web_orders
@@ -1033,6 +1227,8 @@ CREATE OR REPLACE WRAPPER JDBC bv_wo_stock
     )
     CONSTRAINT 'STOCK_PK' PRIMARY KEY ( 'ID' )
     INDEX 'STOCK_PK' OTHER UNIQUE PRIMARY ( 'ID' );
+
+CHOWN admin WRAPPER JDBC bv_wo_stock LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC bv_wo_storages
     FOLDER = '/1 - connectivity/2 - base views'
@@ -1052,11 +1248,104 @@ CREATE OR REPLACE WRAPPER JDBC bv_wo_storages
     CONSTRAINT 'STORAGES_PK' PRIMARY KEY ( 'ID' )
     INDEX 'STORAGES_PK' OTHER UNIQUE PRIMARY ( 'ID' );
 
+CHOWN admin WRAPPER JDBC bv_wo_storages LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC ds_historical_orders_bv_wo_customer
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_historical_orders
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='CUSTOMER' ESCAPE
+    OUTPUTSCHEMA (
+        id = 'ID' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  ESCAPE NOT NULL SORTABLE,
+        customer_code_internal = 'CUSTOMER_CODE_INTERNAL' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  ESCAPE NOT NULL SORTABLE,
+        first_name = 'FIRST_NAME' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='50', sourcetypeid='12', sourcetypename='varchar')  ESCAPE NOT NULL SORTABLE,
+        last_name = 'LAST_NAME' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='100', sourcetypeid='12', sourcetypename='varchar')  ESCAPE SORTABLE,
+        email = 'EMAIL' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='50', sourcetypeid='12', sourcetypename='varchar')  ESCAPE NOT NULL SORTABLE,
+        phone = 'PHONE' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  ESCAPE SORTABLE,
+        main_address = 'MAIN_ADDRESS' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='200', sourcetypeid='12', sourcetypename='varchar')  ESCAPE SORTABLE,
+        main_postcode = 'MAIN_POSTCODE' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  ESCAPE SORTABLE,
+        main_country = 'MAIN_COUNTRY' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='100', sourcetypeid='12', sourcetypename='varchar')  ESCAPE SORTABLE,
+        registered_date = 'REGISTERED_DATE' :'java.time.LocalDateTime' (OPT) (sourcetypedecimals='6', sourcetyperadix='10', sourcetypesize='29', sourcetypeid='93', sourcetypename='timestamp')  ESCAPE NOT NULL SORTABLE
+    );
+
+CHOWN admin WRAPPER JDBC ds_historical_orders_bv_wo_customer LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC s_customer_sale
+    FOLDER = '/7 - summaries'
+    DATASOURCENAME=ds_web_orders
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='s_customer_sale' 
+    OUTPUTSCHEMA (
+        customer_code = 'customer_code' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        total_orders = 'total_orders' :'java.lang.Long' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='19', sourcetypeid='-5', sourcetypename='int8')  SORTABLE
+    );
+
+CHOWN admin WRAPPER JDBC s_customer_sale LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC s_order_count
+    FOLDER = '/7 - summaries'
+    DATASOURCENAME=ds_web_orders
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='s_order_count' 
+    OUTPUTSCHEMA (
+        customer_code = 'customer_code' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        product_id = 'product_id' :'java.lang.Long' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        main_country = 'main_country' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='100', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        cnt_per_cust_per_product = 'cnt_per_cust_per_product' :'java.lang.Long' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='19', sourcetypeid='-5', sourcetypename='int8')  SORTABLE,
+        cnt_item_per_cust_per_product = 'cnt_item_per_cust_per_product' :'java.lang.Long' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='19', sourcetypeid='-5', sourcetypename='int8')  SORTABLE
+    );
+
+CHOWN admin WRAPPER JDBC s_order_count LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC sum1_bv_hr_employees_bv_hr_departments
+    FOLDER = '/7 - summaries'
+    DATASOURCENAME=ds_human_resources
+    RELATIONNAME='sum_10524_bv_hr_departments_bv_2843452757228462162316832398050' 
+    OUTPUTSCHEMA (
+        department_name = 'department_name' :'java.lang.String' (OPT) (sourcetypesize='30', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        location_id = 'location_id' :'java.lang.Integer' (OPT) (sourcetypesize='5', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        employee_id = 'employee_id' :'java.lang.Integer' (OPT) (sourcetypesize='10', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        first_name = 'first_name' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        last_name = 'last_name' :'java.lang.String' (OPT) (sourcetypesize='25', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        email = 'email' :'java.lang.String' (OPT) (sourcetypesize='50', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        phone_number = 'phone_number' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        hire_date = 'hire_date' :'java.time.LocalDate' (OPT) (sourcetypeid='91', sourcetypename='DATE')  SORTABLE NOT UPDATEABLE,
+        job_id = 'job_id' :'java.lang.String' (OPT) (sourcetypesize='10', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        salary = 'salary' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetypesize='8', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        commission_pct = 'commission_pct' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetypesize='2', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        manager_id = 'manager_id' :'java.lang.Integer' (OPT) (sourcetypesize='10', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        department_id = 'department_id' :'java.lang.Integer' (OPT) (sourcetypesize='5', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE
+    );
+
+CHOWN admin WRAPPER JDBC sum1_bv_hr_employees_bv_hr_departments LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC sum2_bv_hr_employees_bv_hr_departments
+    FOLDER = '/7 - summaries'
+    DATASOURCENAME=ds_human_resources
+    RELATIONNAME='sum_11124_bv_hr_departments_bv_1905633217219255561127745991903' 
+    OUTPUTSCHEMA (
+        department_name = 'department_name' :'java.lang.String' (OPT) (sourcetypesize='30', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        location_id = 'location_id' :'java.lang.Integer' (OPT) (sourcetypesize='5', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        employee_id = 'employee_id' :'java.lang.Integer' (OPT) (sourcetypesize='10', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        first_name = 'first_name' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        last_name = 'last_name' :'java.lang.String' (OPT) (sourcetypesize='25', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        email = 'email' :'java.lang.String' (OPT) (sourcetypesize='50', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        phone_number = 'phone_number' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        hire_date = 'hire_date' :'java.time.LocalDate' (OPT) (sourcetypeid='91', sourcetypename='DATE')  SORTABLE NOT UPDATEABLE,
+        job_id = 'job_id' :'java.lang.String' (OPT) (sourcetypesize='10', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        salary = 'salary' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetypesize='8', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        commission_pct = 'commission_pct' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetypesize='2', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        manager_id = 'manager_id' :'java.lang.Integer' (OPT) (sourcetypesize='10', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        department_id = 'department_id' :'java.lang.Integer' (OPT) (sourcetypesize='5', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE
+    );
+
+CHOWN admin WRAPPER JDBC sum2_bv_hr_employees_bv_hr_departments LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JSON ds_sales
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_sales
     TUPLEROOT '/JSONFile'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET ''
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET ''
     OUTPUTSCHEMA (jsonfile = 'JSONFile' : REGISTER OF (
         salesdata = 'salesData' : ARRAY OF (
             salesdata = 'salesData' : REGISTER OF (
@@ -1078,11 +1367,13 @@ CREATE OR REPLACE WRAPPER JSON ds_sales
     )
     );
 
+CHOWN admin WRAPPER JSON ds_sales LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER JSON "ds_sales_b39ea34d-0ee5-43ed-be1c-3a612fddf877"
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_sales
     TUPLEROOT '/JSONFile/salesData/sales'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET ''
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET ''
     OUTPUTSCHEMA (jsonfile = 'JSONFile' : REGISTER OF (
         productid_0 = 'JSONFile.salesData.productId' : 'java.lang.String',
         saleid = 'JSONFile.salesData.sales.saleId' : 'java.lang.String',
@@ -1095,6 +1386,8 @@ CREATE OR REPLACE WRAPPER JSON "ds_sales_b39ea34d-0ee5-43ed-be1c-3a612fddf877"
         totalprice = 'JSONFile.salesData.sales.totalPrice' : 'java.lang.String'
     )
     );
+
+CHOWN admin WRAPPER JSON "ds_sales_b39ea34d-0ee5-43ed-be1c-3a612fddf877" LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER MONGODB products
     FOLDER = '/1 - connectivity/2 - base views'
@@ -1127,11 +1420,13 @@ CREATE OR REPLACE WRAPPER MONGODB products
         )
     );
 
+CHOWN admin WRAPPER MONGODB products LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE WRAPPER XML ds_sales_search
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_sales_search
     TUPLEROOT '/salesDataList/salesData/sales'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET ''
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET ''
     OUTPUTSCHEMA (salesdatalist = 'salesDataList' : REGISTER OF (
         pid = 'pid' : 'java.lang.String' (OBL) (DEFAULTVALUE='2') EXTERN,
         eid = 'eid' : 'java.lang.String' (OBL) (DEFAULTVALUE='48') EXTERN,
@@ -1148,12 +1443,14 @@ CREATE OR REPLACE WRAPPER XML ds_sales_search
     )
     );
 
+CHOWN admin WRAPPER XML ds_sales_search LASTMODIFICATIONUSER admin;
+
 # #######################################
-# STORED PROCEDURES
+# STORED PROCEDURES of denodo_training
 # #######################################
-# No stored procedures
+# No stored procedures in database denodo_training
 # #######################################
-# TYPES
+# TYPES of denodo_training
 # #######################################
 CREATE OR REPLACE TYPE _register_employeeid_customerid_saledate_bundleamount AS REGISTER OF (employeeid:text, customerid:text, saledate:text, bundleamount:text);
 
@@ -1186,11 +1483,11 @@ CREATE OR REPLACE TYPE ds_sales_salesdata_salesdata AS REGISTER OF (productid:te
 CREATE OR REPLACE TYPE ds_sales_salesdata AS ARRAY OF ds_sales_salesdata_salesdata;
 
 # #######################################
-# MAPS
+# MAPS of denodo_training
 # #######################################
-# No maps
+# No maps in database denodo_training
 # #######################################
-# BASE VIEWS
+# BASE VIEWS of denodo_training
 # #######################################
 CREATE OR REPLACE TABLE bv_cc_agent I18N us_pst (
         agent_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
@@ -1211,6 +1508,8 @@ CREATE OR REPLACE TABLE bv_cc_agent I18N us_pst (
         )
         WRAPPER (jdbc bv_cc_agent)
     );
+
+CHOWN admin VIEW bv_cc_agent LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_cc_case_definition I18N us_pst (
         case_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
@@ -1240,6 +1539,8 @@ CREATE OR REPLACE TABLE bv_cc_case_definition I18N us_pst (
         WRAPPER (jdbc bv_cc_case_definition)
     );
 
+CHOWN admin VIEW bv_cc_case_definition LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_cc_customer I18N us_pst (
         customer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
         customer_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '21', description = ''),
@@ -1268,6 +1569,8 @@ CREATE OR REPLACE TABLE bv_cc_customer I18N us_pst (
         WRAPPER (jdbc bv_cc_customer)
     );
 
+CHOWN admin VIEW bv_cc_customer LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_cc_problem I18N us_pst (
         problem_code:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
         problem_description:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '41', description = '')
@@ -1285,6 +1588,8 @@ CREATE OR REPLACE TABLE bv_cc_problem I18N us_pst (
         )
         WRAPPER (jdbc bv_cc_problem)
     );
+
+CHOWN admin VIEW bv_cc_problem LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_cc_service_call I18N us_pst (
         call_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
@@ -1322,6 +1627,8 @@ CREATE OR REPLACE TABLE bv_cc_service_call I18N us_pst (
         WRAPPER (jdbc bv_cc_service_call)
     );
 
+CHOWN admin VIEW bv_cc_service_call LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_cc_service_location I18N us_pst (
         id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
         location_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
@@ -1348,6 +1655,8 @@ CREATE OR REPLACE TABLE bv_cc_service_location I18N us_pst (
         WRAPPER (jdbc bv_cc_service_location)
     );
 
+CHOWN admin VIEW bv_cc_service_location LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_cc_status_code I18N us_pst (
         code_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
         code_description:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '16', description = '')
@@ -1365,6 +1674,8 @@ CREATE OR REPLACE TABLE bv_cc_status_code I18N us_pst (
         )
         WRAPPER (jdbc bv_cc_status_code)
     );
+
+CHOWN admin VIEW bv_cc_status_code LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_conn_events I18N us_pst (
         log_date:text (extern),
@@ -1396,6 +1707,8 @@ CREATE OR REPLACE TABLE bv_conn_events I18N us_pst (
         WRAPPER (df ds_connections)
     );
 
+CHOWN admin VIEW bv_conn_events LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_ho_order_item I18N us_pst (
         id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
         order_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -1416,6 +1729,8 @@ CREATE OR REPLACE TABLE bv_ho_order_item I18N us_pst (
         )
         WRAPPER (jdbc bv_ho_order_item)
     );
+
+CHOWN admin VIEW bv_ho_order_item LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_ho_orders I18N us_pst (
         id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -1444,6 +1759,8 @@ CREATE OR REPLACE TABLE bv_ho_orders I18N us_pst (
         WRAPPER (jdbc bv_ho_orders)
     );
 
+CHOWN admin VIEW bv_ho_orders LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_hr_countries I18N us_pst (
         country_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
         country_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '40'),
@@ -1464,6 +1781,8 @@ CREATE OR REPLACE TABLE bv_hr_countries I18N us_pst (
         )
         WRAPPER (jdbc bv_hr_countries)
     );
+
+CHOWN admin VIEW bv_hr_countries LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_hr_departments I18N us_pst (
         department_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -1488,6 +1807,8 @@ CREATE OR REPLACE TABLE bv_hr_departments I18N us_pst (
         WRAPPER (jdbc bv_hr_departments)
     )
     SMART_THEN_ATSOURCE_THROUGH_VDP;
+
+CHOWN admin VIEW bv_hr_departments LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_hr_employee_subquery I18N us_pst (
         employee_id:int (notnull, sourcetypeid = '4', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -1524,6 +1845,8 @@ CREATE OR REPLACE TABLE bv_hr_employee_subquery I18N us_pst (
         )
         WRAPPER (jdbc bv_employee_subquery)
     );
+
+CHOWN admin VIEW bv_hr_employee_subquery LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_hr_employees I18N us_pst (
         employee_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -1563,6 +1886,8 @@ CREATE OR REPLACE TABLE bv_hr_employees I18N us_pst (
     )
     SMART_THEN_ATSOURCE_THROUGH_VDP;
 
+CHOWN admin VIEW bv_hr_employees LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_hr_employees_mid_tier I18N us_pst (
         first_name:text (sourcetypeid = '-9', sourcetypedecimals = '0', sourcetypesize = '20'),
         last_name:text (notnull, sourcetypeid = '-9', sourcetypedecimals = '0', sourcetypesize = '25'),
@@ -1584,6 +1909,8 @@ CREATE OR REPLACE TABLE bv_hr_employees_mid_tier I18N us_pst (
         )
         WRAPPER (jdbc bv_hr_employees_mid_tier)
     );
+
+CHOWN admin VIEW bv_hr_employees_mid_tier LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_hr_jobs I18N us_pst (
         job_id:text (notnull, sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -1607,6 +1934,8 @@ CREATE OR REPLACE TABLE bv_hr_jobs I18N us_pst (
         )
         WRAPPER (jdbc bv_hr_jobs)
     );
+
+CHOWN admin VIEW bv_hr_jobs LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_hr_locations I18N us_pst (
         location_id:int (notnull, sourcetypeid = '5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '5'),
@@ -1635,6 +1964,8 @@ CREATE OR REPLACE TABLE bv_hr_locations I18N us_pst (
         WRAPPER (jdbc bv_hr_locations)
     );
 
+CHOWN admin VIEW bv_hr_locations LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_hr_regions I18N us_pst (
         region_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
         region_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '25')
@@ -1653,6 +1984,8 @@ CREATE OR REPLACE TABLE bv_hr_regions I18N us_pst (
         )
         WRAPPER (jdbc bv_hr_regions)
     );
+
+CHOWN admin VIEW bv_hr_regions LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_invoices I18N us_pst (
         invoice_id:int (sourcetypeid = '4'),
@@ -1696,6 +2029,8 @@ CREATE OR REPLACE TABLE bv_invoices I18N us_pst (
         WRAPPER (custom ds_invoices)
     );
 
+CHOWN admin VIEW bv_invoices LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_old_invoices I18N us_est (
         invoice:text,
         email:text,
@@ -1732,13 +2067,7 @@ CREATE OR REPLACE TABLE bv_old_invoices I18N us_est (
         WRAPPER (df bv_old_invoices)
     );
 
-CREATE OR REPLACE TYPE products_category AS REGISTER OF (categoryid:int, categoryname:text);
-
-CREATE OR REPLACE TYPE products_characteristics AS REGISTER OF (characteristic_dimensions:text, characteristic_weight:text, characteristic_details:text, characteristic_color:text);
-
-CREATE OR REPLACE TYPE products_accessories_accessories AS REGISTER OF (productid:int, productname:text, productprice:double);
-
-CREATE OR REPLACE TYPE products_accessories AS ARRAY OF products_accessories_accessories;
+CHOWN admin VIEW bv_old_invoices LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_product I18N us_pst (
         _id:text,
@@ -1751,7 +2080,9 @@ CREATE OR REPLACE TABLE bv_product I18N us_pst (
         accessories:products_accessories
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'productid' )
     CACHE OFF
+    BATCHSIZEINCACHE DEFAULT
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD products(
         I18N us_pst
@@ -1779,6 +2110,8 @@ CREATE OR REPLACE TABLE bv_product I18N us_pst (
         )
         WRAPPER (mongodb products)
     );
+
+CHOWN admin VIEW bv_product LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_sales_all I18N us_pst (
         productid_0:text,
@@ -1812,13 +2145,7 @@ CREATE OR REPLACE TABLE bv_sales_all I18N us_pst (
         WRAPPER (json "ds_sales_b39ea34d-0ee5-43ed-be1c-3a612fddf877")
     );
 
-CREATE OR REPLACE TYPE ds_sales_salesdata_salesdata_sales_sales AS REGISTER OF (saleid:text, productid:text, employeeid:text, customerid:text, saledate:text, bundleamount:text, productsaleprice:text, totalprice:text);
-
-CREATE OR REPLACE TYPE ds_sales_salesdata_salesdata_sales AS ARRAY OF ds_sales_salesdata_salesdata_sales_sales;
-
-CREATE OR REPLACE TYPE ds_sales_salesdata_salesdata AS REGISTER OF (productid:text, sales:ds_sales_salesdata_salesdata_sales);
-
-CREATE OR REPLACE TYPE ds_sales_salesdata AS ARRAY OF ds_sales_salesdata_salesdata;
+CHOWN admin VIEW bv_sales_all LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_sales_all_array I18N us_pst (
         salesdata:ds_sales_salesdata
@@ -1847,6 +2174,8 @@ CREATE OR REPLACE TABLE bv_sales_all_array I18N us_pst (
         )
         WRAPPER (json ds_sales)
     );
+
+CHOWN admin VIEW bv_sales_all_array LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_sales_search I18N us_pst (
         pid:text (extern),
@@ -1885,6 +2214,8 @@ CREATE OR REPLACE TABLE bv_sales_search I18N us_pst (
         )
         WRAPPER (xml ds_sales_search)
     );
+
+CHOWN admin VIEW bv_sales_search LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_tpcds_catalog_returns I18N us_pst (
         cr_returned_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -1954,6 +2285,8 @@ CREATE OR REPLACE TABLE bv_tpcds_catalog_returns I18N us_pst (
         )
         WRAPPER (jdbc bv_tpcds_catalog_returns)
     );
+
+CHOWN admin VIEW bv_tpcds_catalog_returns LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_tpcds_catalog_sales I18N us_pst (
         cs_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -2038,6 +2371,8 @@ CREATE OR REPLACE TABLE bv_tpcds_catalog_sales I18N us_pst (
         WRAPPER (jdbc bv_tpcds_catalog_sales)
     );
 
+CHOWN admin VIEW bv_tpcds_catalog_sales LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_tpcds_date_dim I18N us_pst (
         d_date_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
         d_date_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '16'),
@@ -2109,6 +2444,8 @@ CREATE OR REPLACE TABLE bv_tpcds_date_dim I18N us_pst (
         WRAPPER (jdbc bv_tpcds_date_dim)
     );
 
+CHOWN admin VIEW bv_tpcds_date_dim LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_tpcds_inventory I18N us_pst (
         inv_date_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
         inv_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -2131,6 +2468,8 @@ CREATE OR REPLACE TABLE bv_tpcds_inventory I18N us_pst (
         )
         WRAPPER (jdbc bv_tpcds_inventory)
     );
+
+CHOWN admin VIEW bv_tpcds_inventory LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_tpcds_store_returns I18N us_pst (
         sr_returned_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -2186,6 +2525,8 @@ CREATE OR REPLACE TABLE bv_tpcds_store_returns I18N us_pst (
         )
         WRAPPER (jdbc bv_tpcds_store_returns)
     );
+
+CHOWN admin VIEW bv_tpcds_store_returns LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_tpcds_store_sales I18N us_pst (
         ss_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -2248,6 +2589,8 @@ CREATE OR REPLACE TABLE bv_tpcds_store_sales I18N us_pst (
         WRAPPER (jdbc bv_tpcds_store_sales)
     );
 
+CHOWN admin VIEW bv_tpcds_store_sales LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_tpcds_time_dim I18N us_pst (
         t_time_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
         t_time_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '16'),
@@ -2282,6 +2625,8 @@ CREATE OR REPLACE TABLE bv_tpcds_time_dim I18N us_pst (
         )
         WRAPPER (jdbc bv_tpcds_time_dim)
     );
+
+CHOWN admin VIEW bv_tpcds_time_dim LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_tpcds_web_returns I18N us_pst (
         wr_returned_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -2345,6 +2690,8 @@ CREATE OR REPLACE TABLE bv_tpcds_web_returns I18N us_pst (
         )
         WRAPPER (jdbc bv_tpcds_web_returns)
     );
+
+CHOWN admin VIEW bv_tpcds_web_returns LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_tpcds_web_sales I18N us_pst (
         ws_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -2429,6 +2776,8 @@ CREATE OR REPLACE TABLE bv_tpcds_web_sales I18N us_pst (
         WRAPPER (jdbc bv_tpcds_web_sales)
     );
 
+CHOWN admin VIEW bv_tpcds_web_sales LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_wo_customer I18N us_pst (
         id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
         customer_code_internal:text (notnull, sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
@@ -2462,7 +2811,10 @@ CREATE OR REPLACE TABLE bv_wo_customer I18N us_pst (
         OUTPUTLIST (customer_code_internal, email, first_name, id, last_name, main_address, main_country, main_postcode, phone, registered_date
         )
         WRAPPER (jdbc bv_wo_customer)
+        ALTERNATIVE_WRAPPERS (jdbc ds_historical_orders_bv_wo_customer)
     );
+
+CHOWN admin VIEW bv_wo_customer LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_wo_delivery I18N us_pst (
         id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -2488,6 +2840,8 @@ CREATE OR REPLACE TABLE bv_wo_delivery I18N us_pst (
         )
         WRAPPER (jdbc bv_wo_delivery)
     );
+
+CHOWN admin VIEW bv_wo_delivery LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_wo_distance_from_storage I18N us_pst (
         lat_storage:decimal (sourcetypeid = '2', sourcetypedecimals = '10', sourcetypesize = '20'),
@@ -2515,6 +2869,8 @@ CREATE OR REPLACE TABLE bv_wo_distance_from_storage I18N us_pst (
         WRAPPER (jdbc bv_wo_distance_from_storage)
     );
 
+CHOWN admin VIEW bv_wo_distance_from_storage LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_wo_order_item I18N us_pst (
         id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
         order_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -2535,6 +2891,8 @@ CREATE OR REPLACE TABLE bv_wo_order_item I18N us_pst (
         )
         WRAPPER (jdbc bv_wo_order_item)
     );
+
+CHOWN admin VIEW bv_wo_order_item LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_wo_orders I18N us_pst (
         id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -2563,6 +2921,8 @@ CREATE OR REPLACE TABLE bv_wo_orders I18N us_pst (
         WRAPPER (jdbc bv_wo_orders)
     );
 
+CHOWN admin VIEW bv_wo_orders LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_wo_stock I18N us_pst (
         id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
         product_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -2585,6 +2945,8 @@ CREATE OR REPLACE TABLE bv_wo_stock I18N us_pst (
         )
         WRAPPER (jdbc bv_wo_stock)
     );
+
+CHOWN admin VIEW bv_wo_stock LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_wo_storages I18N us_pst (
         id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -2617,26 +2979,38 @@ CREATE OR REPLACE TABLE bv_wo_storages I18N us_pst (
         WRAPPER (jdbc bv_wo_storages)
     );
 
+CHOWN admin VIEW bv_wo_storages LASTMODIFICATIONUSER admin;
+
 # #######################################
-# VIEWS
+# VIEWS of denodo_training
 # #######################################
 CREATE OR REPLACE VIEW iv_all_invoices FOLDER = '/2 - integration' AS SELECT invoice_id AS invoice_id, order_id AS order_id, date_closed AS date_closed, first_name AS first_name, last_name AS last_name, email AS email, address AS address, country AS country, postal_code AS postal_code, phone AS phone, amount AS amount FROM (SELECT invoice_id, order_id, date_closed, first_name, last_name, email, address, country, postal_code, phone, amount FROM bv_invoices SQL UNION SELECT invoice, order, date_closed, name, surname, email, address, country, postal_code, phone, cost FROM bv_old_invoices);
 
+CHOWN admin VIEW iv_all_invoices LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE VIEW iv_current_customer FOLDER = '/2 - integration' AS SELECT bv_wo_customer.id AS id, bv_wo_customer.customer_code_internal AS customer_code_internal, bv_wo_customer.first_name AS first_name, bv_wo_customer.last_name AS last_name, bv_wo_customer.email AS email, bv_wo_customer.phone AS phone, bv_wo_customer.main_address AS main_address, bv_wo_customer.main_postcode AS main_postcode, bv_wo_customer.main_country AS main_country, bv_wo_customer.registered_date AS registered_date FROM bv_wo_customer WHERE registered_date > DATE '2015-01-01';
+
+CHOWN admin VIEW iv_current_customer LASTMODIFICATIONUSER admin;
 
 ALTER VIEW iv_current_customer
  LAYOUT (bv_wo_customer = [20, 20, 200, 200]);
 
 CREATE OR REPLACE VIEW iv_customer_address FOLDER = '/2 - integration' AS SELECT bv_wo_customer.id, bv_wo_customer.customer_code_internal, bv_wo_customer.first_name, bv_wo_customer.last_name, bv_wo_customer.email, bv_wo_customer.phone, bv_wo_customer.registered_date, register(bv_wo_customer.main_address, bv_wo_customer.main_postcode, bv_wo_customer.main_country) AS address FROM bv_wo_customer;
 
+CHOWN admin VIEW iv_customer_address LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE VIEW iv_customer_china FOLDER = '/2 - integration'
     PRIMARY KEY ( 'id' , 'customer_code_internal' ) AS SELECT bv_wo_customer.id AS id, bv_wo_customer.customer_code_internal AS customer_code_internal, bv_wo_customer.first_name AS first_name, bv_wo_customer.last_name AS last_name, bv_wo_customer.email AS email, bv_wo_customer.phone AS phone, bv_wo_customer.main_address AS main_address, bv_wo_customer.main_country AS main_country, bv_wo_customer.registered_date AS registered_date FROM bv_wo_customer WHERE main_country = 'China' ORDER BY registered_date DESC;
+
+CHOWN admin VIEW iv_customer_china LASTMODIFICATIONUSER admin;
 
 ALTER VIEW iv_customer_china
  LAYOUT (bv_wo_customer = [316, 181, 200, 200]);
 
 CREATE OR REPLACE VIEW iv_customer_info FOLDER = '/2 - integration'
     PRIMARY KEY ( 'id' ) AS SELECT bv_wo_customer.id AS id, bv_wo_customer.first_name AS first_name, bv_wo_customer.phone AS phone, bv_wo_customer.customer_code_internal AS customer_code, len(bv_wo_customer.first_name) AS name_length FROM bv_wo_customer ORDER BY first_name DESC;
+
+CHOWN admin VIEW iv_customer_info LASTMODIFICATIONUSER admin;
 
 ALTER VIEW iv_customer_info
  LAYOUT (bv_wo_customer = [136, 135, 200, 200]);
@@ -2646,54 +3020,78 @@ CREATE OR REPLACE VIEW iv_customer_orders FOLDER = '/2 - integration' AS SELECT 
 ALTER VIEW iv_customer_orders
  LAYOUT (bv_wo_order_item = [56, 51, 200, 200], bv_wo_orders = [55, 161, 200, 200], bv_product = [411, 47, 200, 200], bv_wo_customer = [410, 160, 200, 200]);
 
+CHOWN admin VIEW iv_customer_orders LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE VIEW iv_employee_dept FOLDER = '/2 - integration' AS SELECT bv_hr_employees.employee_id AS employee_id, bv_hr_employees.first_name AS first_name, bv_hr_employees.last_name AS last_name, bv_hr_employees.email AS email, bv_hr_employees.phone_number AS phone_number, bv_hr_employees.hire_date AS hire_date, bv_hr_employees.job_id AS job_id, bv_hr_employees.salary AS salary, bv_hr_employees.commission_pct AS commission_pct, bv_hr_employees.manager_id AS manager_id, bv_hr_employees.department_id AS department_id, bv_hr_departments.department_name AS department_name, bv_hr_departments.manager_id AS dept_manager_id, bv_hr_departments.location_id AS location_id FROM bv_hr_employees AS bv_hr_employees INNER JOIN bv_hr_departments AS bv_hr_departments ON bv_hr_employees.department_id = bv_hr_departments.department_id ;
 
 ALTER VIEW iv_employee_dept
  LAYOUT (bv_hr_employees = [149, 104, 200, 200], bv_hr_departments = [496, 104, 200, 200]);
+
+CHOWN admin VIEW iv_employee_dept LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE VIEW iv_employee_income FOLDER = '/2 - integration' AS SELECT bv_hr_employees.employee_id AS employee_id, bv_hr_employees.first_name AS first_name, bv_hr_employees.last_name AS last_name, bv_hr_employees.email AS email, bv_hr_employees.phone_number AS phone_number, bv_hr_employees.hire_date AS hire_date, bv_hr_employees.job_id AS job_id, bv_hr_employees.salary AS salary, bv_hr_employees.commission_pct AS commission_pct, bv_hr_employees.manager_id AS manager_id, bv_hr_employees.department_id AS department_id, bv_hr_jobs.job_title AS job_title, bv_hr_jobs.min_salary AS min_salary, bv_hr_jobs.max_salary AS max_salary FROM bv_hr_employees AS bv_hr_employees INNER JOIN bv_hr_jobs AS bv_hr_jobs ON bv_hr_employees.job_id = bv_hr_jobs.job_id ;
 
 ALTER VIEW iv_employee_income
  LAYOUT (bv_hr_employees = [278, 103, 200, 200], bv_hr_jobs = [805, 131, 200, 200]);
 
+CHOWN admin VIEW iv_employee_income LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE VIEW iv_employee_sales_by_date FOLDER = '/2 - integration' AS SELECT bv_sales_all.employeeid AS employeeid, count(*) AS total_sales, sum(cast('int', bv_sales_all.productsaleprice)) AS total_price, start_date, end_date FROM bv_sales_all WHERE to_localdate('yyyy-MM-dd''T''HH:mm:ss', saledate) between start_date AND end_date GROUP BY bv_sales_all.employeeid USING PARAMETERS ( start_date : localdate to_localdate('yyyy/MM/dd', '1970/01/01'), end_date : localdate current_date());
+
+CHOWN admin VIEW iv_employee_sales_by_date LASTMODIFICATIONUSER admin;
 
 ALTER VIEW iv_employee_sales_by_date
  LAYOUT (bv_sales_all = [20, 20, 200, 200]);
 
 CREATE OR REPLACE VIEW iv_employee_seniority FOLDER = '/2 - integration' AS SELECT bv_hr_employees.employee_id AS employee_id, bv_hr_employees.first_name AS first_name, bv_hr_employees.last_name AS last_name, bv_hr_employees.email AS email, bv_hr_employees.phone_number AS phone_number, bv_hr_employees.hire_date AS hire_date, bv_hr_employees.job_id AS job_id, bv_hr_employees.salary AS salary, bv_hr_employees.commission_pct AS commission_pct, bv_hr_employees.manager_id AS manager_id, bv_hr_employees.department_id AS department_id, round(cast((getdaysbetween(bv_hr_employees.hire_date, current_date())/365.0) AS DECIMAL), 1) AS seniority FROM bv_hr_employees ORDER BY seniority DESC;
 
+CHOWN admin VIEW iv_employee_seniority LASTMODIFICATIONUSER admin;
+
 ALTER VIEW iv_employee_seniority
  LAYOUT (bv_hr_employees = [132, 192, 200, 200]);
 
 CREATE OR REPLACE VIEW iv_orders_by_customer FOLDER = '/2 - integration' AS SELECT customer_code, count(*) AS total_orders FROM bv_wo_orders GROUP BY customer_code HAVING count(*) > 1;
 
+CHOWN admin VIEW iv_orders_by_customer LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE VIEW iv_orders_by_date FOLDER = '/2 - integration' AS SELECT bv_wo_orders.id AS id, bv_wo_orders.customer_code AS customer_code, bv_wo_orders.status AS status, bv_wo_orders.date_placed AS date_placed, bv_wo_orders.date_delivered AS date_delivered, bv_wo_orders.date_closed AS date_closed, start_date_placed, end_date_placed FROM bv_wo_orders WHERE date_placed between start_date_placed AND end_date_placed USING PARAMETERS ( start_date_placed : timestamp, end_date_placed : timestamp);
+
+CHOWN admin VIEW iv_orders_by_date LASTMODIFICATIONUSER admin;
 
 ALTER VIEW iv_orders_by_date
  LAYOUT (bv_wo_orders = [20, 20, 200, 200]);
 
-CREATE OR REPLACE VIEW iv_orders_current FOLDER = '/2 - integration' AS SELECT bv_wo_orders.id AS id, bv_wo_orders.customer_code AS customer_code, bv_wo_orders.status AS status, bv_wo_orders.date_placed AS date_placed, bv_wo_orders.date_delivered AS date_delivered, bv_wo_orders.date_closed AS date_closed, bv_wo_order_item.order_id AS order_id, bv_wo_order_item.product_id AS product_id FROM bv_wo_orders AS bv_wo_orders INNER JOIN bv_wo_order_item AS bv_wo_order_item ON bv_wo_orders.id = bv_wo_order_item.order_id ;
+CREATE OR REPLACE VIEW iv_orders_current FOLDER = '/2 - integration' AS SELECT bv_wo_orders.id AS id, bv_wo_orders.customer_code AS customer_code, bv_wo_orders.status AS status, bv_wo_orders.date_placed AS date_placed, bv_wo_orders.date_delivered AS date_delivered, bv_wo_orders.date_closed AS date_closed, bv_wo_order_item.order_id AS order_id, bv_wo_order_item.product_id AS product_id FROM bv_wo_orders AS bv_wo_orders INNER JOIN bv_wo_order_item AS bv_wo_order_item ON bv_wo_orders.id = bv_wo_order_item.order_id  WHERE bv_wo_orders.date_placed >= DATE '2015-01-01';
 
 ALTER VIEW iv_orders_current
  LAYOUT (bv_wo_orders = [63, 95, 200, 200], bv_wo_order_item = [334, 144, 200, 200]);
 
-CREATE OR REPLACE VIEW iv_orders_historical FOLDER = '/2 - integration' AS SELECT bv_ho_order_item.id AS id, bv_ho_order_item.order_id AS order_id, bv_ho_order_item.product_id AS product_id, bv_ho_orders.customer_code AS customer_code, bv_ho_orders.status AS status, bv_ho_orders.date_placed AS dateplaced, bv_ho_orders.date_delivered AS datedelivered, bv_ho_orders.date_closed AS dateclosed FROM bv_ho_orders AS bv_ho_orders INNER JOIN bv_ho_order_item AS bv_ho_order_item ON bv_ho_orders.id = bv_ho_order_item.order_id ;
+CHOWN admin VIEW iv_orders_current LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE VIEW iv_orders_historical FOLDER = '/2 - integration' AS SELECT bv_ho_order_item.id AS id, bv_ho_order_item.order_id AS order_id, bv_ho_order_item.product_id AS product_id, bv_ho_orders.customer_code AS customer_code, bv_ho_orders.status AS status, bv_ho_orders.date_placed AS dateplaced, bv_ho_orders.date_delivered AS datedelivered, bv_ho_orders.date_closed AS dateclosed FROM bv_ho_orders AS bv_ho_orders INNER JOIN bv_ho_order_item AS bv_ho_order_item ON bv_ho_orders.id = bv_ho_order_item.order_id  WHERE bv_ho_orders.date_placed < DATE '2015-01-01';
 
 ALTER VIEW iv_orders_historical
  LAYOUT (bv_ho_orders = [61, 44, 200, 200], bv_ho_order_item = [411, 63, 200, 200]);
+
+CHOWN admin VIEW iv_orders_historical LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE VIEW iv_orders_simple FOLDER = '/2 - integration' AS SELECT id, customer_code, status, date_placed, date_delivered, date_closed FROM (SELECT status, customer_code, date_placed, id, date_closed, date_delivered FROM bv_ho_orders EXTENDED UNION ALL SELECT date_closed, date_delivered, status, id, date_placed, customer_code FROM bv_wo_orders);
 
 ALTER VIEW iv_orders_simple
  LAYOUT (bv_ho_orders = [177, 125, 200, 200], bv_wo_orders = [381, 283, 200, 200]);
 
+CHOWN admin VIEW iv_orders_simple LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE VIEW iv_people FOLDER = '/2 - integration' AS SELECT first_name, last_name, email, start_date FROM (SELECT first_name, email, last_name, hire_date AS start_date FROM bv_hr_employees EXTENDED UNION ALL SELECT first_name, email, last_name, registered_date AS start_date FROM bv_wo_customer) ORDER BY start_date DESC;
 
 ALTER VIEW iv_people
  LAYOUT (bv_hr_employees = [134, 126, 200, 200], bv_wo_customer = [382, 126, 200, 200]);
 
+CHOWN admin VIEW iv_people LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE VIEW iv_product_details FOLDER = '/2 - integration' AS SELECT bv_product._id AS _id, bv_product.index AS index, bv_product.productid AS productid, bv_product.productname AS productname, bv_product.productprice AS productprice, bv_product.accessories AS accessories, (bv_product.category).categoryid AS categoryid, (bv_product.category).categoryname AS categoryname, (bv_product.characteristics).characteristic_dimensions AS characteristic_dimensions, (bv_product.characteristics).characteristic_weight AS characteristic_weight, (bv_product.characteristics).characteristic_details AS characteristic_details, (bv_product.characteristics).characteristic_color AS characteristic_color FROM bv_product;
+
+CHOWN admin VIEW iv_product_details LASTMODIFICATIONUSER admin;
 
 ALTER VIEW iv_product_details
  LAYOUT (bv_product = [20, 20, 200, 200]);
@@ -2703,26 +3101,376 @@ CREATE OR REPLACE VIEW iv_product_stock FOLDER = '/2 - integration' AS SELECT bv
 ALTER VIEW iv_product_stock
  LAYOUT (bv_product = [188, 164, 200, 200], bv_wo_stock = [213, 392, 200, 200]);
 
-CREATE OR REPLACE VIEW iv_product_storage FOLDER = '/2 - integration' AS SELECT bv_product.productid AS product_id, bv_product.productname AS product_name, bv_wo_storages.id AS storage_id, bv_wo_storages.city AS city, count(*) AS amount FROM (bv_product AS bv_product INNER JOIN bv_wo_stock AS bv_wo_stock ON bv_product.productid = bv_wo_stock.product_id ) INNER JOIN bv_wo_storages AS bv_wo_storages ON bv_wo_stock.storage_id = bv_wo_storages.id  GROUP BY bv_product.productid, bv_product.productname, bv_wo_storages.id, bv_wo_storages.city;
+CHOWN admin VIEW iv_product_stock LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE VIEW iv_product_storage FOLDER = '/2 - integration' AS SELECT bv_product.productid AS product_id, bv_product.productname AS product_name, bv_wo_storages.id AS storage_id, bv_wo_storages.city AS city, count(*) AS amount FROM (bv_product AS bv_product INNER JOIN bv_wo_stock AS bv_wo_stock ON bv_product.productid = bv_wo_stock.product_id ) INNER JOIN bv_wo_storages AS bv_wo_storages ON bv_wo_stock.storage_id = bv_wo_storages.id  GROUP BY bv_product.productid, bv_product.productname, bv_wo_storages.id, bv_wo_storages.city CONTEXT (DATAMOVEMENTPLAN = bv_product : JDBC ds_web_orders);
 
 ALTER VIEW iv_product_storage
  LAYOUT (bv_product = [188, 164, 200, 200], bv_wo_stock = [213, 392, 200, 200], bv_wo_storages = [648, 305, 200, 200]);
+
+CHOWN admin VIEW iv_product_storage LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE VIEW iv_products_in_storages FOLDER = '/2 - integration' AS SELECT bv_product.productname AS product_name, count(*) AS amount FROM (bv_product AS bv_product INNER JOIN bv_wo_stock AS bv_wo_stock ON bv_product.productid = bv_wo_stock.product_id ) INNER JOIN bv_wo_storages AS bv_wo_storages ON bv_wo_stock.storage_id = bv_wo_storages.id  GROUP BY bv_product.productname;
 
 ALTER VIEW iv_products_in_storages
  LAYOUT (bv_product = [103, 45, 200, 200], bv_wo_stock = [493, 69, 200, 200], bv_wo_storages = [862, 96, 200, 200]);
 
+CHOWN admin VIEW iv_products_in_storages LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE VIEW iv_sales_by_product FOLDER = '/2 - integration' AS SELECT productid AS productid, nest(employeeid, customerid, saledate, bundleamount) AS sales FROM bv_sales_all GROUP BY productid;
+
+CHOWN admin VIEW iv_sales_by_product LASTMODIFICATIONUSER admin;
 
 ALTER VIEW iv_sales_by_product
  LAYOUT (bv_sales_all = [20, 20, 200, 200]);
 
+CREATE OR REPLACE SUMMARY VIEW s_customer_sale (
+        customer_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        total_orders:long (sourcetypeid = '-5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '19')
+    )
+    FOLDER = '/7 - summaries'
+    ADD SEARCHMETHOD s_customer_sale(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD customer_code (any) OPT ANY
+             ADD total_orders (any) OPT ANY
+        )
+        OUTPUTLIST (customer_code, total_orders
+        )
+        WRAPPER (jdbc s_customer_sale)
+    )
+AS SELECT bv_wo_orders.customer_code AS customer_code, total_orders AS total_orders FROM (SELECT customer_code, count(*) AS total_orders FROM bv_wo_orders GROUP BY customer_code);
+
+CHOWN admin VIEW s_customer_sale LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE SUMMARY VIEW sum1_bv_hr_employees_bv_hr_departments (
+        department_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '30'),
+        location_id:int (sourcetypeid = '5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '5'),
+        employee_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '25'),
+        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '50'),
+        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        hire_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '13'),
+        job_id:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        salary:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '8'),
+        commission_pct:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '2'),
+        manager_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        department_id:int (sourcetypeid = '5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '5')
+    )
+    FOLDER = '/7 - summaries'
+    ADD SEARCHMETHOD sum1_bv_hr_employees_bv_hr_departments(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD department_name (any) OPT ANY
+             ADD location_id (any) OPT ANY
+             ADD employee_id (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD phone_number (any) OPT ANY
+             ADD hire_date (any) OPT ANY
+             ADD job_id (any) OPT ANY
+             ADD salary (any) OPT ANY
+             ADD commission_pct (any) OPT ANY
+             ADD manager_id (any) OPT ANY
+             ADD department_id (any) OPT ANY
+        )
+        OUTPUTLIST (commission_pct, department_id, department_name, email, employee_id, first_name, hire_date, job_id, last_name, location_id, manager_id, phone_number, salary
+        )
+        WRAPPER (jdbc sum1_bv_hr_employees_bv_hr_departments)
+    )
+AS SELECT bv_hr_departments.department_name AS department_name, bv_hr_departments.location_id AS location_id, bv_hr_employees.employee_id AS employee_id, bv_hr_employees.first_name AS first_name, bv_hr_employees.last_name AS last_name, bv_hr_employees.email AS email, bv_hr_employees.phone_number AS phone_number, bv_hr_employees.hire_date AS hire_date, bv_hr_employees.job_id AS job_id, bv_hr_employees.salary AS salary, bv_hr_employees.commission_pct AS commission_pct, bv_hr_employees.manager_id AS manager_id, bv_hr_employees.department_id AS department_id FROM bv_hr_employees AS bv_hr_employees INNER JOIN bv_hr_departments AS bv_hr_departments ON (bv_hr_employees.department_id = bv_hr_departments.department_id AND bv_hr_employees.employee_id = bv_hr_departments.manager_id) ;
+
+CHOWN admin VIEW sum1_bv_hr_employees_bv_hr_departments LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE SUMMARY VIEW sum2_bv_hr_employees_bv_hr_departments (
+        department_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '30'),
+        location_id:int (sourcetypeid = '5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '5'),
+        employee_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '25'),
+        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '50'),
+        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        hire_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '13'),
+        job_id:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        salary:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '8'),
+        commission_pct:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '2'),
+        manager_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        department_id:int (sourcetypeid = '5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '5')
+    )
+    FOLDER = '/7 - summaries'
+    ADD SEARCHMETHOD sum2_bv_hr_employees_bv_hr_departments(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD department_name (any) OPT ANY
+             ADD location_id (any) OPT ANY
+             ADD employee_id (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD phone_number (any) OPT ANY
+             ADD hire_date (any) OPT ANY
+             ADD job_id (any) OPT ANY
+             ADD salary (any) OPT ANY
+             ADD commission_pct (any) OPT ANY
+             ADD manager_id (any) OPT ANY
+             ADD department_id (any) OPT ANY
+        )
+        OUTPUTLIST (commission_pct, department_id, department_name, email, employee_id, first_name, hire_date, job_id, last_name, location_id, manager_id, phone_number, salary
+        )
+        WRAPPER (jdbc sum2_bv_hr_employees_bv_hr_departments)
+    )
+AS SELECT bv_hr_departments.department_name AS department_name, bv_hr_departments.location_id AS location_id, bv_hr_employees.employee_id AS employee_id, bv_hr_employees.first_name AS first_name, bv_hr_employees.last_name AS last_name, bv_hr_employees.email AS email, bv_hr_employees.phone_number AS phone_number, bv_hr_employees.hire_date AS hire_date, bv_hr_employees.job_id AS job_id, bv_hr_employees.salary AS salary, bv_hr_employees.commission_pct AS commission_pct, bv_hr_employees.manager_id AS manager_id, bv_hr_employees.department_id AS department_id FROM bv_hr_employees AS bv_hr_employees INNER JOIN bv_hr_departments AS bv_hr_departments ON (bv_hr_employees.department_id = bv_hr_departments.department_id AND bv_hr_employees.employee_id = bv_hr_departments.manager_id)  WHERE (bv_hr_employees.employee_id > 10 AND bv_hr_employees.salary < 15000);
+
+CHOWN admin VIEW sum2_bv_hr_employees_bv_hr_departments LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE VIEW iv_orders FOLDER = '/2 - integration' AS SELECT id, customer_code, status, date_placed, date_delivered, date_closed, order_id, product_id FROM (SELECT order_id, product_id, date_closed, date_placed, date_delivered, customer_code, status, id FROM iv_orders_current EXTENDED UNION ALL SELECT status, customer_code, id, datedelivered AS date_delivered, dateplaced AS date_placed, product_id, order_id, dateclosed AS date_closed FROM iv_orders_historical);
+
+ALTER VIEW iv_orders
+ LAYOUT (iv_orders_current = [82, 27, 200, 200], iv_orders_historical = [468, 31, 200, 200]);
+
+CHOWN admin VIEW iv_orders LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE VIEW iv_product_details_flatten FOLDER = '/2 - integration' AS SELECT _id AS _id, index AS index, productid AS productid, productname AS productname, productprice AS productprice, categoryid AS categoryid, categoryname AS categoryname, characteristic_dimensions AS characteristic_dimensions, characteristic_weight AS characteristic_weight, characteristic_details AS characteristic_details, characteristic_color AS characteristic_color, accessories_productid AS accessories_productid, accessories_productprice AS accessories_productprice, accessories_productname AS accessories_productname FROM FLATTEN iv_product_details AS v ( v.accessories);
+
+CHOWN admin VIEW iv_product_details_flatten LASTMODIFICATIONUSER admin;
 
 ALTER VIEW iv_product_details_flatten
  LAYOUT (iv_product_details = [20, 20, 200, 200]);
 
+CREATE OR REPLACE VIEW iv_product_historical_orders FOLDER = '/2 - integration' AS SELECT iv_product_details._id AS _id, iv_product_details.index AS index, iv_product_details.productid AS productid, iv_product_details.productname AS productname, iv_product_details.productprice AS productprice, iv_product_details.categoryid AS categoryid, iv_product_details.categoryname AS categoryname, iv_product_details.characteristic_dimensions AS characteristic_dimensions, iv_product_details.characteristic_weight AS characteristic_weight, iv_product_details.characteristic_details AS characteristic_details, iv_product_details.characteristic_color AS characteristic_color, iv_orders_historical.id AS id, iv_orders_historical.order_id AS order_id, iv_orders_historical.product_id AS product_id, iv_orders_historical.customer_code AS customer_code, iv_orders_historical.status AS status, iv_orders_historical.dateplaced AS dateplaced, iv_orders_historical.datedelivered AS datedelivered, iv_orders_historical.dateclosed AS dateclosed FROM iv_product_details AS iv_product_details INNER JOIN iv_orders_historical AS iv_orders_historical ON iv_product_details.productid = iv_orders_historical.product_id ;
+
+ALTER VIEW iv_product_historical_orders
+ LAYOUT (iv_product_details = [63, 59, 200, 200], iv_orders_historical = [383, 60, 200, 200]);
+
+CHOWN admin VIEW iv_product_historical_orders LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE VIEW iv_orders_customer_detail FOLDER = '/2 - integration' AS SELECT iv_orders.id AS id, iv_orders.customer_code AS customer_code, iv_orders.status AS status, iv_orders.date_placed AS date_placed, iv_orders.date_delivered AS date_delivered, iv_orders.date_closed AS date_closed, iv_orders.order_id AS order_id, iv_orders.product_id AS product_id, bv_wo_customer.id AS customerid, bv_wo_customer.customer_code_internal AS customer_code_internal, bv_wo_customer.first_name AS first_name, bv_wo_customer.last_name AS last_name, bv_wo_customer.email AS email, bv_wo_customer.phone AS phone, bv_wo_customer.main_address AS main_address, bv_wo_customer.main_postcode AS main_postcode, bv_wo_customer.main_country AS main_country, bv_wo_customer.registered_date AS registered_date FROM iv_orders AS iv_orders INNER JOIN bv_wo_customer AS bv_wo_customer ON iv_orders.customer_code = bv_wo_customer.customer_code_internal ;
+
+ALTER VIEW iv_orders_customer_detail
+ LAYOUT (iv_orders = [20, 20, 200, 200], bv_wo_customer = [392, 5, 200, 200]);
+
+CHOWN admin VIEW iv_orders_customer_detail LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE SUMMARY VIEW s_order_count (
+        customer_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        product_id:int (sourcetypeid = '-5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        main_country:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '100'),
+        cnt_per_cust_per_product:long (sourcetypeid = '-5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '19'),
+        cnt_item_per_cust_per_product:long (sourcetypeid = '-5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '19')
+    )
+    FOLDER = '/7 - summaries'
+    ADD SEARCHMETHOD s_order_count(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD customer_code (any) OPT ANY
+             ADD product_id (any) OPT ANY
+             ADD main_country (any) OPT ANY
+             ADD cnt_per_cust_per_product (any) OPT ANY
+             ADD cnt_item_per_cust_per_product (any) OPT ANY
+        )
+        OUTPUTLIST (cnt_item_per_cust_per_product, cnt_per_cust_per_product, customer_code, main_country, product_id
+        )
+        WRAPPER (jdbc s_order_count)
+    )
+AS SELECT customer_code AS customer_code, product_id AS product_id, main_country AS main_country, count(DISTINCT order_id) AS cnt_per_cust_per_product, count(id) AS cnt_item_per_cust_per_product FROM iv_orders_customer_detail GROUP BY customer_code, product_id, main_country;
+
+CHOWN admin VIEW s_order_count LASTMODIFICATIONUSER admin;
+
+# #######################################
+# ASSOCIATIONS of denodo_training
+# #######################################
+CREATE OR REPLACE ASSOCIATION a_product_wo_order_item REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_wo_order_item bv_product PRINCIPAL (1)
+    ENDPOINT bv_product bv_wo_order_item (0,*)
+    ADD MAPPING productid=product_id;
+
+ALTER ASSOCIATION a_product_wo_order_item
+ LAYOUT (bv_product = [385, 113, 200, 200], bv_wo_order_item = [570, 143, 200, 200]);
+
+CHOWN admin ASSOCIATION a_product_wo_order_item LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_hr_countries_bv_hr_locations REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_hr_locations bv_hr_countries PRINCIPAL (0,1)
+    ENDPOINT bv_hr_countries bv_hr_locations (0,*)
+    ADD MAPPING country_id=country_code;
+
+CHOWN admin ASSOCIATION bv_hr_countries_bv_hr_locations LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_hr_departments_bv_hr_employees REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_hr_employees bv_hr_departments PRINCIPAL (0,1)
+    ENDPOINT bv_hr_departments bv_hr_employees (0,*)
+    ADD MAPPING department_id=department_id;
+
+CHOWN admin ASSOCIATION bv_hr_departments_bv_hr_employees LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_hr_employees_bv_hr_employees REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_hr_employees bv_hr_employees PRINCIPAL (0,1)
+    ENDPOINT bv_hr_employees_manager_id bv_hr_employees (0,*)
+    ADD MAPPING employee_id=manager_id;
+
+CHOWN admin ASSOCIATION bv_hr_employees_bv_hr_employees LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_hr_jobs_bv_hr_employees REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_hr_employees bv_hr_jobs PRINCIPAL (0,1)
+    ENDPOINT bv_hr_jobs bv_hr_employees (0,*)
+    ADD MAPPING job_id=job_id;
+
+CHOWN admin ASSOCIATION bv_hr_jobs_bv_hr_employees LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_hr_locations_bv_hr_departments REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_hr_departments bv_hr_locations PRINCIPAL (0,1)
+    ENDPOINT bv_hr_locations bv_hr_departments (0,*)
+    ADD MAPPING location_id=location_id;
+
+CHOWN admin ASSOCIATION bv_hr_locations_bv_hr_departments LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_hr_regions_bv_hr_countries REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_hr_countries bv_hr_regions PRINCIPAL (0,1)
+    ENDPOINT bv_hr_regions bv_hr_countries (0,*)
+    ADD MAPPING region_id=region_id;
+
+CHOWN admin ASSOCIATION bv_hr_regions_bv_hr_countries LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_catalog_returns REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_catalog_returns bv_tpcds_date_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_date_dim bv_tpcds_catalog_returns (0,*)
+    ADD MAPPING d_date_sk=cr_returned_date_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_date_dim_bv_tpcds_catalog_returns LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_catalog_sales_cs_ship_date_sk REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_catalog_sales_cs_ship_date_sk bv_tpcds_date_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_date_dim_cs_ship_date_sk bv_tpcds_catalog_sales (0,*)
+    ADD MAPPING d_date_sk=cs_ship_date_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_date_dim_bv_tpcds_catalog_sales_cs_ship_date_sk LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_catalog_sales_cs_sold_date_sk REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_catalog_sales_cs_sold_date_sk bv_tpcds_date_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_date_dim_cs_sold_date_sk bv_tpcds_catalog_sales (0,*)
+    ADD MAPPING d_date_sk=cs_sold_date_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_date_dim_bv_tpcds_catalog_sales_cs_sold_date_sk LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_inventory REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_inventory bv_tpcds_date_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_date_dim bv_tpcds_inventory (0,*)
+    ADD MAPPING d_date_sk=inv_date_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_date_dim_bv_tpcds_inventory LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_store_returns REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_store_returns bv_tpcds_date_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_date_dim bv_tpcds_store_returns (0,*)
+    ADD MAPPING d_date_sk=sr_returned_date_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_date_dim_bv_tpcds_store_returns LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_store_sales REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_store_sales bv_tpcds_date_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_date_dim bv_tpcds_store_sales (0,*)
+    ADD MAPPING d_date_sk=ss_sold_date_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_date_dim_bv_tpcds_store_sales LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_web_returns REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_web_returns bv_tpcds_date_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_date_dim bv_tpcds_web_returns (0,*)
+    ADD MAPPING d_date_sk=wr_returned_date_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_date_dim_bv_tpcds_web_returns LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_web_sales_ws_ship_date_sk REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_web_sales_ws_ship_date_sk bv_tpcds_date_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_date_dim_ws_ship_date_sk bv_tpcds_web_sales (0,*)
+    ADD MAPPING d_date_sk=ws_ship_date_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_date_dim_bv_tpcds_web_sales_ws_ship_date_sk LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_web_sales_ws_sold_date_sk REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_web_sales_ws_sold_date_sk bv_tpcds_date_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_date_dim_ws_sold_date_sk bv_tpcds_web_sales (0,*)
+    ADD MAPPING d_date_sk=ws_sold_date_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_date_dim_bv_tpcds_web_sales_ws_sold_date_sk LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_catalog_returns REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_catalog_returns bv_tpcds_time_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_time_dim bv_tpcds_catalog_returns (0,*)
+    ADD MAPPING t_time_sk=cr_returned_time_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_time_dim_bv_tpcds_catalog_returns LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_catalog_sales REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_catalog_sales bv_tpcds_time_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_time_dim bv_tpcds_catalog_sales (0,*)
+    ADD MAPPING t_time_sk=cs_sold_time_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_time_dim_bv_tpcds_catalog_sales LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_store_returns REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_store_returns bv_tpcds_time_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_time_dim bv_tpcds_store_returns (0,*)
+    ADD MAPPING t_time_sk=sr_return_time_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_time_dim_bv_tpcds_store_returns LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_store_sales REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_store_sales bv_tpcds_time_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_time_dim bv_tpcds_store_sales (0,*)
+    ADD MAPPING t_time_sk=ss_sold_time_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_time_dim_bv_tpcds_store_sales LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_web_returns REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_web_returns bv_tpcds_time_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_time_dim bv_tpcds_web_returns (0,*)
+    ADD MAPPING t_time_sk=wr_returned_time_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_time_dim_bv_tpcds_web_returns LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_web_sales REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_tpcds_web_sales bv_tpcds_time_dim PRINCIPAL (0,1)
+    ENDPOINT bv_tpcds_time_dim bv_tpcds_web_sales (0,*)
+    ADD MAPPING t_time_sk=ws_sold_time_sk;
+
+CHOWN admin ASSOCIATION bv_tpcds_time_dim_bv_tpcds_web_sales LASTMODIFICATIONUSER admin;
+
+# #######################################
+# WEBSERVICES of denodo_training
+# #######################################
+# No web services in database denodo_training
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS of denodo_training
+# #######################################
+# No deployed web services in database denodo_training
+# #######################################
+# VIEW STATISTICS of denodo_training
+# #######################################
 CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_customer (
     SET ENABLED = true
     SET NUMOFROWS = 1001
@@ -2731,11 +3479,158 @@ CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_customer (
       (customer_name,12.913,'Willie Roberts','Aaron Arnold',986,1),
       (job_title,9.456,'Web Developer IV','',156,1),
       (customer_code,4.612,'ZYxj9KfdZ6LL','',505,1),
-      (other_details,48.878,'Vivamus tortor. Duis mattis egestas metus. Aenean fermentum.
-','
-',208,1),
+      (other_details,48.878,'Vivamus tortor. Duis mattis egestas metus. Aenean fermentum.','',208,1),
       (phone_number,16.12,'998-(974)689-4553','1-(177)988-8828',1000,1),
       (customer_address,17.586,'9994 Transport Park','0 Armistice Way',999,1)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_agent (
+    SET ENABLED = true
+    SET NUMOFROWS = 5000
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (agent_id,4.0,5000,1,5000,0),
+      (agent_name,10.703999999999986,'w. youngr','a. adamsb',4527,0),
+      (agent_code,9.04060000000003,'wyoungr2','aadamsbk',4997,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_case_definition (
+    SET ENABLED = true
+    SET NUMOFROWS = 4998
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (date_closed,186.0,'2016-02-23T21:19:00','2015-02-23T21:17:00',9,2832),
+      (case_status,4.0,9,1,9,0),
+      (case_id,4.0,5000,3,4998,0),
+      (case_summary,21.771908763505355,'Web Site Unavailable','Billing Payment Problem',13,0),
+      (date_raised,186.0,'2015-12-30T19:27:00','2014-12-31T01:04:00',4970,0),
+      (case_comments,11.0,'No comments','No comments',1,0),
+      (customer_code,10.273709483793526,'zlwy6v1','06qpBmpsIxF',504,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_problem (
+    SET ENABLED = true
+    SET NUMOFROWS = 20
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (problem_description,23.0,'Web Site Unavailable','Battery problem',19,0),
+      (problem_code,4.0,20,1,20,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_service_call (
+    SET ENABLED = true
+    SET NUMOFROWS = 20000
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (other_details,212.27470000000034,'Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes. nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean ','Aenean auctor gravida sem.',991,0),
+      (date_ticket_issued,186.0,'2016-02-09T23:45:00','2014-12-31T00:25:00',19641,0),
+      (status_code,4.0,10,1,10,0),
+      (caller_phone,16.11999999999999,'998-(974)689-4553','1-(177)988-8828',1000,0),
+      (agent_id,4.0,4000,1,3974,0),
+      (problem_code,4.0,20,1,20,0),
+      (date_call_received,186.0,'2016-02-09T23:45:00','2014-12-31T00:25:00',19641,0),
+      (case_id,4.0,5000,3,4901,0),
+      (customer_code,5.612000000000002,'zlwy6v1','',505,0),
+      (location_id,4.0,5,1,5,0),
+      (call_id,4.0,21580,0,20000,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_service_location (
+    SET ENABLED = true
+    SET NUMOFROWS = 1000
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (other_details,null,null,null,0,1000),
+      (business_name,11.834000000000001,'5627 Saint P','3 Sage Way',5,0),
+      (service_location,1.0,'','',1,0),
+      (id,4.0,5,1,5,0),
+      (customer_id,4.0,0,0,1,0),
+      (location_id,4.0,1000,1,1000,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_status_code (
+    SET ENABLED = true
+    SET NUMOFROWS = 10
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (code_description,10.3,'Work in Progress','Call Dropped',10,0),
+      (code_id,4.0,10,1,10,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_ho_order_item (
+    SET ENABLED = true
+    SET NUMOFROWS = 1025321
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (product_id,4.0,31,1,31,0),
+      (id,4.0,1025321,1,1025321,0),
+      (order_id,4.0,198458,1,162875,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_ho_orders (
+    SET ENABLED = true
+    SET NUMOFROWS = 198458
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (date_delivered,12.0,'NULL','01-Apr-2012 00:06:44',25549,0),
+      (date_closed,10.0,'NULL','01-Apr-2012 00:05:07',15683,0),
+      (id,4.0,198458,1,198458,0),
+      (customer_code,9.0,'zy7248mc','02Kq6B',2856,0),
+      (date_placed,8.0,'2014-12-31T11:28:29','2011-05-01T00:22:51',198296,0),
+      (status,8.0,'Pending','Accepted',5,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_product (
+    SET ENABLED = true
+    SET NUMOFROWS = 31
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (productid,4.0,31,1,31,0),
+      (index,4.0,30,0,31,0),
+      (productname,14.612903225806448,'Studio Stereo 2.1 Bluetooth','Coral C1',31,0),
+      (_id,24.0,'65d4ea7a64dfc6732f5e8c65','65d4ea7a64dfc6732f5e8c35',31,0),
+      (productprice,4.0,2100,5,26,0),
+      (category,null,null,null,null,null),
+      (characteristics,null,null,null,null,null),
+      (accessories,null,null,null,null,null)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_wo_customer (
+    SET ENABLED = true
+    SET NUMOFROWS = 2856
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (main_postcode,5.0,'9950','02204',394,2428),
+      (phone,17.0,'998-(988)907-0205','-(469)313-3332',2856,0),
+      (main_address,18.0,'99820 Hooker Crossing','0 Anzinger Trail',2856,0),
+      (last_name,7.0,'Young','Adams',250,0),
+      (main_country,8.0,'Zimbabwe','Afghanistan',161,0),
+      (id,4.0,2856,1,2856,0),
+      (registered_date,8.0,'2015-12-29T19:22:00','2014-01-12T04:15:00',2853,0),
+      (first_name,6.0,'Willie','Aaron',200,0),
+      (email,19.0,'wwrightp5@mail.com','aalexandercs@mail.com',2856,0),
+      (customer_code_internal,9.0,'zy7248mc','02Kq6B',2856,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_wo_order_item (
+    SET ENABLED = true
+    SET NUMOFROWS = 255325
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (product_id,4.0,31,1,31,0),
+      (id,4.0,255325,1,255325,0),
+      (order_id,4.0,68555,1,55997,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_wo_orders (
+    SET ENABLED = true
+    SET NUMOFROWS = 68555
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (date_delivered,6.0,'NULL','2015-Apr-01 01:05:55',2802,0),
+      (date_closed,10.0,'NULL','03-Oct-2015 03:20:49',13284,0),
+      (id,4.0,68555,1,68555,0),
+      (customer_code,9.0,'zy7248mc','02Kq6B',2856,0),
+      (date_placed,8.0,'2015-12-31T13:16:09','2015-01-01T13:37:27',68425,0),
+      (status,8.0,'Pending','Accepted',5,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_hr_departments (
+    SET ENABLED = true
+    SET NUMOFROWS = 27
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (department_name,10.62962962962963,'Treasury','Accounting',27,0),
+      (location_id,4.0,15,1,7,0),
+      (manager_id,4.0,95,1,11,16),
+      (department_id,4.0,270,10,27,0)
 );
 
 CREATE OR REPLACE VIEWSTATSUMMARY bv_hr_employees (
@@ -2755,171 +3650,446 @@ CREATE OR REPLACE VIEWSTATSUMMARY bv_hr_employees (
       (hire_date,8.0,'2023-12-09','2010-12-11',96,0)
 );
 
-CREATE OR REPLACE VIEWSTATSUMMARY bv_hr_departments (
-    SET ENABLED = true
-    SET NUMOFROWS = 27
-    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
-      (department_name,10.62962962962963,'Treasury','Accounting',27,0),
-      (location_id,4.0,15,1,7,0),
-      (manager_id,4.0,95,1,11,16),
-      (department_id,4.0,270,10,27,0)
-);
-
-# #######################################
-# ASSOCIATIONS
-# #######################################
-
-CREATE OR REPLACE ASSOCIATION bv_hr_countries_bv_hr_locations REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_hr_locations bv_hr_countries PRINCIPAL (0,1)
-    ENDPOINT bv_hr_countries bv_hr_locations (0,*)
-    ADD MAPPING country_id=country_code;
-
-CREATE OR REPLACE ASSOCIATION bv_hr_departments_bv_hr_employees REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_hr_employees bv_hr_departments PRINCIPAL (0,1)
-    ENDPOINT bv_hr_departments bv_hr_employees (0,*)
-    ADD MAPPING department_id=department_id;
-
-CREATE OR REPLACE ASSOCIATION bv_hr_employees_bv_hr_employees REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_hr_employees bv_hr_employees PRINCIPAL (0,1)
-    ENDPOINT bv_hr_employees_manager_id bv_hr_employees (0,*)
-    ADD MAPPING employee_id=manager_id;
-
-CREATE OR REPLACE ASSOCIATION bv_hr_jobs_bv_hr_employees REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_hr_employees bv_hr_jobs PRINCIPAL (0,1)
-    ENDPOINT bv_hr_jobs bv_hr_employees (0,*)
-    ADD MAPPING job_id=job_id;
-
-CREATE OR REPLACE ASSOCIATION bv_hr_locations_bv_hr_departments REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_hr_departments bv_hr_locations PRINCIPAL (0,1)
-    ENDPOINT bv_hr_locations bv_hr_departments (0,*)
-    ADD MAPPING location_id=location_id;
-
-CREATE OR REPLACE ASSOCIATION bv_hr_regions_bv_hr_countries REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_hr_countries bv_hr_regions PRINCIPAL (0,1)
-    ENDPOINT bv_hr_regions bv_hr_countries (0,*)
-    ADD MAPPING region_id=region_id;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_catalog_returns REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_catalog_returns bv_tpcds_date_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_date_dim bv_tpcds_catalog_returns (0,*)
-    ADD MAPPING d_date_sk=cr_returned_date_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_catalog_sales_cs_ship_date_sk REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_catalog_sales_cs_ship_date_sk bv_tpcds_date_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_date_dim_cs_ship_date_sk bv_tpcds_catalog_sales (0,*)
-    ADD MAPPING d_date_sk=cs_ship_date_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_catalog_sales_cs_sold_date_sk REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_catalog_sales_cs_sold_date_sk bv_tpcds_date_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_date_dim_cs_sold_date_sk bv_tpcds_catalog_sales (0,*)
-    ADD MAPPING d_date_sk=cs_sold_date_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_inventory REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_inventory bv_tpcds_date_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_date_dim bv_tpcds_inventory (0,*)
-    ADD MAPPING d_date_sk=inv_date_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_store_returns REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_store_returns bv_tpcds_date_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_date_dim bv_tpcds_store_returns (0,*)
-    ADD MAPPING d_date_sk=sr_returned_date_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_store_sales REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_store_sales bv_tpcds_date_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_date_dim bv_tpcds_store_sales (0,*)
-    ADD MAPPING d_date_sk=ss_sold_date_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_web_returns REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_web_returns bv_tpcds_date_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_date_dim bv_tpcds_web_returns (0,*)
-    ADD MAPPING d_date_sk=wr_returned_date_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_web_sales_ws_ship_date_sk REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_web_sales_ws_ship_date_sk bv_tpcds_date_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_date_dim_ws_ship_date_sk bv_tpcds_web_sales (0,*)
-    ADD MAPPING d_date_sk=ws_ship_date_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_date_dim_bv_tpcds_web_sales_ws_sold_date_sk REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_web_sales_ws_sold_date_sk bv_tpcds_date_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_date_dim_ws_sold_date_sk bv_tpcds_web_sales (0,*)
-    ADD MAPPING d_date_sk=ws_sold_date_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_catalog_returns REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_catalog_returns bv_tpcds_time_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_time_dim bv_tpcds_catalog_returns (0,*)
-    ADD MAPPING t_time_sk=cr_returned_time_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_catalog_sales REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_catalog_sales bv_tpcds_time_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_time_dim bv_tpcds_catalog_sales (0,*)
-    ADD MAPPING t_time_sk=cs_sold_time_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_store_returns REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_store_returns bv_tpcds_time_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_time_dim bv_tpcds_store_returns (0,*)
-    ADD MAPPING t_time_sk=sr_return_time_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_store_sales REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_store_sales bv_tpcds_time_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_time_dim bv_tpcds_store_sales (0,*)
-    ADD MAPPING t_time_sk=ss_sold_time_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_web_returns REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_web_returns bv_tpcds_time_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_time_dim bv_tpcds_web_returns (0,*)
-    ADD MAPPING t_time_sk=wr_returned_time_sk;
-
-CREATE OR REPLACE ASSOCIATION bv_tpcds_time_dim_bv_tpcds_web_sales REFERENTIAL CONSTRAINT 
-FOLDER = '/6 - associations'
-    ENDPOINT bv_tpcds_web_sales bv_tpcds_time_dim PRINCIPAL (0,1)
-    ENDPOINT bv_tpcds_time_dim bv_tpcds_web_sales (0,*)
-    ADD MAPPING t_time_sk=ws_sold_time_sk;
-
-# #######################################
-# WEBSERVICES
-# #######################################
-# #######################################
-# WEBSERVICES
-# #######################################
-# No web services
-# #######################################
-# WIDGETS
-# #######################################
-# No widgets
-# #######################################
-# WEBCONTAINER WEB SERVICE DEPLOYMENTS
-# #######################################
-# No deployed web services
-# #######################################
-# WEBCONTAINER WIDGET DEPLOYMENTS
-# #######################################
-# No deployed widgets
 # #######################################
 # Closing connection with database denodo_training
 # #######################################
 CLOSE;
 
 
+# 2 ====================================================================
+
+# #######################################
+# DATABASE of query_acceleration
+# #######################################
+CREATE OR REPLACE DATABASE query_acceleration 'Database used by the automatic recommendation tool for summary acceleration.';
+
+CONNECT DATABASE query_acceleration;
+
+# #######################################
+# FOLDERS of query_acceleration
+# #######################################
+CREATE OR REPLACE FOLDER '/logs information' ;
+
+CHOWN admin FOLDER '/logs information';
+
+CREATE OR REPLACE FOLDER '/logs information/connections' ;
+
+CHOWN admin FOLDER '/logs information/connections';
+
+CREATE OR REPLACE FOLDER '/logs information/connections/jdbc' ;
+
+CHOWN admin FOLDER '/logs information/connections/jdbc';
+
+CREATE OR REPLACE FOLDER '/logs information/connections/local files' ;
+
+CHOWN admin FOLDER '/logs information/connections/local files';
+
+CREATE OR REPLACE FOLDER '/logs information/interfaces' ;
+
+CHOWN admin FOLDER '/logs information/interfaces';
+
+# #######################################
+# RESOURCES of query_acceleration
+# #######################################
+# No vault resources in database query_acceleration
+# #######################################
+# LISTENERS JMS of query_acceleration
+# #######################################
+# No listeners jms in database query_acceleration
+# #######################################
+# LISTENERS KAFKA of query_acceleration
+# #######################################
+# No listeners kafka in database query_acceleration
+# #######################################
+# DATASOURCES of query_acceleration
+# #######################################
+CREATE OR REPLACE DATASOURCE CUSTOM monitor_log_file_ds
+    FOLDER = '/logs information/connections/local files'
+    CLASSNAME='com.denodo.dashboard.connect.log.LogCustomWrapper'
+    CLASSPATH='../resources/vdp/query_acceleration/denodo-dmt-log-customwrapper.jar';
+
+CHOWN admin DATASOURCE CUSTOM monitor_log_file_ds LASTMODIFICATIONUSER admin;
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE query_acceleration
+  CHARSET RESTRICTED;
+
+# #######################################
+# WRAPPERS of query_acceleration
+# #######################################
+CREATE OR REPLACE WRAPPER CUSTOM bv_queryblock_notification_file
+    FOLDER = '/logs information/connections/local files'
+    DATASOURCENAME=monitor_log_file_ds
+    PARAMETERS (
+      'Date Pattern' = 'yyyy-MM-dd''T''HH:mm:ss.SSS',
+      'Date Extractor Pattern' = '.*\\t(\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d).*',
+      'Log timezone' = 'GMT',
+      'Content Extractor Pattern' = '([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\\d]*)\\r?\\n?.*',
+      'Filepath' = ROUTE LOCAL 'LocalConnection' '@{LOGS_PATH}/@{LOG_PREFIX}-queryblocks.log',
+      'Sequential Search Interval' = 1000,
+      'Rolling Implementation Class Name' = 'com.denodo.dashboard.connect.log.rollingpolicy.LexicographicRollingPolicy'
+    )
+    OUTPUTSCHEMA (
+        sessionid = 'out0' : 'java.lang.String' (sourcetypeid='12')  NOT SORTABLE NOT UPDATEABLE,
+        queryid = 'out1' : 'java.lang.String' (sourcetypeid='12')  NOT SORTABLE NOT UPDATEABLE,
+        blockid = 'out2' : 'java.lang.String' (sourcetypeid='12')  NOT SORTABLE NOT UPDATEABLE,
+        effectivetime = 'out3' : 'java.lang.String' (sourcetypeid='12')  NOT SORTABLE NOT UPDATEABLE,
+        leafviews = 'out4' : 'java.lang.String' (sourcetypeid='12')  NOT SORTABLE NOT UPDATEABLE,
+        comparable = 'out5' : 'java.lang.String' (sourcetypeid='12')  NOT SORTABLE NOT UPDATEABLE,
+        summariesapplied = 'out6' : 'java.lang.String' (sourcetypeid='12')  NOT SORTABLE NOT UPDATEABLE,
+        starttime = 'out7' : 'java.lang.String' (sourcetypeid='12')  NOT SORTABLE NOT UPDATEABLE,
+        duration = 'out8' : 'java.lang.String' (sourcetypeid='12')  NOT SORTABLE NOT UPDATEABLE,
+        extracted_date = 'Extracted Date' : 'java.time.LocalDate' (OPT) (sourcetypeid='91')  NOT NULL NOT SORTABLE NOT UPDATEABLE,
+        search_start_date = 'Search Start Date' : 'java.time.LocalDate' (OBL) (sourcetypeid='91')  NOT NULL NOT SORTABLE NOT UPDATEABLE,
+        search_end_date = 'Search End Date' : 'java.time.LocalDate' (OPT) (sourcetypeid='91')  NOT SORTABLE NOT UPDATEABLE,
+        logs_path = 'LOGS_PATH' : 'java.lang.String' (OBL) (DEFAULTVALUE='test1')  EXTERN NOT SORTABLE NOT UPDATEABLE,
+        log_prefix = 'LOG_PREFIX' : 'java.lang.String' (OBL) (DEFAULTVALUE='vdp')  EXTERN NOT SORTABLE NOT UPDATEABLE
+    );
+
+CHOWN admin WRAPPER CUSTOM bv_queryblock_notification_file LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER CUSTOM bv_request_notification_file
+    FOLDER = '/logs information/connections/local files'
+    DATASOURCENAME=monitor_log_file_ds
+    PARAMETERS (
+      'Date Pattern' = 'yyyy-MM-dd''T''HH:mm:ss.SSS',
+      'Date Extractor Pattern' = '.*\\t(\\d\\d\\d\\d-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d).*',
+      'Log timezone' = 'GMT',
+      'Content Extractor Pattern' = '([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t]*)\\t([\^\\t\\r\\n]*)(?:\\t([\^\\r\\n]*))?\\r?\\n?.*',
+      'Filepath' = ROUTE LOCAL 'LocalConnection' '@{LOGS_PATH}/@{LOG_PREFIX}-queries.log',
+      'Sequential Search Interval' = 1000,
+      'Rolling Implementation Class Name' = 'com.denodo.dashboard.connect.log.rollingpolicy.LexicographicRollingPolicy'
+    )
+    OUTPUTSCHEMA (
+        servername = 'out0' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        host = 'out1' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        port = 'out2' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        id = 'out3' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        databasename = 'out4' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        username = 'out5' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        notificationtype = 'out6' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        sessionid = 'out7' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        start_time_as_text = 'out8' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        end_time_as_text = 'out9' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        duration_as_text = 'out10' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        waiting_time_as_text = 'out11' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        num_rows_as_text = 'out12' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        state = 'out13' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        completed_as_text = 'out14' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        cache_as_text = 'out15' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        query = 'out16' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        requesttype = 'out17' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        elements = 'out18' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        useragent = 'out19' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        accessinterface = 'out20' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        clientip = 'out21' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        transaction_id_as_text = 'out22' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        webservicename = 'out23' : 'java.lang.String' NOT SORTABLE NOT UPDATEABLE,
+        date = 'Extracted Date' : 'java.util.Date' (OPT) NOT NULL NOT SORTABLE NOT UPDATEABLE,
+        search_start_date = 'Search Start Date' : 'java.util.Date' (OBL) NOT NULL NOT SORTABLE NOT UPDATEABLE,
+        search_end_date = 'Search End Date' : 'java.util.Date' (OPT) NOT SORTABLE NOT UPDATEABLE,
+        logs_path = 'LOGS_PATH' : 'java.lang.String' (OBL) (DEFAULTVALUE='test1')  EXTERN NOT SORTABLE NOT UPDATEABLE,
+        log_prefix = 'LOG_PREFIX' : 'java.lang.String' (OBL) (DEFAULTVALUE='vdp')  EXTERN NOT SORTABLE NOT UPDATEABLE
+    );
+
+CHOWN admin WRAPPER CUSTOM bv_request_notification_file LASTMODIFICATIONUSER admin;
+
+# #######################################
+# STORED PROCEDURES of query_acceleration
+# #######################################
+# No stored procedures in database query_acceleration
+# #######################################
+# TYPES of query_acceleration
+# #######################################
+# No types in database query_acceleration
+# #######################################
+# MAPS of query_acceleration
+# #######################################
+# No maps in database query_acceleration
+# #######################################
+# BASE VIEWS of query_acceleration
+# #######################################
+CREATE OR REPLACE TABLE bv_queryblock_notification_file I18N rfc_restful (
+        sessionid:int (sourcetypeid = '-5', sourcetypesize = '19'),
+        queryid:long (sourcetypeid = '-5', sourcetypesize = '19'),
+        blockid:text,
+        effectivetime:long,
+        leafviews:text (sourcetypeid = '12'),
+        comparable:text (sourcetypeid = '12'),
+        summariesapplied:text (sourcetypeid = '12'),
+        starttime:localdate,
+        duration:long (sourcetypeid = '-5', sourcetypesize = '19'),
+        extracted_date:localdate (notnull, sourcetypeid = '91'),
+        search_start_date:localdate (notnull, sourcetypeid = '91'),
+        search_end_date:localdate (sourcetypeid = '91'),
+        logs_path:text,
+        log_prefix:text
+    )
+    FOLDER = '/logs information/connections/local files'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD requests_log(
+        I18N rfc_restful
+        CONSTRAINTS (
+             ADD extracted_date (any) OPT ANY
+             ADD search_end_date (any) OPT ANY
+             ADD sessionid NOS ZERO ()
+             ADD queryid NOS ZERO ()
+             ADD blockid NOS ZERO ()
+             ADD effectivetime NOS ZERO ()
+             ADD leafviews NOS ZERO ()
+             ADD comparable NOS ZERO ()
+             ADD summariesapplied NOS ZERO ()
+             ADD starttime NOS ZERO ()
+             ADD duration NOS ZERO ()
+             ADD search_start_date (=) OBL ONE
+             ADD logs_path (=) OBL ONE
+             ADD log_prefix (=) OBL ONE
+        )
+        OUTPUTLIST (blockid, comparable, duration, effectivetime, extracted_date, leafviews, queryid, search_end_date, search_start_date, sessionid, starttime, summariesapplied
+        )
+        WRAPPER (custom bv_queryblock_notification_file)
+    );
+
+CHOWN admin VIEW bv_queryblock_notification_file LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_request_notification_file I18N rfc_restful (
+        servername:text,
+        host:text,
+        port:int,
+        id:long,
+        databasename:text,
+        username:text,
+        notificationtype:text,
+        sessionid:long,
+        start_time_as_text:text,
+        end_time_as_text:text,
+        duration_as_text:text,
+        waiting_time_as_text:text,
+        num_rows_as_text:text,
+        state:text,
+        completed_as_text:text,
+        cache_as_text:text,
+        query:text,
+        requesttype:text,
+        elements:text,
+        useragent:text,
+        accessinterface:text,
+        clientip:text,
+        transaction_id_as_text:text,
+        webservicename:text,
+        date:date,
+        search_start_date:localdate (notnull, sourcetypeid = '91', sourcetypedecimals = '0'),
+        search_end_date:date,
+        logs_path:text,
+        log_prefix:text
+    )
+    FOLDER = '/logs information/connections/local files'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_request_notification_file(
+        I18N rfc_restful
+        CONSTRAINTS (
+             ADD date (any) OPT ANY
+             ADD search_end_date (any) OPT ANY
+             ADD servername NOS ZERO ()
+             ADD host NOS ZERO ()
+             ADD port NOS ZERO ()
+             ADD id NOS ZERO ()
+             ADD databasename NOS ZERO ()
+             ADD username NOS ZERO ()
+             ADD notificationtype NOS ZERO ()
+             ADD sessionid NOS ZERO ()
+             ADD start_time_as_text NOS ZERO ()
+             ADD end_time_as_text NOS ZERO ()
+             ADD duration_as_text NOS ZERO ()
+             ADD waiting_time_as_text NOS ZERO ()
+             ADD num_rows_as_text NOS ZERO ()
+             ADD state NOS ZERO ()
+             ADD completed_as_text NOS ZERO ()
+             ADD cache_as_text NOS ZERO ()
+             ADD query NOS ZERO ()
+             ADD requesttype NOS ZERO ()
+             ADD elements NOS ZERO ()
+             ADD useragent NOS ZERO ()
+             ADD accessinterface NOS ZERO ()
+             ADD clientip NOS ZERO ()
+             ADD transaction_id_as_text NOS ZERO ()
+             ADD webservicename NOS ZERO ()
+             ADD search_start_date (any) OBL ONE
+             ADD logs_path (=) OBL ONE
+             ADD log_prefix (=) OBL ONE
+        )
+        OUTPUTLIST (accessinterface, cache_as_text, clientip, completed_as_text, databasename, date, duration_as_text, elements, end_time_as_text, host, id, notificationtype, num_rows_as_text, port, query, requesttype, search_end_date, search_start_date, servername, sessionid, start_time_as_text, state, transaction_id_as_text, useragent, username, waiting_time_as_text, webservicename
+        )
+        WRAPPER (custom bv_request_notification_file)
+    );
+
+CHOWN admin VIEW bv_request_notification_file LASTMODIFICATIONUSER admin;
+
+# #######################################
+# VIEWS of query_acceleration
+# #######################################
+CREATE OR REPLACE VIEW queryblock_notification_file_impl FOLDER = '/logs information/connections/local files' AS SELECT bv_queryblock_notification_file.sessionid AS sessionid, bv_queryblock_notification_file.queryid AS queryid, bv_queryblock_notification_file.blockid AS blockid, bv_queryblock_notification_file.effectivetime AS effectivetime, bv_queryblock_notification_file.leafviews AS leafviews, bv_queryblock_notification_file.comparable AS comparable, bv_queryblock_notification_file.summariesapplied AS summariesapplied, bv_queryblock_notification_file.starttime AS starttime, bv_queryblock_notification_file.duration AS duration FROM bv_queryblock_notification_file WHERE (logs_path = '../tools/monitor/denodo-monitor/logs' AND search_start_date = DATE '1970-01-01' AND log_prefix = 'vdp');
+
+CHOWN admin VIEW queryblock_notification_file_impl LASTMODIFICATIONUSER admin;
+
+ALTER VIEW queryblock_notification_file_impl
+ LAYOUT (bv_queryblock_notification_file = [20, 20, 219, 285]);
+
+CREATE OR REPLACE VIEW request_notification_file_impl FOLDER = '/logs information/connections/local files' AS SELECT bv_request_notification_file.servername AS servername, bv_request_notification_file.host AS host, bv_request_notification_file.port AS port, bv_request_notification_file.id AS id, bv_request_notification_file.databasename AS databasename, bv_request_notification_file.username AS username, bv_request_notification_file.notificationtype AS notificationtype, bv_request_notification_file.sessionid AS sessionid, to_timestamp('yyyy-MM-dd''T''HH:mm:ss.SSS', start_time_as_text) AS starttime, to_timestamp('yyyy-MM-dd''T''HH:mm:ss.SSS', end_time_as_text) AS endtime, cast('long', bv_request_notification_file.duration_as_text) AS duration, cast('long', bv_request_notification_file.waiting_time_as_text) AS waitingtime, cast('int', bv_request_notification_file.num_rows_as_text) AS numrows, bv_request_notification_file.state AS state, bv_request_notification_file.completed_as_text AS completed_as_text, bv_request_notification_file.cache_as_text AS cache_as_text, bv_request_notification_file.query AS query, bv_request_notification_file.requesttype AS requesttype, bv_request_notification_file.elements AS elements, bv_request_notification_file.useragent AS useragent, bv_request_notification_file.accessinterface AS accessinterface, bv_request_notification_file.clientip AS clientip, bv_request_notification_file.transaction_id_as_text AS transaction_id_as_text, bv_request_notification_file.webservicename AS webservicename, bv_request_notification_file.logs_path AS logs_path FROM bv_request_notification_file WHERE (logs_path = '../tools/monitor/denodo-monitor/logs' AND search_start_date = DATE '1970-01-01' AND log_prefix = 'vdp');
+
+CHOWN admin VIEW request_notification_file_impl LASTMODIFICATIONUSER admin;
+
+ALTER VIEW request_notification_file_impl
+ LAYOUT (bv_request_notification_file = [20, 20, 288, 435]);
+
+CREATE OR REPLACE INTERFACE VIEW i_queryblock_notification (
+        sessionid:long (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '19', sourcetypeid = '-5'),
+        queryid:long (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '19', sourcetypeid = '-5'),
+        blockid:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '30', sourcetypeid = '12'),
+        effectivetime:long (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '19', sourcetypeid = '-5'),
+        leafviews:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '4000', sourcetypeid = '12'),
+        comparable:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', sourcetypeid = '12'),
+        summariesapplied:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '4000', sourcetypeid = '12'),
+        starttime:timestamp (sourcetypedecimals = '6', sourcetyperadix = '10', sourcetypesize = '29', sourcetypeid = '93'),
+        duration:long (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '19', sourcetypeid = '-5')
+    )
+    SET IMPLEMENTATION queryblock_notification_file_impl
+    FOLDER = '/logs information/interfaces'
+    DESCRIPTION = 'Interface providing access to the information about query blocks of the Denodo Monitor logs.
+This information is used for Smart Query Acceleration by the tool available under Tools -> Query optimizations -> Summaries recommendation.
+This tool automatically recommends summary candidates to accelerate queries based on this workload.
+
+In order for this tool to work please make sure the implementation is valid and it is accessing:
+- The vdp-queryblocks.log file of the Denodo Monitor, if it is configured to store the data in a file system.
+- The queryblock_notification table if it is configured to store the data in a JDBC database.' ;
+
+ALTER VIEW i_queryblock_notification
+ LAYOUT (queryblock_notification_file_impl = [360, 20, 246, 105]);
+
+CREATE OR REPLACE INTERFACE VIEW i_request_notification (
+        servername:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '100', sourcetypeid = '12'),
+        host:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '100', sourcetypeid = '12'),
+        port:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', sourcetypeid = '12'),
+        id:long (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '19', sourcetypeid = '-5'),
+        databasename:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '100', sourcetypeid = '12'),
+        username:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '100', sourcetypeid = '12'),
+        notificationtype:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '30', sourcetypeid = '12'),
+        sessionid:long (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '19', sourcetypeid = '-5'),
+        starttime:timestamp (sourcetypedecimals = '6', sourcetyperadix = '10', sourcetypesize = '29', sourcetypeid = '93'),
+        endtime:timestamp (sourcetypedecimals = '6', sourcetyperadix = '10', sourcetypesize = '29', sourcetypeid = '93'),
+        duration:long (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '19', sourcetypeid = '-5'),
+        waitingtime:long (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '19', sourcetypeid = '-5'),
+        numrows:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', sourcetypeid = '4'),
+        state:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '30', sourcetypeid = '12'),
+        query:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '4000', sourcetypeid = '12'),
+        requesttype:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '50', sourcetypeid = '12'),
+        elements:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '4000', sourcetypeid = '12'),
+        useragent:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '100', sourcetypeid = '12'),
+        accessinterface:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '100', sourcetypeid = '12'),
+        clientip:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '50', sourcetypeid = '12'),
+        webservicename:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '200', sourcetypeid = '12')
+    )
+    SET IMPLEMENTATION request_notification_file_impl(
+        servername = servername,
+        host = host,
+        port = port,
+        id = id,
+        databasename = databasename,
+        username = username,
+        notificationtype = notificationtype,
+        sessionid = sessionid,
+        starttime = starttime,
+        endtime = endtime,
+        duration = duration,
+        waitingtime = waitingtime,
+        numrows = numrows,
+        state = state,
+        query = query,
+        requesttype = requesttype,
+        elements = elements,
+        useragent = useragent,
+        accessinterface = accessinterface,
+        clientip = clientip,
+        webservicename = webservicename    
+)
+    FOLDER = '/logs information/interfaces'
+    DESCRIPTION = 'Interface providing access to the information about requests of the Denodo Monitor logs.
+This information is used for Smart Query Acceleration by the tool available under Tools -> Query optimizations -> Summaries recommendation.
+This tool automatically recommends summary candidates to accelerate queries based on this workload.
+
+In order for this tool to work please make sure the implementation is valid and it is accessing:
+- The vdp-queries.log file of the Denodo Monitor, if it is configured to store the data in a file system.
+- The request_notification table if it is configured to store the data in a JDBC database.' ;
+
+ALTER VIEW i_request_notification
+ LAYOUT (request_notification_file_impl = [410, 20, 251, 105]);
+
+# #######################################
+# ASSOCIATIONS of query_acceleration
+# #######################################
+# No associations in database query_acceleration
+# #######################################
+# WEBSERVICES of query_acceleration
+# #######################################
+# No web services in database query_acceleration
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS of query_acceleration
+# #######################################
+# No deployed web services in database query_acceleration
+# #######################################
+# VIEW STATISTICS of query_acceleration
+# #######################################
+# No statistics in database query_acceleration
+# #######################################
+# Closing connection with database query_acceleration
+# #######################################
+CLOSE;
+
+# #######################################
+# Connecting to database admin
+# #######################################
+CONNECT DATABASE ADMIN;
+
+# #######################################
+# USER PRIVILEGES
+# #######################################
+ALTER USER local_user
+GRANT ROLE allusers
+GRANT CONNECT, METADATA, EXECUTE ON denodo_training;
+
+# #######################################
+# ROLE PRIVILEGES
+# #######################################
+# #######################################
+# RESOURCE MANAGER PLANS
+# #######################################
+CREATE OR REPLACE RESOURCE_MANAGER PLAN "stop all queries" CONDITION true ACTION 'STOP_QUERY_ALWAYS';
+
+CREATE OR REPLACE RESOURCE_MANAGER PLAN "stop queries that return more than 100 rows" DESCRIPTION = 'This plan allows users to return only the first 100 rows of a query and stops user queries if the load of the server is very high' CONDITION true ACTION 'STOP_QUERY_WHEN_MAX_NUMBER_OF_RETURNED_ROWS_REACHED' PARAMETERS ('MaxReturnedRows' = 100) CONDITION server_cpu >= 0.750000 SERVER_CPU_WINDOW_SIZE 35 ACTION 'STOP_QUERY_ALWAYS';
+
+CREATE OR REPLACE RESOURCE_MANAGER PLAN "stop queries that return more than 5 rows" CONDITION true ACTION 'STOP_QUERY_WHEN_MAX_NUMBER_OF_RETURNED_ROWS_REACHED' PARAMETERS ('MaxReturnedRows' = 5);
+
+# #######################################
+# RESOURCE MANAGER RULES
+# #######################################
+CREATE OR REPLACE RESOURCE_MANAGER RULE "non-working hours" DESCRIPTION = 'Stop queries during non-working hours for non-admin users' CONDITION (admin_user = false AND (gethour(connection_start_time) < 7 OR gethour(connection_start_time) >= 20)) RESOURCE_MANAGER PLAN "stop all queries";
+
+CREATE OR REPLACE RESOURCE_MANAGER RULE "published data services" DESCRIPTION = 'limit the number of rows returned when using a published data service' CONDITION (admin_user = false AND access_interface like 'WS%') RESOURCE_MANAGER PLAN "stop queries that return more than 5 rows";
+
+CREATE OR REPLACE RESOURCE_MANAGER RULE "non admin rule" DESCRIPTION = 'This rule is meant for non administrator users' CONDITION admin_user = false RESOURCE_MANAGER PLAN "stop queries that return more than 100 rows";
+
+# #######################################
+# Closing connection with database admin
+# #######################################
+CLOSE;
+
+# #######################################
+# POLICY CREATION
+# #######################################
 
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
