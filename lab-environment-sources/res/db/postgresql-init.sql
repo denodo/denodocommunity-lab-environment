@@ -42,9 +42,11 @@ GRANT ALL PRIVILEGES ON DATABASE human_resources TO human_resources;
 COPY "REGIONS"     FROM '/mnt/data/human-resources/regions.csv'     WITH (FORMAT CSV, DELIMITER ',', FORCE_NULL("REGION_ID"));
 COPY "JOBS"        FROM '/mnt/data/human-resources/jobs.csv'        DELIMITER ',' CSV;
 COPY "COUNTRIES"   FROM '/mnt/data/human-resources/countries.csv'   DELIMITER ',' CSV;
-COPY "LOCATIONS"   FROM '/mnt/data/human-resources/locations.csv'   WITH (FORMAT CSV, DELIMITER ',', FORCE_NULL("COUNTRY_CODE"));;
+COPY "LOCATIONS"   FROM '/mnt/data/human-resources/locations.csv'   WITH (FORMAT CSV, DELIMITER ',', FORCE_NULL("COUNTRY_CODE"));
 COPY "DEPARTMENTS" FROM '/mnt/data/human-resources/departments.csv' WITH (FORMAT CSV, DELIMITER ',', FORCE_NULL("DEPARTMENT_ID"));
 COPY "EMPLOYEES"   FROM '/mnt/data/human-resources/employees.csv'   DELIMITER ',' CSV;
+
+ALTER TABLE "DEPARTMENTS" ADD CONSTRAINT "DEPT_MGR_FK" FOREIGN KEY ("MANAGER_ID") REFERENCES "EMPLOYEES" ("EMPLOYEE_ID");
 
 GRANT ALL PRIVILEGES ON "REGIONS" TO human_resources;
 GRANT ALL PRIVILEGES ON "JOBS" TO human_resources;

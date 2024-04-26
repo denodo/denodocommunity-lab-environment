@@ -16,16 +16,22 @@ This project mantains some sample data sources that can be used to build a local
 
 ## Getting started
 
+To get started, you’ll need to grab the code. If you are familiar with Git, just open a command prompt and execute this command:
+
+```bash
+git clone https://github.com/denodo/denodocommunity-lab-environment.git
+```
+
 Our recommendation is to launch the data sources as Docker [Containers](./lab-environment-containers/). In order to run the containers, you must [have Docker installed](https://www.docker.com/community-edition#/download).
 
-If you don't have the option of using Docker, then we provide the alternative of downloading a [Virtual Machine](./lab-environment-vm/) for Hyper-V or VirtualBox already configured with all the dependencies needed to run the containers.
+If you don't have the option of using Docker, then we provide an alternative way by means of downloading a [Virtual Machine](./lab-environment-vm/) already configured with all the dependencies needed to run the containers (the VM is available for Hyper-V or VirtualBox).
 
-In case you don't have a VirtualBox of Hyper-V environment, you are still able to use a local installation of the data sources that you can initialize using the scripts provided in the [Data Sources](./lab-environment-sources/) subprojecct.
+In case you don't have a VirtualBox of Hyper-V environment, you are still able to use a local installation of the data sources that you can initialize using the scripts provided in the [Data Sources](./lab-environment-sources/) subproject.
 
 Please read the documentation of each subproject to get more information: 
 
-* [Denodo Community Lab Environment Data Sources](./lab-environment-sources/README.md)
 * [Denodo Community Lab Environment Containers](./lab-environment-containers/README.md)
+* [Denodo Community Lab Environment Data Sources](./lab-environment-sources/README.md)
 * [Denodo Community Lab Environment Virtual Machines](./lab-environment-vm/README.md)
 
 # Join the Denodo Community
