@@ -1,4 +1,7 @@
+lab-environment-containers/README.denodo.md
 lab-environment-containers/build/.env
+lab-environment-containers/build/.env.denodo.template
+lab-environment-containers/build/docker-compose-denodo.yml
 lab-environment-sources/res/war/billing/
 lab-environment-sources/res/war/product-ws/
 lab-environment-sources/res/war/sales-ws/

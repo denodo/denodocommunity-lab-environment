@@ -13,188 +13,6 @@ networks:
 services:
 
   # ########################
-  # Denodo 
-  # ########################
-  # Database for storing Denodo metadata and Cache
-  denodo-postgres:
-    container_name: denodocommunity-lab-environment-metadata
-    image: ${METADATA_DB_VERSION}
-    profiles: ["all","denodo","denodo-ext-metadata","denodo-vdp","denodo-sched","denodo-datacatalog","tutorial","training","ext-sso","ext"]
-    hostname: ${METADATA_DB_HOSTNAME}
-    restart: unless-stopped
-    networks:
-      - denodo-lab-net 
-    volumes:   
-      - ${METADATA_DB_INIT_SCRIPT}:/docker-entrypoint-initdb.d/init.sql
-      - ${METADATA_DB_DATA_DIRECTORY}:/mnt
-      - metadatadb-lab-env:/var/lib/postgresql/data  
-    environment:
-      - POSTGRES_PASSWORD=${METADATA_DB_PWD}
-      - POSTGRES_DB=postgres
-    ports:
-      - "${METADATA_DB_PORT}:${METADATA_DB_PORT}"
-    expose:
-      - "${METADATA_DB_PORT}"
-    command: -p ${METADATA_DB_PORT}
-
-  # Denodo Virtual DataPort server / Embedded web container (Restful-ws/OData service/GraphQL service)
-  denodo-vdp:
-    container_name: denodocommunity-lab-environment-vdp
-    image: ${DENODO_VERSION}
-    profiles: ["all","denodo","denodo-vdp","denodo-datacatalog","tutorial","training"]
-    hostname: ${DENODO_VDP_HOSTNAME}
-    depends_on:
-      - denodo-postgres    
-    networks:        
-      - denodo-lab-net 
-    volumes:
-      - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"   
-      - "${DENODO_VDP_INIT_VQL_DIR}:/container-entrypoint-init/"  
-      - ${DENODO_VDP_GRAPHQL_FILES_DIRECTORY}/application.properties:/opt/denodo/resources/apache-tomcat/webapps/denodo-graphql-service/WEB-INF/classes/application.properties 
-      - ${DENODO_VDP_GRAPHQL_FILES_DIRECTORY}/web.xml:/opt/denodo/resources/apache-tomcat/conf/web.xml
-      - ${DENODO_VDP_FILES_DIRECTORY}:/opt/denodo/  
-    ports:
-      - "${DENODO_VDP_EXTERNAL_WEB_PORT}:9090"
-      - "${DENODO_VDP_EXTERNAL_ODBC_PORT}:9996"
-      - "${DENODO_VDP_EXTERNAL_JMX_PORT}:9997"
-      - "${DENODO_VDP_EXTERNAL_PORT}:9999" 
-    environment:
-      - DENODO_USERNAME=${DENODO_VDP_ADMIN_USER}
-      - DENODO_PASSWORD=${DENODO_VDP_ADMIN_PWD}
-      - DENODO_WEBCONTAINER_STARTUP=true
-      - DENODO_DATABASE_PROVIDER=postgresql
-      - DENODO_DATABASE_PROVIDER_VERSION=12
-      - DENODO_DATABASE_URI=jdbc:postgresql://${METADATA_DB_HOSTNAME}:${METADATA_DB_PORT}/denodo
-      - DENODO_DATABASE_DRIVER=org.postgresql.Driver
-      - DENODO_DATABASE_CLASSPATH=postgresql-12
-      - DENODO_DATABASE_USER=denodo
-      - DENODO_DATABASE_PASSWORD=denodo
-      - DENODO_DATABASE_INITIAL_SIZE=4
-      - DENODO_DATABASE_MAX_ACTIVE=20
-      - DENODO_DATABASE_TEST=true
-      - DENODO_DATABASE_QUERY=Select 1
-    command: --vdpserver
-
-  # Denodo Scheduler server
-  denodo-sched:
-    container_name: denodocommunity-lab-environment-sched
-    image: ${DENODO_VERSION}
-    profiles: ["all","denodo","denodo-sched"]
-    hostname: ${DENODO_SCHED_HOSTNAME}
-    depends_on:
-      denodo-postgres:
-        condition: "service_started"
-        required: true 
-      denodo-vdp:
-        condition: "service_started"
-        required: false
-    restart: unless-stopped
-    networks:
-      - denodo-lab-net 
-    volumes:
-      - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
-      - "${DENODO_SCHED_INIT_ZIP_DIR}:/container-entrypoint-init/"  
-    ports:
-      - "${DENODO_SCHED_EXTERNAL_PORT}:8000"
-    environment:
-      - DENODO_SCHSERVER_SERVER_HOST=${DENODO_VDP_HOSTNAME}
-      - DENODO_SCHSERVER_SERVER_PORT=9999
-      - DENODO_SCHSERVER_DATABASE_PROVIDER=postgresql
-      - DENODO_SCHSERVER_DATABASE_PROVIDER_VERSION=12
-      - DENODO_SCHSERVER_DATABASE_URI=jdbc:postgresql://${METADATA_DB_HOSTNAME}:${METADATA_DB_PORT}/denodo
-      - DENODO_SCHSERVER_DATABASE_DRIVER=org.postgresql.Driver
-      - DENODO_SCHSERVER_DATABASE_CLASSPATH=postgresql-12
-      - DENODO_SCHSERVER_DATABASE_USER=denodo
-      - DENODO_SCHSERVER_DATABASE_PASSWORD=denodo
-      - DENODO_SCHSERVER_DATABASE_INITIAL_SIZE=4
-      - DENODO_SCHSERVER_DATABASE_MAX_ACTIVE=20
-      - DENODO_SCHSERVER_DATABASE_TEST=true
-      - DENODO_SCHSERVER_DATABASE_QUERY=Select 1
-    command: --schserver
-
-  # Denodo Index server
-  denodo-index:
-    container_name: denodocommunity-lab-environment-index
-    image: ${DENODO_VERSION}
-    profiles: ["all","denodo","denodo-index"]
-    hostname: ${DENODO_SCHED_INDEX_HOSTNAME}
-    depends_on:
-      denodo-sched:
-        condition: "service_started"
-        required: false
-    restart: unless-stopped
-    networks:
-      - denodo-lab-net 
-    volumes:
-      - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
-    ports:
-      - "${DENODO_SCHED_INDEX_EXTERNAL_PORT}:9000"
-    command: --schindex
-
-  # Denodo Design Studio web tool
-  denodo-design-studio:
-    container_name: denodocommunity-lab-environment-ds    
-    image: ${DENODO_VERSION}
-    profiles: ["all","denodo","denodo-designstudio","denodo-vdp","denodo-datacatalog","tutorial","training"]
-    hostname: ${DENODO_DS_HOSTNAME}
-    depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
-    restart: unless-stopped
-    networks:
-      - denodo-lab-net 
-    ports:
-      - "${DENODO_DS_EXTERNAL_PORT}:9090"
-    command: --designstudio  
-
-  # Denodo Data Catalog web tool
-  denodo-data-catalog:
-    container_name: denodocommunity-lab-environment-dc
-    image: ${DENODO_VERSION}
-    profiles: ["all","denodo","denodo-datacatalog","training"]
-    hostname: ${DENODO_DC_HOSTNAME}
-    depends_on:
-      - denodo-vdp
-    restart: unless-stopped
-    networks:
-      - denodo-lab-net 
-    volumes:
-      - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
-    ports:
-      - "${DENODO_DC_EXTERNAL_PORT}:9090"
-    environment:
-      - DENODO_DC_SERVER_HOST=${DENODO_VDP_HOSTNAME}
-      - DENODO_DC_DATABASE_PROVIDER=postgresql
-      - DENODO_DC_DATABASE_URI=jdbc:postgresql://${METADATA_DB_HOSTNAME}:${METADATA_DB_PORT}/denodo
-      - DENODO_DC_DATABASE_DRIVER=org.postgresql.Driver
-      - DENODO_DC_DATABASE_USER=denodo
-      - DENODO_DC_DATABASE_PASSWORD=denodo
-      - DENODO_DC_DATABASE_MAX_POOL=5
-      - DENODO_DC_DATABASE_QUERY=Select 1
-    command: --datacatalog
-
-  # Denodo Sechuder Administration web tool
-  denodo-sched-admin:
-    container_name: denodocommunity-lab-environment-sched-admin
-    image: ${DENODO_VERSION}
-    profiles: ["all","denodo","denodo-sched","denodo-sched-admin"]
-    hostname: ${DENODO_SCHED_ADMIN_HOSTNAME}
-    depends_on:
-      denodo-sched:
-        condition: "service_started"
-        required: false
-      denodo-index:
-        condition: "service_started"
-        required: false
-    restart: unless-stopped
-    networks:
-      - denodo-lab-net 
-    ports:
-      - "${DENODO_SCHED_ADMIN_EXTERNAL_PORT}:9090"
-    command: --schadmin
-
-  # ########################
   # Data Sources
   # ########################
   # Relational Database
@@ -204,10 +22,6 @@ services:
     profiles: ["all","ds","ds-mariadb","tutorial","training"]
     hostname: ${RELATIONAL_DB_HOSTNAME}
     restart: unless-stopped
-    depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
     networks:
       - denodo-lab-net 
     volumes:      
@@ -226,10 +40,6 @@ services:
     profiles: ["all","ds","ds-postgres","training"]
     hostname: ${ANALYTICAL_DB_HOSTNAME}
     restart: unless-stopped
-    depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
     networks:
       - denodo-lab-net   
     volumes:   
@@ -249,10 +59,6 @@ services:
     profiles: ["all","ds","ds-tomcat","tutorial","training"]
     hostname: ${APPSERVER_HOSTNAME}
     restart: unless-stopped
-    depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
     networks: 
       - denodo-lab-net 
     ports:
@@ -266,10 +72,6 @@ services:
     image: ${HTTPSERVER_VERSION}
     profiles: ["all","ds","ds-httpd","tutorial","training"]
     hostname: ${HTTPSERVER_HOSTNAME}
-    depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
     restart: unless-stopped
     networks: 
       - denodo-lab-net 
@@ -284,10 +86,6 @@ services:
     image: ${NOSQL_DB_VERSION}
     profiles: ["all","ds","ds-mongo","training"]
     hostname: ${NOSQL_DB_HOSTNAME}
-    depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
     restart: unless-stopped
     networks:
       - denodo-lab-net 
@@ -352,10 +150,6 @@ services:
     image: ${DFS_VERSION}
     profiles: ["ds-dfs"]
     hostname: minio
-    depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
     restart: always
     networks:
       - denodo-lab-net 
@@ -379,10 +173,6 @@ services:
     image: ${LDAP_VERSION}
     profiles: ["all","ext","ext-sso","ext-ldap","ds","tutorial","training"]
     hostname: ${LDAP_HOSTNAME}
-    depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
     restart: unless-stopped
     networks:
       - denodo-lab-net 
@@ -402,9 +192,6 @@ services:
     profiles: ["all","ext","ext-sso"]
     hostname: ${SSO_HOSTNAME}
     depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
       denodo-postgres:
         condition: "service_started"
         required: true
@@ -434,11 +221,7 @@ services:
     hostname: ${VCS_HOSTNAME}
     networks:
       - denodo-lab-net 
-    restart: always
-    depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
+    restart: always    
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         gitlab_rails['initial_root_password'] = '${VCS_ROOT_PASSWORD}'
@@ -481,11 +264,7 @@ services:
     container_name: denodocommunity-lab-environment-graphql-playground
     image: ${GRAPHQL_GUI_VERSION}
     profiles: ["util-graphql","tutorial","ds"]
-    hostname: ${GRAPHQL_GUI_HOSTNAME}
-    depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
+    hostname: ${GRAPHQL_GUI_HOSTNAME}    
     restart: unless-stopped
     networks:
       - denodo-lab-net 
@@ -502,9 +281,6 @@ services:
     profiles: ["util-dbclient"]
     hostname: ${DB_GUI_HOSTNAME}
     depends_on:
-      denodo-vdp:
-        condition: "service_started"
-        required: false
       ds-postgresql:
         condition: "service_started"
         required: false
@@ -544,7 +320,29 @@ services:
       denodo-lab-net:
         aliases:
           - ${HOST_ALIAS}
-    
+
+  # Database for storing Denodo metadata, Monitor and Cache
+  denodo-postgres:
+    container_name: denodocommunity-lab-environment-metadata
+    image: ${METADATA_DB_VERSION}
+    profiles: ["all","ds","denodo","denodo-ext-metadata","tutorial","training","ext-sso","ext"]
+    hostname: ${METADATA_DB_HOSTNAME}
+    restart: unless-stopped
+    networks:
+      - denodo-lab-net 
+    volumes:   
+      - ${METADATA_DB_INIT_SCRIPT}:/docker-entrypoint-initdb.d/init.sql
+      - ${METADATA_DB_DATA_DIRECTORY}:/mnt
+      - metadatadb-lab-env:/var/lib/postgresql/data  
+    environment:
+      - POSTGRES_PASSWORD=${METADATA_DB_PWD}
+      - POSTGRES_DB=postgres
+    ports:
+      - "${METADATA_DB_PORT}:${METADATA_DB_PORT}"
+    expose:
+      - "${METADATA_DB_PORT}"
+    command: -p ${METADATA_DB_PORT}
+     
 volumes:
   metadatadb-lab-env: 
     driver: local

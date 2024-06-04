@@ -70,44 +70,6 @@ $ tree
 
 ```
 
-### Configure access to Denodo containers
-
-Denodo Containers are available in Harbor (https://harbor.open.denodo.com). You need to configure the access to this registry from your docker installation. 
-
-You can find the complete user guide at [Denodo Container Registry Quick Start Guide](https://community.denodo.com/docs/html/document/8.0/en/Denodo%20Container%20Registry%20Quick%20Start%20Guide) but check the following steps for a quick set up.
-
-#### Sign In
-With your Denodo User Account you can sign in https://harbor.open.denodo.com to navigate the repositories available to you.
-
-Use the **Login via OIDC Provider** button that appears on the Harbor login page.
-
-![image](https://lh5.googleusercontent.com/-xMgBq3Zpcu3juCP3e4ELDTPGeVyySvI5CKrWCkEG1nP4bhtJwlgx6clSfBQ8fdkKHulzB0UXHJkg6AWuabcMCoSG1r0wnibfqmwkq8NZyj7su2RqwfAZCaeFFLxFGndqH3jF0O074IXjcTu86FI7LE)
-
-#### Create a CLI Secret
-
-After you have authenticated via Denodo Account and logged into the web interface for the first time, you can use the Docker CLI or Helm CLI to access the registry and artifacts.
-
-To be able to do so, the registry provides a CLI secret for use when logging in from Docker or Helm.
-
-To create the secret click your username at the top of the screen and select **User Profile**:
-
-![image](https://lh5.googleusercontent.com/KI_ZvwdDCJDtYt9NwhxgwHchjnWOvOG18Gdq5VgyCwXoC2X1Qal1lai1R6PW87YBIajjq71_p7_Il7N5_1Ht0fI9lWn_9dUwUCZ1rEJ5fg0k8BU565BFI8pLk3wytP9TYQk5m40lcxyoQah-6w-8Cw)
-
-Then generate and/or copy your CLI secret.
-
-![image](https://lh5.googleusercontent.com/SSInkp0RYQxNeSLmyVpzWxwN3G3VXLNM6ZB2l1D8yHGKujwMio7Dw-RGifPAOgCd3Nfo1U8bmMyr4LiGbSpxp5TgT5l8Iqhy8cnNw8OAM0MV_5hN1rfDcuKHQOB_7uWt_vWv_qNP18Wv6bwv3JdYbw)
-
-A user can only have one CLI secret, so when a new secret is generated or created, the old one becomes invalid.
-
-#### Authenticate in Docker CLI with the CLI Secret
-
-Use docker login and provide the credentials.
-
-```bash
-$ docker login harbor.open.denodo.com
-Username: <denodo_account_username>
-Password: <registry_profile_secret>
-```
 
 # Usage
 
@@ -123,24 +85,20 @@ $ cp .env.template .env
 $ vi .env
 ```
 
-In that file you can configure the hostname, IP address, and the port for connecting to each container **from your local machine** Please note that the connection between containers is always done using the default (internal) ports. In the example below, if you launch a Virtual DataPort container, you can connect from your machine using `//localhost:19999`. But if you are trying to connect from other container, for example, a Design Studio container, you should use the internal hostname and port, in this case `//vdp:9999`: 
+In that file you can configure the hostname, IP address, and the port for connecting to each container **from your local machine** Please note that the connection between containers is always done using the default (internal) ports. In the example below, if you launch a PostgreSQL container, you can connect from your machine using `localhost:5432`. But if you are trying to connect from other container, for example, a database client container, you should use the internal hostname and port, in this case `postgres:5432`
+
 ```properties
 # Global network configuration
 NET_SUBNET=172.30.0.0/24
 
-# Virtual Dataport
-# ================
-DENODO_VDP_HOSTNAME=vdp
-DENODO_VDP_EXTERNAL_PORT=19999
-# INTERNAL PORT = 9999
+# Postgresql (for Analytical database) 
+# ====================================
+ANALYTICAL_DB_HOSTNAME=postgres
+ANALYTICAL_DB_PORT=5432
+# INTERNAL PORT = 5432
 ...
 ```
 
-Furthermore, in this .env file you have the option to set up the path to your Denodo license to start the Denodo containers:
-```properties
-DENODO_VERSION=harbor.open.denodo.com/denodo-9/images/denodo-platform:9.0.0
-DENODO_SA_LIC=<path_to_your_denodo_license>
-```
 ## How to invoke the script
 
 Once you have followed all the configuration steps (cloning the project and creating the .env file), you only have to run the following command:
@@ -158,13 +116,13 @@ where:
 
 Most of the times you won't need to start all the services configured in the docker compose YML file at the same time (because they will make use of some valuable resouces -_cpu_ and _memory_- of your machine) so it is better to start only the containers required. This can be done using docker profles. 
 
-For example, for launching a Denodo Virtual DataPort server and a Denodo Design Studio web tool you can run the following command:
+For example, for launching the data sources for training you can run the following command:
 
 ```bash
-$ docker compose --profile denodo-vdp up 
+$ docker compose --profile ds up 
 ```
 where:
-* `--profile denodo-vdp` refers to the profile name. The profiles help you to selectively start services. This is achieved by assigning each service to one or more profiles. 
+* `--profile ds` refers to the profile name. The profiles help you to selectively start services. This is achieved by assigning each service to one or more profiles. 
 
 In the table below you can find the list of available profiles that you can use (please note that using `--profile all` will start all the containers, which is not recommended!)
 
@@ -172,70 +130,50 @@ In the table below you can find the list of available profiles that you can use 
 
 | Profile name | List of Containers |
 | ----------- | ----------- | 
-| training | Profile for launching the needed **Denodo servers and data sources** for doing the Denodo on-demand training courses: it includes VDP server, Design Studio, Data Catalog, and a PostgreSQL* used as external metadata database. For data sources it launches a PostgreSQL database, a MariaDB database, a MongoDB server, an Apache HTTP server, an Apache Tomcat server and a LDAP server. |
-| tutorial | Profile for launching the needed **Denodo servers and data sources** for doing the Denodo Community Tutorials: it includes VDP server, Design Studio, and a PostgreSQL* used as external metadata database. For data sources it launches a MariaDB database, an Apache HTTP server, an Apache Tomcat server and a LDAP server. |
 | ds | Profile for launching all these **Data Sources**: MariaDB, PostgreSQL, Tomcat, Apache, MongoDB and LDAP |
-| denodo | Profile for launching all the available **Denodo servers and tools**: it includes VDP server, Design Studio, Data Catalog, Scheduler server, Index server, the Scheduler Web Administration Tool and a PostgreSQL* used as external metadata database. |
-| denodo-vdp | Profile for launching **Denodo VirtualDataPort**: it includes VDP server, Design Studio and a PostgreSQL* used as external metadata database. |
-| denodo-sched | Profile for launching **Denodo Scheduler**: it includes Scheduler server, the Scheduler Web Administration Tool and a PostgreSQL* used as external metadata database. |
-| denodo-datacatalog | Profile for launching **Denodo Data Catalog**: it includes VDP server, Design Studio, Data Catalog and a PostgreSQL* used as external metadata database. |
 | ext-sso | Profile for launching a **Keycloak** server for Single Sign-On (including an LDAP server and a PostgreSQL* used as external metadata database). |
 | ext-git | Profile for launching a **GitLab** server for Version Control System. |
 | util-mongo-express | Profile for launching **Mongo Express** as a web-based MongoDB administration interface. |
 | util-graphql | Profile for launching **GraphQL Playground** as a web-based GraphQL client interface. |
 | util-dbclient | Profile for launching **Cloudbeaver** as a web-based database administration interface. |
-| all | Profile for launching all the available **Denodo servers and tools**, **Data Sources** and **External Servers**. |
+| all | Profile for launching all the available **Data Sources** and **External Servers**. |
 
- 
-\* The associated container for this PostgreSQL database is shared among all the Denodo servers and Keycloak.
 
 ## Running containers of different profiles at the same time
 
-Sometimes you will need to start services from different profiles. For example, you may want to launch all the data sources and a Denodo Virtual DataPort server to connect to those data sources and combine data, in that case you can run the following command:
+Sometimes you will need to start services from different profiles. For example, you may want to launch all the data sources and a Git server, in that case you can run the following command:
 
 ```bash
-$ docker compose --profile ds --profile denodo-vdp up 
+$ docker compose --profile ds --profile ext-git up 
 ```
 
 ## Stopping containers
 
 If you want to stop the containers (without removing them) you only have to run the following command:
 ```bash
-$ docker compose --profile denodo stop
+$ docker compose --profile ds stop
 ```
 Using that command you can start the containers again using the command:
 ```bash
-$ docker compose --profile denodo start
+$ docker compose --profile ds start
 ```
 
 ## Removing containers
 
 Alternatively you can use this other command for stoping **and removing** the containers and the associated network (if it is nout used by anoy other container):
 ```bash
-$ docker compose --profile denodo down 
+$ docker compose --profile ds down 
 ```
 **Note:** You can add the option `--volumes` to this command to remove also the volumes defined for the containers. **DON'T USE THIS PARAM in case you want to maintain the changes done in the containers when you stop them!**
 
 Once the containers are stopped or destroyed, if you want to start the containers again, you only have to run the usual command:
 ```bash
-$ docker compose --profile denodo up
+$ docker compose --profile ds up
 ```
 
 # List of Denodo Common Lab Environment Containers
 
 In the table below you can find the name of all the containers included by default in the docker compose script:
-
-## Denodo
-
-| Service name | Container name | Image | Description |
-| ----------- | ----------- | ----------- | ----------- |
-| denodo-vdp | denodocommunity-lab-environment-vdp | denodo-platform:9.x.x | It deploys de **Denodo Virtual DataPort** server using the license file configured in the `.env` file.|
-| denodo-design-studio | denodocommunity-lab-environment-ds | denodo-platform:9.x.x | It deploys the **Denodo Design Studio** web application. By default it is listening at http://localhost:19090/denodo-design-studio/?uri=//vdp:9999/#/ (note: it does not need a Denodo license to run). |
-| denodo-data-catalog | denodocommunity-lab-environmentdc | denodo-platform:9.x.x | It deploys the **Denodo Data Catalog** using the license file configured in the `.env` file. By default it is listening at http://localhost:29090/denodo-data-catalog |
-| denodo-sched | denodocommunity-lab-environment-sched | denodo-platform:9.x.x | It deploys the **Denodo Scheduler** using the license file configured in the `.env` file. |
-| denodo-sched-admin | denodocommunity-lab-environment-sched-admin | denodo-platform:9.x.x | It deploys the **Denodo Scheduler Administration** web application. By default it is listening at http://localhost:39090/webadmin/denodo-scheduler-admin/ (note: it does not need a Denodo license to run). |
-| denodo-index | denodocommunity-lab-environment-index | denodo-platform:9.x.x | It deploys the **Denodo Index Server** using the license file configured in the `.env` file. |
-| denodo-postgres | denodocommunity-lab-environment-metadata | postgres:12-alpine | **PostgreSQL** database used as Denodo and Keycloak external metadata database. The default username and password will be `denodo`/`denodo`. Data is persisted in the [project]_metadatadb-common-lab volume. |
 
 
 ## Data Sources
@@ -254,7 +192,8 @@ In the table below you can find the name of all the containers included by defau
 | Service name | Container name | Image | Hostname | Description |
 |---------|---------|---------|---------|------------|
 | ext-apacheds | denodocommunity-lab-environment-apacheds | 1000kit/apacheds | ldapserver | **Apache Directory Services container**: Apache Directory Services is an extensible and embeddable directory server which has been certified as LDAPv3 compatible by the Open Group. The container consists of a predefined Denodo domain and some users. The default credentials for Apache DS is as follows: `uid=admin,ou=system` / `secret`. It uses by default the port **10389** |
-| ext-keycloak | denodocommunity-lab-environment-keycloak | jboss/keycloak:13.0.0 | sso | **Keycloak container**: Keycloak is a Open Source Identity and Access Management tool. The container consists of a predefined realm for Denodo and it is connected to the **denodo-commonlab-apacheds** for user synchronization. The adminitration tool is listening at http://localhost:28443/ by default. Credentials: you can use the username `denodo` and password `denodo`. |
+| ext-keycloak | denodocommunity-lab-environment-keycloak | jboss/keycloak:13.0.0 | sso | **Keycloak container**: Keycloak is a Open Source Identity and Access Management tool. The container consists of a predefined realm for Denodo and it is connected to the **ext-apacheds** and **denodo-postgres** for user synchronization. The adminitration tool is listening at http://localhost:28443/ by default. Credentials: you can use the username `denodo` and password `denodo`. |
+| denodo-postgres | denodocommunity-lab-environment-metadata | postgres:12-alpine | metadata | **PostgreSQL** database used as Keycloak external metadata database. The default username and password will be `denodo`/`denodo`. Data is persisted in the [project]_metadatadb-common-lab volume. |
 | ext-git | denodocommunity-lab-environment-git | gitlab/gitlab-ce:16.2.8-ce.0 | gitlab | **GitLab container**: GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. This container allows to run a Denodo Virtual DataPort server configured with Version Control System. The administration console is running at http://localhost:1080/ by default |
 
 ## Utilities

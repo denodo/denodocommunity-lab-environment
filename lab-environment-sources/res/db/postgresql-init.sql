@@ -118,8 +118,8 @@ GRANT ALL PRIVILEGES ON DATABASE meter_reading TO udstutorial;
 \c meter_reading
 \i /mnt/schemas/tutorial/tutorial_meter_reading_postgresql_tables.sql
 
-/*COPY meter_reading_train FROM '/mnt/data/tutorial/competition/train.csv' CSV HEADER
-COPY meter_reading_test  FROM '/mnt/data/tutorial/competition/test.csv' CSV HEADER*/
+/*COPY meter_reading_train FROM '/mnt/data/tutorial/competition/train.csv' CSV HEADER;
+COPY meter_reading_test  FROM '/mnt/data/tutorial/competition/test.csv' CSV HEADER; */
 COPY date_dim            FROM '/mnt/data/tpc-ds/date_dim.dat'        DELIMITER '|' CSV;
 
 GRANT ALL PRIVILEGES ON meter_reading_train TO udstutorial;
