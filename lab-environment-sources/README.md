@@ -13,7 +13,7 @@ collaborators: Victoria Margret, Ajay Kumar
 
 # Denodo Community Lab Environment Data Sources
 
-This subproject mantains the configuration scripts for creating a set of different data sources in order to build a local testing environment that can be used later for Denodo training, for testing purposes or a base for your projects.
+This subproject maintains the configuration scripts for creating a set of different data sources in order to build a local testing environment that can be used later for Denodo training, for testing purposes or a base for your projects.
 
 It contains scripts and files for different types of data sources, like databases, web services, plain files, etc.
 

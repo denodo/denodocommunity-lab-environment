@@ -38,7 +38,7 @@ variable "console-path" {
 locals {
   proj-name                    = "DENODO QUICKSTART VIRTUAL MACHINE"
   proj-short-name              = "DQVM"
-  proj-user-guide	             = "http://"
+  proj-user-guide	             = "https://github.com/denodo/denodocommunity-lab-environment/blob/master/lab-environment-vm/Denodo%20QuickStart%20Virtual%20Machine%20-%20User%20Manual.pdf"
   vm-name                      = "Denodo Quickstart Virtual Machine"
   vm-version                   = "2.0 (based on denodocommunity-lab-environment)"
   vm-memory                    = "4096"

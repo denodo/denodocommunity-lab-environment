@@ -29,7 +29,7 @@ You can download the latest version of the DQVM from the Releases section at <li
  
 *__Note__: Skip this section if you have downloaded the DQVM binaries!*
 
-If you need to do changes to the DQVM, feel free to build your own version of the Virtual Machine with your additions. Denodo Quickstart Virtual Machine builds are based on Packer, so the first step you need to do for building the DQVM is to install Packer in your system. You could read the official documentation of Packer at https://developer.hashicorp.com/packer/tutorials/docker-get-started/get-started-install-cli.
+If you need to make changes to the DQVM, feel free to build your own version of the Virtual Machine with your additions. Denodo Quickstart Virtual Machine builds are based on Packer, so the first step you need to do for building the DQVM is to install Packer in your system. You could read the official documentation of Packer at https://developer.hashicorp.com/packer/tutorials/docker-get-started/get-started-install-cli.
 
 Once installed, you could verify the version using the following command:
 
@@ -85,10 +85,11 @@ To launch the build using Packer, you can run the packer build command followed 
 ```bash
 $ cd denodocommunity-lab-environment/lab-environment-vm/build
 $ packer init .
-$ packer build -force dqvm.pkr.hcl
+$ packer build -force .
 ```
+**Note:** you may need administrator privileges to run this command in your system.
 
-When you run this command, Packer will start the build process based on the instructions defined in the dqvm.pkr.hcl configuration file. It will download the Guest OS ISO, boot the image using the boot commands, create a virtual machine, execute the defined provisioners (such as running scripts, copying files or installing packages), and generate the output artifacts based on the specified post-processors (for example, a ".ova" box in the case of VirualBox).
+When you run this command, Packer will start the build process based on the instructions defined in the dqvm.pkr.hcl configuration file. It will download the Guest OS ISO, boot the image using the boot commands, create a virtual machine, execute the defined provisioners (such as running scripts, copying files or installing packages), and generate the output artifacts based on the specified post-processors (for example, a ".ova" box in the case of VirtualBox).
 
 During the build process, you'll see logs indicating the progress of each step, including any errors or warnings that may occur. Once the build process completes successfully, you will find the generated VM file in the specified output directories (output-base in our example).
 

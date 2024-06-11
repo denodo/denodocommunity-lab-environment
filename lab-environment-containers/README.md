@@ -13,9 +13,9 @@ collaborators: Victoria Margret, Ajay Kumar, Sarath Chandran
 
 # Denodo Community Lab Environment Containers
 
-This subproject mantains the Docker Compose scripts for launching a local testing environment with Denodo and other external services used as data sources. You can use it for Denodo training, for testing purposes or a base for your projects.
+This subproject maintains the Docker Compose scripts for launching a local testing environment with Denodo and other external services used as data sources. You can use it for Denodo training, for testing purposes or a base for your projects.
 
-It launches several containers as needed, initializating them using the files of the [lab-environment-sources](../lab-environment-sources/) subproject.
+It launches several containers as needed, initializing them using the files of the [lab-environment-sources](../lab-environment-sources/) subproject.
 
 ## Prerequisites
 
@@ -85,7 +85,7 @@ $ cp .env.template .env
 $ vi .env
 ```
 
-In that file you can configure the hostname, IP address, and the port for connecting to each container **from your local machine** Please note that the connection between containers is always done using the default (internal) ports. In the example below, if you launch a PostgreSQL container, you can connect from your machine using `localhost:5432`. But if you are trying to connect from other container, for example, a database client container, you should use the internal hostname and port, in this case `postgres:5432`
+In that file you can configure the hostname, IP address, and the port for connecting to each container **from your local machine**. Please note that the connection between containers is always done using the default (internal) ports. In the example below, if you launch a PostgreSQL container, you can connect from your machine using `localhost:5432`. But if you are trying to connect from other container, for example, a database client container, you should use the internal hostname and port, in this case `postgres:5432`
 
 ```properties
 # Global network configuration
@@ -110,11 +110,11 @@ where:
 * `-p training` refers to the docker project name. This parameter is **optional**. If you use it, you can use any label here. This is useful if you want to have multiple versions of the same lab environment. For example, one for training and another one for creating a personal project. For the rest of examples used in this README, we are going to omit this parameter but it is strongly recommended to use it.
 * `up` refers to the command for building, creating and starting containers for the services configured. It aggregates the output of each container (logs), if you want to avoid that, simply add `--detach` or `-d` to start the containers in the background.
 
-**Note**: you will notice that this command returns `"no service selected"` and no containers are started. This is the expected behavior because the project was configured for using specific docker profiles in order to start only the containers needed for your specific use case. Read next sections of this README file to know how to use those profiles.
+**Note**: you will notice that this command returns `"no service selected"` and no containers are started. This is the expected behavior because the project was configured for using specific docker profiles in order to start only the containers needed for your specific use case. Read the next sections of this README file to know how to use those profiles.
 
 ## Running containers using profiles 
 
-Most of the times you won't need to start all the services configured in the docker compose YML file at the same time (because they will make use of some valuable resouces -_cpu_ and _memory_- of your machine) so it is better to start only the containers required. This can be done using docker profles. 
+Most of the time you won't need to start all the services configured in the docker compose YML file at the same time (because they will make use of some valuable resources -_cpu_ and _memory_- of your machine) so it is better to start only the containers required. This can be done using docker profiles. 
 
 For example, for launching the data sources for training you can run the following command:
 
@@ -131,7 +131,7 @@ In the table below you can find the list of available profiles that you can use 
 | Profile name | List of Containers |
 | ----------- | ----------- | 
 | ds | Profile for launching all these **Data Sources**: MariaDB, PostgreSQL, Tomcat, Apache, MongoDB and LDAP |
-| ext-sso | Profile for launching a **Keycloak** server for Single Sign-On (including an LDAP server and a PostgreSQL* used as external metadata database). |
+| ext-sso | Profile for launching a **Keycloak** server for Single Sign-On (including an LDAP server and a PostgreSQL* used as an external metadata database). |
 | ext-git | Profile for launching a **GitLab** server for Version Control System. |
 | util-mongo-express | Profile for launching **Mongo Express** as a web-based MongoDB administration interface. |
 | util-graphql | Profile for launching **GraphQL Playground** as a web-based GraphQL client interface. |
@@ -160,7 +160,7 @@ $ docker compose --profile ds start
 
 ## Removing containers
 
-Alternatively you can use this other command for stoping **and removing** the containers and the associated network (if it is nout used by anoy other container):
+Alternatively you can use this other command for stopping **and removing** the containers and the associated network (if it is not used by any other container):
 ```bash
 $ docker compose --profile ds down 
 ```
@@ -192,9 +192,9 @@ In the table below you can find the name of all the containers included by defau
 | Service name | Container name | Image | Hostname | Description |
 |---------|---------|---------|---------|------------|
 | ext-apacheds | denodocommunity-lab-environment-apacheds | 1000kit/apacheds | ldapserver | **Apache Directory Services container**: Apache Directory Services is an extensible and embeddable directory server which has been certified as LDAPv3 compatible by the Open Group. The container consists of a predefined Denodo domain and some users. The default credentials for Apache DS is as follows: `uid=admin,ou=system` / `secret`. It uses by default the port **10389** |
-| ext-keycloak | denodocommunity-lab-environment-keycloak | jboss/keycloak:13.0.0 | sso | **Keycloak container**: Keycloak is a Open Source Identity and Access Management tool. The container consists of a predefined realm for Denodo and it is connected to the **ext-apacheds** and **denodo-postgres** for user synchronization. The adminitration tool is listening at http://localhost:28443/ by default. Credentials: you can use the username `denodo` and password `denodo`. |
+| ext-keycloak | denodocommunity-lab-environment-keycloak | jboss/keycloak:13.0.0 | sso | **Keycloak container**: Keycloak is a Open Source Identity and Access Management tool. The container consists of a predefined realm for Denodo and it is connected to the **ext-apacheds** and **denodo-postgres** for user synchronization. The administration tool is listening at http://localhost:28443/ by default. Credentials: you can use the username `denodo` and password `denodo`. |
 | denodo-postgres | denodocommunity-lab-environment-metadata | postgres:12-alpine | metadata | **PostgreSQL** database used as Keycloak external metadata database. The default username and password will be `denodo`/`denodo`. Data is persisted in the [project]_metadatadb-common-lab volume. |
-| ext-git | denodocommunity-lab-environment-git | gitlab/gitlab-ce:16.2.8-ce.0 | gitlab | **GitLab container**: GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. This container allows to run a Denodo Virtual DataPort server configured with Version Control System. The administration console is running at http://localhost:1080/ by default |
+| ext-git | denodocommunity-lab-environment-git | gitlab/gitlab-ce:16.2.8-ce.0 | gitlab | **GitLab container**: GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. This container runs a GitLab service to be used as the Version Control System for Denodo Platform. The administration console is running at http://localhost:1080/ by default |
 
 ## Utilities
 
