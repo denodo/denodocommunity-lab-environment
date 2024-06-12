@@ -23,7 +23,7 @@ The Denodo Quickstart Virtual Machine (a.k.a. DQVM) can be launched in VirtualBo
 
 ## Binaries 
 
-You can download the latest version of the DQVM from the Releases section at <link to the releases> or you can build the DQVM by yourself following the steps below.
+You can download the latest version of the DQVM from the [Releases](https://github.com/denodo/denodocommunity-lab-environment/releases/latest) or you can build the DQVM by yourself following the steps below.
 
 # Building the DQVM from sources
  

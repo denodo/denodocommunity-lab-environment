@@ -72,7 +72,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_historical_orders
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/historical_orders'
     USERNAME = 'website_sys'
-    USERPASSWORD = 'D5H5zx6uls6Ba9CYl5BY/uejsJFniAJUpHl1smJuqa5qODMwT3ZwHQTzvVFxtfuRv/0+D9A32kVOgRVesg+I860ngCmH6oHgUgcsY4x8KBaRStdZxhPjiCjIsKuSV6SEWxOv2zbGomrEYALxVVnLnQ==' ENCRYPTED
+    USERPASSWORD = 'website'
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -102,7 +102,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_human_resources
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/human_resources'
     USERNAME = 'human_resources'
-    USERPASSWORD = 'PYYwMWIeDZ7b5ESeCCcUCNEIZ81p60f9lWr0nWdbJD1RoN+mvWyD18LvzoW2dhzxM4A2wGBrnFQqE2i4raOOFnvmbcoNT+pY/Ce1f/UoK+R54vf1OwrUtAG+Q1TPX2k/' ENCRYPTED
+    USERPASSWORD = 'human'
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -132,7 +132,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_tpcds
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/tpc_ds'
     USERNAME = 'denodo'
-    USERPASSWORD = 'QgmvoZYyqMmRMixcsbY+gHc8kc42ZKsj/DmXl+kMDljoDIO7IaYohA1L7AyU/gXNcTebmTROewTOKifaKR1bJ5N8a1D1IIjRI+utWUnuBPDINuiiepykGafG6gx2NKARUSxppW/OVopNsEFh0ssNKA==' ENCRYPTED
+    USERPASSWORD = 'denodo'
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -162,7 +162,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_web_orders
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/website_sys'
     USERNAME = 'website_sys'
-    USERPASSWORD = '15K7QJZl5WFPcjlMNYYj3ef3IV4sq0NJK4fYNmfVcHanC/yCU9PAv0JgB2Q0e4PcknL1NapI8b8H+GkPy6yCl6SkHfWZpnA39fLwqvp+mDZWnq4y7USwtaXknacQ+DWSfLSpzglNiI7c+aV1/n4wGA==' ENCRYPTED
+    USERPASSWORD = 'website'
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -197,7 +197,7 @@ CREATE OR REPLACE DATASOURCE JSON ds_sales
     )
     AUTHENTICATION BASIC ( 
       USER 'admin'
-      PASSWORD 'HRT9/b0+e0hKwcMbU6hIGE4BL6Rr1WTyRpTadX34A8TtrBo68dXEy0fV7U49uKqu2se42cEaTShD9YtbwsEv5dMTymjTLhoZTZtkS3pi5zVU5wqbwd974xFtL06AmcZwcCoDXHIzKVE1nVl5+ie4fQ==' ENCRYPTED )
+      PASSWORD 'a,dm0n;' )
     PROXY OFF;
 
 CREATE OR REPLACE DATASOURCE MONGODB ds_nosql
@@ -208,7 +208,7 @@ CREATE OR REPLACE DATASOURCE MONGODB ds_nosql
     )
     AUTHENTICATION (
         USERNAME = 'mongoadmin'
-        USERPASSWORD = 'S9DFZ6LqJe6umK+HXsw538rSWnHciWyRGFHiSEHIubLCv4DkXPYcb3vrqAX/R7x5XWJXV6tLWKvyRZ4duphYKrj+1cKj4Xg+F7wz2+skyP4G9+yzqEIVFsdI6fwd/bON' ENCRYPTED
+        USERPASSWORD = 'admin'
      )
     POOL (
         MAXACTIVE = 100
@@ -235,7 +235,7 @@ CREATE OR REPLACE DATASOURCE XML ds_sales_search
     )
     AUTHENTICATION BASIC ( 
       USER 'admin'
-      PASSWORD 'Wb86RXlyvPsHRFnDhvUG9pJ8SOK77mLXAsgi1qbaMZPOjaJC+/lScvYEL91ptlc7G3gW9HjNEGOwGJfMqbaSOCLGx354d9yludN0BkNxC14SBrmdbiXZ6NEQAp/21sD6j9MpHok7iD66QQrM21yCiw==' ENCRYPTED )
+      PASSWORD 'a,dm0n;')
     PROXY OFF;
 
 # #######################################

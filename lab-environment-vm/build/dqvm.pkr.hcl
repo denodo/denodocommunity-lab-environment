@@ -100,7 +100,8 @@ source "virtualbox-iso" "base" {
 					"${var.password-root}<enter><wait>",
 					"UTC<enter><wait5>",
 					"none<enter><wait5>",
-					"Q<wait>1<enter><wait5>",
+					"c<enter><wait5>",
+					"1<enter><wait5>",					
 					"${local.user-denodo}<enter><wait>",
 					"${local.user-denodo}<enter><wait>",
 					"${var.password-denodo}<enter><wait>",
@@ -143,7 +144,6 @@ build {
   provisioner "shell" {
     inline = [
 	    "echo '***** Updating Repositories'",
-		"echo 'http://dl-cdn.alpinelinux.org/alpine/v3.18/community' >> /etc/apk/repositories",
 	  	"apk update",		
 		
 		"echo '***** Updating Packages'",
@@ -158,13 +158,16 @@ build {
 		"setup-acf",
 		"apk add acf-openssh",		
 		
-		"echo '***** Installing Common Lab Environment'",
-		"apk add git docker docker-compose",
+		"echo '***** Installing Denodo Community Lab Environment'",
+		"apk add git docker docker-compose docker-cli-compose",
 		"rc-update add docker boot",
 		"service docker start",	
 		"cd ${var.home-path}",
 		"git clone ${local.lab-environment-url}",
 		"chown -R ${local.user-denodo}:${local.user-denodo} ${local.lab-environment-prj-name}",
+		"cd ${local.lab-environment-prj-name}/lab-environment-containers/build",
+		"cp .env.template .env",
+		"cd ${var.home-path}",
 		
 		"echo '***** Installing Management Console'",
 		"apk add perl perl-dev perl-net-ssleay perl-app-cpanminus build-base expect procps",
@@ -187,24 +190,27 @@ build {
 		"echo '' > /etc/motd",
 		"echo 'Welcome to the ${local.proj-name}!' >> /etc/motd",
 		"echo '' >> /etc/motd",
-		"echo 'This virtual machine contains the software needed to use the Denodo Common Lab environment. It has been downloaded to:' >> /etc/motd", 
+		"echo 'This virtual machine contains the software needed to use the Denodo Community Lab Environment.' >> /etc/motd", 
+		"echo 'The project is avilable in this path:' >> /etc/motd", 
+		"echo '' >> /etc/motd",
 		"echo '    ${var.home-path}/${local.lab-environment-prj-name}' >> /etc/motd", 
 		"echo '' >> /etc/motd",
-		"echo -n 'Visit ' >> /etc/motd",
+		"echo 'For launching the training data sources please execute these commands:' >> /etc/motd", 
+		"echo '' >> /etc/motd",
+		"echo '    cd ${var.home-path}/${local.lab-environment-prj-name}/lab-environment-containers/build' >> /etc/motd", 
+		"echo '    docker compose -p training --profile ds up' >> /etc/motd", 
+		"echo '' >> /etc/motd",
+		"echo -n '${local.lab-environment-prj-name} documentation: ' >> /etc/motd",
 		"echo -en '\\033[4;36m' >> /etc/motd",
 		"echo -n '${local.lab-environment-readme}' >> /etc/motd",
 		"echo -en '\\033[0m' >> /etc/motd",
-		"echo ' for accessing the ${local.lab-environment-prj-name} documentation.' >> /etc/motd",
-		"echo -n 'Visit ' >> /etc/motd",
+		"echo '' >> /etc/motd",
+		"echo '' >> /etc/motd",
+		"echo -n '${local.proj-short-name} User Manual: ' >> /etc/motd",
 		"echo -en '\\033[4;36m' >> /etc/motd",
 		"echo -n '${local.proj-user-guide}' >> /etc/motd",
 		"echo -en '\\033[0m' >> /etc/motd",
-		"echo ' for accessing the complete user guide of ${local.proj-short-name}.' >> /etc/motd",
-		"echo -n 'Visit ' >> /etc/motd",
-		"echo -en '\\033[4;36m' >> /etc/motd",
-		"echo -n '${local.mngmnt-console-url}' >> /etc/motd",
-		"echo -en '\\033[0m' >> /etc/motd",
-		"echo ' if you want to manage this system.' >> /etc/motd",
+		"echo '' >> /etc/motd",		
 		"echo '' >> /etc/motd",
 		
 		"echo -en '\\033[0;32m' > /etc/issue",
@@ -224,7 +230,12 @@ build {
 		"echo '    Kernel \\r on an \\m' >> /etc/issue",
 		"echo ' ' >> /etc/issue",		
 		"chmod a+x /etc/network/if-up.d/update-issue",		
-		"echo 'DONE! DQVM created succesfully!'"
+		"echo 'DONE! DQVM created succesfully!'",
+
+		"cd ${var.console-path}",
+		"/usr/bin/expect /tmp/webmin.exp",
+		"rc-update add webmin default",
+		"reboot"
     ]
   }
 
