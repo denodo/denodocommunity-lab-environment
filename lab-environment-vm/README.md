@@ -80,6 +80,34 @@ The files needed to build the DQVM are located in the lab-environment-vm directo
 
 *__Note__: Skip this section if you have downloaded the DQVM binaries!*
 
+### Prerequisites
+
+Before building the virtual machines you need to configure your system in order to have the same network configuration in your machine and in the virtual machine.
+
+#### Prerequisites for Hyper-V
+
+The build file is using the Virtual Switch **"Default Switch"** as the default network so you have to ensure you have that swith enabled in the Hyper-V Virtual Switch Manager.
+
+#### Prerequisites for Virtual Box
+
+The build file is assuming you have a **"VirtualBox Host-Only Ethernet Adapter #2"** Host-only network created in your installation of Virtual Box. 
+
+you can follow these steps to create it:
+1. Configure the network by accessing the **Tools** option in VirtualBox.
+2. Click on the button **Create** to create a new VirtualBox Host-Only Network.
+3. After you click on this button you will see a new “VirtualBox Host-Only Ethernet Adapter” listed in this panel, rename it to **VirtualBox Host-Only Ethernet Adapter #2**
+4. Configure the new adapter just by clicking over it and selecting the **Properties** option: select the option **Configure Adapter Manually** and add the following information:
+    * IPv4 Address: 192.168.100.1
+    * IPv4 Network Mask: 255.255.255.0
+5. Inside the configuration of the adapter, open the **DHCP Server** tab and configure the following:
+    * Select Enable Server
+    * Server Address: 192.168.100.2
+    * Server Mask: 255.255.255.0
+    * Lower Address Bound: 192.168.100.3
+    * Upper Address Bound: 192.168.100.254
+
+### Building the DQVM
+
 To launch the build using Packer, you can run the packer build command followed by the name of the configuration file (dqvm.pkr.hcl). Here are the commands you can use:
 
 ```bash

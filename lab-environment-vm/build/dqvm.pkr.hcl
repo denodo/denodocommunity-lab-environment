@@ -35,7 +35,8 @@ source "hyperv-iso" "base" {
 					"UTC<enter><wait5>",
 					"none<enter><wait5>",
 					"openntpd<enter><wait5>",
-					"Q<wait>1<enter><wait5>",
+					"c<enter><wait5>",
+					"1<enter><wait5>",
 					"${local.user-denodo}<enter><wait>",
 					"${local.user-denodo}<enter><wait>",
 					"${var.password-denodo}<enter><wait>",
@@ -49,7 +50,7 @@ source "hyperv-iso" "base" {
 					"${local.user-root}<enter><wait>", 
 					"${var.password-root}<enter><wait>", 
 					"echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config<enter><wait>",	
-					"service sshd restart<enter><wait>",
+					"service sshd restart<enter><wait5>",
 					"apk add hvtools<enter><wait10>",
 					"rc-service hv_fcopy_daemon start<enter><wait5>",
 					"rc-update add hv_fcopy_daemon<enter><wait>",
@@ -176,6 +177,9 @@ build {
 		"wget ${local.mngmnt-console-download-url}",
 		"tar -xvzf ${local.mngmnt-console-name}.tar.gz > /dev/null",
 		"ln -sf ${var.console-path}/${local.mngmnt-console-name} ${var.console-path}/console",
+		"cd ${var.home-path}",
+		"mkdir conf",
+		"cp /tmp/webmin.exp ${var.home-path}/conf",
 
 		"echo '========================'",
 		"echo '         TESTS'",
@@ -230,12 +234,8 @@ build {
 		"echo '    Kernel \\r on an \\m' >> /etc/issue",
 		"echo ' ' >> /etc/issue",		
 		"chmod a+x /etc/network/if-up.d/update-issue",		
-		"echo 'DONE! DQVM created succesfully!'",
-
-		"cd ${var.console-path}",
-		"/usr/bin/expect /tmp/webmin.exp",
-		"rc-update add webmin default",
-		"reboot"
+		
+		"echo 'DONE! DQVM created succesfully!'"
     ]
   }
 
