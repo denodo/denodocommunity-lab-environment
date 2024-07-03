@@ -192,9 +192,7 @@ services:
     profiles: ["all","ext","ext-sso"]
     hostname: ${SSO_HOSTNAME}
     depends_on:
-      denodo-postgres:
-        condition: "service_started"
-        required: true
+      - denodo-postgres
     restart: unless-stopped
     networks:
       - denodo-lab-net 
@@ -244,10 +242,6 @@ services:
     image: ${NOSQL_GUI_VERSION}
     profiles: ["util-mongo-express"]
     hostname: ${NOSQL_GUI_HOSTNAME}
-    depends_on:
-      ds-mongo:
-        condition: "service_started"
-        required: false
     restart: unless-stopped
     networks:
       - denodo-lab-net 
@@ -280,13 +274,6 @@ services:
     image: ${DB_GUI_VERSION}
     profiles: ["util-dbclient"]
     hostname: ${DB_GUI_HOSTNAME}
-    depends_on:
-      ds-postgresql:
-        condition: "service_started"
-        required: false
-      ds-mariadb:
-        condition: "service_started"
-        required: false
     restart: always
     networks:
       - denodo-lab-net 
@@ -303,7 +290,8 @@ services:
     hostname: ${NOTEBOOK_HOSTNAME}
     networks:
       - denodo-lab-net
-    depends_on: [ docker-host ]
+    depends_on: 
+      - docker-host
     restart: unless-stopped
     volumes: 
       - ${NOTEBOOK_DIRECTORY}:/home/jovyan/work
