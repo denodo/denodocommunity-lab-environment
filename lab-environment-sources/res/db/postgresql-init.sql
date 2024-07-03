@@ -40,13 +40,11 @@ GRANT ALL PRIVILEGES ON DATABASE human_resources TO human_resources;
 \i /mnt/schemas/human-resources/hr_postgresql_tables.sql
 
 COPY "REGIONS"     FROM '/mnt/data/human-resources/regions.csv'     WITH (FORMAT CSV, DELIMITER ',', FORCE_NULL("REGION_ID"));
-COPY "JOBS"        FROM '/mnt/data/human-resources/jobs.csv'        DELIMITER ',' CSV;
 COPY "COUNTRIES"   FROM '/mnt/data/human-resources/countries.csv'   DELIMITER ',' CSV;
-COPY "LOCATIONS"   FROM '/mnt/data/human-resources/locations.csv'   WITH (FORMAT CSV, DELIMITER ',', FORCE_NULL("COUNTRY_CODE"));
+COPY "LOCATIONS"   FROM '/mnt/data/human-resources/locations.csv'   WITH (FORMAT CSV, DELIMITER ',', FORCE_NULL("COUNTRY_CODE"));;
+COPY "JOBS"        FROM '/mnt/data/human-resources/jobs.csv'        DELIMITER ',' CSV;
 COPY "DEPARTMENTS" FROM '/mnt/data/human-resources/departments.csv' WITH (FORMAT CSV, DELIMITER ',', FORCE_NULL("DEPARTMENT_ID"));
 COPY "EMPLOYEES"   FROM '/mnt/data/human-resources/employees.csv'   DELIMITER ',' CSV;
-
-ALTER TABLE "DEPARTMENTS" ADD CONSTRAINT "DEPT_MGR_FK" FOREIGN KEY ("MANAGER_ID") REFERENCES "EMPLOYEES" ("EMPLOYEE_ID");
 
 GRANT ALL PRIVILEGES ON "REGIONS" TO human_resources;
 GRANT ALL PRIVILEGES ON "JOBS" TO human_resources;
@@ -70,12 +68,14 @@ COPY "STORAGES"   FROM '/mnt/data/web-orders/storages.csv'    DELIMITER ',' CSV 
 COPY "ORDERS"     FROM '/mnt/data/web-orders/orders.csv'      WITH (FORMAT CSV, DELIMITER ',',FORCE_NULL("DATE_DELIVERED"));
 COPY "STOCK"      FROM '/mnt/data/web-orders/stock.csv'       WITH (FORMAT CSV, DELIMITER ',');
 COPY "ORDER_ITEM" FROM '/mnt/data/web-orders/order_items.csv' WITH (FORMAT CSV, DELIMITER ',');
+COPY "EMPLOYEES"  FROM '/mnt/data/human-resources/employees.csv'   DELIMITER ',' CSV;
 
 GRANT ALL PRIVILEGES ON "CUSTOMER" TO website_sys;
 GRANT ALL PRIVILEGES ON "STORAGES" TO website_sys;
 GRANT ALL PRIVILEGES ON "ORDERS" TO website_sys;
 GRANT ALL PRIVILEGES ON "STOCK" TO website_sys;
 GRANT ALL PRIVILEGES ON "ORDER_ITEM" TO website_sys;
+GRANT ALL PRIVILEGES ON "EMPLOYEES" TO website_sys;
 
 CREATE USER wxinc WITH PASSWORD 'incident';
 CREATE DATABASE wxinc OWNER wxinc;
@@ -87,7 +87,8 @@ GRANT ALL PRIVILEGES ON DATABASE wxinc TO incident_cc;
 \c wxinc
 \i /mnt/schemas/web-orders/wo_postgresql_pl.sql
 
-COPY "OL_SERVICE_REQUEST" FROM '/mnt/data/web-orders/ol_service_request.csv' (FORMAT CSV, DELIMITER ',', FORCE_NULL("CASE_CLOSED_DATE"));;
+COPY "OL_SERVICE_REQUEST" FROM '/mnt/data/web-orders/ol_service_request.csv' (FORMAT CSV, DELIMITER ',', FORCE_NULL("CASE_CLOSED_DATE"));
+
 GRANT ALL PRIVILEGES ON "OL_SERVICE_REQUEST" TO wxinc;
 GRANT SELECT ON "OL_SERVICE_REQUEST" TO incident_cc;
 
@@ -118,8 +119,8 @@ GRANT ALL PRIVILEGES ON DATABASE meter_reading TO udstutorial;
 \c meter_reading
 \i /mnt/schemas/tutorial/tutorial_meter_reading_postgresql_tables.sql
 
-/*COPY meter_reading_train FROM '/mnt/data/tutorial/competition/train.csv' CSV HEADER;
-COPY meter_reading_test  FROM '/mnt/data/tutorial/competition/test.csv' CSV HEADER; */
+/*COPY meter_reading_train FROM '/mnt/data/tutorial/competition/train.csv' CSV HEADER
+COPY meter_reading_test  FROM '/mnt/data/tutorial/competition/test.csv' CSV HEADER*/
 COPY date_dim            FROM '/mnt/data/tpc-ds/date_dim.dat'        DELIMITER '|' CSV;
 
 GRANT ALL PRIVILEGES ON meter_reading_train TO udstutorial;
