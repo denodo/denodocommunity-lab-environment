@@ -1,7 +1,6 @@
 # Copyright 2023 Denodo
 # SPDX-License-Identifier: Apache-2.0
 
-version: '3.8'
 networks:
     denodo-lab-net:
         name: denodo-lab-net

@@ -33,9 +33,5 @@
 -- Contributors:
 -- Gradient Systems
 ---
-alter table catalog_page add constraint cp_p foreign key  (cp_catalog_page_sk) references promotion (p_promo_sk);
 alter table customer add constraint c_a foreign key  (c_current_addr_sk) references customer_address (ca_address_sk);
 alter table customer add constraint c_cd foreign key  (c_current_cdemo_sk) references customer_demographics (cd_demo_sk);
-alter table customer add constraint c_hd foreign key  (c_current_hdemo_sk) references household_demographics (hd_demo_sk);
-alter table household_demographics add constraint hd_ib foreign key  (hd_income_band_sk) references income_band (ib_income_band_sk); 
-alter table promotion add constraint p_i foreign key  (p_item_sk) references item (i_item_sk);

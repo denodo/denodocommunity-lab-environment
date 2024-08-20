@@ -8,7 +8,6 @@ CREATE DATABASE tpc_ds;
 USE tpc_ds;
 
 source /mnt/schemas/tpc-ds/tpcds_mariadb_tables.sql
-source /mnt/schemas/tpc-ds/tpcds_mariadb_tables_ri.sql
 
 LOAD DATA LOCAL INFILE '/mnt/data/tpc-ds/call_center.dat'            INTO TABLE call_center            FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INFILE '/mnt/data/tpc-ds/customer.dat'               INTO TABLE customer               FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
@@ -26,6 +25,8 @@ LOAD DATA LOCAL INFILE '/mnt/data/tpc-ds/web_page.dat'               INTO TABLE 
 LOAD DATA LOCAL INFILE '/mnt/data/tpc-ds/web_site.dat'               INTO TABLE web_site               FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INFILE '/mnt/data/tpc-ds/catalog_page.dat'           INTO TABLE catalog_page           FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INFILE '/mnt/data/tpc-ds/household_demographics.dat' INTO TABLE household_demographics FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+
+source /mnt/schemas/tpc-ds/tpcds_mariadb_tables_ri.sql
 
 GRANT ALL PRIVILEGES ON tpc_ds.* TO 'denodo'@'%';
 FLUSH PRIVILEGES;
