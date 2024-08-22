@@ -10,6 +10,77 @@ networks:
               - subnet: ${NET_SUBNET}
 
 services:
+  
+  # ########################
+  # Denodo 
+  # ########################
+  
+  # Denodo Virtual DataPort server / Embedded web container (Restful-ws/OData service/GraphQL service)
+  denodo-vdp:
+    container_name: denodocommunity-lab-environment-vdp
+    image: ${DENODO_VERSION}
+    profiles: ["all","denodo","denodo-vdp"]
+    hostname: ${DENODO_VDP_HOSTNAME}
+    networks:        
+      - denodo-lab-net 
+    volumes:
+      - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"   
+      - "${DENODO_VDP_INIT_VQL_DIR}:/container-entrypoint-init/"  
+      - ${DENODO_VDP_GRAPHQL_FILES_DIRECTORY}/application.properties:/opt/denodo/resources/apache-tomcat/webapps/denodo-graphql-service/WEB-INF/classes/application.properties 
+      - ${DENODO_VDP_GRAPHQL_FILES_DIRECTORY}/web.xml:/opt/denodo/resources/apache-tomcat/conf/web.xml
+      - ${DENODO_VDP_FILES_DIRECTORY}:/opt/denodo/work/lab-files  
+      - denodo-vdp-metadata:/opt/denodo/metadata
+    ports:
+      - "${DENODO_VDP_EXTERNAL_WEB_PORT}:9090"
+      - "${DENODO_VDP_EXTERNAL_ODBC_PORT}:9996"
+      - "${DENODO_VDP_EXTERNAL_JMX_PORT}:9997"
+      - "${DENODO_VDP_EXTERNAL_PORT}:9999" 
+    environment:
+      - DENODO_USERNAME=${DENODO_VDP_ADMIN_USER}
+      - DENODO_PASSWORD=${DENODO_VDP_ADMIN_PWD}
+      - DENODO_WEBCONTAINER_STARTUP=true
+      - DENODO_DC_SERVER_HOST=${DENODO_VDP_HOSTNAME}
+      - DENODO_DEBUG=true
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/denodo/bin/ping.sh -t 3000 //localhost:9999 || exit 1"]
+      interval: 6s
+      timeout: 700s
+      retries: 35
+      start_period: 60s
+    command: --vdpserver --designstudio --datacatalog
+    tty: true
+    stdin_open: true
+
+  # Denodo Scheduler server
+  denodo-sched:
+    container_name: denodocommunity-lab-environment-sched
+    image: ${DENODO_VERSION}
+    profiles: ["all","denodo-sched"]
+    hostname: ${DENODO_SCHED_HOSTNAME}
+    restart: unless-stopped
+    networks:
+      - denodo-lab-net 
+    volumes:
+      - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
+      - "${DENODO_SCHED_INIT_ZIP_DIR}:/container-entrypoint-init/"  
+      - denodo-sched-metadata:/opt/denodo/metadata
+    ports:
+      - "${DENODO_SCHED_EXTERNAL_PORT}:8000"
+      - "${DENODO_SCHED_INDEX_EXTERNAL_PORT}:9000"
+      - "${DENODO_SCHED_EXTERNAL_WEB_PORT}:9090"
+    environment:
+      - DENODO_SCHSERVER_SERVER_HOST=${DENODO_VDP_HOSTNAME}
+      - DENODO_SCHSERVER_SERVER_PORT=9999
+      - DENODO_WEBCONTAINER_STARTUP=true
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/denodo/tools/scheduler/ping.sh -t 3000 -h localhost -p 8000 || exit 1"]
+      interval: 6s
+      timeout: 700s
+      retries: 35
+      start_period: 60s
+    command: --schserver --schindex --schadmin
+    tty: true
+    stdin_open: true
 
   # ########################
   # Data Sources
@@ -18,7 +89,7 @@ services:
   ds-mariadb:
     container_name: denodocommunity-lab-environment-mariadb
     image: ${RELATIONAL_DB_VERSION}
-    profiles: ["all","ds","ds-mariadb","tutorial","training"]
+    profiles: ["all","ds","ds-mariadb","ds-minimal"]
     hostname: ${RELATIONAL_DB_HOSTNAME}
     restart: unless-stopped
     networks:
@@ -36,7 +107,7 @@ services:
   ds-postgresql:
     container_name: denodocommunity-lab-environment-postgres
     image: ${ANALYTICAL_DB_VERSION}
-    profiles: ["all","ds","ds-postgres","training"]
+    profiles: ["all","ds","ds-postgres","ds-minimal"]
     hostname: ${ANALYTICAL_DB_HOSTNAME}
     restart: unless-stopped
     networks:
@@ -55,7 +126,7 @@ services:
   ds-tomcat:
     container_name: denodocommunity-lab-environment-tomcat 
     image: ${APPSERVER_VERSION}
-    profiles: ["all","ds","ds-tomcat","tutorial","training"]
+    profiles: ["all","ds","ds-tomcat","ds-minimal"]
     hostname: ${APPSERVER_HOSTNAME}
     restart: unless-stopped
     networks: 
@@ -69,7 +140,7 @@ services:
   ds-httpd:
     container_name: denodocommunity-lab-environment-httpd
     image: ${HTTPSERVER_VERSION}
-    profiles: ["all","ds","ds-httpd","tutorial","training"]
+    profiles: ["all","ds","ds-httpd","ds-minimal"]
     hostname: ${HTTPSERVER_HOSTNAME}
     restart: unless-stopped
     networks: 
@@ -83,7 +154,7 @@ services:
   ds-mongo:
     container_name: denodocommunity-lab-environment-mongo
     image: ${NOSQL_DB_VERSION}
-    profiles: ["all","ds","ds-mongo","training"]
+    profiles: ["all","ds","ds-mongo","ds-minimal"]
     hostname: ${NOSQL_DB_HOSTNAME}
     restart: unless-stopped
     networks:
@@ -170,7 +241,7 @@ services:
   ext-apacheds:
     container_name: denodocommunity-lab-environment-apacheds
     image: ${LDAP_VERSION}
-    profiles: ["all","ext","ext-sso","ext-ldap","ds","tutorial","training"]
+    profiles: ["all","ext","ext-sso","ext-ldap","ds"]
     hostname: ${LDAP_HOSTNAME}
     restart: unless-stopped
     networks:
@@ -256,7 +327,7 @@ services:
   util-graphql-playground:
     container_name: denodocommunity-lab-environment-graphql-playground
     image: ${GRAPHQL_GUI_VERSION}
-    profiles: ["util-graphql","tutorial","ds"]
+    profiles: ["util-graphql","ds"]
     hostname: ${GRAPHQL_GUI_HOSTNAME}    
     restart: unless-stopped
     networks:
@@ -296,6 +367,7 @@ services:
       - ${NOTEBOOK_DIRECTORY}:/home/jovyan/work
     ports:
       - '${NOTEBOOK_EXTERNAL_PORT}:8888'
+    command: "start-notebook.sh --NotebookApp.token='${NOTEBOOK_TOKEN}'"
   
   docker-host:
     container_name: denodocommunity-lab-environment-dockerhost
@@ -312,7 +384,7 @@ services:
   denodo-postgres:
     container_name: denodocommunity-lab-environment-metadata
     image: ${METADATA_DB_VERSION}
-    profiles: ["all","ds","denodo","denodo-ext-metadata","tutorial","training","ext-sso","ext"]
+    profiles: ["all","ds","denodo","ext-sso","ext"]
     hostname: ${METADATA_DB_HOSTNAME}
     restart: unless-stopped
     networks:
@@ -329,7 +401,12 @@ services:
     expose:
       - "${METADATA_DB_PORT}"
     command: -p ${METADATA_DB_PORT}
-     
+    healthcheck:
+      test: pg_isready -d denodo -U denodo -p ${METADATA_DB_PORT}
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
 volumes:
   metadatadb-lab-env: 
     driver: local
@@ -344,4 +421,8 @@ volumes:
   git-lab-env:
     driver: local
   dfs-lab-env:
+    driver: local
+  denodo-vdp-metadata:
+    driver: local
+  denodo-sched-metadata:
     driver: local
