@@ -47,9 +47,39 @@ services:
       timeout: 700s
       retries: 35
       start_period: 60s
-    command: --vdpserver --designstudio --datacatalog
+    command: --vdpserver 
     tty: true
     stdin_open: true
+  
+  # Denodo Design Studio
+  denodo-ds:
+    container_name: denodocommunity-lab-environment-ds
+    image: ${DENODO_VERSION}
+    profiles: ["all","denodo","denodo-vdp"]
+    hostname: ${DENODO_VDP_HOSTNAME}
+    networks:        
+      - denodo-lab-net 
+    ports:
+      - "${DENODO_DS_EXTERNAL_WEB_PORT}:9090"
+    command: --designstudio 
+
+  # Denodo Data Catalog
+  denodo-dc:
+    container_name: denodocommunity-lab-environment-dc
+    image: ${DENODO_VERSION}
+    profiles: ["all","denodo","denodo-dc"]
+    hostname: ${DENODO_VDP_HOSTNAME}
+    networks:        
+      - denodo-lab-net 
+    volumes:
+      - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"   
+      - "${DENODO_DC_INIT_DIR}:/container-entrypoint-init/"  
+      - denodo-dc-metadata:/opt/denodo/metadata
+    ports:
+      - "${DENODO_DC_EXTERNAL_WEB_PORT}:9090"
+    environment:
+      - DENODO_DC_SERVER_HOST=${DENODO_VDP_HOSTNAME}
+    command: --datacatalog
 
   # Denodo Scheduler server
   denodo-sched:
@@ -126,7 +156,7 @@ services:
   ds-tomcat:
     container_name: denodocommunity-lab-environment-tomcat 
     image: ${APPSERVER_VERSION}
-    profiles: ["all","ds","ds-tomcat","ds-minimal"]
+    profiles: ["all","ds","ds-tomcat"]
     hostname: ${APPSERVER_HOSTNAME}
     restart: unless-stopped
     networks: 
@@ -154,7 +184,7 @@ services:
   ds-mongo:
     container_name: denodocommunity-lab-environment-mongo
     image: ${NOSQL_DB_VERSION}
-    profiles: ["all","ds","ds-mongo","ds-minimal"]
+    profiles: ["all","ds","ds-mongo"]
     hostname: ${NOSQL_DB_HOSTNAME}
     restart: unless-stopped
     networks:
@@ -425,4 +455,6 @@ volumes:
   denodo-vdp-metadata:
     driver: local
   denodo-sched-metadata:
+    driver: local
+  denodo-dc-metadata:
     driver: local
