@@ -39,7 +39,6 @@ services:
       - DENODO_USERNAME=${DENODO_VDP_ADMIN_USER}
       - DENODO_PASSWORD=${DENODO_VDP_ADMIN_PWD}
       - DENODO_WEBCONTAINER_STARTUP=true
-      - DENODO_DC_SERVER_HOST=${DENODO_VDP_HOSTNAME}
       - DENODO_DEBUG=true
     healthcheck:
       test: ["CMD-SHELL", "/opt/denodo/bin/ping.sh -t 3000 //localhost:9999 || exit 1"]
@@ -56,11 +55,13 @@ services:
     container_name: denodocommunity-lab-environment-ds
     image: ${DENODO_VERSION}
     profiles: ["all","denodo","denodo-vdp"]
-    hostname: ${DENODO_VDP_HOSTNAME}
+    hostname: ${DENODO_DS_HOSTNAME}
+    restart: always
     networks:        
       - denodo-lab-net 
     ports:
       - "${DENODO_DS_EXTERNAL_WEB_PORT}:9090"
+      - DENODO_DEBUG=true
     command: --designstudio 
 
   # Denodo Data Catalog
@@ -68,7 +69,8 @@ services:
     container_name: denodocommunity-lab-environment-dc
     image: ${DENODO_VERSION}
     profiles: ["all","denodo","denodo-dc"]
-    hostname: ${DENODO_VDP_HOSTNAME}
+    hostname: ${DENODO_DC_HOSTNAME}
+    restart: always
     networks:        
       - denodo-lab-net 
     volumes:
@@ -79,6 +81,7 @@ services:
       - "${DENODO_DC_EXTERNAL_WEB_PORT}:9090"
     environment:
       - DENODO_DC_SERVER_HOST=${DENODO_VDP_HOSTNAME}
+      - DENODO_DC_SERVER_NAME=DenodoVDP
     command: --datacatalog
 
   # Denodo Scheduler server
