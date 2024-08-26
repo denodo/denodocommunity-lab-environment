@@ -21,6 +21,7 @@ services:
     image: ${DENODO_VERSION}
     profiles: ["all","denodo","denodo-vdp"]
     hostname: ${DENODO_VDP_HOSTNAME}
+    restart: unless-stopped
     networks:        
       - denodo-lab-net 
     volumes:
@@ -62,6 +63,12 @@ services:
     ports:
       - "${DENODO_DS_EXTERNAL_WEB_PORT}:9090"
       - DENODO_DEBUG=true
+    healthcheck:
+      test: curl --fail http://localhost:9090/design-studio/ || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
     command: --designstudio 
 
   # Denodo Data Catalog
@@ -82,6 +89,12 @@ services:
     environment:
       - DENODO_DC_SERVER_HOST=${DENODO_VDP_HOSTNAME}
       - DENODO_DC_SERVER_NAME=DenodoVDP
+    healthcheck:
+      test: curl --fail http://localhost:9090/denodo-data-catalog/ || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
     command: --datacatalog
 
   # Denodo Scheduler server
