@@ -1,0 +1,979 @@
+﻿# Generated with Denodo Platform 9.0.0.
+
+ENTER SINGLE USER MODE;
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# #######################################
+# USER CREATION
+# #######################################
+CREATE OR REPLACE USER denodo 'sGngc+60BAFejbswBgCrHucYqxXYqrtT2PAm5fp6wAN3Iqp1UYGQlC5JB3x26S8WOsI3rt9pEc2NILk9mvajVg7ppwSQAo4W'  ENCRYPTED SHA512  '';
+
+# #######################################
+# ROLE CREATION
+# #######################################
+CREATE OR REPLACE ROLE analyst 'This role is created for analyst group.';
+
+# #######################################
+# TAG CREATION
+# #######################################
+CREATE OR REPLACE TAG confidential;
+
+CHOWN admin TAG confidential LASTMODIFICATIONUSER admin;
+
+
+# 0 ====================================================================
+
+# #######################################
+# DATABASE of admin
+# #######################################
+CONNECT DATABASE admin;
+
+# #######################################
+# RESOURCES of admin
+# #######################################
+# No vault resources in database admin
+# #######################################
+# LISTENERS JMS of admin
+# #######################################
+# No listeners jms in database admin
+# #######################################
+# LISTENERS KAFKA of admin
+# #######################################
+# No listeners kafka in database admin
+# #######################################
+# DATASOURCES of admin
+# #######################################
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE admin
+  CHARSET DEFAULT;
+
+ALTER DATABASE admin
+  AUTHENTICATION LOCAL;
+
+# #######################################
+# WRAPPERS of admin
+# #######################################
+
+# #######################################
+# STORED PROCEDURES of admin
+# #######################################
+# No stored procedures in database admin
+# #######################################
+# TYPES of admin
+# #######################################
+# No types in database admin
+# #######################################
+# MAPS of admin
+# #######################################
+# No maps in database admin
+# #######################################
+# BASE VIEWS of admin
+# #######################################
+# VIEWS of admin
+# #######################################
+# No views in database admin
+# #######################################
+# ASSOCIATIONS of admin
+# #######################################
+# No associations in database admin
+# #######################################
+# WEBSERVICES of admin
+# #######################################
+# No web services in database admin
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS of admin
+# #######################################
+# No deployed web services in database admin
+# #######################################
+# VIEW STATISTICS of admin
+# #######################################
+# No statistics in database admin
+# #######################################
+# Closing connection with database admin
+# #######################################
+CLOSE;
+
+
+# 2 ====================================================================
+
+# #######################################
+# DATABASE of denodo_hol_cdi_local_solution
+# #######################################
+CREATE OR REPLACE DATABASE denodo_hol_cdi_local_solution 'Cloud Data Integration with a Logical Data Fabric workshop using local data sources (All views created)';
+
+CONNECT DATABASE denodo_hol_cdi_local_solution;
+
+# #######################################
+# FOLDERS of denodo_hol_cdi_local_solution
+# #######################################
+CREATE OR REPLACE FOLDER '/1 - Connectivity' ;
+
+CHOWN admin FOLDER '/1 - Connectivity';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+
+CHOWN admin FOLDER '/1 - connectivity/2 - base views';
+
+CREATE OR REPLACE FOLDER '/2 - Integration' ;
+
+CHOWN admin FOLDER '/2 - Integration';
+
+CREATE OR REPLACE FOLDER '/3 - Business Entities' ;
+
+CHOWN admin FOLDER '/3 - Business Entities';
+
+CREATE OR REPLACE FOLDER '/4 - Report Views' ;
+
+CHOWN admin FOLDER '/4 - Report Views';
+
+CREATE OR REPLACE FOLDER '/5 - Data Services' ;
+
+CHOWN admin FOLDER '/5 - Data Services';
+
+# #######################################
+# RESOURCES of denodo_hol_cdi_local_solution
+# #######################################
+# No vault resources in database denodo_hol_cdi_local_solution
+# #######################################
+# LISTENERS JMS of denodo_hol_cdi_local_solution
+# #######################################
+# No listeners jms in database denodo_hol_cdi_local_solution
+# #######################################
+# LISTENERS KAFKA of denodo_hol_cdi_local_solution
+# #######################################
+# No listeners kafka in database denodo_hol_cdi_local_solution
+# #######################################
+# DATASOURCES of denodo_hol_cdi_local_solution
+# #######################################
+CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_customer
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
+    DATABASEURI = 'jdbc:mariadb://localhost:3306/tpc_ds'
+    USERNAME = 'denodo'
+    USERPASSWORD = 'denodo' 
+    CLASSPATH = 'mariadb-2.7'
+    DATABASENAME = 'Generic'
+    DATABASEVERSION = ''
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = ''
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+CHOWN admin DATASOURCE JDBC ds_tpcds_customer LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_sales
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.postgresql.Driver'
+    DATABASEURI = 'jdbc:postgresql://localhost:5432/tpc_ds'
+    USERNAME = 'denodo'
+    USERPASSWORD = 'denodo' 
+    CLASSPATH = 'postgresql-12'
+    DATABASENAME = 'postgresql'
+    DATABASEVERSION = '12'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'Select 1'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    PROPERTIES ('escapeSyntaxCallMode'='callIfNoReturn')
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+CHOWN admin DATASOURCE JDBC ds_tpcds_sales LASTMODIFICATIONUSER admin;
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE denodo_hol_cdi_local_solution
+  CHARSET DEFAULT;
+
+# #######################################
+# WRAPPERS of denodo_hol_cdi_local_solution
+# #######################################
+CREATE OR REPLACE WRAPPER JDBC customer
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_tpcds_customer
+    CATALOGNAME='tpc_ds' 
+    RELATIONNAME='customer' 
+    OUTPUTSCHEMA (
+        c_customer_sk = 'c_customer_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  NOT NULL SORTABLE,
+        c_customer_id = 'c_customer_id' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='16', description='', sourcetypeid='1', sourcetypename='CHAR')  NOT NULL SORTABLE,
+        c_current_cdemo_sk = 'c_current_cdemo_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
+        c_current_hdemo_sk = 'c_current_hdemo_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
+        c_current_addr_sk = 'c_current_addr_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
+        c_first_shipto_date_sk = 'c_first_shipto_date_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
+        c_first_sales_date_sk = 'c_first_sales_date_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
+        c_salutation = 'c_salutation' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        c_first_name = 'c_first_name' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='20', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        c_last_name = 'c_last_name' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='30', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        c_preferred_cust_flag = 'c_preferred_cust_flag' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='1', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        c_birth_day = 'c_birth_day' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
+        c_birth_month = 'c_birth_month' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
+        c_birth_year = 'c_birth_year' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
+        c_birth_country = 'c_birth_country' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='20', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        c_login = 'c_login' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='13', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        c_email_address = 'c_email_address' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='50', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        c_last_review_date = 'c_last_review_date' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE
+    )
+    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'c_customer_sk' )
+    INDEX 'PRIMARY' OTHER UNIQUE PRIMARY ( 'c_customer_sk' );
+
+CHOWN admin WRAPPER JDBC customer LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC customer_address
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_tpcds_customer
+    CATALOGNAME='tpc_ds' 
+    RELATIONNAME='customer_address' 
+    OUTPUTSCHEMA (
+        ca_address_sk = 'ca_address_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  NOT NULL SORTABLE,
+        ca_address_id = 'ca_address_id' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='16', description='', sourcetypeid='1', sourcetypename='CHAR')  NOT NULL SORTABLE,
+        ca_street_number = 'ca_street_number' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        ca_street_name = 'ca_street_name' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='60', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        ca_street_type = 'ca_street_type' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='15', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        ca_suite_number = 'ca_suite_number' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        ca_city = 'ca_city' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='60', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        ca_county = 'ca_county' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='30', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        ca_state = 'ca_state' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='2', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        ca_zip = 'ca_zip' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        ca_country = 'ca_country' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='20', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
+        ca_gmt_offset = 'ca_gmt_offset' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='5', description='', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE,
+        ca_location_type = 'ca_location_type' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='20', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE
+    )
+    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'ca_address_sk' )
+    INDEX 'PRIMARY' OTHER UNIQUE PRIMARY ( 'ca_address_sk' );
+
+CHOWN admin WRAPPER JDBC customer_address LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC customer_demographics
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_tpcds_customer
+    CATALOGNAME='tpc_ds' 
+    RELATIONNAME='customer_demographics' 
+    OUTPUTSCHEMA (
+        cd_demo_sk = 'cd_demo_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  NOT NULL SORTABLE,
+        cd_gender = 'cd_gender' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='1', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        cd_marital_status = 'cd_marital_status' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='1', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        cd_education_status = 'cd_education_status' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='20', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        cd_purchase_estimate = 'cd_purchase_estimate' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
+        cd_credit_rating = 'cd_credit_rating' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE,
+        cd_dep_count = 'cd_dep_count' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
+        cd_dep_employed_count = 'cd_dep_employed_count' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
+        cd_dep_college_count = 'cd_dep_college_count' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE
+    )
+    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'cd_demo_sk' )
+    INDEX 'PRIMARY' OTHER UNIQUE PRIMARY ( 'cd_demo_sk' );
+
+CHOWN admin WRAPPER JDBC customer_demographics LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC store_sales
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_tpcds_sales
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='store_sales' 
+    OUTPUTSCHEMA (
+        ss_sold_date_sk = 'ss_sold_date_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_sold_time_sk = 'ss_sold_time_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_item_sk = 'ss_item_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        ss_customer_sk = 'ss_customer_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_cdemo_sk = 'ss_cdemo_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_hdemo_sk = 'ss_hdemo_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_addr_sk = 'ss_addr_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_store_sk = 'ss_store_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_promo_sk = 'ss_promo_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_ticket_number = 'ss_ticket_number' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        ss_quantity = 'ss_quantity' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_wholesale_cost = 'ss_wholesale_cost' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_list_price = 'ss_list_price' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_sales_price = 'ss_sales_price' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_ext_discount_amt = 'ss_ext_discount_amt' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_ext_sales_price = 'ss_ext_sales_price' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_ext_wholesale_cost = 'ss_ext_wholesale_cost' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_ext_list_price = 'ss_ext_list_price' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_ext_tax = 'ss_ext_tax' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_coupon_amt = 'ss_coupon_amt' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_net_paid = 'ss_net_paid' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_net_paid_inc_tax = 'ss_net_paid_inc_tax' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_net_profit = 'ss_net_profit' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE
+    )
+    CONSTRAINT 'store_sales_pkey' PRIMARY KEY ( 'ss_item_sk' , 'ss_ticket_number' )
+    CONSTRAINT 'ss_d' FOREIGN KEY ( 'ss_sold_date_sk' ) 
+    REFERENCES 'public'.'date_dim'( 'd_date_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    CONSTRAINT 'ss_t' FOREIGN KEY ( 'ss_sold_time_sk' ) 
+    REFERENCES 'public'.'time_dim'( 't_time_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    INDEX 'store_sales_pkey' OTHER UNIQUE PRIMARY ( 'ss_item_sk' , 'ss_ticket_number' );
+
+CHOWN admin WRAPPER JDBC store_sales LASTMODIFICATIONUSER admin;
+
+# #######################################
+# STORED PROCEDURES of denodo_hol_cdi_local_solution
+# #######################################
+# No stored procedures in database denodo_hol_cdi_local_solution
+# #######################################
+# TYPES of denodo_hol_cdi_local_solution
+# #######################################
+# No types in database denodo_hol_cdi_local_solution
+# #######################################
+# MAPS of denodo_hol_cdi_local_solution
+# #######################################
+# No maps in database denodo_hol_cdi_local_solution
+# #######################################
+# BASE VIEWS of denodo_hol_cdi_local_solution
+# #######################################
+CREATE OR REPLACE TABLE customer I18N es_euro (
+        c_customer_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        c_customer_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
+        c_current_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        c_current_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        c_current_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        c_first_shipto_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        c_first_sales_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        c_salutation:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
+        c_first_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = '') TAGS (confidential),
+        c_last_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '30', description = '') TAGS (confidential),
+        c_preferred_cust_flag:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
+        c_birth_day:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        c_birth_month:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        c_birth_year:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        c_birth_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
+        c_login:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '13', description = ''),
+        c_email_address:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
+        c_last_review_date:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = '')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'c_customer_sk' )
+    CACHE OFF
+    BATCHSIZEINCACHE DEFAULT
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD customer(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD c_customer_sk (any) OPT ANY
+             ADD c_customer_id (any) OPT ANY
+             ADD c_current_cdemo_sk (any) OPT ANY
+             ADD c_current_hdemo_sk (any) OPT ANY
+             ADD c_current_addr_sk (any) OPT ANY
+             ADD c_first_shipto_date_sk (any) OPT ANY
+             ADD c_first_sales_date_sk (any) OPT ANY
+             ADD c_salutation (any) OPT ANY
+             ADD c_first_name (any) OPT ANY
+             ADD c_last_name (any) OPT ANY
+             ADD c_preferred_cust_flag (any) OPT ANY
+             ADD c_birth_day (any) OPT ANY
+             ADD c_birth_month (any) OPT ANY
+             ADD c_birth_year (any) OPT ANY
+             ADD c_birth_country (any) OPT ANY
+             ADD c_login (any) OPT ANY
+             ADD c_email_address (any) OPT ANY
+             ADD c_last_review_date (any) OPT ANY
+        )
+        OUTPUTLIST (c_birth_country, c_birth_day, c_birth_month, c_birth_year, c_current_addr_sk, c_current_cdemo_sk, c_current_hdemo_sk, c_customer_id, c_customer_sk, c_email_address, c_first_name, c_first_sales_date_sk, c_first_shipto_date_sk, c_last_name, c_last_review_date, c_login, c_preferred_cust_flag, c_salutation
+        )
+        WRAPPER (jdbc customer)
+    )
+    ATSOURCE_THROUGH_VDP_ONLY;
+
+CHOWN admin VIEW customer LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE customer_address I18N es_euro (
+        ca_address_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        ca_address_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
+        ca_street_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
+        ca_street_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
+        ca_street_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '15', description = ''),
+        ca_suite_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
+        ca_city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
+        ca_county:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '30', description = ''),
+        ca_state:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = ''),
+        ca_zip:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
+        ca_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
+        ca_gmt_offset:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = ''),
+        ca_location_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = '')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'ca_address_sk' )
+    CACHE OFF
+    BATCHSIZEINCACHE DEFAULT
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD customer_address(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD ca_address_sk (any) OPT ANY
+             ADD ca_address_id (any) OPT ANY
+             ADD ca_street_number (any) OPT ANY
+             ADD ca_street_name (any) OPT ANY
+             ADD ca_street_type (any) OPT ANY
+             ADD ca_suite_number (any) OPT ANY
+             ADD ca_city (any) OPT ANY
+             ADD ca_county (any) OPT ANY
+             ADD ca_state (any) OPT ANY
+             ADD ca_zip (any) OPT ANY
+             ADD ca_country (any) OPT ANY
+             ADD ca_gmt_offset (any) OPT ANY
+             ADD ca_location_type (any) OPT ANY
+        )
+        OUTPUTLIST (ca_address_id, ca_address_sk, ca_city, ca_country, ca_county, ca_gmt_offset, ca_location_type, ca_state, ca_street_name, ca_street_number, ca_street_type, ca_suite_number, ca_zip
+        )
+        WRAPPER (jdbc customer_address)
+    )
+    ATSOURCE_THROUGH_VDP_ONLY;
+
+CHOWN admin VIEW customer_address LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE customer_demographics I18N es_euro (
+        cd_demo_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        cd_gender:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
+        cd_marital_status:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
+        cd_education_status:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
+        cd_purchase_estimate:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        cd_credit_rating:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
+        cd_dep_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        cd_dep_employed_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
+        cd_dep_college_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = '')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'cd_demo_sk' )
+    CACHE OFF
+    BATCHSIZEINCACHE DEFAULT
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD customer_demographics(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD cd_demo_sk (any) OPT ANY
+             ADD cd_gender (any) OPT ANY
+             ADD cd_marital_status (any) OPT ANY
+             ADD cd_education_status (any) OPT ANY
+             ADD cd_purchase_estimate (any) OPT ANY
+             ADD cd_credit_rating (any) OPT ANY
+             ADD cd_dep_count (any) OPT ANY
+             ADD cd_dep_employed_count (any) OPT ANY
+             ADD cd_dep_college_count (any) OPT ANY
+        )
+        OUTPUTLIST (cd_credit_rating, cd_demo_sk, cd_dep_college_count, cd_dep_count, cd_dep_employed_count, cd_education_status, cd_gender, cd_marital_status, cd_purchase_estimate
+        )
+        WRAPPER (jdbc customer_demographics)
+    )
+    ATSOURCE_THROUGH_VDP_ONLY;
+
+CHOWN admin VIEW customer_demographics LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE store_sales I18N es_euro (
+        ss_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_sold_time_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_store_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_promo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_ticket_number:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_quantity:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_wholesale_cost:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_list_price:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_sales_price:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_ext_discount_amt:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_ext_sales_price:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_ext_wholesale_cost:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_ext_list_price:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_ext_tax:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_coupon_amt:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_net_paid:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_net_paid_inc_tax:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_net_profit:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'store_sales_pkey' PRIMARY KEY ( 'ss_item_sk' , 'ss_ticket_number' )
+    CACHE OFF
+    BATCHSIZEINCACHE DEFAULT
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD store_sales(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD ss_sold_date_sk (any) OPT ANY
+             ADD ss_sold_time_sk (any) OPT ANY
+             ADD ss_item_sk (any) OPT ANY
+             ADD ss_customer_sk (any) OPT ANY
+             ADD ss_cdemo_sk (any) OPT ANY
+             ADD ss_hdemo_sk (any) OPT ANY
+             ADD ss_addr_sk (any) OPT ANY
+             ADD ss_store_sk (any) OPT ANY
+             ADD ss_promo_sk (any) OPT ANY
+             ADD ss_ticket_number (any) OPT ANY
+             ADD ss_quantity (any) OPT ANY
+             ADD ss_wholesale_cost (any) OPT ANY
+             ADD ss_list_price (any) OPT ANY
+             ADD ss_sales_price (any) OPT ANY
+             ADD ss_ext_discount_amt (any) OPT ANY
+             ADD ss_ext_sales_price (any) OPT ANY
+             ADD ss_ext_wholesale_cost (any) OPT ANY
+             ADD ss_ext_list_price (any) OPT ANY
+             ADD ss_ext_tax (any) OPT ANY
+             ADD ss_coupon_amt (any) OPT ANY
+             ADD ss_net_paid (any) OPT ANY
+             ADD ss_net_paid_inc_tax (any) OPT ANY
+             ADD ss_net_profit (any) OPT ANY
+        )
+        OUTPUTLIST (ss_addr_sk, ss_cdemo_sk, ss_coupon_amt, ss_customer_sk, ss_ext_discount_amt, ss_ext_list_price, ss_ext_sales_price, ss_ext_tax, ss_ext_wholesale_cost, ss_hdemo_sk, ss_item_sk, ss_list_price, ss_net_paid, ss_net_paid_inc_tax, ss_net_profit, ss_promo_sk, ss_quantity, ss_sales_price, ss_sold_date_sk, ss_sold_time_sk, ss_store_sk, ss_ticket_number, ss_wholesale_cost
+        )
+        WRAPPER (jdbc store_sales)
+    )
+    SMART_ONLY;
+
+CHOWN admin VIEW store_sales LASTMODIFICATIONUSER admin;
+
+# #######################################
+# VIEWS of denodo_hol_cdi_local_solution
+# #######################################
+CREATE OR REPLACE VIEW customer_data FOLDER = '/2 - integration' AS SELECT customer.c_customer_sk AS c_customer_sk, customer.c_customer_id AS c_customer_id, customer.c_current_cdemo_sk AS c_current_cdemo_sk, customer.c_current_hdemo_sk AS c_current_hdemo_sk, customer.c_current_addr_sk AS c_current_addr_sk, customer.c_first_shipto_date_sk AS c_first_shipto_date_sk, customer.c_first_sales_date_sk AS c_first_sales_date_sk, customer.c_salutation AS c_salutation, customer.c_first_name AS c_first_name, customer.c_last_name AS c_last_name, customer.c_preferred_cust_flag AS c_preferred_cust_flag, customer.c_birth_day AS c_birth_day, customer.c_birth_month AS c_birth_month, customer.c_birth_year AS c_birth_year, customer.c_birth_country AS c_birth_country, customer.c_login AS c_login, customer.c_email_address AS c_email_address, customer.c_last_review_date AS c_last_review_date, customer_address.ca_address_sk AS ca_address_sk, customer_address.ca_address_id AS ca_address_id, customer_address.ca_street_number AS ca_street_number, customer_address.ca_street_name AS ca_street_name, customer_address.ca_street_type AS ca_street_type, customer_address.ca_suite_number AS ca_suite_number, customer_address.ca_city AS ca_city, customer_address.ca_county AS ca_county, customer_address.ca_state AS ca_state, customer_address.ca_zip AS ca_zip, customer_address.ca_country AS ca_country, customer_address.ca_gmt_offset AS ca_gmt_offset, customer_address.ca_location_type AS ca_location_type, customer_demographics.cd_demo_sk AS cd_demo_sk, customer_demographics.cd_gender AS cd_gender, customer_demographics.cd_marital_status AS cd_marital_status, customer_demographics.cd_education_status AS cd_education_status, customer_demographics.cd_purchase_estimate AS cd_purchase_estimate, customer_demographics.cd_credit_rating AS cd_credit_rating, customer_demographics.cd_dep_count AS cd_dep_count, customer_demographics.cd_dep_employed_count AS cd_dep_employed_count, customer_demographics.cd_dep_college_count AS cd_dep_college_count FROM (customer AS customer INNER JOIN customer_address AS customer_address ON customer.c_current_addr_sk = customer_address.ca_address_sk ) INNER JOIN customer_demographics AS customer_demographics ON customer.c_current_cdemo_sk = customer_demographics.cd_demo_sk ;
+
+ALTER VIEW customer_data
+ LAYOUT (customer = [20, 20, 200, 225], customer_address = [510, 200, 200, 225], customer_demographics = [860, 40, 200, 205]);
+
+CHOWN admin VIEW customer_data LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE VIEW customer_sales_aggregated_view FOLDER = '/4 - report views' AS SELECT customer.c_customer_sk AS c_customer_sk, sum(store_sales.ss_sales_price) AS total_sales FROM customer AS customer INNER JOIN store_sales AS store_sales ON customer.c_customer_sk = store_sales.ss_customer_sk  GROUP BY customer.c_customer_sk ORDER BY c_customer_sk ASC;
+
+ALTER VIEW customer_sales_aggregated_view
+ LAYOUT (customer = [22, 23, 200, 200], store_sales = [450, 19, 200, 200]);
+
+ALTER VIEW customer_sales_aggregated_view
+ CACHE FULL
+     BATCHSIZEINCACHE DEFAULT TIMETOLIVEINCACHE DEFAULT;
+
+CHOWN admin VIEW customer_sales_aggregated_view LASTMODIFICATIONUSER admin;
+
+# #######################################
+# ASSOCIATIONS of denodo_hol_cdi_local_solution
+# #######################################
+# No associations in database denodo_hol_cdi_local_solution
+# #######################################
+# WEBSERVICES of denodo_hol_cdi_local_solution
+# #######################################
+# No web services in database denodo_hol_cdi_local_solution
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS of denodo_hol_cdi_local_solution
+# #######################################
+# No deployed web services in database denodo_hol_cdi_local_solution
+# #######################################
+# VIEW STATISTICS of denodo_hol_cdi_local_solution
+# #######################################
+CREATE OR REPLACE VIEWSTATSUMMARY customer (
+    SET ENABLED = true
+    SET NUMOFROWS = 30500
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (c_customer_sk,4.0,30500,1,30500,0),
+      (c_customer_id,16.0,'AAAAAAAAPPPGAAAA','AAAAAAAAAAABAAAA',30500,0),
+      (c_current_cdemo_sk,4.0,1920750,0,29236,0),
+      (c_current_hdemo_sk,4.0,7200,0,7077,0),
+      (c_current_addr_sk,4.0,49997,1,22848,0),
+      (c_first_shipto_date_sk,4.0,2452678,0,3651,0),
+      (c_first_sales_date_sk,4.0,2452648,0,3651,0),
+      (c_salutation,3.1275,'Sir','',7,0),
+      (c_first_name,5.6467,'Zoraida','',2849,0),
+      (c_last_name,5.9099,'Zuniga','',4382,0),
+      (c_preferred_cust_flag,0.9653,'Y','',3,0),
+      (c_birth_day,4.0,31,0,32,0),
+      (c_birth_month,4.0,12,0,13,0),
+      (c_birth_year,4.0,1992,0,70,0),
+      (c_birth_country,8.3967,'ZIMBABWE','',212,0),
+      (c_login,0.0,'','',1,0),
+      (c_email_address,26.5548,'Zoraida.Poole@locCA9mOEp0xCV.com','',29483,0),
+      (c_last_review_date,6.7622,'2452648','',367,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY customer_address (
+    SET ENABLED = true
+    SET NUMOFROWS = 50000
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (ca_address_sk,4.0,50000,1,50000,0),
+      (ca_address_id,16.0,'AAAAAAAAPPPLAAAA','AAAAAAAAAAABAAAA',50000,0),
+      (ca_street_number,2.8062,'999','',1001,0),
+      (ca_street_name,8.4501,'Woodland Woodland','',6902,0),
+      (ca_street_type,4.0803,'Wy','',21,0),
+      (ca_suite_number,7.6498,'Suite Y','',76,0),
+      (ca_city,8.6713,'Youngstown','',696,0),
+      (ca_county,13.5514,'Ziebach County','',1847,0),
+      (ca_state,1.938,'WY','',52,0),
+      (ca_zip,4.8461,'99981','',3693,0),
+      (ca_country,12.6035,'United States','',2,0),
+      (ca_gmt_offset,48.0,0.00,-10.00,7,0),
+      (ca_location_type,8.7297,'single family','',4,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY store_sales (
+    SET ENABLED = true
+    SET NUMOFROWS = 36163
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (ss_sold_date_sk,4.0,null,null,1347,1519),
+      (ss_sold_time_sk,4.0,null,null,2906,1538),
+      (ss_item_sk,4.0,null,null,13994,0),
+      (ss_customer_sk,4.0,null,null,2962,1503),
+      (ss_cdemo_sk,4.0,null,null,3001,1542),
+      (ss_hdemo_sk,4.0,null,null,2465,1582),
+      (ss_addr_sk,4.0,null,null,2919,1514),
+      (ss_store_sk,4.0,null,null,6,1559),
+      (ss_promo_sk,4.0,null,null,300,1535),
+      (ss_ticket_number,4.0,null,null,3004,0),
+      (ss_quantity,4.0,null,null,100,1601),
+      (ss_wholesale_cost,6.0,null,null,9415,1549),
+      (ss_list_price,6.0,null,null,14130,1556),
+      (ss_sales_price,6.0,null,null,10166,1572),
+      (ss_ext_discount_amt,3.0,null,null,5607,1490),
+      (ss_ext_sales_price,6.0,null,null,29142,1554),
+      (ss_ext_wholesale_cost,6.0,null,null,31274,1533),
+      (ss_ext_list_price,7.0,null,null,32306,1500),
+      (ss_ext_tax,6.0,null,null,13655,1520),
+      (ss_coupon_amt,3.0,null,null,5607,1490),
+      (ss_net_paid,6.0,null,null,29572,1580),
+      (ss_net_paid_inc_tax,6.0,null,null,31170,1571),
+      (ss_net_profit,6.0,null,null,30700,1597)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY customer_demographics (
+    SET ENABLED = true
+    SET NUMOFROWS = 49540
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (cd_demo_sk,4.0,49540,1,49540,0),
+      (cd_gender,1.0,'M','F',2,0),
+      (cd_marital_status,1.0,'W','D',5,0),
+      (cd_education_status,9.5709,'Unknown','2 yr Degree',7,0),
+      (cd_purchase_estimate,4.0,10000,500,20,0),
+      (cd_credit_rating,7.0,'Unknown','Good',4,0),
+      (cd_dep_count,4.0,6,0,7,0),
+      (cd_dep_employed_count,4.0,1,0,2,0),
+      (cd_dep_college_count,4.0,0,0,1,0)
+);
+
+# #######################################
+# Closing connection with database denodo_hol_cdi_local_solution
+# #######################################
+CLOSE;
+
+# 2 ====================================================================
+
+# #######################################
+# DATABASE of denodo_hol_cdi_local
+# #######################################
+CREATE OR REPLACE DATABASE denodo_hol_cdi_local 'Cloud Data Integration with a Logical Data Fabric workshop using local data sources';
+
+CONNECT DATABASE denodo_hol_cdi_local;
+
+# #######################################
+# FOLDERS of denodo_hol_cdi_local
+# #######################################
+CREATE OR REPLACE FOLDER '/1 - Connectivity' ;
+
+CHOWN admin FOLDER '/1 - Connectivity';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+
+CHOWN admin FOLDER '/1 - connectivity/2 - base views';
+
+CREATE OR REPLACE FOLDER '/2 - Integration' ;
+
+CHOWN admin FOLDER '/2 - Integration';
+
+CREATE OR REPLACE FOLDER '/3 - Business Entities' ;
+
+CHOWN admin FOLDER '/3 - Business Entities';
+
+CREATE OR REPLACE FOLDER '/4 - Report Views' ;
+
+CHOWN admin FOLDER '/4 - Report Views';
+
+CREATE OR REPLACE FOLDER '/5 - Data Services' ;
+
+CHOWN admin FOLDER '/5 - Data Services';
+
+# #######################################
+# RESOURCES of denodo_hol_cdi_local
+# #######################################
+# No vault resources in database denodo_hol_cdi_local
+# #######################################
+# LISTENERS JMS of denodo_hol_cdi_local
+# #######################################
+# No listeners jms in database denodo_hol_cdi_local
+# #######################################
+# LISTENERS KAFKA of denodo_hol_cdi_local
+# #######################################
+# No listeners kafka in database denodo_hol_cdi_local
+# #######################################
+# DATASOURCES of denodo_hol_cdi_local
+# #######################################
+CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_customer
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
+    DATABASEURI = 'jdbc:mariadb://localhost:3306/tpc_ds'
+    USERNAME = 'denodo'
+    USERPASSWORD = 'denodo' 
+    CLASSPATH = 'mariadb-2.7'
+    DATABASENAME = 'Generic'
+    DATABASEVERSION = ''
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = ''
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+CHOWN admin DATASOURCE JDBC ds_tpcds_customer LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_sales
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.postgresql.Driver'
+    DATABASEURI = 'jdbc:postgresql://localhost:5432/tpc_ds'
+    USERNAME = 'denodo'
+    USERPASSWORD = 'denodo' 
+    CLASSPATH = 'postgresql-12'
+    DATABASENAME = 'postgresql'
+    DATABASEVERSION = '12'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'Select 1'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    PROPERTIES ('escapeSyntaxCallMode'='callIfNoReturn')
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+CHOWN admin DATASOURCE JDBC ds_tpcds_sales LASTMODIFICATIONUSER admin;
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE denodo_hol_cdi_local
+  CHARSET DEFAULT;
+
+# #######################################
+# Closing connection with database denodo_hol_cdi_local
+# #######################################
+CLOSE;
+
+# 3 ====================================================================
+
+# #######################################
+# DATABASE of denodo_hol
+# #######################################
+CREATE OR REPLACE DATABASE denodo_hol 'Cloud Data Integration with a Logical Data Fabric workshop';
+
+CONNECT DATABASE denodo_hol;
+
+# #######################################
+# FOLDERS of denodo_hol
+# #######################################
+CREATE OR REPLACE FOLDER '/1 - Connectivity' ;
+
+CHOWN admin FOLDER '/1 - Connectivity';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+
+CHOWN admin FOLDER '/1 - connectivity/2 - base views';
+
+# #######################################
+# RESOURCES of denodo_hol
+# #######################################
+# No vault resources in database denodo_hol
+# #######################################
+# LISTENERS JMS of denodo_hol
+# #######################################
+# No listeners jms in database denodo_hol
+# #######################################
+# LISTENERS KAFKA of denodo_hol
+# #######################################
+# No listeners kafka in database denodo_hol
+# #######################################
+# DATASOURCES of denodo_hol
+# #######################################
+CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_customer
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
+    DATABASEURI = 'jdbc:mariadb://change_to_rds_connection:3306/tpc_ds'
+    USERNAME = 'denodo'
+    USERPASSWORD = 'denodo' 
+    CLASSPATH = 'mariadb-2.7'
+    DATABASENAME = 'Generic'
+    DATABASEVERSION = ''
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = ''
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+CHOWN admin DATASOURCE JDBC ds_tpcds_customer LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_sales
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.postgresql.Driver'
+    DATABASEURI = 'jdbc:postgresql://change_to_redshift_connection:5432/tpc_ds'
+    USERNAME = 'denodo'
+    USERPASSWORD = 'denodo' 
+    CLASSPATH = 'postgresql-12'
+    DATABASENAME = 'postgresql'
+    DATABASEVERSION = '12'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'Select 1'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    PROPERTIES ('escapeSyntaxCallMode'='callIfNoReturn')
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+CHOWN admin DATASOURCE JDBC ds_tpcds_sales LASTMODIFICATIONUSER admin;
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE denodo_hol_cdi_local
+  CHARSET DEFAULT;
+
+# #######################################
+# Closing connection with database denodo_hol_cdi_local
+# #######################################
+CLOSE;
+
+# #######################################
+# Connecting to database admin
+# #######################################
+CONNECT DATABASE ADMIN;
+
+# #######################################
+# USER PRIVILEGES
+# #######################################
+ALTER USER denodo
+GRANT ROLE allusers,analyst
+GRANT CONNECT ON denodo_hol_cdi_local_solution
+GRANT METADATA, EXECUTE ON denodo_hol_cdi_local_solution.customer_sales_aggregated_view;
+
+# #######################################
+# ROLE PRIVILEGES
+# #######################################
+ALTER ROLE analyst
+GRANT CONNECT ON denodo_hol_cdi_local_solution
+GRANT METADATA ON denodo_hol_cdi_local_solution.customer
+GRANT METADATA ON denodo_hol_cdi_local_solution.customer_address
+GRANT METADATA, EXECUTE ON denodo_hol_cdi_local_solution.customer_data
+GRANT METADATA ON denodo_hol_cdi_local_solution.customer_demographics
+GRANT METADATA, EXECUTE ON denodo_hol_cdi_local_solution.customer_sales_aggregated_view;
+
+# #######################################
+# RESOURCE MANAGER PLANS
+# #######################################
+# #######################################
+# RESOURCE MANAGER RULES
+# #######################################
+# #######################################
+# Closing connection with database admin
+# #######################################
+CLOSE;
+
+# #######################################
+# POLICY CREATION
+# #######################################
+CREATE OR REPLACE GLOBAL_SECURITY_POLICY confidential
+    ENABLED = TRUE
+    AUDIENCE (
+        ANY ROLES (analyst)
+    )
+    ELEMENTS (
+        ALL VIEWS
+    )
+    RESTRICTION (
+        FILTER = ''
+        MASKING ANY (confidential) WITH (HIDE) (numbers WITH DEFAULT, datetimes WITH DEFAULT, texts WITH DEFAULT) 
+    );
+
+CHOWN admin GLOBAL_SECURITY_POLICY confidential LASTMODIFICATIONUSER admin;
+
+
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+EXIT SINGLE USER MODE;
