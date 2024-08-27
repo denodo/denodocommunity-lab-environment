@@ -155,7 +155,7 @@ CHOWN admin FOLDER '/5 - Data Services';
 CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_customer
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
-    DATABASEURI = 'jdbc:mariadb://localhost:3306/tpc_ds'
+    DATABASEURI = 'jdbc:mariadb://mariadb:3306/tpc_ds'
     USERNAME = 'denodo'
     USERPASSWORD = 'denodo' 
     CLASSPATH = 'mariadb-2.7'
@@ -185,7 +185,7 @@ CHOWN admin DATASOURCE JDBC ds_tpcds_customer LASTMODIFICATIONUSER admin;
 CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_sales
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
-    DATABASEURI = 'jdbc:postgresql://localhost:5432/tpc_ds'
+    DATABASEURI = 'jdbc:postgresql://postgres:5432/tpc_ds'
     USERNAME = 'denodo'
     USERPASSWORD = 'denodo' 
     CLASSPATH = 'postgresql-12'
@@ -740,7 +740,7 @@ CHOWN admin FOLDER '/5 - Data Services';
 CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_customer
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
-    DATABASEURI = 'jdbc:mariadb://localhost:3306/tpc_ds'
+    DATABASEURI = 'jdbc:mariadb://mariadb:3306/tpc_ds'
     USERNAME = 'denodo'
     USERPASSWORD = 'denodo' 
     CLASSPATH = 'mariadb-2.7'
@@ -770,7 +770,7 @@ CHOWN admin DATASOURCE JDBC ds_tpcds_customer LASTMODIFICATIONUSER admin;
 CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_sales
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
-    DATABASEURI = 'jdbc:postgresql://localhost:5432/tpc_ds'
+    DATABASEURI = 'jdbc:postgresql://postgres:5432/tpc_ds'
     USERNAME = 'denodo'
     USERPASSWORD = 'denodo' 
     CLASSPATH = 'postgresql-12'
