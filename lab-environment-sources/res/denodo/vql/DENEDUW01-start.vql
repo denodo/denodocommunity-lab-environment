@@ -6,20 +6,39 @@ ENTER SINGLE USER MODE;
 # #######################################
 # USER CREATION
 # #######################################
-CREATE OR REPLACE USER denodo 'sGngc+60BAFejbswBgCrHucYqxXYqrtT2PAm5fp6wAN3Iqp1UYGQlC5JB3x26S8WOsI3rt9pEc2NILk9mvajVg7ppwSQAo4W'  ENCRYPTED SHA512  '';
-
 # #######################################
 # ROLE CREATION
 # #######################################
-CREATE OR REPLACE ROLE analyst 'This role is created for analyst group.';
-
 # #######################################
 # TAG CREATION
 # #######################################
-CREATE OR REPLACE TAG confidential;
+# #######################################
+# CONFIGURATION PROPERTIES
+# #######################################
 
-CHOWN admin TAG confidential LASTMODIFICATIONUSER admin;
+CONNECT DATABASE admin;
 
+SET 'com.denodo.vdb.cache.cacheMaintainerPeriodInSecs' = '21600';
+
+SET 'com.denodo.vdb.cache.cacheMaintenance' = 'OFF';
+
+SET 'com.denodo.vdb.cache.cacheStatus' = 'ON';
+
+SET 'com.denodo.vdb.cache.jdbc.customCacheDataSourceName' = 'customvdpcachedatasource';
+
+SET 'com.denodo.vdb.cache.jdbc.derbyCachePort' = '1527';
+
+SET 'com.denodo.vdb.cache.jdbc.derbyCacheRemoteAccess' = 'OFF';
+
+SET 'com.denodo.vdb.cache.jdbc.serverCacheDataSource' = '"admin"."vdpcachedatasource"';
+
+SET 'com.denodo.vdb.cache.timeToLiveInSecs' = '-1';
+
+SET 'com.denodo.vdb.interpreter.execution.SelectAction.costoptimization' = 'true';
+
+UPDATE SCRIPTS;
+
+CLOSE;
 
 # 0 ====================================================================
 
@@ -43,7 +62,34 @@ CONNECT DATABASE admin;
 # #######################################
 # DATASOURCES of admin
 # #######################################
+CREATE OR REPLACE DATASOURCE JDBC vdpcachedatasource
+    DRIVERCLASSNAME = 'org.apache.derby.jdbc.ClientDriver'
+    DATABASEURI = 'jdbc:derby://vdp:1527/cache'
+    USERNAME = 'vdpcache'
+    USERPASSWORD = 'vdpcache'
+    CLASSPATH = 'derby-10'
+    DATABASENAME = 'derby'
+    DATABASEVERSION = '10'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'values 1'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
 
+CHOWN admin DATASOURCE JDBC vdpcachedatasource LASTMODIFICATIONUSER admin;
 # #######################################
 # DATABASE CONFIGURATION
 # #######################################
@@ -111,31 +157,19 @@ CONNECT DATABASE denodo_hol_cdi_local_solution;
 # #######################################
 CREATE OR REPLACE FOLDER '/1 - Connectivity' ;
 
-CHOWN admin FOLDER '/1 - Connectivity';
-
 CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
-
-CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
 
 CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
 
-CHOWN admin FOLDER '/1 - connectivity/2 - base views';
-
 CREATE OR REPLACE FOLDER '/2 - Integration' ;
-
-CHOWN admin FOLDER '/2 - Integration';
 
 CREATE OR REPLACE FOLDER '/3 - Business Entities' ;
 
-CHOWN admin FOLDER '/3 - Business Entities';
-
 CREATE OR REPLACE FOLDER '/4 - Report Views' ;
-
-CHOWN admin FOLDER '/4 - Report Views';
 
 CREATE OR REPLACE FOLDER '/5 - Data Services' ;
 
-CHOWN admin FOLDER '/5 - Data Services';
+CREATE OR REPLACE FOLDER '/6 - Associations' ;
 
 # #######################################
 # RESOURCES of denodo_hol_cdi_local_solution
@@ -220,7 +254,7 @@ ALTER DATABASE denodo_hol_cdi_local_solution
   CHARSET DEFAULT;
 
 # #######################################
-# WRAPPERS of denodo_hol_cdi_local_solution
+# WRAPPERS
 # #######################################
 CREATE OR REPLACE WRAPPER JDBC customer
     FOLDER = '/1 - connectivity/2 - base views'
@@ -248,9 +282,13 @@ CREATE OR REPLACE WRAPPER JDBC customer
         c_last_review_date = 'c_last_review_date' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='1', sourcetypename='CHAR')  SORTABLE
     )
     CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'c_customer_sk' )
-    INDEX 'PRIMARY' OTHER UNIQUE PRIMARY ( 'c_customer_sk' );
-
-CHOWN admin WRAPPER JDBC customer LASTMODIFICATIONUSER admin;
+    CONSTRAINT 'c_a' FOREIGN KEY ( 'c_current_addr_sk' ) 
+    REFERENCES 'tpc_ds'.'customer_address'( 'ca_address_sk' )  ON UPDATE RESTRICT  ON DELETE RESTRICT NOT DEFERRABLE 
+    CONSTRAINT 'c_cd' FOREIGN KEY ( 'c_current_cdemo_sk' ) 
+    REFERENCES 'tpc_ds'.'customer_demographics'( 'cd_demo_sk' )  ON UPDATE RESTRICT  ON DELETE RESTRICT NOT DEFERRABLE 
+    INDEX 'PRIMARY' OTHER UNIQUE PRIMARY ( 'c_customer_sk' )
+    INDEX 'c_a' OTHER ( 'c_current_addr_sk' )
+    INDEX 'c_cd' OTHER ( 'c_current_cdemo_sk' );
 
 CREATE OR REPLACE WRAPPER JDBC customer_address
     FOLDER = '/1 - connectivity/2 - base views'
@@ -275,8 +313,6 @@ CREATE OR REPLACE WRAPPER JDBC customer_address
     CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'ca_address_sk' )
     INDEX 'PRIMARY' OTHER UNIQUE PRIMARY ( 'ca_address_sk' );
 
-CHOWN admin WRAPPER JDBC customer_address LASTMODIFICATIONUSER admin;
-
 CREATE OR REPLACE WRAPPER JDBC customer_demographics
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_tpcds_customer
@@ -295,8 +331,6 @@ CREATE OR REPLACE WRAPPER JDBC customer_demographics
     )
     CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'cd_demo_sk' )
     INDEX 'PRIMARY' OTHER UNIQUE PRIMARY ( 'cd_demo_sk' );
-
-CHOWN admin WRAPPER JDBC customer_demographics LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC store_sales
     FOLDER = '/1 - connectivity/2 - base views'
@@ -335,8 +369,6 @@ CREATE OR REPLACE WRAPPER JDBC store_sales
     REFERENCES 'public'.'time_dim'( 't_time_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
     INDEX 'store_sales_pkey' OTHER UNIQUE PRIMARY ( 'ss_item_sk' , 'ss_ticket_number' );
 
-CHOWN admin WRAPPER JDBC store_sales LASTMODIFICATIONUSER admin;
-
 # #######################################
 # STORED PROCEDURES of denodo_hol_cdi_local_solution
 # #######################################
@@ -361,8 +393,8 @@ CREATE OR REPLACE TABLE customer I18N es_euro (
         c_first_shipto_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
         c_first_sales_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
         c_salutation:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        c_first_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = '') TAGS (confidential),
-        c_last_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '30', description = '') TAGS (confidential),
+        c_first_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
+        c_last_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '30', description = ''),
         c_preferred_cust_flag:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
         c_birth_day:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
         c_birth_month:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
@@ -402,10 +434,7 @@ CREATE OR REPLACE TABLE customer I18N es_euro (
         OUTPUTLIST (c_birth_country, c_birth_day, c_birth_month, c_birth_year, c_current_addr_sk, c_current_cdemo_sk, c_current_hdemo_sk, c_customer_id, c_customer_sk, c_email_address, c_first_name, c_first_sales_date_sk, c_first_shipto_date_sk, c_last_name, c_last_review_date, c_login, c_preferred_cust_flag, c_salutation
         )
         WRAPPER (jdbc customer)
-    )
-    ATSOURCE_THROUGH_VDP_ONLY;
-
-CHOWN admin VIEW customer LASTMODIFICATIONUSER admin;
+    );
 
 CREATE OR REPLACE TABLE customer_address I18N es_euro (
         ca_address_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
@@ -423,7 +452,7 @@ CREATE OR REPLACE TABLE customer_address I18N es_euro (
         ca_location_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = '')
     )
     FOLDER = '/1 - connectivity/2 - base views'
-    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'ca_address_sk' )
+    PRIMARY KEY ( 'ca_address_sk' )
     CACHE OFF
     BATCHSIZEINCACHE DEFAULT
     TIMETOLIVEINCACHE DEFAULT
@@ -447,10 +476,7 @@ CREATE OR REPLACE TABLE customer_address I18N es_euro (
         OUTPUTLIST (ca_address_id, ca_address_sk, ca_city, ca_country, ca_county, ca_gmt_offset, ca_location_type, ca_state, ca_street_name, ca_street_number, ca_street_type, ca_suite_number, ca_zip
         )
         WRAPPER (jdbc customer_address)
-    )
-    ATSOURCE_THROUGH_VDP_ONLY;
-
-CHOWN admin VIEW customer_address LASTMODIFICATIONUSER admin;
+    );
 
 CREATE OR REPLACE TABLE customer_demographics I18N es_euro (
         cd_demo_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
@@ -464,7 +490,7 @@ CREATE OR REPLACE TABLE customer_demographics I18N es_euro (
         cd_dep_college_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = '')
     )
     FOLDER = '/1 - connectivity/2 - base views'
-    CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'cd_demo_sk' )
+    PRIMARY KEY ( 'cd_demo_sk' )
     CACHE OFF
     BATCHSIZEINCACHE DEFAULT
     TIMETOLIVEINCACHE DEFAULT
@@ -484,10 +510,7 @@ CREATE OR REPLACE TABLE customer_demographics I18N es_euro (
         OUTPUTLIST (cd_credit_rating, cd_demo_sk, cd_dep_college_count, cd_dep_count, cd_dep_employed_count, cd_education_status, cd_gender, cd_marital_status, cd_purchase_estimate
         )
         WRAPPER (jdbc customer_demographics)
-    )
-    ATSOURCE_THROUGH_VDP_ONLY;
-
-CHOWN admin VIEW customer_demographics LASTMODIFICATIONUSER admin;
+    );
 
 CREATE OR REPLACE TABLE store_sales I18N es_euro (
         ss_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
@@ -552,8 +575,6 @@ CREATE OR REPLACE TABLE store_sales I18N es_euro (
     )
     SMART_ONLY;
 
-CHOWN admin VIEW store_sales LASTMODIFICATIONUSER admin;
-
 # #######################################
 # VIEWS of denodo_hol_cdi_local_solution
 # #######################################
@@ -562,23 +583,34 @@ CREATE OR REPLACE VIEW customer_data FOLDER = '/2 - integration' AS SELECT custo
 ALTER VIEW customer_data
  LAYOUT (customer = [20, 20, 200, 225], customer_address = [510, 200, 200, 225], customer_demographics = [860, 40, 200, 205]);
 
-CHOWN admin VIEW customer_data LASTMODIFICATIONUSER admin;
+CREATE OR REPLACE VIEW sales_by_customer FOLDER = '/2 - integration' DESCRIPTION = 'This view calculates the total sales by each customer.'  AS SELECT customer_data.c_first_name AS c_first_name, customer_data.c_last_name AS c_last_name, customer_data.c_email_address AS c_email_address, customer_data.c_customer_sk AS c_customer_sk, customer_data.ca_country AS ca_country, sum(store_sales.ss_sales_price) AS total_sales FROM customer_data AS customer_data INNER JOIN store_sales AS store_sales ON customer_data.c_customer_sk = store_sales.ss_customer_sk  GROUP BY customer_data.c_customer_sk, customer_data.c_first_name, customer_data.c_last_name, customer_data.c_email_address, customer_data.ca_country ORDER BY c_email_address ASC;
 
-CREATE OR REPLACE VIEW customer_sales_aggregated_view FOLDER = '/4 - report views' AS SELECT customer.c_customer_sk AS c_customer_sk, sum(store_sales.ss_sales_price) AS total_sales FROM customer AS customer INNER JOIN store_sales AS store_sales ON customer.c_customer_sk = store_sales.ss_customer_sk  GROUP BY customer.c_customer_sk ORDER BY c_customer_sk ASC;
+ALTER VIEW sales_by_customer
+ LAYOUT (customer_data = [58, 17, 200, 200], store_sales = [333, 16, 200, 200]);
 
-ALTER VIEW customer_sales_aggregated_view
- LAYOUT (customer = [22, 23, 200, 200], store_sales = [450, 19, 200, 200]);
+CREATE OR REPLACE VIEW report_sales_by_customer FOLDER = '/4 - report views' AS SELECT sales_by_customer.c_first_name AS c_first_name, sales_by_customer.c_last_name AS c_last_name, sales_by_customer.c_email_address AS c_email_address, sales_by_customer.c_customer_sk AS c_customer_sk, sales_by_customer.ca_country AS ca_country, sales_by_customer.total_sales AS total_sales FROM sales_by_customer;
 
-ALTER VIEW customer_sales_aggregated_view
+ALTER VIEW report_sales_by_customer
+ LAYOUT (sales_by_customer = [20, 20, 200, 200]);
+
+ALTER VIEW report_sales_by_customer
  CACHE FULL
-     BATCHSIZEINCACHE DEFAULT TIMETOLIVEINCACHE DEFAULT;
-
-CHOWN admin VIEW customer_sales_aggregated_view LASTMODIFICATIONUSER admin;
+     BATCHSIZEINCACHE DEFAULT TIMETOLIVEINCACHE NOEXPIRE;
 
 # #######################################
-# ASSOCIATIONS of denodo_hol_cdi_local_solution
+# ASSOCIATIONS
 # #######################################
-# No associations in database denodo_hol_cdi_local_solution
+CREATE OR REPLACE ASSOCIATION customer_address_customer REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT customer customer_address PRINCIPAL (0,1)
+    ENDPOINT customer_address customer (0,*)
+    ADD MAPPING ca_address_sk=c_current_addr_sk;
+
+CREATE OR REPLACE ASSOCIATION customer_demographics_customer REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT customer customer_demographics PRINCIPAL (0,1)
+    ENDPOINT customer_demographics customer (0,*)
+    ADD MAPPING cd_demo_sk=c_current_cdemo_sk;
 # #######################################
 # WEBSERVICES of denodo_hol_cdi_local_solution
 # #######################################
@@ -664,17 +696,17 @@ CREATE OR REPLACE VIEWSTATSUMMARY store_sales (
 
 CREATE OR REPLACE VIEWSTATSUMMARY customer_demographics (
     SET ENABLED = true
-    SET NUMOFROWS = 49540
+    SET NUMOFROWS = 913200
     SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
-      (cd_demo_sk,4.0,49540,1,49540,0),
+      (cd_purchase_estimate,4.0,10000,500,20,0),
+      (cd_education_status,9.5714,'Unknown','2 yr Degree',7,0),
+      (cd_credit_rating,6.9987,'Unknown','Good',4,0),
+      (cd_dep_college_count,4.0,3,0,4,0),
+      (cd_dep_count,4.0,6,0,7,0),
+      (cd_demo_sk,4.0,913200,1,913200,0),
       (cd_gender,1.0,'M','F',2,0),
       (cd_marital_status,1.0,'W','D',5,0),
-      (cd_education_status,9.5709,'Unknown','2 yr Degree',7,0),
-      (cd_purchase_estimate,4.0,10000,500,20,0),
-      (cd_credit_rating,7.0,'Unknown','Good',4,0),
-      (cd_dep_count,4.0,6,0,7,0),
-      (cd_dep_employed_count,4.0,1,0,2,0),
-      (cd_dep_college_count,4.0,0,0,1,0)
+      (cd_dep_employed_count,4.0,6,0,7,0)
 );
 
 # #######################################
@@ -705,22 +737,6 @@ CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
 CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
 
 CHOWN admin FOLDER '/1 - connectivity/2 - base views';
-
-CREATE OR REPLACE FOLDER '/2 - Integration' ;
-
-CHOWN admin FOLDER '/2 - Integration';
-
-CREATE OR REPLACE FOLDER '/3 - Business Entities' ;
-
-CHOWN admin FOLDER '/3 - Business Entities';
-
-CREATE OR REPLACE FOLDER '/4 - Report Views' ;
-
-CHOWN admin FOLDER '/4 - Report Views';
-
-CREATE OR REPLACE FOLDER '/5 - Data Services' ;
-
-CHOWN admin FOLDER '/5 - Data Services';
 
 # #######################################
 # RESOURCES of denodo_hol_cdi_local
@@ -851,9 +867,9 @@ CHOWN admin FOLDER '/1 - connectivity/2 - base views';
 CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_customer
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
-    DATABASEURI = 'jdbc:mariadb://change_to_rds_connection:3306/tpc_ds'
-    USERNAME = 'denodo'
-    USERPASSWORD = 'denodo' 
+    DATABASEURI = '#AWS_RDS_DATABASEURI#'
+    USERNAME = '#AWS_RDS_USERNAME#'
+    USERPASSWORD = '#AWS_RDS_USERPASSWORD#' 
     CLASSPATH = 'mariadb-2.7'
     DATABASENAME = 'Generic'
     DATABASEVERSION = ''
@@ -881,9 +897,9 @@ CHOWN admin DATASOURCE JDBC ds_tpcds_customer LASTMODIFICATIONUSER admin;
 CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_sales
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
-    DATABASEURI = 'jdbc:postgresql://change_to_redshift_connection:5432/tpc_ds'
-    USERNAME = 'denodo'
-    USERPASSWORD = 'denodo' 
+    DATABASEURI = '#AWS_REDSHIFT_DATABASEURI#'
+    USERNAME = '#AWS_REDSHIFT_USERNAME#'
+    USERPASSWORD = '#AWS_REDSHIFT_USERPASSWORD#' 
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -912,11 +928,11 @@ CHOWN admin DATASOURCE JDBC ds_tpcds_sales LASTMODIFICATIONUSER admin;
 # #######################################
 # DATABASE CONFIGURATION
 # #######################################
-ALTER DATABASE denodo_hol_cdi_local
+ALTER DATABASE denodo_hol
   CHARSET DEFAULT;
 
 # #######################################
-# Closing connection with database denodo_hol_cdi_local
+# Closing connection with database denodo_hol
 # #######################################
 CLOSE;
 
@@ -928,22 +944,9 @@ CONNECT DATABASE ADMIN;
 # #######################################
 # USER PRIVILEGES
 # #######################################
-ALTER USER denodo
-GRANT ROLE allusers,analyst
-GRANT CONNECT ON denodo_hol_cdi_local_solution
-GRANT METADATA, EXECUTE ON denodo_hol_cdi_local_solution.customer_sales_aggregated_view;
-
 # #######################################
 # ROLE PRIVILEGES
 # #######################################
-ALTER ROLE analyst
-GRANT CONNECT ON denodo_hol_cdi_local_solution
-GRANT METADATA ON denodo_hol_cdi_local_solution.customer
-GRANT METADATA ON denodo_hol_cdi_local_solution.customer_address
-GRANT METADATA, EXECUTE ON denodo_hol_cdi_local_solution.customer_data
-GRANT METADATA ON denodo_hol_cdi_local_solution.customer_demographics
-GRANT METADATA, EXECUTE ON denodo_hol_cdi_local_solution.customer_sales_aggregated_view;
-
 # #######################################
 # RESOURCE MANAGER PLANS
 # #######################################
@@ -958,22 +961,6 @@ CLOSE;
 # #######################################
 # POLICY CREATION
 # #######################################
-CREATE OR REPLACE GLOBAL_SECURITY_POLICY confidential
-    ENABLED = TRUE
-    AUDIENCE (
-        ANY ROLES (analyst)
-    )
-    ELEMENTS (
-        ALL VIEWS
-    )
-    RESTRICTION (
-        FILTER = ''
-        MASKING ANY (confidential) WITH (HIDE) (numbers WITH DEFAULT, datetimes WITH DEFAULT, texts WITH DEFAULT) 
-    );
-
-CHOWN admin GLOBAL_SECURITY_POLICY confidential LASTMODIFICATIONUSER admin;
-
-
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EXIT SINGLE USER MODE;
