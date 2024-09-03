@@ -60,10 +60,14 @@ services:
     restart: always
     networks:        
       - denodo-lab-net 
+    volumes:
+      - "${DENODO_DS_CUSTOM_LANG_DIR}/DesignStudioBackend-${DENODO_DS_CUSTOM_LANG}.properties:/denodo/conf/design-studio/DesignStudioBackend.properties"
+      - "${DENODO_DS_CUSTOM_LANG_DIR}/customLang-${DENODO_DS_CUSTOM_LANG}.properties:/opt/denodo/work/design-studio/customLang.properties" 
     ports:
       - "${DENODO_DS_EXTERNAL_WEB_PORT}:9090"
     environment:
       - DENODO_DEBUG=true
+      - DENODO_MERGE_CONF=true
     healthcheck:
       test: curl --fail http://localhost:9090/denodo-design-studio/ || exit 1
       interval: 60s
@@ -84,12 +88,15 @@ services:
     volumes:
       - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"   
       - "${DENODO_DC_INIT_DIR}:/container-entrypoint-init/"  
+      - "${DENODO_DC_CUSTOM_LANG_DIR}/DataCatalogBackend-${DENODO_DC_CUSTOM_LANG}.properties:/denodo/conf/design-studio/DesignStudioBackend.properties"
+      - "${DENODO_DC_CUSTOM_LANG_DIR}/customLang-${DENODO_DC_CUSTOM_LANG}.properties:/opt/denodo/work/data-catalog/customLang.properties"   
       - denodo-dc-metadata:/opt/denodo/metadata
     ports:
       - "${DENODO_DC_EXTERNAL_WEB_PORT}:9090"
     environment:
       - DENODO_DC_SERVER_HOST=${DENODO_VDP_HOSTNAME}
       - DENODO_DC_SERVER_NAME=DenodoVDP
+      - DENODO_MERGE_CONF=true
     healthcheck:
       test: curl --fail http://localhost:9090/denodo-data-catalog/ || exit 1
       interval: 60s
