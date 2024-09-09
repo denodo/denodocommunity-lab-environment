@@ -181,7 +181,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_call_center
     DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
     DATABASEURI = 'jdbc:mariadb://localhost:3306/calltracking'
     USERNAME = 'phone'
-    USERPASSWORD = 'gvd86Ry0s5Gyb7CaZN3NynDyP38eIl/nKg21sRe2f59xWzQAlfZK1LlMqEjZuffJO8EytGjV77itIdFAqrpg1ZVFz3uvH14V2SVmH6E3wvA4xW3WRFHccEZ8fSHDMhjE' ENCRYPTED
+    USERPASSWORD = 'phone'
     CLASSPATH = 'mariadb-2.7'
     DATABASENAME = 'Generic'
     DATABASEVERSION = ''
@@ -211,7 +211,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_historical_orders
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/historical_orders'
     USERNAME = 'website_sys'
-    USERPASSWORD = 'yQFWhf2I/XoB0lq9q9STgcNQtQamELeW62XQlYL9YMz/7BOp1ZTexVeQDBvKm7AFk1OmcLK0fHfclQGQvs9ViwyQhkfN9e5HZeqyqGp+3JvVMlp0SHj4NmRdoGEMrtghXcQ8NI3IAEfLHxVIqVy/pQ==' ENCRYPTED
+    USERPASSWORD = 'website' 
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -244,7 +244,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_human_resources
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/human_resources'
     USERNAME = 'human_resources'
-    USERPASSWORD = 'yzNyCyfJEvbhO+ozpr9tSaMGyK5g/vK6whYR8BGq3WuMPTsidrmoad/TTB45lDXuqXO9hXvSEHqJ82CM1hhz6idzn3eHS5cCS6OkguOXEHsqPHkZJmp+KzRt0eVkiC25' ENCRYPTED
+    USERPASSWORD = 'human' 
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -276,7 +276,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_tpcds
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/tpc_ds'
     USERNAME = 'denodo'
-    USERPASSWORD = 'p5/TZt1D9xng3eU2Smhpupom3uayaLnT4cyamjRqHCfxZb45AKX5BMNNYA0fNMaPe+D7znprCLSwZLCpKPH/ih68dfxie+kcmfgXWExYXtRu0M9VDxu5yyPGVEPh1vqBpl7HlJHu+0jr3m49T9U2vw==' ENCRYPTED
+    USERPASSWORD = 'denodo'
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -308,7 +308,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_web_orders
     DRIVERCLASSNAME = 'org.postgresql.Driver'
     DATABASEURI = 'jdbc:postgresql://localhost:5432/website_sys'
     USERNAME = 'website_sys'
-    USERPASSWORD = 'RCGsYiLXB2CO1sooQfNR0nMR6TBExYFQBU0TdP8b05bWzMopIa2GvEZoDDv3XPkKwJtEYWbzibfnaStqrBxvNhP7PmyXjgjNH2pablTKCd8vCVr5/ewZIJ6bCK8zSFKdDPmgECvyUjHyyUdgmRpEGw==' ENCRYPTED
+    USERPASSWORD = 'website'
     CLASSPATH = 'postgresql-12'
     DATABASENAME = 'postgresql'
     DATABASEVERSION = '12'
@@ -345,7 +345,7 @@ CREATE OR REPLACE DATASOURCE JSON ds_sales
     )
     AUTHENTICATION BASIC ( 
       USER 'admin'
-      PASSWORD '3EA/Xs+79+tmXaBfYyUheiB61z9QPmHJIFqkaQfkCxzXa1T3/1gRVcWM8gxqLbvBRIu0vD1mAuWNc5s7kFDuBR5rBKsxO5+6SUgZht4LpNDU/cjX8IF6ZMwBATDt/v8uPok8JcKI1r8Ufhez65JO7A==' ENCRYPTED )
+      PASSWORD 'a,dm0n;' )
     PROXY OFF;
 
 CHOWN admin DATASOURCE JSON ds_sales LASTMODIFICATIONUSER admin;
@@ -358,7 +358,7 @@ CREATE OR REPLACE DATASOURCE MONGODB ds_nosql
     )
     AUTHENTICATION (
         USERNAME = 'mongoadmin'
-        USERPASSWORD = 'Uq3tCGdK0sLcEtTsOzDliV1NpXUf/E9nyXIEo3d5fHS0DqnDO3M+2kesvgFCWyiDALjAtY1RIGvmoAjF5hMC1oadfsU36Ykmy06rkTUUIdXnO8/7TDvhavhzXaCYSwp0' ENCRYPTED
+        USERPASSWORD = 'admin'
      )
     POOL (
         MAXACTIVE = 100
@@ -387,7 +387,7 @@ CREATE OR REPLACE DATASOURCE XML ds_sales_search
     )
     AUTHENTICATION BASIC ( 
       USER 'admin'
-      PASSWORD 'sK3V1jeUXb0QtqbfX9/T5aBN6ZOYYyjdQDDZ1/UtDCN/KTPR+6Uz2rSnkZqIIyUGS0Z7yg5Kg+dmC5H+AEpi+BZMeIdiZi1Iu2dIPh7KNisRaI1Sx+laMTHPCu7bY+xhut+1RoWeMJdktq1cvsP/pw==' ENCRYPTED )
+      PASSWORD 'a,dm0n;' )
     PROXY OFF;
 
 CHOWN admin DATASOURCE XML ds_sales_search LASTMODIFICATIONUSER admin;
@@ -3479,7 +3479,9 @@ CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_customer (
       (customer_name,12.913,'Willie Roberts','Aaron Arnold',986,1),
       (job_title,9.456,'Web Developer IV','',156,1),
       (customer_code,4.612,'ZYxj9KfdZ6LL','',505,1),
-      (other_details,48.878,'Vivamus tortor. Duis mattis egestas metus. Aenean fermentum.','',208,1),
+      (other_details,48.878,'Vivamus tortor. Duis mattis egestas metus. Aenean fermentum.
+','
+',208,1),
       (phone_number,16.12,'998-(974)689-4553','1-(177)988-8828',1000,1),
       (customer_address,17.586,'9994 Transport Park','0 Armistice Way',999,1)
 );
@@ -3489,7 +3491,9 @@ CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_agent (
     SET NUMOFROWS = 5000
     SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
       (agent_id,4.0,5000,1,5000,0),
-      (agent_name,10.703999999999986,'w. youngr','a. adamsb',4527,0),
+      (agent_name,10.703999999999986,'w. youngr
+','a. adamsb
+',4527,0),
       (agent_code,9.04060000000003,'wyoungr2','aadamsbk',4997,0)
 );
 
@@ -3503,14 +3507,18 @@ CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_case_definition (
       (case_summary,21.771908763505355,'Web Site Unavailable','Billing Payment Problem',13,0),
       (date_raised,186.0,'2015-12-30T19:27:00','2014-12-31T01:04:00',4970,0),
       (case_comments,11.0,'No comments','No comments',1,0),
-      (customer_code,10.273709483793526,'zlwy6v1','06qpBmpsIxF',504,0)
+      (customer_code,10.273709483793526,'zlwy6v1
+','06qpBmpsIxF
+',504,0)
 );
 
 CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_problem (
     SET ENABLED = true
     SET NUMOFROWS = 20
     SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
-      (problem_description,23.0,'Web Site Unavailable','Battery problem',19,0),
+      (problem_description,23.0,'Web Site Unavailable
+','Battery problem
+',19,0),
       (problem_code,4.0,20,1,20,0)
 );
 
@@ -3526,7 +3534,9 @@ CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_service_call (
       (problem_code,4.0,20,1,20,0),
       (date_call_received,186.0,'2016-02-09T23:45:00','2014-12-31T00:25:00',19641,0),
       (case_id,4.0,5000,3,4901,0),
-      (customer_code,5.612000000000002,'zlwy6v1','',505,0),
+      (customer_code,5.612000000000002,'zlwy6v1
+','
+',505,0),
       (location_id,4.0,5,1,5,0),
       (call_id,4.0,21580,0,20000,0)
 );
@@ -3537,7 +3547,9 @@ CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_service_location (
     SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
       (other_details,null,null,null,0,1000),
       (business_name,11.834000000000001,'5627 Saint P','3 Sage Way',5,0),
-      (service_location,1.0,'','',1,0),
+      (service_location,1.0,'
+','
+',1,0),
       (id,4.0,5,1,5,0),
       (customer_id,4.0,0,0,1,0),
       (location_id,4.0,1000,1,1000,0)
@@ -3547,7 +3559,8 @@ CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_status_code (
     SET ENABLED = true
     SET NUMOFROWS = 10
     SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
-      (code_description,10.3,'Work in Progress','Call Dropped',10,0),
+      (code_description,10.3,'Work in Progress','Call Dropped
+',10,0),
       (code_id,4.0,10,1,10,0)
 );
 

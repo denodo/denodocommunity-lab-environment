@@ -49,7 +49,7 @@ CREATE OR REPLACE DATASOURCE CUSTOM ds_invoices
 
 CREATE OR REPLACE DATASOURCE DF ds_connections
     FOLDER = '/1 - connectivity/1 - data sources'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost/logs/@{LOG_DATE}.log'
+    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost:1080/logs/@{LOG_DATE}.log'
     CHECKCERTIFICATES
     AUTHENTICATION OFF
     PROXY OFF
@@ -59,7 +59,7 @@ CREATE OR REPLACE DATASOURCE DF ds_connections
 
 CREATE OR REPLACE DATASOURCE DF ds_old_invoices
     FOLDER = '/1 - connectivity/1 - data sources'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost/excel/old_invoices.csv'
+    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost:1080/excel/old_invoices.csv'
     AUTHENTICATION OFF
     PROXY OFF
     CHARSET = 'Adobe-Standard-Encoding'
@@ -259,7 +259,7 @@ CREATE OR REPLACE WRAPPER CUSTOM ds_invoices
     DATASOURCENAME=ds_invoices
     PARAMETERS (
       'Type of file' = 'Excel 2007 or later (*.xlsx)',
-      'File location' = ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost/excel/Invoices_2015.xlsx'
+      'File location' = ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost:1080/excel/Invoices_2015.xlsx'
         CHECKCERTIFICATES
         AUTHENTICATION OFF
         PROXY OFF,
