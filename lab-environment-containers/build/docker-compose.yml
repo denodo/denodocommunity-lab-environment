@@ -90,19 +90,21 @@ services:
       - "${DENODO_DC_INIT_DIR}:/container-entrypoint-init/"  
       - "${DENODO_DC_CUSTOM_LANG_DIR}/DataCatalogBackend-${DENODO_DC_CUSTOM_LANG}.properties:/denodo/conf/design-studio/DesignStudioBackend.properties"
       - "${DENODO_DC_CUSTOM_LANG_DIR}/customLang-${DENODO_DC_CUSTOM_LANG}.properties:/opt/denodo/work/data-catalog/customLang.properties"   
-      - denodo-dc-metadata:/opt/denodo/metadata
+      - ${DENODO_DC_VOLUME}:/opt/denodo/metadata/
     ports:
       - "${DENODO_DC_EXTERNAL_WEB_PORT}:9090"
     environment:
       - DENODO_DC_SERVER_HOST=${DENODO_VDP_HOSTNAME}
       - DENODO_DC_SERVER_NAME=DenodoVDP
       - DENODO_MERGE_CONF=true
+      - DENODO_DEBUG=true
+      - DENODO_INIT_MAX_TIMEOUT=700
     healthcheck:
-      test: curl --fail http://localhost:9090/denodo-data-catalog/ || exit 1
-      interval: 60s
-      retries: 5
-      start_period: 20s
-      timeout: 10s
+      test: ["CMD-SHELL", "curl http://localhost:9090/denodo-data-catalog/Ping || exit 1"]
+      interval: 6s
+      timeout: 700s
+      retries: 35
+      start_period: 5s
     command: --datacatalog
 
   # Denodo Scheduler server
