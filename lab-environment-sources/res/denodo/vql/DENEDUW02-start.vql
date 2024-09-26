@@ -4998,6 +4998,7 @@ ALTER USER reader
 GRANT ROLE allusers
 GRANT CONNECT ON admin
 GRANT CONNECT ON denodo_hol
+GRANT METADATA ON denodo_hol.iv_item
 GRANT METADATA, EXECUTE ON denodo_hol.holiday_web_sales_by_year
 GRANT METADATA, EXECUTE ON denodo_hol.same_store_sales_by_year
 GRANT METADATA, EXECUTE ON denodo_hol.store_by_total_sales;

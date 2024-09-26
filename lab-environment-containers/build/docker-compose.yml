@@ -118,7 +118,9 @@ services:
       - denodo-lab-net 
     volumes:
       - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
-      - "${DENODO_SCHED_INIT_ZIP_DIR}:/container-entrypoint-init/"  
+      - "${DENODO_SCHED_INIT_ZIP_DIR}:/container-entrypoint-init/" 
+      #- ${DENODO_SCHED_METADATA_VOLUME}:/opt/denodo/metadata/
+      #- ${DENODO_SCHED_WORK_VOLUME}:/opt/denodo/work/arn/data/index/
     ports:
       - "${DENODO_SCHED_EXTERNAL_PORT}:8000"
       - "${DENODO_SCHED_INDEX_EXTERNAL_PORT}:9000"
@@ -479,8 +481,6 @@ volumes:
   dfs-lab-env:
     driver: local
   denodo-vdp-metadata:
-    driver: local
-  denodo-sched-metadata:
     driver: local
   denodo-dc-metadata:
     driver: local
