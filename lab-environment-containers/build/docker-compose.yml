@@ -119,7 +119,6 @@ services:
     volumes:
       - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
       - "${DENODO_SCHED_INIT_ZIP_DIR}:/container-entrypoint-init/"  
-      - denodo-sched-metadata:/opt/denodo/metadata
     ports:
       - "${DENODO_SCHED_EXTERNAL_PORT}:8000"
       - "${DENODO_SCHED_INDEX_EXTERNAL_PORT}:9000"
@@ -128,6 +127,7 @@ services:
       - DENODO_SCHSERVER_SERVER_HOST=${DENODO_VDP_HOSTNAME}
       - DENODO_SCHSERVER_SERVER_PORT=9999
       - DENODO_WEBCONTAINER_STARTUP=true
+      - DENODO_DEBUG=true
     healthcheck:
       test: ["CMD-SHELL", "/opt/denodo/tools/scheduler/ping.sh -t 3000 -h localhost -p 8000 || exit 1"]
       interval: 6s
