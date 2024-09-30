@@ -31,6 +31,7 @@ services:
       - ${DENODO_VDP_GRAPHQL_FILES_DIRECTORY}/web.xml:/opt/denodo/resources/apache-tomcat/conf/web.xml
       - ${DENODO_VDP_FILES_DIRECTORY}:/opt/denodo/work/lab-files  
       - denodo-vdp-metadata:/opt/denodo/metadata
+      #- ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
     ports:
       - "${DENODO_VDP_EXTERNAL_WEB_PORT}:9090"
       - "${DENODO_VDP_EXTERNAL_ODBC_PORT}:9996"
@@ -41,6 +42,11 @@ services:
       - DENODO_PASSWORD=${DENODO_VDP_ADMIN_PWD}
       - DENODO_WEBCONTAINER_STARTUP=true
       - DENODO_DEBUG=true
+      #- DENODO_KEYSTORE_LOADER_TYPE=FILE
+      #- DENODO_KEYSTORE_LOADER_LOCATION=/opt/denodo/conf/denodo-key-custom.keystore
+      #- DENODO_KEYSTORE_TYPE=${DENODO_KEYSTORE_TYPE}
+      #- DENODO_KEYSTORE_PASSWORD_VALUE=${DENODO_KEYSTORE_PASSWORD_VALUE}
+      #- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
     healthcheck:
       test: ["CMD-SHELL", "/opt/denodo/bin/ping.sh -t 3000 //localhost:9999 || exit 1"]
       interval: 6s
@@ -91,6 +97,7 @@ services:
       - "${DENODO_DC_CUSTOM_LANG_DIR}/DataCatalogBackend-${DENODO_DC_CUSTOM_LANG}.properties:/denodo/conf/design-studio/DesignStudioBackend.properties"
       - "${DENODO_DC_CUSTOM_LANG_DIR}/customLang-${DENODO_DC_CUSTOM_LANG}.properties:/opt/denodo/work/data-catalog/customLang.properties"   
       - ${DENODO_DC_VOLUME}:/opt/denodo/metadata/
+      #- ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
     ports:
       - "${DENODO_DC_EXTERNAL_WEB_PORT}:9090"
     environment:
@@ -99,6 +106,11 @@ services:
       - DENODO_MERGE_CONF=true
       - DENODO_DEBUG=true
       - DENODO_INIT_MAX_TIMEOUT=700
+      #- DENODO_KEYSTORE_LOADER_TYPE=FILE
+      #- DENODO_KEYSTORE_LOADER_LOCATION=/opt/denodo/conf/denodo-key-custom.keystore
+      #- DENODO_KEYSTORE_TYPE=${DENODO_KEYSTORE_TYPE}
+      #- DENODO_KEYSTORE_PASSWORD_VALUE=${DENODO_KEYSTORE_PASSWORD_VALUE}
+      #- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
     healthcheck:
       test: ["CMD-SHELL", "curl http://localhost:9090/denodo-data-catalog/Ping || exit 1"]
       interval: 6s
