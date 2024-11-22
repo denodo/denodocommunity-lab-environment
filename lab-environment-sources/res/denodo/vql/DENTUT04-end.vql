@@ -48,7 +48,7 @@ CREATE OR REPLACE FOLDER '/8 - stored procedures' ;
 CREATE OR REPLACE DATASOURCE JDBC ds_crm
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
-    DATABASEURI = 'jdbc:mariadb://localhost:3306/crm'
+    DATABASEURI = 'jdbc:mariadb://mariadb:3306/crm'
     USERNAME = 'root'
     USERPASSWORD = 'admin'
     CLASSPATH = 'mariadb-2.7'
@@ -75,7 +75,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_crm
 
 CREATE OR REPLACE DATASOURCE WS ds_billing
     FOLDER = '/1 - connectivity/1 - data sources'
-    WSDLURI = 'http://localhost:8080/billing/services/BillProvider?wsdl'
+    WSDLURI = 'http://tomcat:8080/billing/services/BillProvider?wsdl'
     MAXCONNECTIONS 50
     CONNECTIONPOOLTIMEOUT 0
     AUTHENTICATION OFF

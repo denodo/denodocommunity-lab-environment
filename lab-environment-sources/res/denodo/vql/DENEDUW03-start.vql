@@ -1,0 +1,1028 @@
+﻿# Generated with Denodo Platform 9.0.0.
+
+ENTER SINGLE USER MODE;
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# #######################################
+# USER CREATION
+# #######################################
+# #######################################
+# ROLE CREATION
+# #######################################
+# #######################################
+# TAG CREATION
+# #######################################
+# #######################################
+# CONFIGURATION PROPERTIES
+# #######################################
+
+CONNECT DATABASE admin;
+
+SET 'com.denodo.vdb.cache.cacheMaintainerPeriodInSecs' = '21600';
+
+SET 'com.denodo.vdb.cache.cacheMaintenance' = 'OFF';
+
+SET 'com.denodo.vdb.cache.cacheStatus' = 'ON';
+
+SET 'com.denodo.vdb.cache.jdbc.customCacheDataSourceName' = 'customvdpcachedatasource';
+
+SET 'com.denodo.vdb.cache.jdbc.derbyCachePort' = '1527';
+
+SET 'com.denodo.vdb.cache.jdbc.derbyCacheRemoteAccess' = 'OFF';
+
+SET 'com.denodo.vdb.cache.jdbc.serverCacheDataSource' = '"admin"."vdpcachedatasource"';
+
+SET 'com.denodo.vdb.cache.timeToLiveInSecs' = '-1';
+
+SET 'com.denodo.vdb.interpreter.execution.SelectAction.costoptimization' = 'true';
+
+SET 'com.denodo.vdb.interpreter.execution.SelectAction.dataMovement' = 'true';
+
+SET 'com.denodo.vdb.interpreter.execution.SelectAction.simplify' = 'true';
+
+SET 'com.denodo.vdb.interpreter.execution.SelectAction.summaryRewrite' = 'true';
+
+UPDATE SCRIPTS;
+
+CLOSE;
+
+# 0 ====================================================================
+
+# #######################################
+# DATABASE of admin
+# #######################################
+CONNECT DATABASE admin;
+
+# #######################################
+# RESOURCES of admin
+# #######################################
+# No vault resources in database admin
+# #######################################
+# LISTENERS JMS of admin
+# #######################################
+# No listeners jms in database admin
+# #######################################
+# LISTENERS KAFKA of admin
+# #######################################
+# No listeners kafka in database admin
+# #######################################
+# DATASOURCES of admin
+# #######################################
+CREATE OR REPLACE DATASOURCE JDBC vdpcachedatasource
+    DRIVERCLASSNAME = 'org.apache.derby.jdbc.ClientDriver'
+    DATABASEURI = 'jdbc:derby://vdp:1527/cache'
+    USERNAME = 'vdpcache'
+    USERPASSWORD = 'vdpcache'
+    CLASSPATH = 'derby-10'
+    DATABASENAME = 'derby'
+    DATABASEVERSION = '10'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'values 1'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+CHOWN admin DATASOURCE JDBC vdpcachedatasource LASTMODIFICATIONUSER admin;
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE admin
+  CHARSET DEFAULT;
+
+ALTER DATABASE admin
+  AUTHENTICATION LOCAL;
+
+# #######################################
+# WRAPPERS of admin
+# #######################################
+
+# #######################################
+# STORED PROCEDURES of admin
+# #######################################
+# No stored procedures in database admin
+# #######################################
+# TYPES of admin
+# #######################################
+# No types in database admin
+# #######################################
+# MAPS of admin
+# #######################################
+# No maps in database admin
+# #######################################
+# BASE VIEWS of admin
+# #######################################
+# VIEWS of admin
+# #######################################
+# No views in database admin
+# #######################################
+# ASSOCIATIONS of admin
+# #######################################
+# No associations in database admin
+# #######################################
+# WEBSERVICES of admin
+# #######################################
+# No web services in database admin
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS of admin
+# #######################################
+# No deployed web services in database admin
+# #######################################
+# VIEW STATISTICS of admin
+# #######################################
+# No statistics in database admin
+# #######################################
+# Closing connection with database admin
+# #######################################
+CLOSE;
+
+# 3 ====================================================================
+
+# #######################################
+# DATABASE of denodo_hol
+# #######################################
+CREATE OR REPLACE DATABASE denodo_hol_bank 'Denodo GenAI workshop - Bank database';
+
+CONNECT DATABASE denodo_hol_bank;
+
+# #######################################
+# FOLDERS of denodo_hol_bank
+# #######################################
+CREATE OR REPLACE FOLDER '/1 - Connectivity' ;
+
+CHOWN admin FOLDER '/1 - Connectivity';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+
+CHOWN admin FOLDER '/1 - connectivity/2 - base views';
+
+CREATE OR REPLACE FOLDER '/2 - integration' ;
+
+CHOWN admin FOLDER '/2 - integration';
+
+CREATE OR REPLACE FOLDER '/2 - integration/1 - standardized views' ;
+
+CHOWN admin FOLDER '/2 - integration/1 - standardized views';
+
+CREATE OR REPLACE FOLDER '/2 - integration/2 - presentation' ;
+
+CHOWN admin FOLDER '/2 - integration/2 - presentation';
+
+CREATE OR REPLACE FOLDER '/2 - integration/3 - derived views' ;
+
+CHOWN admin FOLDER '/2 - integration/3 - derived views';
+
+CREATE OR REPLACE FOLDER '/3 - business entities' ;
+
+CHOWN admin FOLDER '/3 - business entities';
+
+# #######################################
+# RESOURCES of denodo_hol_bank
+# #######################################
+# No vault resources in database denodo_hol_bank
+# #######################################
+# LISTENERS JMS of denodo_hol_bank
+# #######################################
+# No listeners jms in database denodo_hol_bank
+# #######################################
+# LISTENERS KAFKA of denodo_hol_bank
+# #######################################
+# No listeners kafka in database denodo_hol_bank
+# #######################################
+# DATASOURCES of denodo_hol_bank
+# #######################################
+CREATE OR REPLACE DATASOURCE JDBC ds_bank
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.postgresql.Driver'
+    DATABASEURI = 'jdbc:postgresql://pgvector:5432/bank'
+    USERNAME = 'denodo'
+    USERPASSWORD = 'denodo'
+    CLASSPATH = 'postgresql-12'
+    DATABASENAME = 'postgresql'
+    DATABASEVERSION = '12'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'Select 1'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    PROPERTIES ('escapeSyntaxCallMode'='callIfNoReturn')
+    KERBEROSPROPERTIES ('jaasLogin'='false', 'user'='<user>')
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+CREATE OR REPLACE DATASOURCE DF ds_security_metrics
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE S3 'hdfs.S3Connection' 's3://denodo/sample_data/q1_2024_all.csv' FILENAMEPATTERN = ''
+    AUTHENTICATION (
+      AWS_ACCESS_KEY_ID = 'denodo'
+      AWS_SECRET_ACCESS_KEY = 'denodo123' 
+    )
+    CUSTOM_PROPERTIES = ('fs.s3a.path.style.access'='true', 'fs.s3a.endpoint'='http://minio:9000')
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_customer_stock_holdings
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE S3 'hdfs.S3Connection' 's3://denodo/sample_data/customer_stock_holdings.csv' FILENAMEPATTERN = ''
+    AUTHENTICATION (
+      AWS_ACCESS_KEY_ID = 'denodo'
+      AWS_SECRET_ACCESS_KEY = 'denodo123'
+    )
+    CUSTOM_PROPERTIES = ('fs.s3a.path.style.access'='true', 'fs.s3a.endpoint'='http://minio:9000')
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE JSON ds_ticker_api
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'http://webserver/json/ticker_prices.json'
+    CHECKCERTIFICATES
+    AUTHENTICATION BASIC ( 
+      USER 'admin'
+      PASSWORD 'admin' )
+    PROXY OFF;
+
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE denodo_hol_bank
+  CHARSET DEFAULT;
+
+# #######################################
+# WRAPPERS of denodo_hol_bank
+# #######################################
+CREATE OR REPLACE WRAPPER DF ds_customer_stock_holdings
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_customer_stock_holdings
+    OUTPUTSCHEMA (
+        email = 'email',
+        stock_ticker = 'stock_ticker',
+        stocks_purchased = 'stocks_purchased'
+    );
+
+CHOWN admin WRAPPER DF ds_customer_stock_holdings LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC customers
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_bank
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='customers' 
+    OUTPUTSCHEMA (
+        customer_id = 'customer_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        first_name = 'first_name' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        last_name = 'last_name' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        email = 'email' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        phone_number = 'phone_number' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        address = 'address' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        city = 'city' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        state = 'state' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        zip_code = 'zip_code' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE
+    )
+    CONSTRAINT 'customers_pkey' PRIMARY KEY ( 'customer_id' )
+    INDEX 'customers_pkey' OTHER UNIQUE PRIMARY ( 'customer_id' );
+
+CHOWN admin WRAPPER JDBC customers LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC loan_officers
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_bank
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='loan_officers' 
+    OUTPUTSCHEMA (
+        loan_officer_id = 'loan_officer_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        first_name = 'first_name' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        last_name = 'last_name' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        email = 'email' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        phone_number = 'phone_number' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE
+    )
+    CONSTRAINT 'loan_officers_pkey' PRIMARY KEY ( 'loan_officer_id' )
+    INDEX 'loan_officers_pkey' OTHER UNIQUE PRIMARY ( 'loan_officer_id' );
+
+CHOWN admin WRAPPER JDBC loan_officers LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC loans
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_bank
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='loans' 
+    OUTPUTSCHEMA (
+        loan_id = 'loan_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        customer_id = 'customer_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        loan_amount = 'loan_amount' :'java.lang.Double' (OPT) (sourcetypedecimals='8', sourcetyperadix='10', sourcetypesize='8', sourcetypeid='7', sourcetypename='float4')  SORTABLE,
+        interest_rate = 'interest_rate' :'java.lang.Double' (OPT) (sourcetypedecimals='8', sourcetyperadix='10', sourcetypesize='8', sourcetypeid='7', sourcetypename='float4')  SORTABLE,
+        term = 'term' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        property_id = 'property_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        loan_officer_id = 'loan_officer_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        status = 'status' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE
+    )
+    CONSTRAINT 'loans_pkey' PRIMARY KEY ( 'loan_id' )
+    CONSTRAINT 'loans_customer_id_fkey' FOREIGN KEY ( 'customer_id' ) 
+    REFERENCES 'public'.'customers'( 'customer_id' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    CONSTRAINT 'loans_loan_officer_id_fkey' FOREIGN KEY ( 'loan_officer_id' ) 
+    REFERENCES 'public'.'loan_officers'( 'loan_officer_id' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    CONSTRAINT 'loans_property_id_fkey' FOREIGN KEY ( 'property_id' ) 
+    REFERENCES 'public'.'properties'( 'property_id' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    INDEX 'loans_pkey' OTHER UNIQUE PRIMARY ( 'loan_id' );
+
+CHOWN admin WRAPPER JDBC loans LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC payments
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_bank
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='payments' 
+    OUTPUTSCHEMA (
+        payment_id = 'payment_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        loan_id = 'loan_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        payment_amount = 'payment_amount' :'java.lang.Double' (OPT) (sourcetypedecimals='8', sourcetyperadix='10', sourcetypesize='8', sourcetypeid='7', sourcetypename='float4')  SORTABLE,
+        payment_date = 'payment_date' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE
+    )
+    CONSTRAINT 'payments_pkey' PRIMARY KEY ( 'payment_id' )
+    CONSTRAINT 'payments_loan_id_fkey' FOREIGN KEY ( 'loan_id' ) 
+    REFERENCES 'public'.'loans'( 'loan_id' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    INDEX 'payments_pkey' OTHER UNIQUE PRIMARY ( 'payment_id' );
+
+CHOWN admin WRAPPER JDBC payments LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC properties
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_bank
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='properties' 
+    OUTPUTSCHEMA (
+        property_id = 'property_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        address = 'address' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        city = 'city' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        state = 'state' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        zip_code = 'zip_code' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        property_value = 'property_value' :'java.lang.Double' (OPT) (sourcetypedecimals='8', sourcetyperadix='10', sourcetypesize='8', sourcetypeid='7', sourcetypename='float4')  SORTABLE
+    )
+    CONSTRAINT 'properties_pkey' PRIMARY KEY ( 'property_id' )
+    INDEX 'properties_pkey' OTHER UNIQUE PRIMARY ( 'property_id' );
+
+CHOWN admin WRAPPER JDBC properties LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC rates
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_bank
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='rates' 
+    OUTPUTSCHEMA (
+        rate_id = 'rate_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        loan_type = 'loan_type' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        term = 'term' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        interest_rate = 'interest_rate' :'java.lang.Double' (OPT) (sourcetypedecimals='8', sourcetyperadix='10', sourcetypesize='8', sourcetypeid='7', sourcetypename='float4')  SORTABLE
+    )
+    CONSTRAINT 'rates_pkey' PRIMARY KEY ( 'rate_id' )
+    INDEX 'rates_pkey' OTHER UNIQUE PRIMARY ( 'rate_id' );
+
+CHOWN admin WRAPPER JDBC rates LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC underwriting
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_bank
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='underwriting' 
+    OUTPUTSCHEMA (
+        underwriting_id = 'underwriting_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        loan_id = 'loan_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        credit_score = 'credit_score' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        employment_history = 'employment_history' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        financial_history = 'financial_history' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE
+    )
+    CONSTRAINT 'underwriting_pkey' PRIMARY KEY ( 'underwriting_id' )
+    CONSTRAINT 'underwriting_loan_id_fkey' FOREIGN KEY ( 'loan_id' ) 
+    REFERENCES 'public'.'loans'( 'loan_id' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    INDEX 'underwriting_pkey' OTHER UNIQUE PRIMARY ( 'underwriting_id' );
+
+CHOWN admin WRAPPER JDBC underwriting LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JSON ds_ticker_api
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_ticker_api
+    TUPLEROOT '/JSONFile/JSONArray'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET ''
+    OUTPUTSCHEMA (jsonfile = 'JSONFile' : REGISTER OF (
+        ticker = 'JSONFile.JSONArray.ticker' : 'java.lang.String',
+        date = 'JSONFile.JSONArray.date' : 'java.lang.String',
+        close = 'JSONFile.JSONArray.close' : 'java.lang.String',
+        volume = 'JSONFile.JSONArray.volume' : 'java.lang.String',
+        open = 'JSONFile.JSONArray.open' : 'java.lang.String',
+        high = 'JSONFile.JSONArray.high' : 'java.lang.String',
+        low = 'JSONFile.JSONArray.low' : 'java.lang.String'
+    )
+    );
+
+CHOWN admin WRAPPER JSON ds_ticker_api LASTMODIFICATIONUSER admin;
+
+# #######################################
+# STORED PROCEDURES of denodo_hol_bank
+# #######################################
+# No stored procedures in database denodo_hol_bank
+# #######################################
+# TYPES of denodo_hol_bank
+# #######################################
+# No types in database denodo_hol_bank
+# #######################################
+# MAPS of denodo_hol_bank
+# #######################################
+# No maps in database denodo_hol_bank
+# #######################################
+# BASE VIEWS of denodo_hol_bank
+# #######################################
+CREATE OR REPLACE TABLE bv_bank_customers I18N es_euro (
+        customer_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        address:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        city:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        state:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        zip_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'customers_pkey' PRIMARY KEY ( 'customer_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD customers(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD customer_id (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD phone_number (any) OPT ANY
+             ADD address (any) OPT ANY
+             ADD city (any) OPT ANY
+             ADD state (any) OPT ANY
+             ADD zip_code (any) OPT ANY
+        )
+        OUTPUTLIST (address, city, customer_id, email, first_name, last_name, phone_number, state, zip_code
+        )
+        WRAPPER (jdbc customers)
+    );
+
+CHOWN admin VIEW bv_bank_customers LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_loan_officers I18N es_euro (
+        loan_officer_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'loan_officers_pkey' PRIMARY KEY ( 'loan_officer_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD loan_officers(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD loan_officer_id (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD phone_number (any) OPT ANY
+        )
+        OUTPUTLIST (email, first_name, last_name, loan_officer_id, phone_number
+        )
+        WRAPPER (jdbc loan_officers)
+    );
+
+CHOWN admin VIEW bv_bank_loan_officers LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_loans I18N es_euro (
+        loan_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        customer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        loan_amount:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8'),
+        interest_rate:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8'),
+        term:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        property_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        loan_officer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        status:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'loans_pkey' PRIMARY KEY ( 'loan_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD loans(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD loan_id (any) OPT ANY
+             ADD customer_id (any) OPT ANY
+             ADD loan_amount (any) OPT ANY
+             ADD interest_rate (any) OPT ANY
+             ADD term (any) OPT ANY
+             ADD property_id (any) OPT ANY
+             ADD loan_officer_id (any) OPT ANY
+             ADD status (any) OPT ANY
+        )
+        OUTPUTLIST (customer_id, interest_rate, loan_amount, loan_id, loan_officer_id, property_id, status, term
+        )
+        WRAPPER (jdbc loans)
+    );
+
+CHOWN admin VIEW bv_bank_loans LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_payments I18N es_euro (
+        payment_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        loan_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        payment_amount:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8'),
+        payment_date:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'payments_pkey' PRIMARY KEY ( 'payment_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD payments(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD payment_id (any) OPT ANY
+             ADD loan_id (any) OPT ANY
+             ADD payment_amount (any) OPT ANY
+             ADD payment_date (any) OPT ANY
+        )
+        OUTPUTLIST (loan_id, payment_amount, payment_date, payment_id
+        )
+        WRAPPER (jdbc payments)
+    );
+
+CHOWN admin VIEW bv_bank_payments LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_properties I18N es_euro (
+        property_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        address:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        city:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        state:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        zip_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        property_value:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'properties_pkey' PRIMARY KEY ( 'property_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD properties(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD property_id (any) OPT ANY
+             ADD address (any) OPT ANY
+             ADD city (any) OPT ANY
+             ADD state (any) OPT ANY
+             ADD zip_code (any) OPT ANY
+             ADD property_value (any) OPT ANY
+        )
+        OUTPUTLIST (address, city, property_id, property_value, state, zip_code
+        )
+        WRAPPER (jdbc properties)
+    );
+
+CHOWN admin VIEW bv_bank_properties LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_rates I18N es_euro (
+        rate_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        loan_type:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        term:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        interest_rate:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'rates_pkey' PRIMARY KEY ( 'rate_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD rates(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD rate_id (any) OPT ANY
+             ADD loan_type (any) OPT ANY
+             ADD term (any) OPT ANY
+             ADD interest_rate (any) OPT ANY
+        )
+        OUTPUTLIST (interest_rate, loan_type, rate_id, term
+        )
+        WRAPPER (jdbc rates)
+    );
+
+CHOWN admin VIEW bv_bank_rates LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_underwriting I18N es_euro (
+        underwriting_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        loan_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        credit_score:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        employment_history:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        financial_history:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'underwriting_pkey' PRIMARY KEY ( 'underwriting_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD underwriting(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD underwriting_id (any) OPT ANY
+             ADD loan_id (any) OPT ANY
+             ADD credit_score (any) OPT ANY
+             ADD employment_history (any) OPT ANY
+             ADD financial_history (any) OPT ANY
+        )
+        OUTPUTLIST (credit_score, employment_history, financial_history, loan_id, underwriting_id
+        )
+        WRAPPER (jdbc underwriting)
+    );
+
+CHOWN admin VIEW bv_bank_underwriting LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_customer_stock_holdings I18N es_euro (
+        email:text,
+        stock_ticker:text,
+        stocks_purchased:text
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_customer_stock_holdings(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD email NOS ZERO ()
+             ADD stock_ticker NOS ZERO ()
+             ADD stocks_purchased NOS ZERO ()
+        )
+        OUTPUTLIST (email, stock_ticker, stocks_purchased
+        )
+        WRAPPER (df ds_customer_stock_holdings)
+    );
+
+CHOWN admin VIEW bv_customer_stock_holdings LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_ticker_api I18N es_euro (
+        ticker:text,
+        date:text,
+        close:text,
+        volume:text,
+        open:text,
+        high:text,
+        low:text
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_ticker_api(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD ticker NOS ZERO ()
+             ADD date NOS ZERO ()
+             ADD close NOS ZERO ()
+             ADD volume NOS ZERO ()
+             ADD open NOS ZERO ()
+             ADD high NOS ZERO ()
+             ADD low NOS ZERO ()
+        )
+        OUTPUTLIST (close, date, high, low, open, ticker, volume
+        )
+        WRAPPER (json ds_ticker_api)
+    );
+
+CHOWN admin VIEW bv_ticker_api LASTMODIFICATIONUSER admin;
+
+# #######################################
+# VIEWS of denodo_hol_bank
+# #######################################
+CREATE OR REPLACE INTERFACE VIEW p_customers (
+        customer_id:int,
+        customer_first_name:text,
+        customer_last_name:text,
+        customer_email:text,
+        customer_phone_number:text,
+        customer_address:text,
+        customer_city:text,
+        customer_state:text,
+        customer_zip_code:text
+    )
+    SET IMPLEMENTATION bv_bank_customers(
+        customer_id = customer_id,
+        customer_first_name = first_name,
+        customer_last_name = last_name,
+        customer_email = email,
+        customer_phone_number = phone_number,
+        customer_address = address,
+        customer_city = city,
+        customer_state = state,
+        customer_zip_code = zip_code    
+)
+    FOLDER = '/2 - integration/2 - presentation';
+
+CREATE OR REPLACE VIEW sd_stock_holdings FOLDER = '/2 - integration/1 - standardized views' AS SELECT bv_customer_stock_holdings.email AS email, bv_customer_stock_holdings.stock_ticker AS stock_ticker, cast('int', bv_customer_stock_holdings.stocks_purchased) AS stocks_purchased FROM bv_customer_stock_holdings;
+
+CHOWN admin VIEW sd_stock_holdings LASTMODIFICATIONUSER admin;
+
+ALTER VIEW sd_stock_holdings
+ LAYOUT (bv_customer_stock_holdings = [20, 20, 200, 200]);
+
+CREATE OR REPLACE VIEW sd_ticker_api FOLDER = '/2 - integration/1 - standardized views' AS SELECT bv_ticker_api.ticker AS ticker, to_localdate('MM/dd/yyyy', bv_ticker_api.date) AS date, cast('float', replace(bv_ticker_api.close, '$', '')) AS close, cast('long', replace(bv_ticker_api.volume, ',', '')) AS volume, cast('float', replace(bv_ticker_api.open, '$', '')) AS open, cast('float', replace(bv_ticker_api.high, '$', '')) AS high, cast('float', replace(bv_ticker_api.low, '$', '')) AS low FROM bv_ticker_api;
+
+CHOWN admin VIEW sd_ticker_api LASTMODIFICATIONUSER admin;
+
+ALTER VIEW sd_ticker_api
+ LAYOUT (bv_ticker_api = [20, 20, 200, 200]);
+
+CREATE OR REPLACE INTERFACE VIEW p_customer_stock_holdings (
+        customer_stock_email:text,
+        customer_stock_ticker:text,
+        customer_stock_purchased:int
+    )
+    SET IMPLEMENTATION sd_stock_holdings(
+        customer_stock_email = email,
+        customer_stock_ticker = stock_ticker,
+        customer_stock_purchased = stocks_purchased    
+)
+    FOLDER = '/2 - integration/2 - presentation';
+
+CREATE OR REPLACE INTERFACE VIEW p_ticker_api (
+        ticker:text,
+        ticker_date:localdate,
+        ticker_close:float,
+        ticker_volume:long,
+        ticker_open:float,
+        ticker_high:float,
+        ticker_low:float
+    )
+    SET IMPLEMENTATION sd_ticker_api(
+        ticker = ticker,
+        ticker_date = date,
+        ticker_close = close,
+        ticker_volume = volume,
+        ticker_open = open,
+        ticker_high = high,
+        ticker_low = low    
+)
+    FOLDER = '/2 - integration/2 - presentation';
+
+CREATE OR REPLACE VIEW iv_customer_assets FOLDER = '/2 - integration/3 - derived views' AS SELECT p_customers.customer_id AS customer_id, p_customers.customer_first_name AS customer_first_name, p_customers.customer_last_name AS customer_last_name, p_customers.customer_email AS customer_email, p_customers.customer_phone_number AS customer_phone_number, p_customers.customer_address AS customer_address, p_customers.customer_city AS customer_city, p_customers.customer_state AS customer_state, p_customers.customer_zip_code AS customer_zip_code, p_customer_stock_holdings.customer_stock_email AS customer_stock_email, p_customer_stock_holdings.customer_stock_ticker AS customer_stock_ticker, p_customer_stock_holdings.customer_stock_purchased AS customer_stock_purchased, p_ticker_api.ticker AS ticker, p_ticker_api.ticker_date AS ticker_date, p_ticker_api.ticker_close AS ticker_close, p_ticker_api.ticker_volume AS ticker_volume, p_ticker_api.ticker_open AS ticker_open, p_ticker_api.ticker_high AS ticker_high, p_ticker_api.ticker_low AS ticker_low FROM (p_customers AS p_customers INNER JOIN p_customer_stock_holdings AS p_customer_stock_holdings ON p_customers.customer_email = p_customer_stock_holdings.customer_stock_email ) INNER JOIN p_ticker_api AS p_ticker_api ON p_customer_stock_holdings.customer_stock_ticker = p_ticker_api.ticker ;
+
+ALTER VIEW iv_customer_assets
+ LAYOUT (p_customers = [145, 84, 200, 200], p_customer_stock_holdings = [391, 79, 200, 200], p_ticker_api = [668, 165, 200, 200]);
+
+CHOWN admin VIEW iv_customer_assets LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE INTERFACE VIEW customer_assets (
+        customer_id:int,
+        first_name:text,
+        last_name:text,
+        email:text,
+        phone_number:text,
+        address:text,
+        city:text,
+        state:text,
+        zip_code:text,
+        customer_stock_ticker:text,
+        customer_stock_purchased:int,
+        ticker_date:localdate,
+        ticker_close:float,
+        ticker_volume:long,
+        ticker_open:float,
+        ticker_high:float,
+        ticker_low:float
+    )
+    SET IMPLEMENTATION iv_customer_assets(
+        customer_id = customer_id,
+        first_name = customer_first_name,
+        last_name = customer_last_name,
+        email = customer_email,
+        phone_number = customer_phone_number,
+        address = customer_address,
+        city = customer_city,
+        state = customer_state,
+        zip_code = customer_zip_code,
+        customer_stock_ticker = customer_stock_ticker,
+        customer_stock_purchased = customer_stock_purchased,
+        ticker_date = ticker_date,
+        ticker_close = ticker_close,
+        ticker_volume = ticker_volume,
+        ticker_open = ticker_open,
+        ticker_high = ticker_high,
+        ticker_low = ticker_low    
+)
+    FOLDER = '/3 - business entities';
+
+# #######################################
+# ASSOCIATIONS of denodo_hol_bank
+# #######################################
+# No associations in database denodo_hol_bank
+# #######################################
+# WEBSERVICES of denodo_hol_bank
+# #######################################
+# No web services in database denodo_hol_bank
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS of denodo_hol_bank
+# #######################################
+# No deployed web services in database denodo_hol_bank
+# #######################################
+# VIEW STATISTICS of denodo_hol_bank
+# #######################################
+# No statistics in database denodo_hol_bank
+
+# #######################################
+# Closing connection with database denodo_hol_bank
+# #######################################
+CLOSE;
+
+# 3 ====================================================================
+
+# #######################################
+# DATABASE of denodo_hol_services
+# #######################################
+CREATE OR REPLACE DATABASE denodo_hol_services 'Denodo GenAI workshop - Services database';
+
+CONNECT DATABASE denodo_hol_services;
+
+# #######################################
+# FOLDERS of denodo_hol_services
+# #######################################
+CREATE OR REPLACE FOLDER '/1 - Connectivity' ;
+
+CHOWN admin FOLDER '/1 - Connectivity';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+
+CHOWN admin FOLDER '/1 - connectivity/2 - base views';
+
+# #######################################
+# RESOURCES of denodo_hol_services
+# #######################################
+# No vault resources in database denodo_hol_services
+# #######################################
+# LISTENERS JMS of denodo_hol_services
+# #######################################
+# No listeners jms in database denodo_hol_services
+# #######################################
+# LISTENERS KAFKA of denodo_hol_services
+# #######################################
+# No listeners kafka in database denodo_hol_services
+# #######################################
+# DATASOURCES of denodo_hol_services
+# #######################################
+CREATE OR REPLACE DATASOURCE DF ds_s3_service_interactions
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE S3 'hdfs.S3Connection' 's3://denodo/' FILENAMEPATTERN = 'support_interactions.csv'
+    AUTHENTICATION (
+      AWS_ACCESS_KEY_ID = 'denodo'
+      AWS_SECRET_ACCESS_KEY = 'denodo123' 
+    )
+    CUSTOM_PROPERTIES = ('fs.s3a.path.style.access'='true', 'fs.s3a.endpoint'='http://minio:9000')
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_service_interactions
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE LOCAL 'LocalConnection' '/opt/denodo/sample_data/support_interaction.csv' FILENAMEPATTERN = ''
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE denodo_hol_services
+  CHARSET DEFAULT;
+
+# #######################################
+# Closing connection with database denodo_hol_services
+# #######################################
+CLOSE;
+
+# 3 ====================================================================
+
+# #######################################
+# DATABASE of denodo_hol_unstructured
+# #######################################
+CREATE OR REPLACE DATABASE denodo_hol_unstructured 'Denodo GenAI workshop - Unstructured database';
+
+CONNECT DATABASE denodo_hol_unstructured;
+
+# #######################################
+# FOLDERS of denodo_hol_unstructured
+# #######################################
+CREATE OR REPLACE FOLDER '/1 - Connectivity' ;
+
+CHOWN admin FOLDER '/1 - Connectivity';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+
+CHOWN admin FOLDER '/1 - connectivity/2 - base views';
+
+# #######################################
+# RESOURCES of denodo_hol_unstructured
+# #######################################
+# No vault resources in database denodo_hol_unstructured
+# #######################################
+# LISTENERS JMS of denodo_hol_unstructured
+# #######################################
+# No listeners jms in database denodo_hol_unstructured
+# #######################################
+# LISTENERS KAFKA of denodo_hol_unstructured
+# #######################################
+# No listeners kafka in database denodo_hol_unstructured
+# #######################################
+# DATASOURCES of denodo_hol_unstructured
+# #######################################
+
+CREATE OR REPLACE DATASOURCE CUSTOM ds_local_files
+    FOLDER = '/1 - connectivity/1 - data sources'
+    CLASSNAME='com.denodo.custom.wrapper.BlobWrapper'
+    JARS 'blob_wrapper'
+    PARAMETERS (
+      'OpenDAL Schema' = 'fs',
+      'Root directory' = '/opt/denodo/sample_data'
+    );
+
+CREATE OR REPLACE DATASOURCE CUSTOM ds_s3_files
+    FOLDER = '/1 - connectivity/1 - data sources'
+    CLASSNAME='com.denodo.custom.wrapper.BlobWrapper'
+    JARS 'blob_wrapper'
+    PARAMETERS (
+      'OpenDAL Schema' = 's3',
+      'Root directory' = '/',
+      'S3 bucket' = 'denodo',
+      'S3 region' = 'auto',
+      'Endpoint' = 'http://minio:9000',
+      'S3 access key ID' = 'denodo',
+      'S3 access key' = 'denodo123'
+    );
+
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE denodo_hol_unstructured
+  CHARSET DEFAULT;
+
+# #######################################
+# Closing connection with database denodo_hol_unstructured
+# #######################################
+CLOSE;
+
+# #######################################
+# Connecting to database admin
+# #######################################
+CONNECT DATABASE ADMIN;
+
+# #######################################
+# USER PRIVILEGES
+# #######################################
+# #######################################
+# ROLE PRIVILEGES
+# #######################################
+# #######################################
+# RESOURCE MANAGER PLANS
+# #######################################
+# #######################################
+# RESOURCE MANAGER RULES
+# #######################################
+# #######################################
+# Closing connection with database admin
+# #######################################
+CLOSE;
+
+# #######################################
+# POLICY CREATION
+# #######################################
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+EXIT SINGLE USER MODE;

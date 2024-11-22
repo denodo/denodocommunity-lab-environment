@@ -1539,7 +1539,7 @@ CREATE OR REPLACE TABLE bv_product I18N us_pst (
     )
     FOLDER = '/1 - connectivity/2 - base views'
     PRIMARY KEY ( 'productid' )
-    CACHE FULL
+    CACHE OFF
     BATCHSIZEINCACHE DEFAULT
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD products(
@@ -3044,17 +3044,9 @@ DEPLOY WEBSERVICE ws_rest_api LOGIN = 'admin' PASSWORD = 'admin';
 # #######################################
 # USER PRIVILEGES
 # #######################################
-ALTER USER dcox19
-GRANT ROLE sales;
-
 # #######################################
 # ROLE PRIVILEGES
 # #######################################
-ALTER ROLE sales
-GRANT CONNECT, METADATA, EXECUTE ON DATABASE;
-
-
-
 # #######################################
 # WEBSERVICES
 # #######################################

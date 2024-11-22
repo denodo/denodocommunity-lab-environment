@@ -1,0 +1,92 @@
+# Copyright 2024 Denodo
+# SPDX-License-Identifier: Apache-2.0
+
+services:
+
+  # ###############################
+  # Denodo AI SDK + SAMPLE CHATBOT
+  # ###############################  
+  denodo-ai-sdk-chatbot:
+    container_name: denodo-ai-sdk-chatbot
+    hostname: ${DENODO_CHATBOT_AI_SDK_HOSTNAME}
+    image: ${DENODO_AI_SDK_VERSION}
+    restart: always
+    depends_on:
+      denodo-platform-chatbot:
+        condition: service_healthy
+    ports:
+      - "${DENODO_CHATBOT_EXTERNAL_PORT}:9992"
+      - "${DENODO_CHATBOT_AI_SDK_EXTERNAL_PORT}:8008"
+    environment:
+      #AI_SDK_SSL_CERT: "<path_to_public_cert>"
+      #AI_SDK_SSL_KEY: "<path_to_private_key>"
+      CHATBOT_LLM_PROVIDER: ${PROVIDER}
+      CHATBOT_LLM_MODEL: ${LLM_MODEL}
+      CHATBOT_EMBEDDINGS_PROVIDER: ${PROVIDER}
+      CHATBOT_EMBEDDINGS_MODEL: ${EMB_MODEL}
+      CHATBOT_VECTOR_STORE_PROVIDER: ${VECTOR_STORE}
+      AI_SDK_USERNAME: ${SERVICE_ACCOUNT_USERNAME}
+      AI_SDK_PASSWORD: ${SERVICE_ACCOUNT_PASSWORD}
+      AI_SDK_VER: ${AI_SDK_VER}
+      CHAT_PROVIDER: ${PROVIDER}
+      CHAT_MODEL: ${LLM_MODEL}
+      SQL_GENERATION_PROVIDER: ${PROVIDER}
+      SQL_GENERATION_MODEL: ${LLM_MODEL}
+      EMBEDDINGS_PROVIDER: ${PROVIDER}
+      EMBEDDINGS_MODEL: ${EMB_MODEL}
+      VECTOR_STORE: ${VECTOR_STORE}
+      VDB_NAMES: ${VDB_NAMES}
+      DATA_CATALOG_URL: ${DATA_CATALOG_URL}
+      DATA_CATALOG_METADATA_USER: ${SERVICE_ACCOUNT_USERNAME}
+      DATA_CATALOG_METADATA_PWD: ${SERVICE_ACCOUNT_PASSWORD}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_ORG_ID: ${OPENAI_ORG_ID}
+      OPENAI_PROXY: ${OPENAI_PROXY}
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT} 
+      AZURE_API_VERSION: ${AZURE_API_VERSION}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY}
+      AZURE_OPENAI_PROXY: ${AZURE_OPENAI_PROXY}
+      GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS}
+      AWS_REGION: ${AWS_REGION}
+      AWS_PROFILE_NAME: ${AWS_PROFILE_NAME}
+      AWS_ROLE_ARN: ${AWS_ROLE_ARN}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      MISTRAL_API_KEY: ${MISTRAL_API_KEY}
+      NVIDIA_API_KEY: ${NVIDIA_API_KEY}
+      NVIDIA_BASE_URL: ${NVIDIA_BASE_URL}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+    volumes:
+      - "${DENODO_CHATBOT_CONFIG_FILE}:/opt/ai-sdk/sample_chatbot/chatbot_config.env"
+      
+  # ####################################
+  # Denodo Express + SAMPLE BANKING DATA
+  # ####################################
+  denodo-platform-chatbot:
+    container_name: denodo-platform-chatbot
+    hostname: ${DENODO_CHATBOT_DENODO_VDP_HOSTNAME}
+    restart: unless-stopped
+    image: ${DENODO_VERSION}
+    ports:
+      - "${DENODO_CHATBOT_VDP_EXTERNAL_WEB_PORT}:9090"
+      - "${DENODO_CHATBOT_VDP_EXTERNAL_ARROWFLIGHTSQL_PORT}:9994"
+      - "${DENODO_CHATBOT_VDP_EXTERNAL_ODBC_PORT}:9996"
+      - "${DENODO_CHATBOT_VDP_EXTERNAL_JMX_PORT}:9997"
+      - "${DENODO_CHATBOT_VDP_EXTERNAL_PORT}:9999" 
+    environment:
+      DENODO_DEBUG: true
+    volumes:
+      - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
+      - "${DENODO_CHATBOT_SAMPLE_DATA_PATH}:/opt/denodo/samples/ai-sdk/sample_chatbot/sample_data"
+      - "${DENODO_CHATBOT_SAMPLE_DATA_VQL}:/container-entrypoint-init/samples_bank.vql"
+      - "${DENODO_CHATBOT_SAMPLE_DATA_DC_METADATA}:/container-entrypoint-init/dc-metadata-1731947417725.zip"
+    command: ["--vqlserver", "--designstudio","--datacatalog"]
+    healthcheck:
+      test: ["CMD", "/opt/denodo/bin/ping.sh", "-r", "-t", "5000", "//localhost:9999/admin"]
+      interval: 20s
+      timeout: 10s
+      start_period: 180s
+      start_interval: 180s
+      retries: 3
+    tty: true
+    stdin_open: true

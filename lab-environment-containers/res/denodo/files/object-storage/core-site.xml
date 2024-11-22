@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+<property>
+  <name>fs.s3a.path.style.access</name>
+  <value>true</value>
+  <description>Enables S3 path style access that is disabling the default virtual hosting behavior(default: false)</description>
+</property>
+<property>
+  <name>fs.s3a.connection.timeout</name>
+  <value>10000</value>
+  <description>Sets the total timeout of the connection operation</description>
+</property>
+<property>
+  <name>fs.s3a.attempts.maximum</name>
+  <value>3</value>
+  <description>Sets the total number of attempts that will be tried. Default is 20!</description>
+</property>
+<property>
+  <name>fs.s3a.connection.establish.timeout</name>
+  <value>2000</value>
+  <description>Sets the connection timeout to 3 seconds, default is 5</description>
+</property>
+<property>
+  <name>fs.s3a.retry.limit</name>
+  <value>1</value>
+  <description>Sets the number of times that the whole process is retried</description>
+</property>
+<property>
+  <name>fs.s3a.access.key</name>
+  <value>denodo</value>
+  <description>minio login</description>
+</property>
+<property>
+  <name>fs.s3a.secret.key</name>
+  <value>denodo123</value>
+  <description>minio password</description>
+</property>
+<property>
+  <name>fs.s3a.endpoint</name>
+  <value>http://minio:9000</value>
+  <description>endpoint</description>
+</property>
+</configuration>

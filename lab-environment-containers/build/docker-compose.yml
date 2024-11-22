@@ -34,6 +34,7 @@ services:
       #- ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
     ports:
       - "${DENODO_VDP_EXTERNAL_WEB_PORT}:9090"
+      - "${DENODO_VDP_EXTERNAL_ARROWFLIGHTSQL_PORT}:9994"
       - "${DENODO_VDP_EXTERNAL_ODBC_PORT}:9996"
       - "${DENODO_VDP_EXTERNAL_JMX_PORT}:9997"
       - "${DENODO_VDP_EXTERNAL_PORT}:9999" 
@@ -132,7 +133,8 @@ services:
       - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
       - "${DENODO_SCHED_INIT_ZIP_DIR}:/container-entrypoint-init/" 
       #- ${DENODO_SCHED_METADATA_VOLUME}:/opt/denodo/metadata/
-      #- ${DENODO_SCHED_WORK_VOLUME}:/opt/denodo/work/arn/data/index/
+      #- ${DENODO_SCHED_INDEX_VOLUME}:/opt/denodo/work/arn/data/index/
+      ##- ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
     ports:
       - "${DENODO_SCHED_EXTERNAL_PORT}:8000"
       - "${DENODO_SCHED_INDEX_EXTERNAL_PORT}:9000"
@@ -142,6 +144,11 @@ services:
       - DENODO_SCHSERVER_SERVER_PORT=9999
       - DENODO_WEBCONTAINER_STARTUP=true
       - DENODO_DEBUG=true
+      ##- DENODO_KEYSTORE_LOADER_TYPE=FILE
+      ##- DENODO_KEYSTORE_LOADER_LOCATION=/opt/denodo/conf/denodo-key-custom.keystore
+      ##- DENODO_KEYSTORE_TYPE=${DENODO_KEYSTORE_TYPE}
+      ##- DENODO_KEYSTORE_PASSWORD_VALUE=${DENODO_KEYSTORE_PASSWORD_VALUE}
+      ##- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
     healthcheck:
       test: ["CMD-SHELL", "/opt/denodo/tools/scheduler/ping.sh -t 3000 -h localhost -p 8000 || exit 1"]
       interval: 6s
@@ -151,7 +158,7 @@ services:
     command: --schserver --schindex --schadmin
     tty: true
     stdin_open: true
-
+    
   # ########################
   # Data Sources
   # ########################
@@ -191,6 +198,25 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "${ANALYTICAL_DB_PORT}:5432"
+ 
+  # Vector Database
+  ds-pgvector:
+    container_name: denodocommunity-lab-environment-pgvector
+    image: ${VECTOR_DB_VERSION}
+    profiles: ["all","ds-pvector"]
+    hostname: ${VECTOR_DB_HOSTNAME}
+    restart: unless-stopped
+    networks:
+      - denodo-lab-net   
+    volumes:   
+      - ${VECTOR_DB_INIT_SCRIPT}:/docker-entrypoint-initdb.d/init.sql
+      - ${VECTOR_DB_DATA_DIRECTORY}:/mnt
+      - pgvector-lab-env:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${VECTOR_DB_PWD}
+      - POSTGRES_DB=postgres
+    ports:
+      - "${VECTOR_DB_PORT}:5432"
  
   # Application server
   ds-tomcat:
@@ -288,21 +314,20 @@ services:
   ds-dfs:
     container_name: denodocommunity-lab-environment-minio
     image: ${DFS_VERSION}
-    profiles: ["ds-dfs"]
+    profiles: ["all","ds-dfs"]
     hostname: minio
     restart: always
     networks:
       - denodo-lab-net 
     volumes:
-      - dfs-lab-env:/data      
+      - ${DFS_BUCKET_DIRECTORY}:/data
     environment:
       - MINIO_ROOT_USER=${DFS_ROOT_ADMIN}
       - MINIO_ROOT_PASSWORD=${DFS_ROOT_PWD}
     ports:
       - '${DFS_PORT}:9000'
       - '${DFS_CONSOLE_PORT}:9001'
-    command: --console-address ":9001"
-
+    command: ["server", "/data", "--console-address", ":9001"]
 
   # ###################
   # External Services #
@@ -380,7 +405,7 @@ services:
   util-mongo-express:
     container_name: denodocommunity-lab-environment-mongo-express
     image: ${NOSQL_GUI_VERSION}
-    profiles: ["util-mongo-express"]
+    profiles: ["all","util-mongo-express"]
     hostname: ${NOSQL_GUI_HOSTNAME}
     restart: unless-stopped
     networks:
@@ -397,7 +422,7 @@ services:
   util-graphql-playground:
     container_name: denodocommunity-lab-environment-graphql-playground
     image: ${GRAPHQL_GUI_VERSION}
-    profiles: ["util-graphql","ds"]
+    profiles: ["all","util-graphql","ds"]
     hostname: ${GRAPHQL_GUI_HOSTNAME}    
     restart: unless-stopped
     networks:
@@ -412,7 +437,7 @@ services:
   util-cloudbeaver:
     container_name: denodocommunity-lab-environment-cloudbeaver
     image: ${DB_GUI_VERSION}
-    profiles: ["util-dbclient"]
+    profiles: ["all","util-dbclient"]
     hostname: ${DB_GUI_HOSTNAME}
     restart: always
     networks:
@@ -426,29 +451,44 @@ services:
   util-notebook:
     container_name: denodocommunity-lab-environment-notebook
     image: ${NOTEBOOK_VERSION}
-    profiles: ["util-notebook"]
+    profiles: ["all","notebook","util-notebook"]
     hostname: ${NOTEBOOK_HOSTNAME}
     networks:
       - denodo-lab-net
-    depends_on: 
-      - docker-host
+    #depends_on: 
+    #  - docker-host
     restart: unless-stopped
     volumes: 
       - ${NOTEBOOK_DIRECTORY}:/home/jovyan/work
     ports:
       - '${NOTEBOOK_EXTERNAL_PORT}:8888'
-    command: "start-notebook.sh --NotebookApp.token='${NOTEBOOK_TOKEN}'"
+    command: "start-notebook.sh --ServerApp.base_url=/notebook/ --NotebookApp.token='${NOTEBOOK_TOKEN}'"
   
   docker-host:
     container_name: denodocommunity-lab-environment-dockerhost
     image: qoomon/docker-host
-    profiles: ["util-notebook"]
+    profiles: ["docker-host"]
     cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
     restart: on-failure
     networks:
       denodo-lab-net:
         aliases:
           - ${HOST_ALIAS}
+
+  # Nginx reverse proxy
+  nginx-proxy:
+    container_name: denodocommunity-lab-environment-reverseproxy
+    image: ${REVERSE_PROXY_VERSION}
+    profiles: ["reverse-proxy"]
+    hostname: ${REVERSE_PROXY_HOSTNAME}
+    networks:
+      - denodo-lab-net
+    restart: unless-stopped
+    volumes:
+      - ${REVERSE_PROXY_CONF}:/etc/nginx/nginx.conf:ro  
+    ports:
+      - "${REVERSE_PROXY_EXTERNAL_PORT}:80"
+      - "${REVERSE_PROXY_EXTERNAL_PORT_SSL}:443"
 
   # Database for storing Denodo metadata, Monitor and Cache
   denodo-postgres:
@@ -481,6 +521,8 @@ volumes:
   metadatadb-lab-env: 
     driver: local
   postgres-lab-env: 
+    driver: local
+  pgvector-lab-env: 
     driver: local
   mariadb-lab-env: 
     driver: local

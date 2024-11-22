@@ -1,0 +1,24 @@
+﻿property_id,address,city,state,zip_code,property_value
+1,123 Main St,Anytown,CA,12345,300000.0
+2,456 Elm St,Smalltown,TX,23456,350000.0
+3,789 Oak St,Bigcity,NY,34567,280000.0
+4,101 Pine St,Ruraltown,WA,45678,320000.0
+5,321 Maple St,Suburbia,FL,56789,310000.0
+6,555 Cedar St,Uptown,IL,67890,330000.0
+7,777 Birch St,Downtown,MI,78901,340000.0
+8,999 Walnut St,Countryside,OH,89012,290000.0
+9,888 Willow St,Seaside,OR,90123,280000.0
+10,777 Cherry St,Mountainside,CO,01234,310000.0
+11,123 Oak St,Beachtown,CA,23456,320000.0
+12,456 Pine St,Suburbia,TX,34567,330000.0
+13,789 Elm St,Bigcity,NY,45678,340000.0
+14,101 Cedar St,Uptown,WA,56789,320000.0
+15,321 Birch St,Downtown,FL,67890,330000.0
+16,555 Maple St,Countryside,IL,78901,340000.0
+17,777 Willow St,Seaside,MI,89012,290000.0
+18,999 Cherry St,Mountainside,OH,90123,280000.0
+19,888 Main St,Beachtown,OR,01234,310000.0
+20,777 Pine St,Suburbia,CO,12345,320000.0
+21,123 Birch St,Uptown,CA,23456,330000.0
+22,456 Maple St,Downtown,TX,34567,340000.0
+23,789 Willow St,Countryside,NY,45678,320000.0
