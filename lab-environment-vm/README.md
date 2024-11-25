@@ -19,7 +19,7 @@ If you do not have Docker installed in your system, but you have a virtualizatio
 
 ## Prerequisites
 
-The Denodo Quickstart Virtual Machine (a.k.a. DQVM) can be launched in VirtualBox, or Hyper-V environments. You need that virtualization software installed to be able to import the virtual machine.
+The Denodo Quickstart Virtual Machine (a.k.a. DQVM) can be launched in **VirtualBox, or Hyper-V** environments. You need that virtualization software installed to be able to import the virtual machine.
 
 ## Binaries 
 

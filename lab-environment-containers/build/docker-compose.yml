@@ -336,7 +336,7 @@ services:
   ext-apacheds:
     container_name: denodocommunity-lab-environment-apacheds
     image: ${LDAP_VERSION}
-    profiles: ["all","ext","ext-sso","ext-ldap","ds"]
+    profiles: ["all","ext","sso","ext-ldap","ds"]
     hostname: ${LDAP_HOSTNAME}
     restart: unless-stopped
     networks:
@@ -354,7 +354,7 @@ services:
   ext-keycloak:
     container_name: denodocommunity-lab-environment-keycloak
     image: ${SSO_VERSION}
-    profiles: ["all","ext","ext-sso"]
+    profiles: ["all","ext","sso"]
     hostname: ${SSO_HOSTNAME}
     depends_on:
       - denodo-postgres
@@ -380,7 +380,7 @@ services:
   ext-git:
     container_name: denodocommunity-lab-environment-git
     image: ${VCS_VERSION}
-    profiles: ["all","ext","ext-git"]
+    profiles: ["all","ext","git"]
     hostname: ${VCS_HOSTNAME}
     networks:
       - denodo-lab-net 
@@ -494,7 +494,7 @@ services:
   denodo-postgres:
     container_name: denodocommunity-lab-environment-metadata
     image: ${METADATA_DB_VERSION}
-    profiles: ["all","ds","denodo","ext-sso","ext"]
+    profiles: ["all","ds","denodo","sso","ext"]
     hostname: ${METADATA_DB_HOSTNAME}
     restart: unless-stopped
     networks:

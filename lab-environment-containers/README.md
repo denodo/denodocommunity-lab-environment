@@ -58,13 +58,15 @@ $ tree
 ├── lab-environment-containers
 │   ├── build
 │   │   ├── .env.template
+│   │   ├── docker-compose-sample-chatbot.yml
 │   │   └── docker-compose.yml
 ├── res
-│   ├── denodo
-│   │   └── vql
-│   └── graphql
-│       ├── application.properties
-│       └── web.xml
+│   └── denodo
+│       ├── chatbot
+│       ├── files
+│       ├── license
+│       ├── vql
+│       └── zip
 ├── lab-environment-sources
 └── lab-environment-vm
 
@@ -85,21 +87,76 @@ $ cp .env.template .env
 $ vi .env
 ```
 
-In that file you can configure the hostname, IP address, and the port for connecting to each container **from your local machine**. Please note that the connection between containers is always done using the default (internal) ports. In the example below, if you launch a PostgreSQL container, you can connect from your machine using `localhost:5432`. But if you are trying to connect from other container, for example, a database client container, you should use the internal hostname and port, in this case `postgres:5432`
+In that file you can configure the hostname, IP address, and the port for connecting to each container **from your local machine**. Please note that the connection between containers is always done using the default (internal) ports. In the example below, if you launch an Apache HTTP container, you can connect from your local machine to the container using the url `http://localhost:1080` (the external port). But if you are trying to connect to this Apache container from other container of the Lab Environment, for example, from a Denodo Platform container, you should use the internal hostname and port, in this case `http://webserver:80`
 
 ```properties
-# Global network configuration
-NET_SUBNET=172.30.0.0/24
-
-# Postgresql (for Analytical database) 
-# ====================================
-ANALYTICAL_DB_HOSTNAME=postgres
-ANALYTICAL_DB_PORT=5432
-# INTERNAL PORT = 5432
+# Apache HTTP 
+# ===========
+HTTPSERVER_HOSTNAME=webserver
+HTTPSERVER_EXTERNAL_PORT=1080
+# INTERNAL PORT = 80
 ...
 ```
 
-## How to invoke the script
+### Configure access to Denodo containers
+
+Denodo Containers are available in Harbor (https://harbor.open.denodo.com). You need to configure the access to this registry from your docker installation to be able to download and start the Denodo containers. 
+
+You can find the complete user guide at [Denodo Container Registry Quick Start Guide](https://community.denodo.com/docs/html/document/latest/en/Denodo%20Container%20Registry%20Quick%20Start%20Guide) but check the following steps of this Readme for a quick set up.
+
+#### Sign In
+With your Denodo User Account you can sign in https://harbor.open.denodo.com to navigate the repositories available to you.
+
+Use the **Login via OIDC Provider** button that appears on the Harbor login page.
+
+![Denodo Harbor repository login](./res/img/harbor_login.png)
+
+#### Create a CLI Secret
+
+After you have authenticated via Denodo Account and logged into the web interface for the first time, you can use the Docker CLI or Helm CLI to access the registry and artifacts.
+
+To be able to do so, the registry provides a CLI secret for use when logging in from Docker or Helm.
+
+To create the secret click your username at the top of the screen and select **User Profile**:
+
+![Denodo Harbor repository User Profile menu](./res/img/harbor_user_profile.png)
+
+Then generate and/or copy your CLI secret.
+
+![Denodo Harbor repository User Profile](./res/img/harbor_user_profile_2.png)
+
+A user can only have one CLI secret, so when a new secret is generated or created, the old one becomes invalid.
+
+#### Authenticate in Docker CLI with the CLI Secret
+
+Use docker login and provide the credentials.
+
+```bash
+$ docker login harbor.open.denodo.com
+Username: <denodo_account_username>
+Password: <registry_profile_secret>
+```
+#### Configure the Denodo License
+
+For starting the Denodo containers, you need a valid Denodo license. If you don't have one, you can download a Denodo Express licese which is free forever. Just go to the Denodo Community Site (https://community.denodo.com/express/) and download your license. 
+
+Furthermore, in the `.env` file you have to configure the path to the Denodo license you have downloaded (`DENODO_SA_LIC` parameter) and the specific Denodo container you want to use for starting the Denodo Platform (`DENODO_VERSION` parameter) and the Denodo AI SDK (`DENODO_AI_SDK_VERSION` parameter):
+
+```properties
+##########
+# Denodo #
+##########
+# For Denodo Customers:     DENODO_VERSION=harbor.open.denodo.com/denodo-9/images/denodo-platform:latest
+# For Denodo Express Users: DENODO_VERSION=harbor.open.denodo.com/denodo-express/denodo-platform:latest
+DENODO_VERSION=harbor.open.denodo.com/denodo-express/denodo-platform:latest
+# For Denodo Customers:     DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-connects-9/images/ai-sdk:latest
+# For Denodo Express Users: DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-express/ai-sdk:latest
+DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-express/ai-sdk:latest
+# Full Path to your Denodo Standalone license file
+DENODO_SA_LIC=../res/denodo/license/
+```
+
+## How to start the Denodo Community Lab Environment containers
 
 Once you have followed all the configuration steps (cloning the project and creating the .env file), you only have to run the following command:
 ```bash
@@ -110,13 +167,15 @@ where:
 * `-p training` refers to the docker project name. This parameter is **optional**. If you use it, you can use any label here. This is useful if you want to have multiple versions of the same lab environment. For example, one for training and another one for creating a personal project. For the rest of examples used in this README, we are going to omit this parameter but it is strongly recommended to use it.
 * `up` refers to the command for building, creating and starting containers for the services configured. It aggregates the output of each container (logs), if you want to avoid that, simply add `--detach` or `-d` to start the containers in the background.
 
-**Note**: you will notice that this command returns `"no service selected"` and no containers are started. This is the expected behavior because the project was configured for using specific docker profiles in order to start only the containers needed for your specific use case. Read the next sections of this README file to know how to use those profiles.
+**Note**: you will notice that this command returns `"no service selected"` and no containers are started. This is the expected behavior because the project was configured for using specific Docker profiles in order to start only the containers needed for your specific use case. Read the next sections of this README file to know how to use those profiles.
+
+**Note 2: Running the Denodo AI SDK container**: In case you want to try the Denodo AI SDK, please read the [Building an AI Chatbot with Denodo in Minutes](https://community.denodo.com/tutorials/browse/chatbot/index) tutorial, which explains how to use a specific environment with some precreated views in Denodo to be used by the AI SDK and the Sample Chatbot.
 
 ## Running containers using profiles 
 
 Most of the time you won't need to start all the services configured in the docker compose YML file at the same time (because they will make use of some valuable resources -_cpu_ and _memory_- of your machine) so it is better to start only the containers required. This can be done using docker profiles. 
 
-For example, for launching the data sources for training you can run the following command:
+For example, for starting only the data sources used for tutorials or training courses, you can run the following command:
 
 ```bash
 $ docker compose --profile ds up 
@@ -130,21 +189,25 @@ In the table below you can find the list of available profiles that you can use 
 
 | Profile name | List of Containers |
 | ----------- | ----------- | 
-| ds | Profile for launching all these **Data Sources**: MariaDB, PostgreSQL, Tomcat, Apache, MongoDB and LDAP |
-| ext-sso | Profile for launching a **Keycloak** server for Single Sign-On (including an LDAP server and a PostgreSQL* used as an external metadata database). |
-| ext-git | Profile for launching a **GitLab** server for Version Control System. |
+| ds | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, Tomcat, Apache, MongoDB, and LDAP. And this **Application**: GraphQL client. |
+| denodo | Profile for launching these **Denodo servers and tools**: Virtual DataPort server, Design Studio, Data Catalog, and a PostgreSQL* database to be used as external metadata and cache database. |
+| denodo-vdp | Profile for launching **Denodo Virtual DataPort**: it includes a irtual DataPort server, and a Design Studio. |
+| denodo-sched | Profile for launching **Denodo Scheduler**: it includes a Denodo Scheduler server, a Denodo Index server, and the Scheduler Web Administration Tool. |
+| sso | Profile for launching a **Keycloak** server that can be used to test Single Sign-On in Denodo (it includes an LDAP server and a PostgreSQL* used as an external metadata database). |
+| git | Profile for launching a **GitLab** server that can be used testing Version Control System with Denodo. |
 | util-mongo-express | Profile for launching **Mongo Express** as a web-based MongoDB administration interface. |
 | util-graphql | Profile for launching **GraphQL Playground** as a web-based GraphQL client interface. |
 | util-dbclient | Profile for launching **Cloudbeaver** as a web-based database administration interface. |
-| all | Profile for launching all the available **Data Sources** and **External Servers**. |
+| all | Profile for launching all the available containers (**We strongly recommend not to use this profile**). |
 
+\* The associated container for this PostgreSQL database is shared among all the Denodo servers and Keycloak.
 
 ## Running containers of different profiles at the same time
 
-Sometimes you will need to start services from different profiles. For example, you may want to launch all the data sources and a Git server, in that case you can run the following command:
+Sometimes you will need to start services from different profiles. For example, you may want to launch teh Denodo Platform and the data sources, in that case you can run the following command:
 
 ```bash
-$ docker compose --profile ds --profile ext-git up 
+$ docker compose --profile ds  --profile denodo up 
 ```
 
 ## Stopping containers
@@ -175,17 +238,17 @@ $ docker compose --profile ds up
 
 In the table below you can find the name of all the containers included by default in the docker compose script:
 
-
 ## Data Sources
 
 | Service name | Container name | Image | Hostname | Description |
 | ----------- | ----------- | ----------- | ----------- | ----------- |
 | ds-tomcat | denodocommunity-lab-environment-tomcat | tomcat:8.5.47 | tomcat | **Apache Tomcat** server for deploying some Web services, including: *Sales WS*, *Product WS*. By default it is listening at http://localhost:8080/ |
-| ds-postgresql | denodo-commonlab-postgres | postgres:12-alpine | postgres | **PostgreSQL** database. While running this container for the first time, the SQL files from the project directory will be executed and the fact tables of the TPC-DS data set will be imported. It is to be noted that this process only happens once. The default username and password will be `postgres`/`admin`. This container runs in the host **localhost** and port number **5432**. |
-| ds-mariadb | denodocommunity-lab-environment-mariadb | mariadb:11.0.2 | mariadb | **MariaDB** database. While running this container for the first time, the SQL files from the project directory will be executed and the dimension tables of the TPC-DS data set will be imported. It is to be noted that this process only happens once. You can use `root`/`admin` as default user/password and **localhost:3306** as default host/port number for this data source. Data is persisted in the [project]_mariadb-common-lab volume. |
-| ds-mongo | denodocommunity-lab-environment-mongo | mongo:6.0 | mongo | **MongoDB** NoSQL database initialized with a support data set. This server will be launched at host/port **localhost:27017** and the default credentials are `mongoadmin`/`admin`. |
-| ds-httpd | denodocommunity-lab-environment-httpd | httpd:2.4.57 | webserver | **Apache HTTP** server which contains MS Excel, JSON and log files. By default it is listening at http://localhost:1080/ |
+| ds-postgresql | denodo-commonlab-postgres | postgres:12-alpine | postgres | **PostgreSQL** database. While running this container for the first time, the SQL files from the sources project will be imported (see [Sources](../lab-environment-sources/README.md)). It is to be noted that this process only happens once. The default username and password will be `postgres`/`admin`. This container runs in the host **localhost** and port number **5432**. |
+| ds-mariadb | denodocommunity-lab-environment-mariadb | mariadb:11.3.2 | mariadb | **MariaDB** database. While running this container for the first time, the SQL files from the project directory will be executed (see [Sources](../lab-environment-sources/README.md)) It is to be noted that this process only happens once. You can use `root`/`admin` as default user/password and **localhost:3306** as default host/port number for this data source. |
+| ds-mongo | denodocommunity-lab-environment-mongo | mongo:7.0.8* | mongo | **MongoDB** NoSQL database initialized with a support data set. This server will be launched at host/port **localhost:27017** and the default credentials are `mongoadmin`/`admin`. |
+| ds-httpd | denodocommunity-lab-environment-httpd | httpd:2.4.59 | webserver | **Apache HTTP** server which contains MS Excel, JSON and log files. By default it is listening at http://localhost:1080/ |
 
+\* You can change the MongoDB version to **4.4.18** if you see this error when starting the container: `MongoDB 5.0+ requires a CPU with AVX support`
 
 ## External Services
 
@@ -193,18 +256,26 @@ In the table below you can find the name of all the containers included by defau
 |---------|---------|---------|---------|------------|
 | ext-apacheds | denodocommunity-lab-environment-apacheds | 1000kit/apacheds | ldapserver | **Apache Directory Services container**: Apache Directory Services is an extensible and embeddable directory server which has been certified as LDAPv3 compatible by the Open Group. The container consists of a predefined Denodo domain and some users. The default credentials for Apache DS is as follows: `uid=admin,ou=system` / `secret`. It uses by default the port **10389** |
 | ext-keycloak | denodocommunity-lab-environment-keycloak | jboss/keycloak:13.0.0 | sso | **Keycloak container**: Keycloak is a Open Source Identity and Access Management tool. The container consists of a predefined realm for Denodo and it is connected to the **ext-apacheds** and **denodo-postgres** for user synchronization. The administration tool is listening at http://localhost:28443/ by default. Credentials: you can use the username `denodo` and password `denodo`. |
-| denodo-postgres | denodocommunity-lab-environment-metadata | postgres:12-alpine | metadata | **PostgreSQL** database used as Keycloak external metadata database. The default username and password will be `denodo`/`denodo`. Data is persisted in the [project]_metadatadb-common-lab volume. |
-| ext-git | denodocommunity-lab-environment-git | gitlab/gitlab-ce:16.2.8-ce.0 | gitlab | **GitLab container**: GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. This container runs a GitLab service to be used as the Version Control System for Denodo Platform. The administration console is running at http://localhost:1080/ by default |
+| denodo-postgres | denodocommunity-lab-environment-metadata | postgres:12-alpine | metadata | **PostgreSQL** database used as Keycloak external metadata database. The default username and password will be `denodo`/`denodo`. |
+| ext-git | denodocommunity-lab-environment-git | gitlab/gitlab-ce:16.2.8-ce.0 | gitlab | **GitLab container**: GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. This container runs a GitLab service to be used as the Version Control System for Denodo Platform. The administration console is running at http://localhost:1180/ by default |
 
 ## Utilities
 
 | Service name | Container name | Image | Description |
 |---------|---------|---------|------------|
-| util-mongo-express | denodocommunity-lab-environment-mongo-express | mongo-express:latest | Web-based **MongoDB admin** interface, it is listening at http://localhost:8111/ by default. Use the following default credentials: `admin`/`pass`. |
+| util-mongo-express | denodocommunity-lab-environment-mongo-express | mongo-express:1.0.2 | Web-based **MongoDB admin** interface, it is listening at http://localhost:8111/ by default. Use the following default credentials: `admin`/`pass`. |
 | util-cloudbeaver | denodocommunity-lab-environment-cloudbeaver | dbeaver/cloudbeaver:23.2.2 | **Cloudbeaver container**: This container has CloudBeaver which is a web-based database management tool. This tool runs on http://localhost:8978/#/ |
-| util-graphql-playground | denodocommunity-lab-environment-graphql-playground | imega/graphql-playground:latest | **GraphQL container**: GraphQL Playground is a graphical, interactive, in-browser GraphQL IDE. This is available at http://localhost:4000/graphql. |
+| util-graphql-playground | denodocommunity-lab-environment-graphql-playground | imega/graphql-playground:0.0.3 | **GraphQL container**: GraphQL Playground is a graphical, interactive, in-browser GraphQL IDE. This is available at http://localhost:4000/graphql. |
 
+## Denodo
 
+| Service name | Container name | Image | Description |
+| ----------- | ----------- | ----------- | ----------- |
+| denodo-vdp | denodocommunity-lab-environment-vdp | denodo-platform:latest | It deploys de **Denodo Virtual DataPort** server using the license file configured in the `.env` file.|
+| denodo-ds | denodocommunity-lab-environment-ds | denodo-platform:latest | It deploys the **Denodo Design Studio** web application. By default it is listening at http://localhost:19090/denodo-design-studio/?uri=//vdp:9999/#/ (**Note**: it does not need a Denodo license to run). |
+| denodo-dc | denodocommunity-lab-environmentdc | denodo-platform:latest | It deploys the **Denodo Data Catalog** using the license file configured in the `.env` file. By default it is listening at http://localhost:29090/denodo-data-catalog |
+| denodo-sched | denodocommunity-lab-environment-sched | denodo-platform:latest | It deploys the **Denodo Scheduler** using the license file configured in the `.env` file, the **Denodo Index Server** using the license file configured in the `.env` file, and the **Denodo Scheduler Administration** web application. By default it is listening at http://localhost:39090/webadmin/denodo-scheduler-admin/ |
+| denodo-postgres | denodocommunity-lab-environment-metadata | postgres:12-alpine | **PostgreSQL** database used as Denodo and Keycloak external metadata database. The default username and password will be `denodo`/`denodo`. |
 
 # Licenses of the containers
 

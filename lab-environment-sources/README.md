@@ -37,13 +37,16 @@ You will have a directory structure like this:
 │   ├── res
 │   │   ├── db
 │   │   ├── denodo
+│   │   ├── dfs
 │   │   ├── files
+│   │   |   ├── df
 │   │   |   ├── excel
 │   │   |   ├── json
 │   │   |   └── logs
 │   │   ├── ldap
 │   │   ├── nosql
 │   │   |   └── mongodb
+│   │   ├── notebook
 │   │   ├── sso
 │   │   └── war
 │   └── README.md
@@ -61,12 +64,14 @@ Each directory has the files for the specific data source:
 | database | MariaDB | tpc_ds, calltracking, sales (tutorial), crm | [db/mariadb-init.sql](res/db/postgresql-init.sql) |
 | denodo monitor logs | Denodo | vdp-queries, vdp-queryblocks | [denodo-monitor/logs/](res/denodo/files/tools/monitor/denodo-monitor/logs/) |
 | Binary files | MS Excel | invoices, marketing promotions, zipcodes | [files/excel/](res/files/excel/) |
-| Delimited files | - | logs | [files/logs/](res/files/json/) |
+| Delimited files | - | banking | [files/df/](res/files/df/) |
+| Log files | - | logs | [files/logs/](res/files/json/) |
 | JSON files | - | household demographics | [files/json/](res/files/logs/) |
 | LDIF files | ApacheDS | users, groups | [ldap/](res/ldap/) |
-| NoSQL | MongoDB | product, support | [nosql/](res/nosql/) |
+| NoSQL | MongoDB | product, support, building | [nosql/](res/nosql/mongodb/) |
 | Realm configuration | Keycloak | realm, users, groups | [sso/](res/sso/) |
 | Web services | Tomcat | billing, product, sales (ws) | [war/](res/war/) |
+| Notebooks | JupyterLab | sample notebooks | [notebook/](res/notebook/) |
 
 
 ## License
