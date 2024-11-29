@@ -189,11 +189,13 @@ In the table below you can find the list of available profiles that you can use 
 
 | Profile name | List of Containers |
 | ----------- | ----------- | 
-| ds | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, Tomcat, Apache, MongoDB, and LDAP. And this **Application**: GraphQL client. |
+| ds | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, Tomcat, Apache HTTP, MongoDB, and LDAP. And this **Application**: GraphQL client. |
+| ds-minimal | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, and Apache HTTP. |
 | denodo | Profile for launching these **Denodo servers and tools**: Virtual DataPort server, Design Studio, Data Catalog, and a PostgreSQL* database to be used as external metadata and cache database. |
-| denodo-vdp | Profile for launching **Denodo Virtual DataPort**: it includes a irtual DataPort server, and a Design Studio. |
+| denodo-vdp | Profile for launching **Denodo Virtual DataPort**: it includes a Virtual DataPort server, and a Design Studio. |
 | denodo-sched | Profile for launching **Denodo Scheduler**: it includes a Denodo Scheduler server, a Denodo Index server, and the Scheduler Web Administration Tool. |
 | sso | Profile for launching a **Keycloak** server that can be used to test Single Sign-On in Denodo (it includes an LDAP server and a PostgreSQL* used as an external metadata database). |
+| notebook | Profile for launching a **JupyterLab** notebook that can be used to test a Python client for connecting to Denodo. |
 | git | Profile for launching a **GitLab** server that can be used testing Version Control System with Denodo. |
 | util-mongo-express | Profile for launching **Mongo Express** as a web-based MongoDB administration interface. |
 | util-graphql | Profile for launching **GraphQL Playground** as a web-based GraphQL client interface. |
@@ -266,6 +268,7 @@ In the table below you can find the name of all the containers included by defau
 | util-mongo-express | denodocommunity-lab-environment-mongo-express | mongo-express:1.0.2 | Web-based **MongoDB admin** interface, it is listening at http://localhost:8111/ by default. Use the following default credentials: `admin`/`pass`. |
 | util-cloudbeaver | denodocommunity-lab-environment-cloudbeaver | dbeaver/cloudbeaver:23.2.2 | **Cloudbeaver container**: This container has CloudBeaver which is a web-based database management tool. This tool runs on http://localhost:8978/#/ |
 | util-graphql-playground | denodocommunity-lab-environment-graphql-playground | imega/graphql-playground:0.0.3 | **GraphQL container**: GraphQL Playground is a graphical, interactive, in-browser GraphQL IDE. This is available at http://localhost:4000/graphql. |
+| util-notebook | denodocommunity-lab-environment-notebook | datascience-notebook:2024-03-14 | Web-based **JupyterLab** notebook that can be used to test a Python client for connecting to Denodo. This is available at http://localhost:8888/notebook/. Use the following default token: `denodo` |
 
 ## Denodo
 
@@ -291,6 +294,8 @@ The Denodo Community Lab Environment docker compose script downloads containers 
 * GitLab CE: MIT License https://gitlab.com/gitlab-org/gitlab/-/blob/master/LICENSE
 * Cloudbeaver Community: Apache License Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
 * GraphQL Playground: MIT License https://github.com/graphql/graphql-playground/blob/main/LICENSE
+* JupyterLab: https://github.com/jupyterlab/jupyterlab/blob/main/LICENSE
+* Nginx: https://nginx.org/LICENSE
 
 ## Denodo Community Lab Environment License
 
