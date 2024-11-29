@@ -158,7 +158,7 @@ services:
     command: --schserver --schindex --schadmin
     tty: true
     stdin_open: true
-    
+   
   # ########################
   # Data Sources
   # ########################
@@ -198,25 +198,6 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "${ANALYTICAL_DB_PORT}:5432"
- 
-  # Vector Database
-  ds-pgvector:
-    container_name: denodocommunity-lab-environment-pgvector
-    image: ${VECTOR_DB_VERSION}
-    profiles: ["all","ds-pvector"]
-    hostname: ${VECTOR_DB_HOSTNAME}
-    restart: unless-stopped
-    networks:
-      - denodo-lab-net   
-    volumes:   
-      - ${VECTOR_DB_INIT_SCRIPT}:/docker-entrypoint-initdb.d/init.sql
-      - ${VECTOR_DB_DATA_DIRECTORY}:/mnt
-      - pgvector-lab-env:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=${VECTOR_DB_PWD}
-      - POSTGRES_DB=postgres
-    ports:
-      - "${VECTOR_DB_PORT}:5432"
  
   # Application server
   ds-tomcat:
@@ -263,52 +244,6 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${NOSQL_DB_ROOT_PWD}
     ports:
       - '${NOSQL_DB_EXTERNAL_PORT}:27017'
-  
-  # Kafka (Zookeeper+Broker)
-  ds-kafka-zookeeper:
-    container_name: denodocommunity-lab-environment-zookeeper
-    image: confluentinc/cp-zookeeper:${KAFKA_VERSION}
-    profiles: ["ds-kafka"]
-    hostname: zookeeper
-    networks:
-      - denodo-lab-net 
-    ports:
-      - "2181"
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-
-  ds-kafka:
-    container_name: denodocommunity-lab-environment-kafka
-    image: confluentinc/cp-server:${KAFKA_VERSION}
-    profiles: ["ds-kafka"]
-    hostname: kafka
-    networks:
-      - denodo-lab-net 
-    depends_on:
-      - ds-kafka-zookeeper
-    ports:
-      - "${KAFKA_PORT}:9092"
-      - "${KAFKA_JMX_PORT}:9101"
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_JMX_PORT: 9101
-      KAFKA_JMX_HOSTNAME: kafka
-      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka:9092
-      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
-      CONFLUENT_METRICS_ENABLE: 'true'
-      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
   # MinIO (S3)
   ds-dfs:

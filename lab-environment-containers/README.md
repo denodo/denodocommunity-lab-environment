@@ -292,7 +292,6 @@ The Denodo Community Lab Environment docker compose script downloads containers 
 * Cloudbeaver Community: Apache License Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
 * GraphQL Playground: MIT License https://github.com/graphql/graphql-playground/blob/main/LICENSE
 
-
 ## Denodo Community Lab Environment License
 
 This project is distributed under **Apache License, Version 2.0**. 
@@ -301,6 +300,11 @@ See [LICENSE](../LICENSE)
 
 ## Denodo Community Lab Environment Support
 
-This project is supported by **Denodo Community**. 
+This project is supported by **Denodo Community**. See [SUPPORT](../SUPPORT.md)
 
-See [SUPPORT](../SUPPORT.md)
+Feel free to modify this project for using alternative data sources o different versions of the same data sources.
+ 
+[Contributions](https://github.com/denodo/denodocommunity-lab-environment/contribute) to the project are, of course, most welcome! 
+
+
+

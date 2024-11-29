@@ -12,7 +12,7 @@ collaborators: Victoria Margret, Ajay Kumar, Sarath Chandran
 
 [Denodo](https://www.denodo.com/) is the leading logical data management platform. It establishes a unified data accessibility framework that provides data consumers with real-time insights from diverse data sources.
 
-This project maintains some sample data sources that can be used to build a local testing environment of different technologies that can be used later for Denodo training, for testing purposes or for having a base for your Denodo projects.
+This project maintains some sample data sources that can be used to build a **local testing environment** of different technologies that can be used for Denodo training and testing purposes. You cannot use this project for running Denodo in production.
 
 ## Getting started
 

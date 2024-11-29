@@ -1,0 +1,243 @@
+﻿# Generated with Denodo Platform 9.0.3.
+
+ENTER SINGLE USER MODE;
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# #######################################
+# USER CREATION
+# #######################################
+# #######################################
+# ROLE CREATION
+# #######################################
+# #######################################
+# TAG CREATION
+# #######################################
+# #######################################
+# CONFIGURATION PROPERTIES
+# #######################################
+
+# 2 ====================================================================
+
+# #######################################
+# IMPORT THIS INTO YOUR VIRTUAL DATABASE 
+# #######################################
+
+# #######################################
+# FOLDERS 
+# #######################################
+CREATE OR REPLACE FOLDER '/1 - connectivity' ;
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+
+# #######################################
+# RESOURCES 
+# #######################################
+# No vault resources 
+# #######################################
+# LISTENERS JMS 
+# #######################################
+# No listeners jms
+# #######################################
+# LISTENERS KAFKA 
+# #######################################
+# No listeners kafka 
+# #######################################
+# DATASOURCES 
+# #######################################
+
+CREATE OR REPLACE DATASOURCE JDBC ds_tpcds_sales
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.postgresql.Driver'
+    DATABASEURI = 'jdbc:postgresql://localhost:5432/tpc_ds'
+    USERNAME = 'denodo'
+    USERPASSWORD = 'denodo' 
+    CLASSPATH = 'postgresql-12'
+    DATABASENAME = 'postgresql'
+    DATABASEVERSION = '12'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'Select 1'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    PROPERTIES ('escapeSyntaxCallMode'='callIfNoReturn')
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+# #######################################
+# WRAPPERS
+# #######################################
+CREATE OR REPLACE WRAPPER JDBC store_sales
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_tpcds_sales
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='store_sales' 
+    OUTPUTSCHEMA (
+        ss_sold_date_sk = 'ss_sold_date_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_sold_time_sk = 'ss_sold_time_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_item_sk = 'ss_item_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        ss_customer_sk = 'ss_customer_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_cdemo_sk = 'ss_cdemo_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_hdemo_sk = 'ss_hdemo_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_addr_sk = 'ss_addr_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_store_sk = 'ss_store_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_promo_sk = 'ss_promo_sk' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_ticket_number = 'ss_ticket_number' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        ss_quantity = 'ss_quantity' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        ss_wholesale_cost = 'ss_wholesale_cost' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_list_price = 'ss_list_price' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_sales_price = 'ss_sales_price' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_ext_discount_amt = 'ss_ext_discount_amt' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_ext_sales_price = 'ss_ext_sales_price' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_ext_wholesale_cost = 'ss_ext_wholesale_cost' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_ext_list_price = 'ss_ext_list_price' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_ext_tax = 'ss_ext_tax' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_coupon_amt = 'ss_coupon_amt' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_net_paid = 'ss_net_paid' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_net_paid_inc_tax = 'ss_net_paid_inc_tax' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        ss_net_profit = 'ss_net_profit' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='7', sourcetypeid='2', sourcetypename='numeric')  SORTABLE
+    )
+    CONSTRAINT 'store_sales_pkey' PRIMARY KEY ( 'ss_item_sk' , 'ss_ticket_number' )
+    CONSTRAINT 'ss_d' FOREIGN KEY ( 'ss_sold_date_sk' ) 
+    REFERENCES 'public'.'date_dim'( 'd_date_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    CONSTRAINT 'ss_t' FOREIGN KEY ( 'ss_sold_time_sk' ) 
+    REFERENCES 'public'.'time_dim'( 't_time_sk' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    INDEX 'store_sales_pkey' OTHER UNIQUE PRIMARY ( 'ss_item_sk' , 'ss_ticket_number' );
+
+# #######################################
+# STORED PROCEDURES 
+# #######################################
+# No stored procedures 
+# #######################################
+# TYPES 
+# #######################################
+# No types 
+# #######################################
+# MAPS 
+# #######################################
+# No maps 
+# #######################################
+# BASE VIEWS 
+# #######################################
+
+CREATE OR REPLACE TABLE bv_store_sales I18N au_cst (
+        ss_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_sold_time_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_store_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_promo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_ticket_number:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_quantity:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        ss_wholesale_cost:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_list_price:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_sales_price:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_ext_discount_amt:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_ext_sales_price:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_ext_wholesale_cost:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_ext_list_price:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_ext_tax:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_coupon_amt:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_net_paid:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_net_paid_inc_tax:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7'),
+        ss_net_profit:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'store_sales_pkey' PRIMARY KEY ( 'ss_item_sk' , 'ss_ticket_number' )
+    CACHE OFF
+    BATCHSIZEINCACHE DEFAULT
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_store_sales(
+        I18N au_cst
+        CONSTRAINTS (
+             ADD ss_sold_date_sk (any) OPT ANY
+             ADD ss_sold_time_sk (any) OPT ANY
+             ADD ss_item_sk (any) OPT ANY
+             ADD ss_customer_sk (any) OPT ANY
+             ADD ss_cdemo_sk (any) OPT ANY
+             ADD ss_hdemo_sk (any) OPT ANY
+             ADD ss_addr_sk (any) OPT ANY
+             ADD ss_store_sk (any) OPT ANY
+             ADD ss_promo_sk (any) OPT ANY
+             ADD ss_ticket_number (any) OPT ANY
+             ADD ss_quantity (any) OPT ANY
+             ADD ss_wholesale_cost (any) OPT ANY
+             ADD ss_list_price (any) OPT ANY
+             ADD ss_sales_price (any) OPT ANY
+             ADD ss_ext_discount_amt (any) OPT ANY
+             ADD ss_ext_sales_price (any) OPT ANY
+             ADD ss_ext_wholesale_cost (any) OPT ANY
+             ADD ss_ext_list_price (any) OPT ANY
+             ADD ss_ext_tax (any) OPT ANY
+             ADD ss_coupon_amt (any) OPT ANY
+             ADD ss_net_paid (any) OPT ANY
+             ADD ss_net_paid_inc_tax (any) OPT ANY
+             ADD ss_net_profit (any) OPT ANY
+        )
+        OUTPUTLIST (ss_addr_sk, ss_cdemo_sk, ss_coupon_amt, ss_customer_sk, ss_ext_discount_amt, ss_ext_list_price, ss_ext_sales_price, ss_ext_tax, ss_ext_wholesale_cost, ss_hdemo_sk, ss_item_sk, ss_list_price, ss_net_paid, ss_net_paid_inc_tax, ss_net_profit, ss_promo_sk, ss_quantity, ss_sales_price, ss_sold_date_sk, ss_sold_time_sk, ss_store_sk, ss_ticket_number, ss_wholesale_cost
+        )
+        WRAPPER (jdbc store_sales)
+    )
+    SMART_ONLY;
+
+# #######################################
+# VIEWS 
+# #######################################
+# #######################################
+# ASSOCIATIONS
+# #######################################
+# No associations
+# #######################################
+# WEBSERVICES 
+# #######################################
+# No web services 
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS 
+# #######################################
+# No deployed web services
+# #######################################
+# VIEW STATISTICS 
+# #######################################
+# #######################################
+# Connecting to database admin
+# #######################################
+CONNECT DATABASE ADMIN;
+
+# #######################################
+# USER PRIVILEGES
+# #######################################
+# #######################################
+# ROLE PRIVILEGES
+# #######################################
+# #######################################
+# RESOURCE MANAGER PLANS
+# #######################################
+# #######################################
+# RESOURCE MANAGER RULES
+# #######################################
+# #######################################
+# Closing connection with database admin
+# #######################################
+CLOSE;
+
+# #######################################
+# POLICY CREATION
+# #######################################
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+EXIT SINGLE USER MODE;

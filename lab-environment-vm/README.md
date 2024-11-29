@@ -124,7 +124,7 @@ During the build process, you'll see logs indicating the progress of each step, 
 Note that the build process may take some time to complete, depending on your hardware and internet connection speed.
 
 ```bash
-$ packer build -force dqvm.pkr.hcl
+$ packer build -force .
 virtualbox-iso.base: output will be in this color.
 
 ==> virtualbox-iso.base: Retrieving Guest additions
