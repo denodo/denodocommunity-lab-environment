@@ -97,6 +97,9 @@ HTTPSERVER_EXTERNAL_PORT=1080
 # INTERNAL PORT = 80
 ...
 ```
+> 
+> **NOTE:** Please read [this documentation](./build/README.md) for more information about the configuration options
+
 
 ### Configure access to Denodo containers
 
@@ -190,7 +193,6 @@ In the table below you can find the list of available profiles that you can use 
 | Profile name | List of Containers |
 | ----------- | ----------- | 
 | ds | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, Tomcat, Apache HTTP, MongoDB, and LDAP. And this **Application**: GraphQL client. |
-| ds-minimal | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, and Apache HTTP. |
 | denodo | Profile for launching these **Denodo servers and tools**: Virtual DataPort server, Design Studio, Data Catalog, and a PostgreSQL* database to be used as external metadata and cache database. |
 | denodo-vdp | Profile for launching **Denodo Virtual DataPort**: it includes a Virtual DataPort server, and a Design Studio. |
 | denodo-sched | Profile for launching **Denodo Scheduler**: it includes a Denodo Scheduler server, a Denodo Index server, and the Scheduler Web Administration Tool. |

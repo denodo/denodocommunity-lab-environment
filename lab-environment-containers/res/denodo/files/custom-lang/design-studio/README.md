@@ -17,7 +17,9 @@ The language of the Denodo Design Studio is English by default. You can change t
 
 # Disclaimer
 
-This project maintains language files uploaded by the Denodo Commuity of users. For the official language packages, please go to the Denodo User Manual: https://community.denodo.com/docs/html/browse/latest/en/platform/administration/language_of_the_web_tools/language_of_the_web_tools#install-a-language-file-for-design-studio
+This project maintains language files uploaded by the Denodo Commuity of users. 
+
+**Note:** For the official language packages provided by Denodo, please go to the Denodo User Manual: https://community.denodo.com/docs/html/browse/latest/en/platform/administration/language_of_the_web_tools/language_of_the_web_tools#install-a-language-file-for-design-studio
 
 ## Install a Language File for Denodo Design Studio
 
