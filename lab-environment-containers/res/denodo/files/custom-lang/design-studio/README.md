@@ -26,6 +26,7 @@ To change the language of Denodo Design Studio, follow these steps:
 * Download the language file from this directory:
   * Japanese: [customLang-ja.properties](./customLang-ja.properties)
   * Simplified Chinese: [customLang-zh_CN.properties](./customLang-zh_CN.properties)
+  * German: [customLang-de.properties](./customLang-de.properties)
 
 * Copy this file to `<DENODO_HOME>/work/design-studio/`.
 
@@ -34,6 +35,7 @@ To change the language of Denodo Design Studio, follow these steps:
 * Edit the file `<DENODO_HOME>/conf/design-studio/DesignStudioBackend.properties`, search the line with `customLang.langAttribute` and replace the entire line with one of these:
   * Japanese: `customLang.langAttribute=ja`
   * Simplified Chinese: `customLang.langAttribute=zh_CN`
+  * German: `customLang.langAttribute=de`
 
 * Restart Design Studio.
 
