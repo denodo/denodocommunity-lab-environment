@@ -85,8 +85,8 @@ services:
       test: ["CMD", "/opt/denodo/bin/ping.sh", "-r", "-t", "5000", "//localhost:9999/admin"]
       interval: 20s
       timeout: 10s
-      start_period: 180s
-      start_interval: 180s
+      start_period: 300s
+      start_interval: 300s
       retries: 3
     tty: true
     stdin_open: true
