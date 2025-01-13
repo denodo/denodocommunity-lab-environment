@@ -4,7 +4,12 @@ ENTER SINGLE USER MODE;
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 # #######################################
-# USER CREATION
+# USER CREATION (denodo / denodo)
+# #######################################
+CREATE OR REPLACE USER denodo 'TabGFRTVX5QZAs4kw+BqWweQ6miqAlWWJe/bUtUuplLOT8syvZv3lZAYmyYpZkbz/weKJYt6Jda9MuZzWhMh1Iwu+ypPV7If'  ENCRYPTED SHA512  'User created for the Denodo hands-on labs';
+
+# #######################################
+# USER CREATION (analyst / admin)
 # #######################################
 CREATE OR REPLACE USER analyst 'yd4hTGNRJ4R5fA3Uae+DO+w7iM569+e6VjtgTfEURAJfXyiVrBm6purIDn/e5yrLjZgk23j9G0hWqZbG9yz/CN3DUmIBpOrh'  ENCRYPTED SHA512  'Analyst user';
 
