@@ -16,7 +16,7 @@ services:
         condition: service_healthy
     ports:
       - "${DENODO_CHATBOT_EXTERNAL_PORT}:9992"
-      - "${DENODO_CHATBOT_AI_SDK_EXTERNAL_PORT}:8008"
+      - "${DENODO_AI_SDK_EXTERNAL_PORT}:8008"
     environment:
       #AI_SDK_SSL_CERT: "<path_to_public_cert>"
       #AI_SDK_SSL_KEY: "<path_to_private_key>"
@@ -35,7 +35,7 @@ services:
       EMBEDDINGS_PROVIDER: ${PROVIDER}
       EMBEDDINGS_MODEL: ${EMB_MODEL}
       VECTOR_STORE: ${VECTOR_STORE}
-      VDB_NAMES: ${VDB_NAMES}
+      VDB_NAMES: ${DENODO_CHATBOT_SAMPLE_VDB_NAMES}
       DATA_CATALOG_URL: ${DATA_CATALOG_URL}
       DATA_CATALOG_METADATA_USER: ${SERVICE_ACCOUNT_USERNAME}
       DATA_CATALOG_METADATA_PWD: ${SERVICE_ACCOUNT_PASSWORD}

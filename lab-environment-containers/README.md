@@ -194,8 +194,9 @@ In the table below you can find the list of available profiles that you can use 
 | ----------- | ----------- | 
 | ds | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, Tomcat, Apache HTTP, MongoDB, and LDAP. And this **Application**: GraphQL client. |
 | denodo | Profile for launching these **Denodo servers and tools**: Virtual DataPort server, Design Studio, Data Catalog, and a PostgreSQL* database to be used as external metadata and cache database. |
-| denodo-vdp | Profile for launching **Denodo Virtual DataPort**: it includes a Virtual DataPort server, and a Design Studio. |
 | denodo-sched | Profile for launching **Denodo Scheduler**: it includes a Denodo Scheduler server, a Denodo Index server, and the Scheduler Web Administration Tool. |
+| ai | Profile for launching a **Denodo AI-ready** environment: Denodo AI SDK, Virtual DataPort server, Design Studio, Data Catalog, and a PostgreSQL* database to be used as external metadata and cache database. |
+| denodo-ai-sdk | Profile for launching **Denodo AI SDK**: it launches only the Denodo AI SDK endpoint (ensure you have configured the path to your Data Catalog server in the .env file). |
 | sso | Profile for launching a **Keycloak** server that can be used to test Single Sign-On in Denodo (it includes an LDAP server and a PostgreSQL* used as an external metadata database). |
 | notebook | Profile for launching a **JupyterLab** notebook that can be used to test a Python client for connecting to Denodo. |
 | git | Profile for launching a **GitLab** server that can be used testing Version Control System with Denodo. |

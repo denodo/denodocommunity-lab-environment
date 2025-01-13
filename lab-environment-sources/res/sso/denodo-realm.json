@@ -462,7 +462,7 @@
           "attributes": {}
         }
       ],
-      "denodo80": [
+      "denodoplatform": [
         {
           "id": "e8a9de79-1fb7-4f7e-a283-2411b2ebc687",
           "name": "uma_protection",
@@ -516,11 +516,11 @@
     {
       "id": "3cd89eba-adbf-47b0-836b-3be0c79b4396",
       "createdTimestamp": 1596541477212,
-      "username": "service-account-denodo80",
+      "username": "service-account-denodoplatform",
       "enabled": true,
       "totp": false,
       "emailVerified": false,
-      "serviceAccountClientId": "denodo80",
+      "serviceAccountClientId": "denodoplatform",
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
@@ -529,7 +529,7 @@
         "administration"
       ],
       "clientRoles": {
-        "denodo80": [
+        "denodoplatform": [
           "uma_protection"
         ],
         "account": [
@@ -734,7 +734,7 @@
     },
     {
       "id": "404c4a35-6978-4ba3-9373-12058e6f0235",
-      "clientId": "denodo80",
+      "clientId": "denodoplatform",
       "name": "denodo",
       "rootUrl": "",
       "adminUrl": "http://127.0.0.1:19090/sso/sso-openid/openid-login",
@@ -888,7 +888,7 @@
         "resources": [
           {
             "name": "Default Resource",
-            "type": "urn:denodo80:resources:default",
+            "type": "urn:denodoplatform:resources:default",
             "ownerManagedAccess": false,
             "attributes": {},
             "_id": "5a66bd78-98e6-4e77-b4b2-c061a36cc31b",
@@ -917,7 +917,7 @@
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
-              "defaultResourceType": "urn:denodo80:resources:default",
+              "defaultResourceType": "urn:denodoplatform:resources:default",
               "applyPolicies": "[\"Default Policy\"]"
             }
           }

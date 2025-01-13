@@ -15,4 +15,4 @@ Best effort means that major security vulnerabilities and major bugs will be fix
 [gh-issue]: https://github.com/denodo/denodocommunity-lab-environment/issues/new/choose
 [gh-bug]: https://github.com/denodo/denodocommunity-lab-environment/issues/new?assignees=&labels=bug&template=bug_report.md&title=
 [gh-feature]: https://github.com/denodo/denodocommunity-lab-environment/issues/new?assignees=&labels=enhancement&template=Feature_Request.md&title=
-[contributor]: https://community.denodo.com/
+[contributor]: https://community.denodo.com/sharing/contributing-guidelines

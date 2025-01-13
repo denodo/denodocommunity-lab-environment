@@ -1,12 +1,3 @@
-CREATE EXTENSION vector;
-
-CREATE TABLE IF NOT EXISTS image_metadata (
-    image_source VARCHAR(4000), 
-    first_name VARCHAR(1000), 
-    last_name VARCHAR(1000), 
-	content_summary VARCHAR(65535)
-);
-
 CREATE TABLE IF NOT EXISTS customers (
 	"customer_id"	INTEGER,
 	"first_name"	TEXT,

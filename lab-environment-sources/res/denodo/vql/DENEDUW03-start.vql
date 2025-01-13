@@ -160,9 +160,9 @@ CONNECT DATABASE denodo_hol_bank;
 # #######################################
 # FOLDERS of denodo_hol_bank
 # #######################################
-CREATE OR REPLACE FOLDER '/1 - Connectivity' ;
+CREATE OR REPLACE FOLDER '/1 - connectivity' ;
 
-CHOWN admin FOLDER '/1 - Connectivity';
+CHOWN admin FOLDER '/1 - connectivity';
 
 CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
 
@@ -210,7 +210,7 @@ CHOWN admin FOLDER '/3 - business entities';
 CREATE OR REPLACE DATASOURCE JDBC ds_bank
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
-    DATABASEURI = 'jdbc:postgresql://pgvector:5432/bank'
+    DATABASEURI = 'jdbc:postgresql://postgres:5432/bank'
     USERNAME = 'denodo'
     USERPASSWORD = 'denodo'
     CLASSPATH = 'postgresql-12'
@@ -866,9 +866,9 @@ CONNECT DATABASE denodo_hol_services;
 # #######################################
 # FOLDERS of denodo_hol_services
 # #######################################
-CREATE OR REPLACE FOLDER '/1 - Connectivity' ;
+CREATE OR REPLACE FOLDER '/1 - connectivity' ;
 
-CHOWN admin FOLDER '/1 - Connectivity';
+CHOWN admin FOLDER '/1 - connectivity';
 
 CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
 
@@ -907,7 +907,7 @@ CREATE OR REPLACE DATASOURCE DF ds_s3_service_interactions
 
 CREATE OR REPLACE DATASOURCE DF ds_service_interactions
     FOLDER = '/1 - connectivity/1 - data sources'
-    ROUTE LOCAL 'LocalConnection' '/opt/denodo/sample_data/support_interaction.csv' FILENAMEPATTERN = ''
+    ROUTE LOCAL 'LocalConnection' '/opt/denodo/samples/ai-sdk/sample_chatbot/sample_data/unstructured/support_interaction.csv' FILENAMEPATTERN = ''
     COLUMNDELIMITER = ','
     ENDOFLINEDELIMITER = '\n'
     HEADER = TRUE;
@@ -920,81 +920,6 @@ ALTER DATABASE denodo_hol_services
 
 # #######################################
 # Closing connection with database denodo_hol_services
-# #######################################
-CLOSE;
-
-# 3 ====================================================================
-
-# #######################################
-# DATABASE of denodo_hol_unstructured
-# #######################################
-CREATE OR REPLACE DATABASE denodo_hol_unstructured 'Denodo GenAI workshop - Unstructured database';
-
-CONNECT DATABASE denodo_hol_unstructured;
-
-# #######################################
-# FOLDERS of denodo_hol_unstructured
-# #######################################
-CREATE OR REPLACE FOLDER '/1 - Connectivity' ;
-
-CHOWN admin FOLDER '/1 - Connectivity';
-
-CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
-
-CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
-
-CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
-
-CHOWN admin FOLDER '/1 - connectivity/2 - base views';
-
-# #######################################
-# RESOURCES of denodo_hol_unstructured
-# #######################################
-# No vault resources in database denodo_hol_unstructured
-# #######################################
-# LISTENERS JMS of denodo_hol_unstructured
-# #######################################
-# No listeners jms in database denodo_hol_unstructured
-# #######################################
-# LISTENERS KAFKA of denodo_hol_unstructured
-# #######################################
-# No listeners kafka in database denodo_hol_unstructured
-# #######################################
-# DATASOURCES of denodo_hol_unstructured
-# #######################################
-
-CREATE OR REPLACE DATASOURCE CUSTOM ds_local_files
-    FOLDER = '/1 - connectivity/1 - data sources'
-    CLASSNAME='com.denodo.custom.wrapper.BlobWrapper'
-    JARS 'blob_wrapper'
-    PARAMETERS (
-      'OpenDAL Schema' = 'fs',
-      'Root directory' = '/opt/denodo/sample_data'
-    );
-
-CREATE OR REPLACE DATASOURCE CUSTOM ds_s3_files
-    FOLDER = '/1 - connectivity/1 - data sources'
-    CLASSNAME='com.denodo.custom.wrapper.BlobWrapper'
-    JARS 'blob_wrapper'
-    PARAMETERS (
-      'OpenDAL Schema' = 's3',
-      'Root directory' = '/',
-      'S3 bucket' = 'denodo',
-      'S3 region' = 'auto',
-      'Endpoint' = 'http://minio:9000',
-      'S3 access key ID' = 'denodo',
-      'S3 access key' = 'denodo123'
-    );
-
-
-# #######################################
-# DATABASE CONFIGURATION
-# #######################################
-ALTER DATABASE denodo_hol_unstructured
-  CHARSET DEFAULT;
-
-# #######################################
-# Closing connection with database denodo_hol_unstructured
 # #######################################
 CLOSE;
 

@@ -30,9 +30,9 @@ In case you don't have a VirtualBox of Hyper-V environment, you are still able t
 
 Please read the documentation of each subproject to get more information: 
 
-* [Denodo Community Lab Environment Containers](./lab-environment-containers/README.md)
-* [Denodo Community Lab Environment Data Sources](./lab-environment-sources/README.md)
-* [Denodo Community Lab Environment Virtual Machines](./lab-environment-vm/README.md)
+* [Denodo Community Lab Environment Containers](./lab-environment-containers/)
+* [Denodo Community Lab Environment Data Sources](./lab-environment-sources/)
+* [Denodo Community Lab Environment Virtual Machines](./lab-environment-vm/)
 
 # Join the Denodo Community
 

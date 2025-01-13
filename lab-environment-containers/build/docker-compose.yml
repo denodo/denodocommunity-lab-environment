@@ -15,21 +15,24 @@ services:
   # Denodo 
   # ########################
   
-  # Denodo Virtual DataPort server / Embedded web container (Restful-ws/OData service/GraphQL service)
+  # Denodo Virtual DataPort server / Data Catalog / Embedded web container (Restful-ws/OData service/GraphQL service)
   denodo-vdp:
     container_name: denodocommunity-lab-environment-vdp
     image: ${DENODO_VERSION}
-    profiles: ["all","denodo","denodo-vdp"]
+    profiles: ["all","denodo","ai"]
     hostname: ${DENODO_VDP_HOSTNAME}
     restart: unless-stopped
     networks:        
       - denodo-lab-net 
     volumes:
-      - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"   
+      - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic" 
       - "${DENODO_VDP_INIT_VQL_DIR}:/container-entrypoint-init/"  
-      - ${DENODO_VDP_GRAPHQL_FILES_DIRECTORY}/application.properties:/opt/denodo/resources/apache-tomcat/webapps/denodo-graphql-service/WEB-INF/classes/application.properties 
-      - ${DENODO_VDP_GRAPHQL_FILES_DIRECTORY}/web.xml:/opt/denodo/resources/apache-tomcat/conf/web.xml
+      #- ${DENODO_VDP_GRAPHQL_FILES_DIRECTORY}/application.properties:/opt/denodo/resources/apache-tomcat/webapps/denodo-graphql-service/WEB-INF/classes/application.properties 
+      #- ${DENODO_VDP_GRAPHQL_FILES_DIRECTORY}/web.xml:/opt/denodo/resources/apache-tomcat/conf/web.xml
       - ${DENODO_VDP_FILES_DIRECTORY}:/opt/denodo/work/lab-files  
+      - "${DENODO_CHATBOT_SAMPLE_DATA_PATH}:/opt/denodo/samples/ai-sdk/sample_chatbot/sample_data"
+      - "${DENODO_DC_CUSTOM_LANG_DIR}/DataCatalogBackend-${DENODO_DC_CUSTOM_LANG}.properties:/denodo/conf/design-studio/DesignStudioBackend.properties"
+      - "${DENODO_DC_CUSTOM_LANG_DIR}/customLang-${DENODO_DC_CUSTOM_LANG}.properties:/opt/denodo/work/data-catalog/customLang.properties"   
       - denodo-vdp-metadata:/opt/denodo/metadata
       #- ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
     ports:
@@ -43,18 +46,23 @@ services:
       - DENODO_PASSWORD=${DENODO_VDP_ADMIN_PWD}
       - DENODO_WEBCONTAINER_STARTUP=true
       - DENODO_DEBUG=true
+      - DENODO_MERGE_CONF=true
+      - DENODO_DC_SERVER_NAME=DenodoVDP
+      - DENODO_WEBCONTAINER_CORS_ENABLED=true
+      - DENODO_WEBCONTAINER_CORS_ORIGINS=http://localhost:4000
       #- DENODO_KEYSTORE_LOADER_TYPE=FILE
       #- DENODO_KEYSTORE_LOADER_LOCATION=/opt/denodo/conf/denodo-key-custom.keystore
       #- DENODO_KEYSTORE_TYPE=${DENODO_KEYSTORE_TYPE}
       #- DENODO_KEYSTORE_PASSWORD_VALUE=${DENODO_KEYSTORE_PASSWORD_VALUE}
       #- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
     healthcheck:
-      test: ["CMD-SHELL", "/opt/denodo/bin/ping.sh -t 3000 //localhost:9999 || exit 1"]
-      interval: 6s
-      timeout: 700s
-      retries: 35
-      start_period: 60s
-    command: --vdpserver 
+      test: ["CMD", "/opt/denodo/bin/ping.sh", "-r", "-t", "5000", "//localhost:9999/admin"]
+      interval: 20s
+      timeout: 10s
+      retries: 3
+      start_period: 180s
+      start_interval: 180s
+    command: ["--vqlserver", "--datacatalog"]
     tty: true
     stdin_open: true
   
@@ -62,7 +70,7 @@ services:
   denodo-ds:
     container_name: denodocommunity-lab-environment-ds
     image: ${DENODO_VERSION}
-    profiles: ["all","denodo","denodo-vdp"]
+    profiles: ["all","denodo","ai"]
     hostname: ${DENODO_DS_HOSTNAME}
     restart: always
     networks:        
@@ -82,43 +90,6 @@ services:
       start_period: 20s
       timeout: 10s
     command: --designstudio 
-
-  # Denodo Data Catalog
-  denodo-dc:
-    container_name: denodocommunity-lab-environment-dc
-    image: ${DENODO_VERSION}
-    profiles: ["all","denodo","denodo-dc"]
-    hostname: ${DENODO_DC_HOSTNAME}
-    restart: always
-    networks:        
-      - denodo-lab-net 
-    volumes:
-      - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"   
-      - "${DENODO_DC_INIT_DIR}:/container-entrypoint-init/"  
-      - "${DENODO_DC_CUSTOM_LANG_DIR}/DataCatalogBackend-${DENODO_DC_CUSTOM_LANG}.properties:/denodo/conf/design-studio/DesignStudioBackend.properties"
-      - "${DENODO_DC_CUSTOM_LANG_DIR}/customLang-${DENODO_DC_CUSTOM_LANG}.properties:/opt/denodo/work/data-catalog/customLang.properties"   
-      - ${DENODO_DC_VOLUME}:/opt/denodo/metadata/
-      #- ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
-    ports:
-      - "${DENODO_DC_EXTERNAL_WEB_PORT}:9090"
-    environment:
-      - DENODO_DC_SERVER_HOST=${DENODO_VDP_HOSTNAME}
-      - DENODO_DC_SERVER_NAME=DenodoVDP
-      - DENODO_MERGE_CONF=true
-      - DENODO_DEBUG=true
-      - DENODO_INIT_MAX_TIMEOUT=700
-      #- DENODO_KEYSTORE_LOADER_TYPE=FILE
-      #- DENODO_KEYSTORE_LOADER_LOCATION=/opt/denodo/conf/denodo-key-custom.keystore
-      #- DENODO_KEYSTORE_TYPE=${DENODO_KEYSTORE_TYPE}
-      #- DENODO_KEYSTORE_PASSWORD_VALUE=${DENODO_KEYSTORE_PASSWORD_VALUE}
-      #- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
-    healthcheck:
-      test: ["CMD-SHELL", "curl http://localhost:9090/denodo-data-catalog/Ping || exit 1"]
-      interval: 6s
-      timeout: 700s
-      retries: 35
-      start_period: 5s
-    command: --datacatalog
 
   # Denodo Scheduler server
   denodo-sched:
@@ -158,7 +129,64 @@ services:
     command: --schserver --schindex --schadmin
     tty: true
     stdin_open: true
-   
+  
+  denodo-ai-sdk:
+    container_name: denodo-ai-sdk
+    image: ${DENODO_AI_SDK_VERSION}
+    profiles: ["all","denodo-aisdk","ai"]
+    hostname: ${DENODO_AI_SDK_HOSTNAME}
+    restart: unless-stopped
+    networks:
+      - denodo-lab-net 
+    depends_on:
+      denodo-vdp:
+        condition: service_healthy
+    volumes:
+      - "${DENODO_CHATBOT_CONFIG_FILE}:/opt/ai-sdk/sample_chatbot/chatbot_config.env"
+    ports:
+      - "${DENODO_CHATBOT_EXTERNAL_PORT}:9992"
+      - "${DENODO_AI_SDK_EXTERNAL_PORT}:8008"
+    environment:
+      #- AI_SDK_SSL_CERT: "<path_to_public_cert>"
+      #- AI_SDK_SSL_KEY: "<path_to_private_key>"
+      - AI_SDK_USERNAME=${DENODO_VDP_ADMIN_USER}
+      - AI_SDK_PASSWORD=${DENODO_VDP_ADMIN_PWD}
+      - AI_SDK_VER=${AI_SDK_VER}
+      - VDB_NAMES=${VDB_NAMES}
+      - VECTOR_STORE=${VECTOR_STORE}
+      - DATA_CATALOG_URL=http://vdp:9090/denodo-data-catalog/
+      - DATA_CATALOG_METADATA_USER=${DENODO_VDP_ADMIN_USER}
+      - DATA_CATALOG_METADATA_PWD=${DENODO_VDP_ADMIN_PWD}
+      - CHATBOT_LLM_PROVIDER=${PROVIDER}
+      - CHATBOT_LLM_MODEL=${LLM_MODEL}
+      - CHATBOT_EMBEDDINGS_PROVIDER=${PROVIDER}
+      - CHATBOT_EMBEDDINGS_MODEL=${EMB_MODEL}
+      - CHATBOT_VECTOR_STORE_PROVIDER=${VECTOR_STORE}
+      - CHAT_PROVIDER=${PROVIDER}
+      - CHAT_MODEL=${LLM_MODEL}
+      - SQL_GENERATION_PROVIDER=${PROVIDER}
+      - SQL_GENERATION_MODEL=${LLM_MODEL}
+      - EMBEDDINGS_PROVIDER=${PROVIDER}
+      - EMBEDDINGS_MODEL=${EMB_MODEL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_ORG_ID=${OPENAI_ORG_ID}
+      - OPENAI_PROXY=${OPENAI_PROXY}
+      - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT} 
+      - AZURE_API_VERSION=${AZURE_API_VERSION}
+      - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
+      - AZURE_OPENAI_PROXY=${AZURE_OPENAI_PROXY}
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_PROFILE_NAME=${AWS_PROFILE_NAME}
+      - AWS_ROLE_ARN=${AWS_ROLE_ARN}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+      - NVIDIA_API_KEY=${NVIDIA_API_KEY}
+      - NVIDIA_BASE_URL=${NVIDIA_BASE_URL}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+    command: ["python", "run.py", "api", "--no-logs"]
+      
   # ########################
   # Data Sources
   # ########################
@@ -254,8 +282,6 @@ services:
     restart: always
     networks:
       - denodo-lab-net 
-    volumes:
-      - ${DFS_BUCKET_DIRECTORY}:/data
     environment:
       - MINIO_ROOT_USER=${DFS_ROOT_ADMIN}
       - MINIO_ROOT_PASSWORD=${DFS_ROOT_PWD}
@@ -263,6 +289,22 @@ services:
       - '${DFS_PORT}:9000'
       - '${DFS_CONSOLE_PORT}:9001'
     command: ["server", "/data", "--console-address", ":9001"]
+
+  ds-dfs-mc:
+    container_name: denodocommunity-lab-environment-minio-mc
+    image: ${DFS_MC_VERSION}
+    depends_on:
+      - ds-dfs
+    networks:
+      - denodo-lab-net 
+    volumes:
+      - "${DFS_BUCKET_DIRECTORY}${DFS_BUCKET_NAME}:/tmp"
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add minio http://minio:9000 ${DFS_ROOT_ADMIN} ${DFS_ROOT_PWD};
+      /usr/bin/mc mb minio/${DFS_BUCKET_NAME};
+      /usr/bin/mc cp --recursive /tmp/* minio/${DFS_BUCKET_NAME}/
+      "
 
   # ###################
   # External Services #
@@ -297,18 +339,19 @@ services:
     networks:
       - denodo-lab-net 
     ports:
-      - "${SSO_EXTERNAL_PORT}:8443"
+      - "${SSO_EXTERNAL_PORT}:8080"
     volumes:
-      - ${SSO_CONF_FILE}:/data/denodo-realm.json
+      - ${SSO_CONF_FILE}:/opt/bitnami/keycloak/data/import/denodo-realm.json
     environment:
       KEYCLOAK_USER: ${SSO_USER}
       KEYCLOAK_PASSWORD: ${SSO_PASSWORD}
       DB_VENDOR: postgres
-      DB_ADDR: ${METADATA_DB_HOSTNAME}:${METADATA_DB_PORT}
+      DB_ADDR: ${METADATA_DB_HOSTNAME}
+      DB_PORT: ${METADATA_DB_PORT}
       DB_DATABASE: sso
       DB_USER: ${SSO_USER}
       DB_PASSWORD: ${SSO_PASSWORD}
-      JAVA_OPTS_APPEND: "-Dkeycloak.profile.feature.upload_scripts=enabled"
+      KEYCLOAK_EXTRA_ARGS: --import-realm
       KEYCLOAK_IMPORT: /data/denodo-realm.json
 
   # GIT server
@@ -429,7 +472,7 @@ services:
   denodo-postgres:
     container_name: denodocommunity-lab-environment-metadata
     image: ${METADATA_DB_VERSION}
-    profiles: ["all","ds","denodo","sso","ext"]
+    profiles: ["all","ds","denodo","ai","sso","ext"]
     hostname: ${METADATA_DB_HOSTNAME}
     restart: unless-stopped
     networks:
@@ -457,8 +500,6 @@ volumes:
     driver: local
   postgres-lab-env: 
     driver: local
-  pgvector-lab-env: 
-    driver: local
   mariadb-lab-env: 
     driver: local
   mongodb-lab-env: 
@@ -471,5 +512,5 @@ volumes:
     driver: local
   denodo-vdp-metadata:
     driver: local
-  denodo-dc-metadata:
+  minio-lab-env:
     driver: local
