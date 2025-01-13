@@ -289,13 +289,19 @@ services:
       - '${DFS_PORT}:9000'
       - '${DFS_CONSOLE_PORT}:9001'
     command: ["server", "/data", "--console-address", ":9001"]
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   ds-dfs-mc:
     container_name: denodocommunity-lab-environment-minio-mc
     image: ${DFS_MC_VERSION}
     profiles: ["all","ds-dfs"]
     depends_on:
-      - ds-dfs
+      ds-dfs:
+        condition: service_healthy
     networks:
       - denodo-lab-net 
     volumes:
