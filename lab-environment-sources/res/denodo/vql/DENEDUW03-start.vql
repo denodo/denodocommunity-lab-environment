@@ -1,4 +1,4 @@
-﻿# Generated with Denodo Platform 9.0.0.
+﻿# Generated with Denodo Platform 9.1.1.
 
 ENTER SINGLE USER MODE;
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -6,12 +6,24 @@ ENTER SINGLE USER MODE;
 # #######################################
 # USER CREATION
 # #######################################
+CREATE OR REPLACE USER analyst 'yd4hTGNRJ4R5fA3Uae+DO+w7iM569+e6VjtgTfEURAJfXyiVrBm6purIDn/e5yrLjZgk23j9G0hWqZbG9yz/CN3DUmIBpOrh'  ENCRYPTED SHA512  'Analyst user';
+
 # #######################################
 # ROLE CREATION
 # #######################################
+CREATE OR REPLACE ROLE analyst 'Role granted to analyst users to provide them with customer data related to stock holdings and other stock holding information.';
+
+CREATE OR REPLACE ROLE full_read 'Provides full access to customer data.';
+
 # #######################################
 # TAG CREATION
 # #######################################
+CREATE OR REPLACE TAGS (pii DESCRIPTION = 'This tag is associated with columns or views containing Personal Identifiable Information (PII).', raw DESCRIPTION = 'The views tagged with this tag contain raw, unprocessed data coming directly from underlying systems.', verified DESCRIPTION = 'Views with this tag have been cleaned and reviewed. These views are ready for application access.');
+
+CHOWNS (CHOWN admin TAG pii LASTMODIFICATIONUSER admin, 
+    CHOWN admin TAG raw LASTMODIFICATIONUSER admin, 
+    CHOWN admin TAG verified LASTMODIFICATIONUSER admin);
+
 # #######################################
 # CONFIGURATION PROPERTIES
 # #######################################
@@ -126,7 +138,8 @@ ALTER DATABASE admin
 # #######################################
 # VIEWS of admin
 # #######################################
-# No views in database admin
+CREATE OR REPLACE VIEW ping_query_view AS SELECT 1 FROM dual();
+
 # #######################################
 # ASSOCIATIONS of admin
 # #######################################
@@ -134,11 +147,32 @@ ALTER DATABASE admin
 # #######################################
 # WEBSERVICES of admin
 # #######################################
-# No web services in database admin
+CREATE OR REPLACE REST WEBSERVICE ping_query_view
+    CONNECTION (
+        CHUNKSIZE = 1000
+        CHUNKTIMEOUT = 1000
+        QUERYTIMEOUT = 900000
+        POOLENABLED = true
+        POOLINITSIZE = 0
+        POOLMAXACTIVE = 30
+    )
+    DEFAULTREPRESENTATION = JSON
+    SUPPORTEDREPRESENTATIONS (JSON)
+    RESOURCES (
+        VIEW ping_query_view FIELDS (
+            field1 : 'int'
+        )
+    )
+    OPTIONS ( NULLVALUESASEMPTYXMLELEMENTS = false
+        ALLOW_CORS_ORIGINS (*) DISABLED
+        PROCESS_FUNCTIONS_IN_SELECT_PARAMETER = true ) 
+    OPENAPI2 ( API_VERSION = '1.0.0' ) ;
+
 # #######################################
 # WEBCONTAINER WEB SERVICE DEPLOYMENTS of admin
 # #######################################
-# No deployed web services in database admin
+DEPLOY WEBSERVICE ping_query_view;
+
 # #######################################
 # VIEW STATISTICS of admin
 # #######################################
@@ -160,19 +194,19 @@ CONNECT DATABASE denodo_hol_bank;
 # #######################################
 # FOLDERS of denodo_hol_bank
 # #######################################
-CREATE OR REPLACE FOLDER '/1 - connectivity' ;
+CREATE OR REPLACE FOLDER '/1 - connectivity' DESCRIPTION 'This folder stores the data sources and base views of the project';
 
 CHOWN admin FOLDER '/1 - connectivity';
 
-CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' DESCRIPTION 'This folder stores the data sources of the project' ;
 
 CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
 
-CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' DESCRIPTION 'This folder stores the base views of the project' ;
 
 CHOWN admin FOLDER '/1 - connectivity/2 - base views';
 
-CREATE OR REPLACE FOLDER '/2 - integration' ;
+CREATE OR REPLACE FOLDER '/2 - integration' DESCRIPTION 'The integration views created for combining the different base views are stored in this folder';
 
 CHOWN admin FOLDER '/2 - integration';
 
@@ -188,9 +222,21 @@ CREATE OR REPLACE FOLDER '/2 - integration/3 - derived views' ;
 
 CHOWN admin FOLDER '/2 - integration/3 - derived views';
 
-CREATE OR REPLACE FOLDER '/3 - business entities' ;
+CREATE OR REPLACE FOLDER '/3 - business entities' DESCRIPTION 'The interfaces representing the business entities will be stored at this level. Additional subfolders can be added. The implementation views, since they are not going to be directly accessed by the client application, can remain in the integration level.' ;
 
 CHOWN admin FOLDER '/3 - business entities';
+
+CREATE OR REPLACE FOLDER '/4 - report views' DESCRIPTION 'Interfaces representing the pre-built reports published to final application will be stored in this folder.' ;
+
+CHOWN admin FOLDER '/4 - report views';
+
+CREATE OR REPLACE FOLDER '/5 - data services' DESCRIPTION 'This folder stores data services.' ;
+
+CHOWN admin FOLDER '/5 - data services';
+
+CREATE OR REPLACE FOLDER '/6 - associations' DESCRIPTION 'This folder stores associations.' ;
+
+CHOWN admin FOLDER '/6 - associations';
 
 # #######################################
 # RESOURCES of denodo_hol_bank
@@ -311,6 +357,33 @@ CREATE OR REPLACE WRAPPER JDBC customers
     INDEX 'customers_pkey' OTHER UNIQUE PRIMARY ( 'customer_id' );
 
 CHOWN admin WRAPPER JDBC customers LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER DF ds_security_metrics
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_security_metrics
+    OUTPUTSCHEMA (
+        date = 'Date',
+        security = 'Security',
+        ticker = 'Ticker',
+        mcaprank = 'McapRank',
+        turnrank = 'TurnRank',
+        volatilityrank = 'VolatilityRank',
+        pricerank = 'PriceRank',
+        litvol000_0 = 'LitVol(''000)',
+        ordervol000_0 = 'OrderVol(''000)',
+        hidden = 'Hidden',
+        tradesforhidden = 'TradesForHidden',
+        hiddenvol000_0 = 'HiddenVol(''000)',
+        tradevolforhidden000_0 = 'TradeVolForHidden(''000)',
+        cancels = 'Cancels',
+        littrades = 'LitTrades',
+        oddlots = 'OddLots',
+        tradesforoddlots = 'TradesForOddLots',
+        oddlotvol000_0 = 'OddLotVol(''000)',
+        tradevolforoddlots000_0 = 'TradeVolForOddLots(''000)'
+    );
+
+CHOWN admin WRAPPER DF ds_security_metrics LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE WRAPPER JDBC loan_officers
     FOLDER = '/1 - connectivity/2 - base views'
@@ -460,18 +533,19 @@ CHOWN admin WRAPPER JSON ds_ticker_api LASTMODIFICATIONUSER admin;
 # BASE VIEWS of denodo_hol_bank
 # #######################################
 CREATE OR REPLACE TABLE bv_bank_customers I18N es_euro (
-        customer_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        address:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        city:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        state:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        zip_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+        customer_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the customer'),
+        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'First name of the customer'),
+        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Last name of the customer'),
+        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Email address of the customer'),
+        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Phone number of the customer'),
+        address:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Street address of the customer'),
+        city:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'City where the customer resides'),
+        state:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'State where the customer resides'),
+        zip_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Postal code of the customer''s address')
     )
     FOLDER = '/1 - connectivity/2 - base views'
     CONSTRAINT 'customers_pkey' PRIMARY KEY ( 'customer_id' )
+    TAGS (raw)
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD customers(
@@ -490,19 +564,21 @@ CREATE OR REPLACE TABLE bv_bank_customers I18N es_euro (
         OUTPUTLIST (address, city, customer_id, email, first_name, last_name, phone_number, state, zip_code
         )
         WRAPPER (jdbc customers)
-    );
+    )
+    SMART_THEN_ATSOURCE_THROUGH_VDP;
 
 CHOWN admin VIEW bv_bank_customers LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_bank_loan_officers I18N es_euro (
-        loan_officer_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+        loan_officer_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the loan officer'),
+        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'First name of the loan officer'),
+        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Last name of the loan officer'),
+        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Email address of the loan officer'),
+        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Phone number of the loan officer')
     )
     FOLDER = '/1 - connectivity/2 - base views'
     CONSTRAINT 'loan_officers_pkey' PRIMARY KEY ( 'loan_officer_id' )
+    TAGS (raw)
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD loan_officers(
@@ -517,22 +593,24 @@ CREATE OR REPLACE TABLE bv_bank_loan_officers I18N es_euro (
         OUTPUTLIST (email, first_name, last_name, loan_officer_id, phone_number
         )
         WRAPPER (jdbc loan_officers)
-    );
+    )
+    SMART_THEN_ATSOURCE_THROUGH_VDP;
 
 CHOWN admin VIEW bv_bank_loan_officers LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_bank_loans I18N es_euro (
-        loan_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        customer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        loan_amount:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8'),
-        interest_rate:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8'),
-        term:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        property_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        loan_officer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        status:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+        loan_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the loan'),
+        customer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the customer who took the loan'),
+        loan_amount:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8', description = 'Total amount of the loan'),
+        interest_rate:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8', description = 'Interest rate applied to the loan'),
+        term:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Term duration of the loan in months or years'),
+        property_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the property being financed'),
+        loan_officer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the loan officer handling the loan'),
+        status:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Current status of the loan (e.g., active, closed)')
     )
     FOLDER = '/1 - connectivity/2 - base views'
     CONSTRAINT 'loans_pkey' PRIMARY KEY ( 'loan_id' )
+    TAGS (raw)
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD loans(
@@ -550,18 +628,20 @@ CREATE OR REPLACE TABLE bv_bank_loans I18N es_euro (
         OUTPUTLIST (customer_id, interest_rate, loan_amount, loan_id, loan_officer_id, property_id, status, term
         )
         WRAPPER (jdbc loans)
-    );
+    )
+    SMART_THEN_ATSOURCE_THROUGH_VDP;
 
 CHOWN admin VIEW bv_bank_loans LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_bank_payments I18N es_euro (
-        payment_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        loan_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        payment_amount:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8'),
-        payment_date:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+        payment_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the payment'),
+        loan_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the loan for which the payment is made'),
+        payment_amount:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8', description = 'Amount of the payment made'),
+        payment_date:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Date the payment was made')
     )
     FOLDER = '/1 - connectivity/2 - base views'
     CONSTRAINT 'payments_pkey' PRIMARY KEY ( 'payment_id' )
+    TAGS (raw)
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD payments(
@@ -575,20 +655,22 @@ CREATE OR REPLACE TABLE bv_bank_payments I18N es_euro (
         OUTPUTLIST (loan_id, payment_amount, payment_date, payment_id
         )
         WRAPPER (jdbc payments)
-    );
+    )
+    SMART_THEN_ATSOURCE_THROUGH_VDP;
 
 CHOWN admin VIEW bv_bank_payments LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_bank_properties I18N es_euro (
-        property_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        address:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        city:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        state:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        zip_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        property_value:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8')
+        property_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the property'),
+        address:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Street address of the property'),
+        city:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'City where the property is located'),
+        state:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'State where the property is located'),
+        zip_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Postal code of the property location'),
+        property_value:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8', description = 'Assessed value of the property')
     )
     FOLDER = '/1 - connectivity/2 - base views'
     CONSTRAINT 'properties_pkey' PRIMARY KEY ( 'property_id' )
+    TAGS (raw)
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD properties(
@@ -604,18 +686,20 @@ CREATE OR REPLACE TABLE bv_bank_properties I18N es_euro (
         OUTPUTLIST (address, city, property_id, property_value, state, zip_code
         )
         WRAPPER (jdbc properties)
-    );
+    )
+    SMART_THEN_ATSOURCE_THROUGH_VDP;
 
 CHOWN admin VIEW bv_bank_properties LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_bank_rates I18N es_euro (
-        rate_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        loan_type:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        term:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        interest_rate:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8')
+        rate_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the interest rate'),
+        loan_type:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Type of loan associated with the rate (e.g., mortgage, personal)'),
+        term:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Loan term duration in months or years'),
+        interest_rate:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8', description = 'Interest rate percentage for the loan type')
     )
     FOLDER = '/1 - connectivity/2 - base views'
     CONSTRAINT 'rates_pkey' PRIMARY KEY ( 'rate_id' )
+    TAGS (raw)
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD rates(
@@ -629,19 +713,78 @@ CREATE OR REPLACE TABLE bv_bank_rates I18N es_euro (
         OUTPUTLIST (interest_rate, loan_type, rate_id, term
         )
         WRAPPER (jdbc rates)
-    );
+    )
+    SMART_THEN_ATSOURCE_THROUGH_VDP;
 
 CHOWN admin VIEW bv_bank_rates LASTMODIFICATIONUSER admin;
 
+
+CREATE OR REPLACE TABLE bv_security_metrics I18N es_euro (
+        date:text (description = 'Date of the security metric record'),
+        security:text (description = 'Name or type of the security being evaluated'),
+        ticker:text (description = 'Ticker symbol of the security'),
+        mcaprank:text (description = 'Market capitalization rank of the security'),
+        turnrank:text (description = 'Turnover rank of the security'),
+        volatilityrank:text (description = 'Volatility rank of the security'),
+        pricerank:text (description = 'Price rank of the security'),
+        litvol000_0:text (description = 'Lit volume of the security in thousands'),
+        ordervol000_0:text (description = 'Order volume of the security in thousands'),
+        hidden:text (description = 'Hidden volume of the security'),
+        tradesforhidden:text (description = 'Number of trades for hidden volume'),
+        hiddenvol000_0:text (description = 'Hidden volume of the security in thousands'),
+        tradevolforhidden000_0:text (description = 'Trade volume for hidden in thousands'),
+        cancels:text (description = 'Number of canceled trades for the security'),
+        littrades:text (description = 'Number of lit trades for the security'),
+        oddlots:text (description = 'Number of odd lot trades for the security'),
+        tradesforoddlots:text (description = 'Number of trades for odd lots'),
+        oddlotvol000_0:text (description = 'Odd lot volume of the security in thousands'),
+        tradevolforoddlots000_0:text (description = 'Trade volume for odd lots in thousands')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'ticker' )
+    TAGS (raw)
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_security_metrics(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD date NOS ZERO ()
+             ADD security NOS ZERO ()
+             ADD ticker NOS ZERO ()
+             ADD mcaprank NOS ZERO ()
+             ADD turnrank NOS ZERO ()
+             ADD volatilityrank NOS ZERO ()
+             ADD pricerank NOS ZERO ()
+             ADD litvol000_0 NOS ZERO ()
+             ADD ordervol000_0 NOS ZERO ()
+             ADD hidden NOS ZERO ()
+             ADD tradesforhidden NOS ZERO ()
+             ADD hiddenvol000_0 NOS ZERO ()
+             ADD tradevolforhidden000_0 NOS ZERO ()
+             ADD cancels NOS ZERO ()
+             ADD littrades NOS ZERO ()
+             ADD oddlots NOS ZERO ()
+             ADD tradesforoddlots NOS ZERO ()
+             ADD oddlotvol000_0 NOS ZERO ()
+             ADD tradevolforoddlots000_0 NOS ZERO ()
+        )
+        OUTPUTLIST (cancels, date, hidden, hiddenvol000_0, littrades, litvol000_0, mcaprank, oddlots, oddlotvol000_0, ordervol000_0, pricerank, security, ticker, tradesforhidden, tradesforoddlots, tradevolforhidden000_0, tradevolforoddlots000_0, turnrank, volatilityrank
+        )
+        WRAPPER (df ds_security_metrics)
+    );
+
+CHOWN admin VIEW bv_security_metrics LASTMODIFICATIONUSER admin;
+
 CREATE OR REPLACE TABLE bv_bank_underwriting I18N es_euro (
-        underwriting_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        loan_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        credit_score:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        employment_history:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
-        financial_history:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+        underwriting_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the underwriting record'),
+        loan_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the associated loan'),
+        credit_score:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Credit score of the customer during underwriting'),
+        employment_history:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Employment history of the customer during underwriting'),
+        financial_history:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Financial history of the customer during underwriting')
     )
     FOLDER = '/1 - connectivity/2 - base views'
     CONSTRAINT 'underwriting_pkey' PRIMARY KEY ( 'underwriting_id' )
+    TAGS (raw)
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD underwriting(
@@ -656,16 +799,19 @@ CREATE OR REPLACE TABLE bv_bank_underwriting I18N es_euro (
         OUTPUTLIST (credit_score, employment_history, financial_history, loan_id, underwriting_id
         )
         WRAPPER (jdbc underwriting)
-    );
+    )
+    SMART_THEN_ATSOURCE_THROUGH_VDP;
 
 CHOWN admin VIEW bv_bank_underwriting LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_customer_stock_holdings I18N es_euro (
-        email:text,
-        stock_ticker:text,
-        stocks_purchased:text
+        email:text (description = 'Email address of the customer'),
+        stock_ticker:text (description = 'Ticker symbol of the stock held by the customer'),
+        stocks_purchased:text (description = 'Quantity of stocks purchased by the customer')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'email' )
+    TAGS (raw)
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD ds_customer_stock_holdings(
@@ -683,15 +829,17 @@ CREATE OR REPLACE TABLE bv_customer_stock_holdings I18N es_euro (
 CHOWN admin VIEW bv_customer_stock_holdings LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_ticker_api I18N es_euro (
-        ticker:text,
-        date:text,
-        close:text,
-        volume:text,
-        open:text,
-        high:text,
-        low:text
+        ticker:text (description = 'Ticker symbol of the stock'),
+        date:text (description = 'Date of the stock record'),
+        close:text (description = 'Closing price of the stock on the specified date'),
+        volume:text (description = 'Trading volume of the stock'),
+        open:text (description = 'Opening price of the stock on the specified date'),
+        high:text (description = 'Highest price of the stock on the specified date'),
+        low:text (description = 'Lowest price of the stock on the specified date')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'ticker' )
+    TAGS (raw)
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD ds_ticker_api(
@@ -717,53 +865,88 @@ CHOWN admin VIEW bv_ticker_api LASTMODIFICATIONUSER admin;
 # #######################################
 CREATE OR REPLACE INTERFACE VIEW p_customers (
         customer_id:int,
-        customer_first_name:text,
-        customer_last_name:text,
-        customer_email:text,
-        customer_phone_number:text,
-        customer_address:text,
-        customer_city:text,
-        customer_state:text,
-        customer_zip_code:text
+        first_name:text,
+        last_name:text,
+        email:text,
+        phone_number:text,
+        address:text TAGS (pii),
+        city:text TAGS (pii),
+        state:text TAGS (pii),
+        zip_code:text TAGS (pii)
     )
-    SET IMPLEMENTATION bv_bank_customers(
-        customer_id = customer_id,
-        customer_first_name = first_name,
-        customer_last_name = last_name,
-        customer_email = email,
-        customer_phone_number = phone_number,
-        customer_address = address,
-        customer_city = city,
-        customer_state = state,
-        customer_zip_code = zip_code    
-)
-    FOLDER = '/2 - integration/2 - presentation';
+    SET IMPLEMENTATION bv_bank_customers
+    FOLDER = '/2 - integration/2 - presentation'
+    TAGS (verified);
 
-CREATE OR REPLACE VIEW sd_stock_holdings FOLDER = '/2 - integration/1 - standardized views' AS SELECT bv_customer_stock_holdings.email AS email, bv_customer_stock_holdings.stock_ticker AS stock_ticker, cast('int', bv_customer_stock_holdings.stocks_purchased) AS stocks_purchased FROM bv_customer_stock_holdings;
+CREATE OR REPLACE VIEW sd_customer_stock_holdings FOLDER = '/2 - integration/1 - standardized views'
+    PRIMARY KEY ( 'email' ) (
+    stocks_purchased (description = 'Quantity of stocks purchased by the customer (converted to integer)')
+ )
+ AS SELECT bv_customer_stock_holdings.email AS email, bv_customer_stock_holdings.stock_ticker AS stock_ticker, cast('int', bv_customer_stock_holdings.stocks_purchased) AS stocks_purchased FROM bv_customer_stock_holdings;
 
-CHOWN admin VIEW sd_stock_holdings LASTMODIFICATIONUSER admin;
+CHOWN admin VIEW sd_customer_stock_holdings LASTMODIFICATIONUSER admin;
 
-ALTER VIEW sd_stock_holdings
- LAYOUT (bv_customer_stock_holdings = [20, 20, 200, 200]);
+CREATE OR REPLACE VIEW sd_security_metrics FOLDER = '/2 - integration/1 - standardized views'
+    PRIMARY KEY ( 'ticker' ) (
+    date (description = 'Date of the security metric record (converted to localdate)'),
+    mcaprank (description = 'Market capitalization rank of the security (converted to float)'),
+    turnrank (description = 'Turnover rank of the security (converted to float)'),
+    volatilityrank (description = 'Volatility rank of the security (converted to float)'),
+    pricerank (description = 'Price rank of the security (converted to float)'),
+    ordervolume (description = 'Order volume of the security in thousands (converted to float)')
+ )
+ AS SELECT to_localdate('yyyyMMdd', bv_security_metrics.date) AS date, bv_security_metrics.security AS security, bv_security_metrics.ticker AS ticker, cast('float', bv_security_metrics.mcaprank) AS mcaprank, cast('float', bv_security_metrics.turnrank) AS turnrank, cast('float', bv_security_metrics.volatilityrank) AS volatilityrank, cast('float', bv_security_metrics.pricerank) AS pricerank, cast('float', bv_security_metrics.ordervol000_0) AS ordervolume FROM bv_security_metrics;
 
-CREATE OR REPLACE VIEW sd_ticker_api FOLDER = '/2 - integration/1 - standardized views' AS SELECT bv_ticker_api.ticker AS ticker, to_localdate('MM/dd/yyyy', bv_ticker_api.date) AS date, cast('float', replace(bv_ticker_api.close, '$', '')) AS close, cast('long', replace(bv_ticker_api.volume, ',', '')) AS volume, cast('float', replace(bv_ticker_api.open, '$', '')) AS open, cast('float', replace(bv_ticker_api.high, '$', '')) AS high, cast('float', replace(bv_ticker_api.low, '$', '')) AS low FROM bv_ticker_api;
+CHOWN admin VIEW sd_security_metrics LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE VIEW sd_ticker_api FOLDER = '/2 - integration/1 - standardized views'
+    PRIMARY KEY ( 'ticker' ) (
+    date (description = 'Date of the stock record (converted to localdate)'),
+    close (description = 'Closing price of the stock on the specified date (converted to float)'),
+    volume (description = 'Trading volume of the stock (converted to long)'),
+    open (description = 'Opening price of the stock on the specified date (converted to float)'),
+    high (description = 'Highest price of the stock on the specified date (converted to float)'),
+    low (description = 'Lowest price of the stock on the specified date (converted to float)')
+ )
+ AS SELECT bv_ticker_api.ticker AS ticker, to_localdate('MM/dd/yyyy', bv_ticker_api.date) AS date, cast('float', replace(bv_ticker_api.close, '$', '')) AS close, cast('long', replace(bv_ticker_api.volume, ',', '')) AS volume, cast('float', replace(bv_ticker_api.open, '$', '')) AS open, cast('float', replace(bv_ticker_api.high, '$', '')) AS high, cast('float', replace(bv_ticker_api.low, '$', '')) AS low FROM bv_ticker_api;
 
 CHOWN admin VIEW sd_ticker_api LASTMODIFICATIONUSER admin;
 
-ALTER VIEW sd_ticker_api
- LAYOUT (bv_ticker_api = [20, 20, 200, 200]);
-
 CREATE OR REPLACE INTERFACE VIEW p_customer_stock_holdings (
-        customer_stock_email:text,
+        email:text,
         customer_stock_ticker:text,
-        customer_stock_purchased:int
+        customer_stocks_purchased:int
     )
-    SET IMPLEMENTATION sd_stock_holdings(
-        customer_stock_email = email,
+    SET IMPLEMENTATION sd_customer_stock_holdings(
+        email = email,
         customer_stock_ticker = stock_ticker,
-        customer_stock_purchased = stocks_purchased    
+        customer_stocks_purchased = stocks_purchased    
 )
-    FOLDER = '/2 - integration/2 - presentation';
+    FOLDER = '/2 - integration/2 - presentation'
+    TAGS (verified);
+
+CREATE OR REPLACE INTERFACE VIEW p_security_metrics (
+        ticker_date:localdate,
+        security:text,
+        ticker:text,
+        mcaprank:float,
+        turnrank:float,
+        volatilityrank:float,
+        pricerank:float,
+        ordervolume:float
+    )
+    SET IMPLEMENTATION sd_security_metrics(
+        ticker_date = date,
+        security = security,
+        ticker = ticker,
+        mcaprank = mcaprank,
+        turnrank = turnrank,
+        volatilityrank = volatilityrank,
+        pricerank = pricerank,
+        ordervolume = ordervolume    
+)
+    FOLDER = '/2 - integration/2 - presentation'
+    TAGS (verified);
 
 CREATE OR REPLACE INTERFACE VIEW p_ticker_api (
         ticker:text,
@@ -783,14 +966,34 @@ CREATE OR REPLACE INTERFACE VIEW p_ticker_api (
         ticker_high = high,
         ticker_low = low    
 )
-    FOLDER = '/2 - integration/2 - presentation';
+    FOLDER = '/2 - integration/2 - presentation'
+    TAGS (verified);
 
-CREATE OR REPLACE VIEW iv_customer_assets FOLDER = '/2 - integration/3 - derived views' AS SELECT p_customers.customer_id AS customer_id, p_customers.customer_first_name AS customer_first_name, p_customers.customer_last_name AS customer_last_name, p_customers.customer_email AS customer_email, p_customers.customer_phone_number AS customer_phone_number, p_customers.customer_address AS customer_address, p_customers.customer_city AS customer_city, p_customers.customer_state AS customer_state, p_customers.customer_zip_code AS customer_zip_code, p_customer_stock_holdings.customer_stock_email AS customer_stock_email, p_customer_stock_holdings.customer_stock_ticker AS customer_stock_ticker, p_customer_stock_holdings.customer_stock_purchased AS customer_stock_purchased, p_ticker_api.ticker AS ticker, p_ticker_api.ticker_date AS ticker_date, p_ticker_api.ticker_close AS ticker_close, p_ticker_api.ticker_volume AS ticker_volume, p_ticker_api.ticker_open AS ticker_open, p_ticker_api.ticker_high AS ticker_high, p_ticker_api.ticker_low AS ticker_low FROM (p_customers AS p_customers INNER JOIN p_customer_stock_holdings AS p_customer_stock_holdings ON p_customers.customer_email = p_customer_stock_holdings.customer_stock_email ) INNER JOIN p_ticker_api AS p_ticker_api ON p_customer_stock_holdings.customer_stock_ticker = p_ticker_api.ticker ;
+CREATE OR REPLACE VIEW iv_customer_assets FOLDER = '/2 - integration/3 - derived views' (
+    address TAGS (pii),
+    city TAGS (pii),
+    state TAGS (pii),
+    zip_code TAGS (pii)
+ )
+ AS SELECT p_customers.customer_id AS customer_id, p_customers.first_name AS first_name, p_customers.last_name AS last_name, p_customers.email AS email, p_customers.phone_number AS phone_number, p_customers.address AS address, p_customers.city AS city, p_customers.state AS state, p_customers.zip_code AS zip_code, p_customer_stock_holdings.customer_stock_ticker AS customer_stock_ticker, p_customer_stock_holdings.customer_stocks_purchased AS customer_stocks_purchased, p_ticker_api.ticker_date AS ticker_date, p_ticker_api.ticker_close AS ticker_close, p_ticker_api.ticker_volume AS ticker_volume, p_ticker_api.ticker_open AS ticker_open, p_ticker_api.ticker_high AS ticker_high, p_ticker_api.ticker_low AS ticker_low FROM (p_customers AS p_customers INNER JOIN p_customer_stock_holdings AS p_customer_stock_holdings ON p_customers.email = p_customer_stock_holdings.email ) INNER JOIN p_ticker_api AS p_ticker_api ON p_customer_stock_holdings.customer_stock_ticker = p_ticker_api.ticker ;
 
 ALTER VIEW iv_customer_assets
- LAYOUT (p_customers = [145, 84, 200, 200], p_customer_stock_holdings = [391, 79, 200, 200], p_ticker_api = [668, 165, 200, 200]);
+ LAYOUT (p_customers = [20, 20, 200, 200], p_customer_stock_holdings = [363, 48, 200, 200], p_ticker_api = [913, 255, 200, 200]);
 
 CHOWN admin VIEW iv_customer_assets LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE VIEW iv_customer_sec_risks_unified FOLDER = '/2 - integration/3 - derived views' (
+    address TAGS (pii),
+    city TAGS (pii),
+    state TAGS (pii),
+    zip_code TAGS (pii)
+ )
+ AS SELECT p_customers.customer_id AS customer_id, p_customers.first_name AS first_name, p_customers.last_name AS last_name, p_customers.email AS email, p_customers.phone_number AS phone_number, p_customers.address AS address, p_customers.city AS city, p_customers.state AS state, p_customers.zip_code AS zip_code, p_customer_stock_holdings.customer_stock_ticker AS stock_ticker, p_customer_stock_holdings.customer_stocks_purchased AS stocks_purchased, p_security_metrics.ticker_date AS security_metric_date, p_security_metrics.security AS security, p_security_metrics.ticker AS ticker, p_security_metrics.mcaprank AS mcaprank, p_security_metrics.turnrank AS turnrank, p_security_metrics.volatilityrank AS volatilityrank, p_security_metrics.pricerank AS pricerank, p_security_metrics.ordervolume AS ordervolume, p_ticker_api.ticker_date AS ticker_date, p_ticker_api.ticker_close AS ticker_close, p_ticker_api.ticker_volume AS ticker_volume, p_ticker_api.ticker_open AS ticker_open, p_ticker_api.ticker_high AS ticker_high, p_ticker_api.ticker_low AS ticker_low, (customer_stocks_purchased*ticker_close) AS assets_value FROM ((p_customers AS p_customers INNER JOIN p_customer_stock_holdings AS p_customer_stock_holdings ON p_customers.email = p_customer_stock_holdings.email ) INNER JOIN p_security_metrics AS p_security_metrics ON p_customer_stock_holdings.customer_stock_ticker = p_security_metrics.ticker ) INNER JOIN p_ticker_api AS p_ticker_api ON p_customer_stock_holdings.customer_stock_ticker = p_ticker_api.ticker ;
+
+ALTER VIEW iv_customer_sec_risks_unified
+ LAYOUT (p_customers = [192, 168, 200, 200], p_customer_stock_holdings = [639, 215, 200, 200], p_security_metrics = [1021, 107, 200, 200], p_ticker_api = [995, 321, 200, 200]);
+
+CHOWN admin VIEW iv_customer_sec_risks_unified LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE INTERFACE VIEW customer_assets (
         customer_id:int,
@@ -798,12 +1001,12 @@ CREATE OR REPLACE INTERFACE VIEW customer_assets (
         last_name:text,
         email:text,
         phone_number:text,
-        address:text,
-        city:text,
-        state:text,
-        zip_code:text,
+        address:text TAGS (pii),
+        city:text TAGS (pii),
+        state:text TAGS (pii),
+        zip_code:text TAGS (pii),
         customer_stock_ticker:text,
-        customer_stock_purchased:int,
+        customer_stocks_purchased:int,
         ticker_date:localdate,
         ticker_close:float,
         ticker_volume:long,
@@ -811,31 +1014,131 @@ CREATE OR REPLACE INTERFACE VIEW customer_assets (
         ticker_high:float,
         ticker_low:float
     )
-    SET IMPLEMENTATION iv_customer_assets(
+    SET IMPLEMENTATION iv_customer_assets
+    FOLDER = '/3 - business entities'
+    TAGS (verified);
+
+CREATE OR REPLACE INTERFACE VIEW customer_sec_risks_unified (
+        customer_id:int,
+        first_name:text,
+        last_name:text,
+        email:text,
+        phone_number:text,
+        address:text TAGS (pii),
+        city:text TAGS (pii),
+        state:text TAGS (pii),
+        zip_code:text TAGS (pii),
+        customer_stock_ticker:text,
+        customer_stocks_purchased:int,
+        customer_assets_value:float,
+        ticker_date:localdate,
+        ticker_close:float,
+        ticker_volume:long,
+        ticker_mcaprank:float,
+        ticker_turnrank:float,
+        ticker_volatility_rank:float,
+        ticker_price_rank:float
+    )
+    SET IMPLEMENTATION iv_customer_sec_risks_unified(
         customer_id = customer_id,
-        first_name = customer_first_name,
-        last_name = customer_last_name,
-        email = customer_email,
-        phone_number = customer_phone_number,
-        address = customer_address,
-        city = customer_city,
-        state = customer_state,
-        zip_code = customer_zip_code,
-        customer_stock_ticker = customer_stock_ticker,
-        customer_stock_purchased = customer_stock_purchased,
+        first_name = first_name,
+        last_name = last_name,
+        email = email,
+        phone_number = phone_number,
+        address = address,
+        city = city,
+        state = state,
+        zip_code = zip_code,
+        customer_stock_ticker = stock_ticker,
+        customer_stocks_purchased = stocks_purchased,
+        customer_assets_value = assets_value,
         ticker_date = ticker_date,
         ticker_close = ticker_close,
         ticker_volume = ticker_volume,
-        ticker_open = ticker_open,
-        ticker_high = ticker_high,
-        ticker_low = ticker_low    
+        ticker_mcaprank = mcaprank,
+        ticker_turnrank = turnrank,
+        ticker_volatility_rank = volatilityrank,
+        ticker_price_rank = pricerank    
 )
-    FOLDER = '/3 - business entities';
+    FOLDER = '/3 - business entities'
+    TAGS (verified);
 
 # #######################################
 # ASSOCIATIONS of denodo_hol_bank
 # #######################################
-# No associations in database denodo_hol_bank
+CREATE OR REPLACE ASSOCIATION customers_customer_stock_holdings REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_customer_stock_holdings bv_bank_customers PRINCIPAL (1)
+    ENDPOINT bv_customers bv_customer_stock_holdings (0,*)
+    ADD MAPPING email=email;
+
+ALTER ASSOCIATION customers_customer_stock_holdings
+ LAYOUT (bv_customers = [10, 30, 200, 200], bv_customer_stock_holdings = [334, 36, 200, 200]);
+
+CHOWN admin ASSOCIATION customers_customer_stock_holdings LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION customers_loans REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT loans bv_bank_customers PRINCIPAL (0,1)
+    ENDPOINT customers bv_bank_loans (0,*)
+    ADD MAPPING customer_id=customer_id;
+
+CHOWN admin ASSOCIATION customers_loans LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION loanofficers_loans REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT loans bv_bank_loan_officers PRINCIPAL (0,1)
+    ENDPOINT loanofficers bv_bank_loans (0,*)
+    ADD MAPPING loan_officer_id=loan_officer_id;
+
+CHOWN admin ASSOCIATION loanofficers_loans LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION loans_payments REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT payments bv_bank_loans PRINCIPAL (0,1)
+    ENDPOINT loans bv_bank_payments (0,*)
+    ADD MAPPING loan_id=loan_id;
+
+CHOWN admin ASSOCIATION loans_payments LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION loans_underwriting REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT underwriting bv_bank_loans PRINCIPAL (0,1)
+    ENDPOINT loans bv_bank_underwriting (0,*)
+    ADD MAPPING loan_id=loan_id;
+
+CHOWN admin ASSOCIATION loans_underwriting LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION properties_loans REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT loans bv_bank_properties PRINCIPAL (0,1)
+    ENDPOINT properties bv_bank_loans (0,*)
+    ADD MAPPING property_id=property_id;
+
+CHOWN admin ASSOCIATION properties_loans LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION security_metrics_customer_stock_holdings REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_customer_stock_holdings bv_security_metrics PRINCIPAL (1)
+    ENDPOINT bv_security_metrics bv_customer_stock_holdings (0,*)
+    ADD MAPPING ticker=stock_ticker;
+
+ALTER ASSOCIATION security_metrics_customer_stock_holdings
+ LAYOUT (bv_security_metrics = [10, 10, 200, 200], bv_customer_stock_holdings = [384, 36, 200, 200]);
+
+CHOWN admin ASSOCIATION security_metrics_customer_stock_holdings LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE ASSOCIATION ticker_api_customer_stock_holdings REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_customer_stock_holdings bv_ticker_api PRINCIPAL (1)
+    ENDPOINT bv_ticker_api bv_customer_stock_holdings (0,*)
+    ADD MAPPING ticker=stock_ticker;
+
+ALTER ASSOCIATION ticker_api_customer_stock_holdings
+ LAYOUT (bv_ticker_api = [10, 10, 200, 200], bv_customer_stock_holdings = [486, 48, 200, 200]);
+
+CHOWN admin ASSOCIATION ticker_api_customer_stock_holdings LASTMODIFICATIONUSER admin;
+
 # #######################################
 # WEBSERVICES of denodo_hol_bank
 # #######################################
@@ -847,7 +1150,226 @@ CREATE OR REPLACE INTERFACE VIEW customer_assets (
 # #######################################
 # VIEW STATISTICS of denodo_hol_bank
 # #######################################
-# No statistics in database denodo_hol_bank
+CREATE OR REPLACE VIEWSTATSUMMARY bv_customer_stock_holdings (
+    SET ENABLED = true
+    SET NUMOFROWS = 50
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (stocks_purchased,2.0200000000000005,'95','10',19,0),
+      (email,24.799999999999997,'zachary.evans@example.com','a.person@example.com',50,0),
+      (stock_ticker,4.0,'NVDA','AMZN',4,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_bank_customers (
+    SET ENABLED = true
+    SET NUMOFROWS = 50
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (customer_id,4.0,50,1,50,0),
+      (last_name,5.76,'Young','Adams',48,0),
+      (city,8.34,'Uptown','Anytown',11,0),
+      (zip_code,5.0,'90123','01234',10,0),
+      (first_name,6.08,'Zachary','A B',47,0),
+      (state,2.0,'WA','CA',10,0),
+      (email,24.8,'zachary.evans@example.com','alexis.ward@example.com',50,0),
+      (phone_number,12.0,'555-901-2345','555-012-3456',10,0),
+      (address,11.58,'999 Walnut St','101 Cedar St',42,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_bank_loan_officers (
+    SET ENABLED = true
+    SET NUMOFROWS = 24
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (phone_number,12.0,'555-901-2345','555-012-3456',10,0),
+      (email,25.041666666666668,'victor.ortiz@example.com','anna.rivera@example.com',24,0),
+      (last_name,6.333333333333333,'Williams','Brown',23,0),
+      (first_name,5.708333333333333,'Victor','Anna',24,0),
+      (loan_officer_id,4.0,24,1,24,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_bank_loans (
+    SET ENABLED = true
+    SET NUMOFROWS = 23
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (property_id,4.0,23,1,23,0),
+      (customer_id,4.0,23,1,23,0),
+      (status,7.608695652173913,'rejected','approved',3,0),
+      (loan_id,4.0,23,1,23,0),
+      (term,4.0,30,10,5,0),
+      (loan_officer_id,4.0,23,1,23,0),
+      (loan_amount,8.0,400000.0,200000.0,9,0),
+      (interest_rate,8.0,4.5,3.5,5,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_bank_payments (
+    SET ENABLED = true
+    SET NUMOFROWS = 23
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (payment_date,10.0,'2025-11-01','2024-01-01',23,0),
+      (loan_id,4.0,23,1,23,0),
+      (payment_id,4.0,23,1,23,0),
+      (payment_amount,8.0,3700.0,1000.0,23,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_bank_properties (
+    SET ENABLED = true
+    SET NUMOFROWS = 23
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (property_value,8.0,350000.0,280000.0,8,0),
+      (address,11.695652173913043,'999 Walnut St','101 Cedar St',23,0),
+      (zip_code,5.0,'90123','01234',10,0),
+      (state,2.0,'WA','CA',10,0),
+      (property_id,4.0,23,1,23,0),
+      (city,8.434782608695652,'Uptown','Anytown',11,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_bank_rates (
+    SET ENABLED = true
+    SET NUMOFROWS = 5
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (term,4.0,30,10,5,0),
+      (loan_type,5.0,'Fixed','Fixed',1,0),
+      (interest_rate,8.0,4.5,3.5,5,0),
+      (rate_id,4.0,5,1,5,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_security_metrics (
+    SET ENABLED = true
+    SET NUMOFROWS = 7338
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (pricerank,3.054238212046877,'9.0','1.0',10,0),
+      (security,4.085854456255123,'Stock','ETF',2,0),
+      (littrades,4.853229762878182,'9998.0','0.0',3182,0),
+      (hidden,4.462932679204157,'999.0','0.0',2255,0),
+      (tradevolforhidden000_0,10.361542654674285,'999.039','0.0',6534,0),
+      (ticker,3.7210411556282357,'ZZZ','A',7338,0),
+      (cancels,6.803352412101369,'9990.0','100.0',6903,0),
+      (hiddenvol000_0,9.16298718997001,'99.695','0.0',5664,0),
+      (turnrank,3.054374488961568,'9.0','1.0',10,0),
+      (date,8.0,'20240328','20240328',1,0),
+      (oddlotvol000_0,9.829790133551388,'990.88','0.0',5608,0),
+      (litvol000_0,10.89111474516212,'997.848','0.0',6412,0),
+      (tradevolforoddlots000_0,10.298582720087264,'999.9300000000001','0.0',6526,0),
+      (ordervol000_0,12.665985282093164,'9998.091999999999','10.218',7335,0),
+      (mcaprank,3.054374488961573,'9.0','1.0',10,0),
+      (oddlots,4.760697737803211,'9991.0','0.0',3010,0),
+      (volatilityrank,3.0543744889615714,'9.0','1.0',10,0),
+      (tradesforoddlots,4.9949577541564265,'9987.0','0.0',3405,0),
+      (tradesforhidden,4.99959116925593,'998.0','0.0',3388,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_ticker_api (
+    SET ENABLED = true
+    SET NUMOFROWS = 4
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (ticker,4.0,'NVDA','AMZN',4,0),
+      (low,7.0,'$89.193','$151.33',4,0),
+      (open,6.75,'$90.00','$152.00',4,0),
+      (volume,10.25,'435,212,300','21,105,630',4,0),
+      (high,6.75,'$91.30','$152.67',4,0),
+      (date,10.0,'03/28/2024','03/28/2024',1,0),
+      (close,7.0,'$90.356','$152.26',4,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY bv_bank_underwriting (
+    SET ENABLED = true
+    SET NUMOFROWS = 23
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (employment_history,6.0,'Varied','Stable',2,0),
+      (credit_score,4.0,750,430,11,0),
+      (financial_history,5.478260869565218,'Good','Bad',4,0),
+      (underwriting_id,4.0,23,1,23,0),
+      (loan_id,4.0,23,1,23,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY sd_customer_stock_holdings (
+    SET ENABLED = true
+    SET NUMOFROWS = 50
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (stocks_purchased,4.0,100,10,19,0),
+      (stock_ticker,4.0,'NVDA','AMZN',4,0),
+      (email,24.799999999999997,'zachary.evans@example.com','a.person@example.com',50,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY sd_security_metrics (
+    SET ENABLED = true
+    SET NUMOFROWS = 7338
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (volatilityrank,4.0,10.0,1.0,10,0),
+      (ticker,3.7210411556282357,'ZZZ','A',7338,0),
+      (ordervolume,4.0,1.8954806E7,2.858,7334,0),
+      (security,4.085854456255123,'Stock','ETF',2,0),
+      (pricerank,4.0,10.0,1.0,10,0),
+      (turnrank,4.0,10.0,1.0,10,0),
+      (mcaprank,4.0,10.0,1.0,10,0),
+      (date,186.0,'2024-03-28','2024-03-28',1,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY sd_ticker_api (
+    SET ENABLED = true
+    SET NUMOFROWS = 4
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (low,4.0,419.12,89.193,4,0),
+      (ticker,4.0,'NVDA','AMZN',4,0),
+      (volume,8.0,435212300,21105630,4,0),
+      (open,4.0,420.96,90.0,4,0),
+      (high,4.0,421.87,91.3,4,0),
+      (date,186.0,'2024-03-28','2024-03-28',1,0),
+      (close,4.0,420.72,90.356,4,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY iv_customer_assets (
+    SET ENABLED = true
+    SET NUMOFROWS = 50
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (phone_number,12.0,'555-901-2345','555-012-3456',10,0),
+      (state,2.0,'WA','CA',10,0),
+      (zip_code,5.0,'90123','01234',10,0),
+      (last_name,5.760000000000002,'Young','Adams',48,0),
+      (city,8.34,'Uptown','Anytown',11,0),
+      (email,24.8,'zachary.evans@example.com','a.person@example.com',50,0),
+      (address,11.579999999999995,'999 Walnut St','101 Cedar St',42,0),
+      (customer_stocks_purchased,4.0,100,10,19,0),
+      (first_name,6.080000000000001,'Zachary','A B',47,0),
+      (ticker_volume,8.0,435212300,21105630,4,0),
+      (ticker_close,4.0,420.72,90.356,4,0),
+      (customer_stock_ticker,4.0,'NVDA','AMZN',4,0),
+      (ticker_low,4.0,419.12,89.193,4,0),
+      (customer_id,4.0,50,1,50,0),
+      (ticker_high,4.0,421.87,91.3,4,0),
+      (ticker_open,4.0,420.96,90.0,4,0),
+      (ticker_date,186.0,'2024-03-28','2024-03-28',1,0)
+);
+
+CREATE OR REPLACE VIEWSTATSUMMARY iv_customer_sec_risks_unified (
+    SET ENABLED = true
+    SET NUMOFROWS = 50
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (volatilityrank,4.0,5.0,1.0,3,0),
+      (pricerank,4.0,10.0,10.0,1,0),
+      (ordervolume,4.0,428476.3,210398.62,4,0),
+      (zip_code,5.0,'90123','01234',10,0),
+      (city,8.34,'Uptown','Anytown',11,0),
+      (state,2.0,'WA','CA',10,0),
+      (security,5.0,'Stock','Stock',1,0),
+      (ticker,4.0,'NVDA','AMZN',4,0),
+      (stock_ticker,4.0,'NVDA','AMZN',4,0),
+      (address,11.579999999999995,'999 Walnut St','101 Cedar St',42,0),
+      (first_name,6.080000000000001,'Zachary','A B',47,0),
+      (stocks_purchased,4.0,100,10,19,0),
+      (email,24.8,'zachary.evans@example.com','a.person@example.com',50,0),
+      (last_name,5.760000000000002,'Young','Adams',48,0),
+      (customer_id,4.0,50,1,50,0),
+      (phone_number,12.0,'555-901-2345','555-012-3456',10,0),
+      (ticker_high,4.0,421.87,91.3,4,0),
+      (turnrank,4.0,9.0,3.0,2,0),
+      (mcaprank,4.0,10.0,10.0,1,0),
+      (ticker_open,4.0,420.96,90.0,4,0),
+      (ticker_date,186.0,'2024-03-28','2024-03-28',1,0),
+      (ticker_close,4.0,420.72,90.356,4,0),
+      (assets_value,4.0,35761.2,1522.6,42,0),
+      (ticker_volume,8.0,435212300,21105630,4,0),
+      (security_metric_date,186.0,'2024-03-28','2024-03-28',1,0),
+      (ticker_low,4.0,419.12,89.193,4,0)
+);
 
 # #######################################
 # Closing connection with database denodo_hol_bank
@@ -877,6 +1399,14 @@ CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
 CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
 
 CHOWN admin FOLDER '/1 - connectivity/2 - base views';
+
+CREATE OR REPLACE FOLDER '/2 - integration' ;
+
+CHOWN admin FOLDER '/2 - integration';
+
+CREATE OR REPLACE FOLDER '/3 - business entities' ;
+
+CHOWN admin FOLDER '/3 - business entities';
 
 # #######################################
 # RESOURCES of denodo_hol_services
@@ -919,6 +1449,139 @@ ALTER DATABASE denodo_hol_services
   CHARSET DEFAULT;
 
 # #######################################
+# WRAPPERS of services
+# #######################################
+CREATE OR REPLACE WRAPPER DF ds_minio_service_interactions
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_s3_service_interactions
+    OUTPUTSCHEMA (
+        interaction_id = 'interaction_id',
+        timestamp = 'timestamp',
+        persona = 'persona',
+        email = 'email',
+        message_0 = '"message"'
+    );
+
+CHOWN admin WRAPPER DF ds_minio_service_interactions LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER DF ds_service_interactions
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_service_interactions
+    OUTPUTSCHEMA (
+        interaction_id = 'interaction_id',
+        timestamp = 'timestamp',
+        persona = 'persona',
+        email = 'email',
+        message = 'message'
+    );
+
+CHOWN admin WRAPPER DF ds_service_interactions LASTMODIFICATIONUSER admin;
+
+# #######################################
+# STORED PROCEDURES of services
+# #######################################
+# No stored procedures in database services
+# #######################################
+# TYPES of services
+# #######################################
+# No types in database services
+# #######################################
+# MAPS of services
+# #######################################
+# No maps in database services
+# #######################################
+# BASE VIEWS of services
+# #######################################
+CREATE OR REPLACE TABLE bv_s3_service_interactions I18N es_euro (
+        interaction_id:text,
+        timestamp:text,
+        persona:text,
+        email:text,
+        message_0:text
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_minio_service_interactions(
+        I18N es_euro
+        CONSTRAINTS (
+             ADD interaction_id NOS ZERO ()
+             ADD timestamp NOS ZERO ()
+             ADD persona NOS ZERO ()
+             ADD email NOS ZERO ()
+             ADD message_0 NOS ZERO ()
+        )
+        OUTPUTLIST (email, interaction_id, message_0, persona, timestamp
+        )
+        WRAPPER (df ds_minio_service_interactions)
+    );
+
+CHOWN admin VIEW bv_s3_service_interactions LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_service_interactions I18N au_cst (
+        interaction_id:text,
+        timestamp:text,
+        persona:text,
+        email:text,
+        message:text
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_service_interactions(
+        I18N au_cst
+        CONSTRAINTS (
+             ADD interaction_id NOS ZERO ()
+             ADD timestamp NOS ZERO ()
+             ADD persona NOS ZERO ()
+             ADD email NOS ZERO ()
+             ADD message NOS ZERO ()
+        )
+        OUTPUTLIST (email, interaction_id, message, persona, timestamp
+        )
+        WRAPPER (df ds_service_interactions)
+    );
+
+CHOWN admin VIEW bv_service_interactions LASTMODIFICATIONUSER admin;
+
+# #######################################
+# VIEWS of services
+# #######################################
+CREATE OR REPLACE VIEW iv_service_interactions FOLDER = '/2 - integration'
+    PRIMARY KEY ( 'interaction_id' ) AS SELECT interaction_id AS interaction_id, timestamp AS timestamp, persona AS persona, email AS email, message AS message FROM (SELECT interaction_id, timestamp, persona, email, message FROM bv_service_interactions SQL UNION ALL SELECT interaction_id, timestamp, persona, email, message_0 FROM bv_s3_service_interactions);
+
+ALTER VIEW iv_service_interactions
+ LAYOUT (bv_service_interactions = [20, 20, 200, 200], bv_s3_service_interactions = [420, 250, 200, 200]);
+
+CHOWN admin VIEW iv_service_interactions LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE INTERFACE VIEW service_interactions (
+        interaction_id:text,
+        timestamp:text,
+        persona:text,
+        email:text,
+        message:text
+    )
+    SET IMPLEMENTATION iv_service_interactions
+    FOLDER = '/3 - business entities';
+
+# #######################################
+# ASSOCIATIONS of services
+# #######################################
+# No associations in database services
+# #######################################
+# WEBSERVICES of services
+# #######################################
+# No web services in database services
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS of services
+# #######################################
+# No deployed web services in database services
+# #######################################
+# VIEW STATISTICS of services
+# #######################################
+# No statistics in database services
+# #######################################
 # Closing connection with database denodo_hol_services
 # #######################################
 CLOSE;
@@ -931,9 +1594,44 @@ CONNECT DATABASE ADMIN;
 # #######################################
 # USER PRIVILEGES
 # #######################################
+ALTER USER analyst
+GRANT ROLE allusers,data_catalog_data_preparation,analyst;
+
+ALTER USER denodo
+GRANT ROLE allusers,full_read,data_catalog_data_preparation,manage_policies,data_catalog_editor;
+
 # #######################################
 # ROLE PRIVILEGES
 # #######################################
+ALTER ROLE analyst
+GRANT CONNECT ON admin
+GRANT CONNECT ON denodo_hol_bank
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_customer_stock_holdings
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_customers
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_loan_officers
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_loans
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_payments
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_properties
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_rates
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_security_metrics
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_ticker_api
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_underwriting
+GRANT METADATA, EXECUTE ON denodo_hol_bank.customer_assets
+GRANT METADATA, EXECUTE ON denodo_hol_bank.customer_sec_risks_unified
+GRANT METADATA, EXECUTE ON denodo_hol_bank.iv_customer_assets
+GRANT METADATA, EXECUTE ON denodo_hol_bank.iv_customer_sec_risks_unified
+GRANT METADATA, EXECUTE ON denodo_hol_bank.p_customer_stock_holdings
+GRANT METADATA, EXECUTE ON denodo_hol_bank.p_customers
+GRANT METADATA, EXECUTE ON denodo_hol_bank.p_security_metrics
+GRANT METADATA, EXECUTE ON denodo_hol_bank.p_ticker_api
+GRANT METADATA, EXECUTE ON denodo_hol_bank.sd_customer_stock_holdings
+GRANT METADATA, EXECUTE ON denodo_hol_bank.sd_security_metrics
+GRANT METADATA, EXECUTE ON denodo_hol_bank.sd_ticker_api;
+
+ALTER ROLE full_read
+GRANT CONNECT ON admin
+GRANT CONNECT, CREATE, CREATE_DATA_SOURCE, CREATE_DATA_SERVICE, CREATE_VIEW, CREATE_FOLDER, METADATA, EXECUTE ON denodo_hol_bank;
+
 # #######################################
 # RESOURCE MANAGER PLANS
 # #######################################
@@ -948,6 +1646,20 @@ CLOSE;
 # #######################################
 # POLICY CREATION
 # #######################################
+CREATE OR REPLACE GLOBAL_SECURITY_POLICY block_pii
+    ENABLED = TRUE
+    AUDIENCE (
+        ANY ROLES (analyst)
+    )
+    ELEMENTS (
+        ALL VIEWS
+    )
+    RESTRICTION (
+        FILTER = ''
+        MASKING ANY (pii) WITH (HIDE) (numbers WITH DEFAULT, datetimes WITH DEFAULT, texts WITH DEFAULT) 
+    );
+
+CHOWN admin GLOBAL_SECURITY_POLICY block_pii LASTMODIFICATIONUSER admin;
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EXIT SINGLE USER MODE;
