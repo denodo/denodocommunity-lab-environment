@@ -293,6 +293,7 @@ services:
   ds-dfs-mc:
     container_name: denodocommunity-lab-environment-minio-mc
     image: ${DFS_MC_VERSION}
+    profiles: ["all","ds-dfs"]
     depends_on:
       - ds-dfs
     networks:
