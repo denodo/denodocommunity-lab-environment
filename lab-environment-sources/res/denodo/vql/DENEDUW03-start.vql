@@ -1603,7 +1603,7 @@ ALTER USER analyst
 GRANT ROLE allusers,data_catalog_data_preparation,analyst;
 
 ALTER USER denodo
-GRANT ROLE allusers,full_read,data_catalog_data_preparation,manage_policies,data_catalog_editor;
+GRANT ROLE allusers,full_read,data_catalog_data_preparation,manage_policies,data_catalog_editor,manage_tags,assign_tags,use_large_language_model;
 
 # #######################################
 # ROLE PRIVILEGES

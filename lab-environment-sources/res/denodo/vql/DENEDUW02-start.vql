@@ -6,9 +6,9 @@ ENTER SINGLE USER MODE;
 # #######################################
 # USER CREATION
 # #######################################
-CREATE OR REPLACE USER denodo 'TabGFRTVX5QZAs4kw+BqWweQ6miqAlWWJe/bUtUuplLOT8syvZv3lZAYmyYpZkbz/weKJYt6Jda9MuZzWhMh1Iwu+ypPV7If'  ENCRYPTED SHA512  '';
+CREATE OR REPLACE USER denodo 'TabGFRTVX5QZAs4kw+BqWweQ6miqAlWWJe/bUtUuplLOT8syvZv3lZAYmyYpZkbz/weKJYt6Jda9MuZzWhMh1Iwu+ypPV7If'  ENCRYPTED SHA512  'User created for the Denodo hands-on labs';
 
-CREATE OR REPLACE USER reader 'PWbmbzKKfmoSXhtgK8x9/xdlny6XsQnYCXREfPf/oBTSSHVw+EzyYuTgqVpBcIxgZ5hkxIbL3xfT+olWutPD9+jUdq2wV1+g'  ENCRYPTED SHA512  '';
+CREATE OR REPLACE USER reader 'PWbmbzKKfmoSXhtgK8x9/xdlny6XsQnYCXREfPf/oBTSSHVw+EzyYuTgqVpBcIxgZ5hkxIbL3xfT+olWutPD9+jUdq2wV1+g'  ENCRYPTED SHA512  'Read-only user created for the Denodo hands-on labs';
 
 # #######################################
 # ROLE CREATION

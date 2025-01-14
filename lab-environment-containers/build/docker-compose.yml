@@ -57,11 +57,11 @@ services:
       #- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
     healthcheck:
       test: ["CMD", "/opt/denodo/bin/ping.sh", "-r", "-t", "5000", "//localhost:9999/admin"]
-      interval: 20s
+      interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 180s
-      start_interval: 180s
+      start_period: 360s
+      start_interval: 360s
     command: ["--vqlserver", "--datacatalog"]
     tty: true
     stdin_open: true
