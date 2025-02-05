@@ -611,7 +611,7 @@ CREATE OR REPLACE TABLE bv_bank_loans I18N es_euro (
         term:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Term duration of the loan in months or years'),
         property_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the property being financed'),
         loan_officer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the loan officer handling the loan'),
-        status:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Current status of the loan (e.g., active, closed)')
+        status:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Current status of the loan (e.g., approved, rejected, pending)')
     )
     FOLDER = '/1 - connectivity/2 - base views'
     CONSTRAINT 'loans_pkey' PRIMARY KEY ( 'loan_id' )
