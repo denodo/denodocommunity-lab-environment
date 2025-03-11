@@ -42,8 +42,8 @@ $ docker compose --profile ds up
 | ----------- | ----------- | 
 | ds | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, Tomcat, Apache HTTP, MongoDB, and LDAP. And this **Application**: GraphQL client. |
 | denodo | Profile for launching these **Denodo servers and tools**: Virtual DataPort server, Design Studio, Data Catalog, and a PostgreSQL* database to be used as external metadata and cache database. |
-| denodo-vdp | Profile for launching **Denodo Virtual DataPort**: it includes a Virtual DataPort server, and a Design Studio. |
 | denodo-sched | Profile for launching **Denodo Scheduler**: it includes a Denodo Scheduler server, a Denodo Index server, and the Scheduler Web Administration Tool. |
+| ai | Profile for launching **Denodo AI SDK**: it includes the Denodo AI SDK\*\*, a Virtual DataPort server, Data Catalog, Design Studio and a PostgreSQL\* database to be used as cache database. |
 | sso | Profile for launching a **Keycloak** server that can be used to test Single Sign-On in Denodo (it includes an LDAP server and a PostgreSQL* used as an external metadata database). |
 | notebook | Profile for launching a **JupyterLab** notebook that can be used to test a Python client for connecting to Denodo. |
 | git | Profile for launching a **GitLab** server that can be used testing Version Control System with Denodo. |
@@ -53,6 +53,8 @@ $ docker compose --profile ds up
 | all | Profile for launching all the available containers (**We strongly recommend not to use this profile**). |
 
 \* The associated container for this PostgreSQL database is shared among all the Denodo servers and Keycloak.
+
+\*\* You need to configure your LLM Infrastructure in the .env file to use it 
 
 ## Running containers of different profiles at the same time
 

@@ -472,7 +472,7 @@ services:
     restart: unless-stopped
     volumes:
       - ${REVERSE_PROXY_CONF}:/etc/nginx/nginx.conf:ro  
-      #- ${REVERSE_PROXY_SSL_PUBLIC_CERT}:/ssl/cert.pem
+      #- ${REVERSE_PROXY_SSL_PUBLIC_CERT}:/ssl/cert.crt
       #- ${REVERSE_PROXY_SSL_PRIVATE_KEY}:/ssl/cert.key
     ports:
       - "${REVERSE_PROXY_EXTERNAL_PORT}:80"
