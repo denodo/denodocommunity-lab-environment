@@ -2545,11 +2545,11 @@ CHOWN admin WEBSERVICE store_by_total_sales_ws LASTMODIFICATIONUSER admin;
 # #######################################
 UNDEPLOY IF EXISTS WEBSERVICE store_by_total_sales_ws;
 
-DEPLOY WEBSERVICE store_by_total_sales_ws LOGIN = 'admin' PASSWORD = 'admin';
+DEPLOY WEBSERVICE store_by_total_sales_ws LOGIN = 'denodo' PASSWORD = 'denodo';
 
 UNDEPLOY IF EXISTS WEBSERVICE customer_ws;
 
-DEPLOY WEBSERVICE customer_ws LOGIN = 'admin' PASSWORD = 'admin';
+DEPLOY WEBSERVICE customer_ws LOGIN = 'denodo' PASSWORD = 'denodo';
 
 # #######################################
 # Closing connection with database denodo_hol
@@ -4946,11 +4946,11 @@ CHOWN admin WEBSERVICE store_by_total_sales_local_ws LASTMODIFICATIONUSER admin;
 # #######################################
 UNDEPLOY IF EXISTS WEBSERVICE store_by_total_sales_local_ws;
 
-DEPLOY WEBSERVICE store_by_total_sales_local_ws LOGIN = 'admin' PASSWORD = 'admin';
+DEPLOY WEBSERVICE store_by_total_sales_local_ws LOGIN = 'denodo' PASSWORD = 'denodo';
 
 UNDEPLOY IF EXISTS WEBSERVICE customer_local_ws;
 
-DEPLOY WEBSERVICE customer_local_ws LOGIN = 'admin' PASSWORD = 'admin';
+DEPLOY WEBSERVICE customer_local_ws LOGIN = 'denodo' PASSWORD = 'denodo';
 
 # #######################################
 # Closing connection with database denodo_hol_dg_local
