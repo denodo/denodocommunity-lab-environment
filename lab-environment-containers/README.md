@@ -196,7 +196,7 @@ In the table below you can find the list of available profiles that you can use 
 | denodo | Profile for launching these **Denodo servers and tools**: Virtual DataPort server, Design Studio, Data Catalog, and a PostgreSQL* database to be used as external metadata and cache database. |
 | denodo-sched | Profile for launching **Denodo Scheduler**: it includes a Denodo Scheduler server, a Denodo Index server, and the Scheduler Web Administration Tool. |
 | ai | Profile for launching a **Denodo AI-ready** environment: Denodo AI SDK, Virtual DataPort server, Design Studio, Data Catalog, and a PostgreSQL* database to be used as external metadata and cache database. |
-| denodo-ai-sdk | Profile for launching **Denodo AI SDK**: it launches only the Denodo AI SDK endpoint (ensure you have configured the path to your Data Catalog server in the .env file). |
+| denodo-ai-sdk | Profile for launching **Denodo AI SDK**: it launches only the Denodo AI SDK endpoint (ensure you have configured the path to your Data Catalog server in the `docker-compose.yml` file). |
 | sso | Profile for launching a **Keycloak** server that can be used to test Single Sign-On in Denodo (it includes an LDAP server and a PostgreSQL* used as an external metadata database). |
 | notebook | Profile for launching a **JupyterLab** notebook that can be used to test a Python client for connecting to Denodo. |
 | git | Profile for launching a **GitLab** server that can be used testing Version Control System with Denodo. |
@@ -277,11 +277,11 @@ In the table below you can find the name of all the containers included by defau
 
 | Service name | Container name | Image | Description |
 | ----------- | ----------- | ----------- | ----------- |
-| denodo-vdp | denodocommunity-lab-environment-vdp | denodo-platform:latest | It deploys de **Denodo Virtual DataPort** server using the license file configured in the `.env` file.|
+| denodo-vdp | denodocommunity-lab-environment-vdp | denodo-platform:latest | It deploys the **Denodo Virtual DataPort** server and the **Denodo Data Catalog** using the license file configured in the `.env` file. By default, the Data Catalog is listening at http://localhost:9090/denodo-data-catalog |
 | denodo-ds | denodocommunity-lab-environment-ds | denodo-platform:latest | It deploys the **Denodo Design Studio** web application. By default it is listening at http://localhost:19090/denodo-design-studio/?uri=//vdp:9999/#/ (**Note**: it does not need a Denodo license to run). |
-| denodo-dc | denodocommunity-lab-environmentdc | denodo-platform:latest | It deploys the **Denodo Data Catalog** using the license file configured in the `.env` file. By default it is listening at http://localhost:29090/denodo-data-catalog |
 | denodo-sched | denodocommunity-lab-environment-sched | denodo-platform:latest | It deploys the **Denodo Scheduler** using the license file configured in the `.env` file, the **Denodo Index Server** using the license file configured in the `.env` file, and the **Denodo Scheduler Administration** web application. By default it is listening at http://localhost:39090/webadmin/denodo-scheduler-admin/ |
 | denodo-postgres | denodocommunity-lab-environment-metadata | postgres:12-alpine | **PostgreSQL** database used as Denodo and Keycloak external metadata database. The default username and password will be `denodo`/`denodo`. |
+| denodo-ai-sdk | denodo-ai-sdk | ai-sdk:latest | **Denodo AI SDK** server. It needs connectivity with a Denodo Data Catalog. By default, it is listening at http://localhost:8008/docs/. |
 
 # Licenses of the containers
 
