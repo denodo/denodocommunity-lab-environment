@@ -351,8 +351,8 @@ services:
     volumes:
       - ${SSO_CONF_FILE}:/opt/bitnami/keycloak/data/import/denodo-realm.json
     environment:
-      KEYCLOAK_USER: ${SSO_USER}
-      KEYCLOAK_PASSWORD: ${SSO_PASSWORD}
+      KEYCLOAK_ADMIN: ${SSO_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${SSO_PASSWORD}
       DB_VENDOR: postgres
       DB_ADDR: ${METADATA_DB_HOSTNAME}
       DB_PORT: ${METADATA_DB_PORT}

@@ -562,7 +562,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "321315dc83cf42c69e103384623828ba",
       "defaultRoles": [
         "manage-account",
         "view-profile"
@@ -1841,7 +1841,7 @@
             "mail"
           ],
           "connectionUrl": [
-            "ldap://ldap:10389"
+            "ldap://ldapserver:10389"
           ],
           "allowKerberosAuthentication": [
             "false"
