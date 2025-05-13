@@ -130,6 +130,91 @@ services:
     command: --schserver --schindex --schadmin
     tty: true
     stdin_open: true
+
+  denodo-sm:
+    container_name: denodocommunity-lab-environment-sm
+    image: ${DENODO_SM_VERSION}
+    profiles: ["denodo-sm"]
+    hostname: ${DENODO_SM_HOSTNAME}
+    restart: unless-stopped
+    networks:
+      - denodo-lab-net 
+    ports:
+      - "${DENODO_SM_EXTERNAL_WEB_PORT}:19090"
+    volumes:
+      - "${DENODO_SOL_LIC}:/opt/denodo/conf/denodo.lic"
+      - ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
+    environment:
+      - DENODO_DEBUG=true
+      - DENODO_KEYSTORE_LOADER_TYPE=FILE
+      - DENODO_KEYSTORE_LOADER_LOCATION=/opt/denodo/conf/denodo-key-custom.keystore
+      - DENODO_KEYSTORE_TYPE=${DENODO_KEYSTORE_TYPE}
+      - DENODO_KEYSTORE_PASSWORD_VALUE=${DENODO_KEYSTORE_PASSWORD_VALUE}
+      - DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/denodo/bin/ping.sh -t 3000 //localhost:19999 && curl http://localhost:10090/pingSolutionManager || exit 1"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+      start_period: 360s
+    command: ["--lmserver", "--smserver", "--smadmin"]
+
+  denodo-sm-env:
+    container_name: denodocommunity-lab-environment-sm-env
+    image: ${DENODO_VERSION}
+    profiles: ["denodo-sm"]
+    hostname: ${DENODO_SM_ENV_1_HOSTNAME}
+    restart: unless-stopped
+    networks:
+      - denodo-lab-net
+    volumes:
+      - ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
+    ports:
+      - "${DENODO_VDP_EXTERNAL_WEB_PORT}:9090"
+      - "${DENODO_VDP_EXTERNAL_ARROWFLIGHTSQL_PORT}:9994"
+      - "${DENODO_VDP_EXTERNAL_ODBC_PORT}:9996"
+      - "${DENODO_VDP_EXTERNAL_JMX_PORT}:9997"
+      - "${DENODO_VDP_EXTERNAL_PORT}:9999"
+      - "${DENODO_SCHED_EXTERNAL_PORT}:8000"
+      - "${DENODO_SCHED_INDEX_EXTERNAL_PORT}:9000"
+    environment:
+      - DENODO_LM_HOST=${DENODO_SM_HOSTNAME}
+      - DENODO_LM_PORT=10091
+      - DENODO_SM_HOST=${DENODO_SM_HOSTNAME}
+      - DENODO_SM_PORT=10090
+      - DENODO_SSO_HOST=${DENODO_SM_HOSTNAME}
+      - DENODO_SSO_PORT=19090
+      - DENODO_REGISTER_ENVIRONMENT_NAME=${DENODO_SM_ENV_1_HOSTNAME}
+      - DENODO_REGISTER_ENVIRONMENT_LICENSE=${DENODO_SOL_LIC_TYPE}
+      - DENODO_REGISTER_SERVER_NAME=server-${DENODO_SM_ENV_1_HOSTNAME}
+      - DENODO_REGISTER_CLUSTER_NAME=cluster-${DENODO_SM_ENV_1_HOSTNAME}
+      - DENODO_REGISTER_SERVER_TYPE=VDP VDP_DATA_CATALOG SCHEDULER
+      - DENODO_REGISTER_SERVER_PORT=9999
+      - DENODO_REGISTER_SERVER_USERNAME=admin
+      - DENODO_REGISTER_SERVER_PASSWORD=admin
+      - DENODO_REGISTER_CLUSTER_DC_URL=http://${DENODO_SM_ENV_1_HOSTNAME}:9090/denodo-data-catalog/?auth=login
+      - DENODO_DEBUG=true
+      - DENODO_USERNAME=${DENODO_VDP_ADMIN_USER}
+      - DENODO_PASSWORD=${DENODO_VDP_ADMIN_PWD}
+      - DENODO_INIT_MAX_TIMEOUT=180
+      - DENODO_MERGE_CONF=true
+      - DENODO_DC_SERVER_NAME=DenodoVDP
+      - DENODO_KEYSTORE_LOADER_TYPE=FILE
+      - DENODO_KEYSTORE_LOADER_LOCATION=/opt/denodo/conf/denodo-key-custom.keystore
+      - DENODO_KEYSTORE_TYPE=${DENODO_KEYSTORE_TYPE}
+      - DENODO_KEYSTORE_PASSWORD_VALUE=${DENODO_KEYSTORE_PASSWORD_VALUE}
+      - DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
+    healthcheck:
+      test: ["CMD", "/opt/denodo/bin/ping.sh", "-r", "-t", "5000", "//localhost:9999/admin"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 360s
+      start_interval: 360s
+    depends_on:
+      denodo-sm:
+        condition: service_healthy
+    command: ["--vqlserver", "--datacatalog", "--schserver"]
   
   denodo-ai-sdk:
     container_name: denodo-ai-sdk
