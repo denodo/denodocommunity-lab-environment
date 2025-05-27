@@ -133,10 +133,10 @@ In the `.env` file you can configure a specific version of Denodo Platform in th
 DENODO_VERSION=harbor.open.denodo.com/denodo-express/denodo-platform:latest
 ```
 
-For example, if you have a Denodo subscription license, you can use this to launch a Denodo 9.0.4 container:
+For example, if you have a Denodo subscription license, you can use this to launch a Denodo 9.2.1 container:
 
 ```properties
-DENODO_VERSION=harbor.open.denodo.com/denodo-9/images/denodo-platform:9.0.4
+DENODO_VERSION=harbor.open.denodo.com/denodo-9/images/denodo-platform:9.2.1
 ```
 
 #### Denodo AI SDK
@@ -146,10 +146,10 @@ DENODO_VERSION=harbor.open.denodo.com/denodo-9/images/denodo-platform:9.0.4
 DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-express/ai-sdk:latest
 ```
 
-For example, if you have a Denodo subscription license, you can use this to use the version 0.3 of the Denodo AI SDK:
+For example, if you have a Denodo subscription license, you can use this to use the version v0.8.1 of the Denodo AI SDK:
 
 ```properties
-DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-connects-9/images/ai-sdk:v0.3
+DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-connects-9/images/ai-sdk:v0.8.1
 ```
 **Note: Running the Denodo AI SDK container**: In case you want to try the Denodo AI SDK, please read the [Building an AI Chatbot with Denodo in Minutes](https://community.denodo.com/tutorials/browse/chatbot/index) tutorial, which explains how to use a specific environment with some precreated views in Denodo to be used by the AI SDK and the Sample Chatbot.
 
