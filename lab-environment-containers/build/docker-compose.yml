@@ -227,8 +227,8 @@ services:
     depends_on:
       denodo-vdp:
         condition: service_healthy
-    volumes:
-      - "${DENODO_CHATBOT_CONFIG_FILE}:/opt/ai-sdk/sample_chatbot/chatbot_config.env"
+    #volumes:
+    #  - "${DENODO_CHATBOT_CONFIG_FILE}:/opt/ai-sdk/sample_chatbot/chatbot_config.env"
     ports:
       - "${DENODO_CHATBOT_EXTERNAL_PORT}:9992"
       - "${DENODO_AI_SDK_EXTERNAL_PORT}:8008"
