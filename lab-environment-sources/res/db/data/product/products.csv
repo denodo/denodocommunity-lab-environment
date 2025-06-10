@@ -1,0 +1,32 @@
+id,product_name,category_id,price
+1,"Onyx O3",1,298.00
+2,"Onyx O4",1,385.00
+3,"Onyx O5",1,499.99
+4,"Moonstone M8",2,249.99
+5,"Moonstone M9",2,350.50
+6,"Moonstone M12",2,399.00
+7,"Quartz 2000",3,555.00
+8,"Quartz 3000",3,999.99
+9,"Quartz Plus",3,1500.00
+10,"Quartz X GT",3,2000.00
+11,"Rainbow Full LE",4,585.00
+12,"Emerald HD",4,800.00
+13,"Emerald 3D",4,1000.00
+14,"Emerald FX",4,1500.00
+15,"DataP Micro SD card",5,19.99
+16,"HighSpeed Battery Charger 500",5,19.99
+17,"DualP Charger",5,9.99
+18,"HeadSet Total audio 15",5,25.75
+19,"Remote Control Emerald",5,30.99
+20,"Onyx O6X",1,679.00
+21,"Garnet Sphere 3",2,350.00
+22,"Onyx O6X 32GB",1,750.00
+23,"Onyx O6X 64GB",1,799.99
+24,"Emerald FX 50",4,1800.00
+25,"Emerald FX 60",4,2100.00
+26,"Coral C1",1,99.99
+27,"HighSpeed Pro Storage 64GB",5,40.50
+28,"HighSpeed Pro Storage 32GB",5,30.50
+29,"Shield total protection 6",5,5.00
+30,"Studio Stereo 2.1 Bluetooth",5,12.25
+31,"Emerald Power",5,19.90
