@@ -1,0 +1,784 @@
+﻿# Generated with Denodo Platform 9.2.0.
+
+ENTER SINGLE USER MODE;
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+# 0 ====================================================================
+
+# #######################################
+# DATABASE
+# #######################################
+CREATE OR REPLACE DATABASE tutorial 'Database for Denodo Community Tutorials';
+
+CONNECT DATABASE tutorial;
+
+# #######################################
+# FOLDERS
+# #######################################
+CREATE OR REPLACE FOLDER '/1 - connectivity' ;
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+
+CREATE OR REPLACE FOLDER '/2 - integration' ;
+
+CREATE OR REPLACE FOLDER '/3 - business entities' ;
+
+CREATE OR REPLACE FOLDER '/4 - report views' ;
+
+CREATE OR REPLACE FOLDER '/5 - data services' ;
+
+CREATE OR REPLACE FOLDER '/8 - stored procedures' ;
+
+# #######################################
+# RESOURCES
+# #######################################
+# No vault resources
+# #######################################
+# LISTENERS JMS
+# #######################################
+# No listeners jms
+# #######################################
+# LISTENERS KAFKA
+# #######################################
+# No listeners kafka
+# #######################################
+# DATASOURCES
+# #######################################
+CREATE OR REPLACE DATASOURCE CUSTOM ds_marketing
+    FOLDER = '/1 - connectivity/1 - data sources'
+    CLASSNAME='com.denodo.vdb.contrib.wrapper.xls.ExcelWrapper';
+
+CREATE OR REPLACE DATASOURCE CUSTOM ds_marketing_lookup
+    FOLDER = '/1 - connectivity/1 - data sources'
+    CLASSNAME='com.denodo.vdb.contrib.wrapper.xls.ExcelWrapper';
+
+CREATE OR REPLACE DATASOURCE DF ds_billing
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'https://raw.githubusercontent.com/denodo/denodocommunity-lab-environment/refs/heads/master/lab-environment-sources/res/db/data/billing/billing.dat'
+    CHECKCERTIFICATES
+    GENERATE_OUTPUT_ON_EMPTY_CONTENT
+    AUTHENTICATION OFF
+    PROXY OFF
+    COLUMNDELIMITER = '|'
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_crm
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'https://raw.githubusercontent.com/denodo/denodocommunity-lab-environment/refs/heads/master/lab-environment-sources/res/db/data/tutorial/crm/address.csv'
+    CHECKCERTIFICATES
+    GENERATE_OUTPUT_ON_EMPTY_CONTENT
+    AUTHENTICATION OFF
+    PROXY OFF
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_crm_client
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'https://raw.githubusercontent.com/denodo/denodocommunity-lab-environment/refs/heads/master/lab-environment-sources/res/db/data/tutorial/crm/client.csv'
+    CHECKCERTIFICATES
+    GENERATE_OUTPUT_ON_EMPTY_CONTENT
+    AUTHENTICATION OFF
+    PROXY OFF
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_crm_client_type
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'https://raw.githubusercontent.com/denodo/denodocommunity-lab-environment/refs/heads/master/lab-environment-sources/res/db/data/tutorial/crm/client_type.csv'
+    CHECKCERTIFICATES
+    GENERATE_OUTPUT_ON_EMPTY_CONTENT
+    AUTHENTICATION OFF
+    PROXY OFF
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_sales
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'https://raw.githubusercontent.com/denodo/denodocommunity-lab-environment/refs/heads/master/lab-environment-sources/res/db/data/tutorial/sales/sales.csv'
+    CHECKCERTIFICATES
+    GENERATE_OUTPUT_ON_EMPTY_CONTENT
+    AUTHENTICATION OFF
+    PROXY OFF
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_sales_areas
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'https://raw.githubusercontent.com/denodo/denodocommunity-lab-environment/refs/heads/master/lab-environment-sources/res/db/data/tutorial/sales/areas.csv'
+    CHECKCERTIFICATES
+    GENERATE_OUTPUT_ON_EMPTY_CONTENT
+    AUTHENTICATION OFF
+    PROXY OFF
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_sales_dates
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'https://raw.githubusercontent.com/denodo/denodocommunity-lab-environment/refs/heads/master/lab-environment-sources/res/db/data/tutorial/sales/dates.csv'
+    CHECKCERTIFICATES
+    GENERATE_OUTPUT_ON_EMPTY_CONTENT
+    AUTHENTICATION OFF
+    PROXY OFF
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_sales_ordermethods
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'https://raw.githubusercontent.com/denodo/denodocommunity-lab-environment/refs/heads/master/lab-environment-sources/res/db/data/tutorial/sales/ordermethods.csv'
+    CHECKCERTIFICATES
+    GENERATE_OUTPUT_ON_EMPTY_CONTENT
+    AUTHENTICATION OFF
+    PROXY OFF
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_sales_products
+    FOLDER = '/1 - connectivity/1 - data sources'
+    ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'https://raw.githubusercontent.com/denodo/denodocommunity-lab-environment/refs/heads/master/lab-environment-sources/res/db/data/tutorial/sales/products.csv'
+    CHECKCERTIFICATES
+    GENERATE_OUTPUT_ON_EMPTY_CONTENT
+    AUTHENTICATION OFF
+    PROXY OFF
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE tutorial
+  CHARSET DEFAULT;
+
+# #######################################
+# WRAPPERS
+# #######################################
+CREATE OR REPLACE WRAPPER CUSTOM ds_marketing
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DATASOURCENAME=ds_marketing
+    PARAMETERS (
+      'Type of file' = 'Excel 2007 or later (*.xlsx)',
+      'File location' = ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'https://github.com/denodo/denodocommunity-lab-environment/raw/refs/heads/master/lab-environment-sources/res/files/excel/Marketing_promotions.xlsx'
+        CHECKCERTIFICATES
+        AUTHENTICATION OFF
+        PROXY OFF,
+      'Worksheet' = 'Marketing promotions',
+      'Extract data from all sheets' = false,
+      'Extract sheet name as a new column' = false,
+      'Start cell' = 'A1',
+      'End cell' = 'I43',
+      'Has headers' = true,
+      'Stream tuples' = true
+    )
+    OUTPUTSCHEMA (
+        promotionid_0 = 'Promotion ID' : 'java.lang.Integer' (OPT) (sourcetypeid='4')  SORTABLE,
+        description = 'Description' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        startdate_0 = 'Start date' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        enddate_0 = 'End date' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        product = 'Product' : 'java.lang.Integer' (OPT) (sourcetypeid='4')  SORTABLE,
+        area = 'Area' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        type = 'Type' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        discount = 'Discount' : 'java.math.BigDecimal' (OPT) (sourcetypeid='3')  SORTABLE,
+        channel = 'Channel' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE
+    );
+
+CREATE OR REPLACE WRAPPER CUSTOM ds_marketing_lookup
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DATASOURCENAME=ds_marketing_lookup
+    PARAMETERS (
+      'Type of file' = 'Excel 2007 or later (*.xlsx)',
+      'File location' = ROUTE HTTP 'http.ApacheHttpClientConnection,120000' GET 'https://github.com/denodo/denodocommunity-lab-environment/raw/refs/heads/master/lab-environment-sources/res/files/excel/Marketing_promotions.xlsx'
+        CHECKCERTIFICATES
+        AUTHENTICATION OFF
+        PROXY OFF,
+      'Worksheet' = 'Country lookup',
+      'Extract data from all sheets' = false,
+      'Extract sheet name as a new column' = false,
+      'Start cell' = 'A1',
+      'End cell' = 'B36',
+      'Has headers' = true,
+      'Stream tuples' = true
+    )
+    OUTPUTSCHEMA (
+        marketingarea_0 = 'Marketing area' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE,
+        standardizedarea_0 = 'Standardized area' : 'java.lang.String' (OPT) (sourcetypeid='12')  SORTABLE
+    );
+
+CREATE OR REPLACE WRAPPER DF bv_billing
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_billing
+    OUTPUTSCHEMA (
+        billing_id = 'billing_id' (OPT),
+        customer_id = 'customer_id' (OPT),
+        billing_period_id = 'billing_period_id' (OPT),
+        billing_start_date = 'billing_start_date' (OPT),
+        billing_end_date = 'billing_end_date' (OPT),
+        amount_due = 'amount_due' (OPT),
+        due_date = 'due_date' (OPT),
+        tax_id = 'tax_id' (OPT),
+        ssn = 'SSN' (OPT),
+        phone_center = 'phone_center' (OPT),
+        balance = 'balance' (OPT),
+        package_id = 'package_id' (OPT)
+    );
+
+CREATE OR REPLACE WRAPPER DF bv_crm_address1
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_crm
+    OUTPUTSCHEMA (
+        client_fid = 'client_fid' (OPT),
+        street = 'street' (OPT),
+        city = 'city' (OPT),
+        state = 'state' (OPT),
+        zip = 'zip' (OPT),
+        primary_phone = 'primary_phone' (OPT)
+    );
+
+CREATE OR REPLACE WRAPPER DF bv_crm_client1
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_crm_client
+    OUTPUTSCHEMA (
+        client_id = 'client_id' (OPT),
+        surname = 'surname' (OPT),
+        name = 'name' (OPT),
+        client_type = 'client_type' (OPT)
+    );
+
+CREATE OR REPLACE WRAPPER DF bv_crm_client_type1
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_crm_client_type
+    OUTPUTSCHEMA (
+        code = 'code' (OPT),
+        type_value = 'type_value' (OPT)
+    );
+
+CREATE OR REPLACE WRAPPER DF bv_sales
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_sales
+    OUTPUTSCHEMA (
+        id = 'id' (OPT),
+        dateid = 'dateid' (OPT),
+        product = 'product' (OPT),
+        ordermethod = 'ordermethod' (OPT),
+        area = 'area' (OPT),
+        promotion = 'promotion' (OPT)
+    );
+
+CREATE OR REPLACE WRAPPER DF bv_sales_dates
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_sales_dates
+    OUTPUTSCHEMA (
+        id = 'id' (OPT),
+        fulldate = 'fulldate' (OPT)
+    );
+
+CREATE OR REPLACE WRAPPER DF bv_sales_ordermethods
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_sales_ordermethods
+    OUTPUTSCHEMA (
+        id = 'id' (OPT),
+        description = 'description' (OPT)
+    );
+
+CREATE OR REPLACE WRAPPER DF bv_sales_products
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_sales_products
+    OUTPUTSCHEMA (
+        id = 'id' (OPT),
+        name = 'name' (OPT),
+        length = 'length' (OPT),
+        width = 'width' (OPT),
+        height = 'height' (OPT),
+        weight = 'weight' (OPT)
+    );
+
+CREATE OR REPLACE WRAPPER DF ds_sales_areas
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_sales_areas
+    OUTPUTSCHEMA (
+        id = 'id' (OPT),
+        country = 'country' (OPT),
+        area = 'area' (OPT),
+        description = 'description' (OPT)
+    );
+
+# #######################################
+# STORED PROCEDURES
+# #######################################
+CREATE OR REPLACE VQL PROCEDURE sp_client_type
+    FOLDER = '/8 - stored procedures'
+(upper_limit IN INTEGER, lower_limit IN INTEGER, client_id OUT VARCHAR, total_amount OUT INTEGER, type_client OUT VARCHAR)
+AS (
+    CURSOR cdata IS 'SELECT name,
+       client_id,
+       surname,
+       total_amount
+	   FROM tutorial.iv_amount_due_by_client
+  	   ORDER BY COALESCE(total_amount, 0) DESC';
+    c cdata%ROWTYPE;
+    type_c VARCHAR;
+)
+BEGIN
+    OPEN cdata;
+    LOOP 
+        FETCH cdata INTO c;
+        CASE 
+                    WHEN c.total_amount >= upper_limit THEN                 type_c:='Important';
+                    WHEN c.total_amount >= lower_limit THEN                 type_c:='Medium';
+                    WHEN c.total_amount >= 1 THEN                 type_c:='Small';
+            ELSE 
+                type_c:='Unbilled';
+            END CASE;
+        RETURN ROW ( client_id, total_amount, type_client) VALUES (c.client_id, c.total_amount, type_c);
+        EXIT WHEN cdata%NOTFOUND;
+    END LOOP;
+    CLOSE cdata;
+
+END;
+
+# #######################################
+# TYPES
+# #######################################
+# No types
+# #######################################
+# MAPS
+# #######################################
+# No maps
+# #######################################
+# BASE VIEWS
+# #######################################
+CREATE OR REPLACE TABLE bv_billing I18N us_pst (
+        billing_id:text,
+        customer_id:text,
+        billing_period_id:text,
+        billing_start_date:text,
+        billing_end_date:text,
+        amount_due:text,
+        due_date:text,
+        tax_id:text,
+        ssn:text,
+        phone_center:text,
+        balance:text,
+        package_id:text
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_billing(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD billing_id (any) OPT ANY
+             ADD customer_id (any) OPT ANY
+             ADD billing_period_id (any) OPT ANY
+             ADD billing_start_date (any) OPT ANY
+             ADD billing_end_date (any) OPT ANY
+             ADD amount_due (any) OPT ANY
+             ADD due_date (any) OPT ANY
+             ADD tax_id (any) OPT ANY
+             ADD ssn (any) OPT ANY
+             ADD phone_center (any) OPT ANY
+             ADD balance (any) OPT ANY
+             ADD package_id (any) OPT ANY
+        )
+        OUTPUTLIST (amount_due, balance, billing_end_date, billing_id, billing_period_id, billing_start_date, customer_id, due_date, package_id, phone_center, ssn, tax_id
+        )
+        WRAPPER (df bv_billing)
+    );
+
+CREATE OR REPLACE TABLE bv_crm_address I18N us_pst (
+        client_fid:text,
+        street:text,
+        city:text,
+        state:text,
+        zip:text,
+        primary_phone:text
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_crm_address1(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD client_fid (any) OPT ANY
+             ADD street (any) OPT ANY
+             ADD city (any) OPT ANY
+             ADD state (any) OPT ANY
+             ADD zip (any) OPT ANY
+             ADD primary_phone (any) OPT ANY
+        )
+        OUTPUTLIST (city, client_fid, primary_phone, state, street, zip
+        )
+        WRAPPER (df bv_crm_address1)
+    );
+
+CREATE OR REPLACE TABLE bv_crm_client I18N us_pst (
+        client_id:text,
+        surname:text,
+        name:text,
+        client_type:text
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'client_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_crm_client1(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD client_id (any) OPT ANY
+             ADD surname (any) OPT ANY
+             ADD name (any) OPT ANY
+             ADD client_type (any) OPT ANY
+        )
+        OUTPUTLIST (client_id, client_type, name, surname
+        )
+        WRAPPER (df bv_crm_client1)
+    );
+
+CREATE OR REPLACE TABLE bv_crm_client_type I18N us_pst (
+        code:text,
+        type_value:text
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'code' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_crm_client_type1(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD code (any) OPT ANY
+             ADD type_value (any) OPT ANY
+        )
+        OUTPUTLIST (code, type_value
+        )
+        WRAPPER (df bv_crm_client_type1)
+    );
+
+CREATE OR REPLACE TABLE bv_marketing_country_lookup I18N us_pst (
+        marketingarea_0:text (sourcetypeid = '12'),
+        standardizedarea_0:text (sourcetypeid = '12')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_marketing_lookup(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD marketingarea_0 (any) OPT ANY
+             ADD standardizedarea_0 (any) OPT ANY
+        )
+        OUTPUTLIST (marketingarea_0, standardizedarea_0
+        )
+        WRAPPER (custom ds_marketing_lookup)
+    );
+
+CREATE OR REPLACE TABLE bv_marketing_promotions I18N us_pst (
+        promotionid_0:int (sourcetypeid = '4'),
+        description:text (sourcetypeid = '12'),
+        startdate_0:text (sourcetypeid = '12'),
+        enddate_0:text (sourcetypeid = '12'),
+        product:int (sourcetypeid = '4'),
+        area:text (sourcetypeid = '12'),
+        type:text (sourcetypeid = '12'),
+        discount:decimal (sourcetypeid = '3'),
+        channel:text (sourcetypeid = '12')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_marketing(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD promotionid_0 (any) OPT ANY
+             ADD description (any) OPT ANY
+             ADD startdate_0 (any) OPT ANY
+             ADD enddate_0 (any) OPT ANY
+             ADD product (any) OPT ANY
+             ADD area (any) OPT ANY
+             ADD type (any) OPT ANY
+             ADD discount (any) OPT ANY
+             ADD channel (any) OPT ANY
+        )
+        OUTPUTLIST (area, channel, description, discount, enddate_0, product, promotionid_0, startdate_0, type
+        )
+        WRAPPER (custom ds_marketing)
+    );
+
+CREATE OR REPLACE TABLE bv_sales I18N us_pst (
+        id:int,
+        dateid:int,
+        product:int,
+        ordermethod:int,
+        area:int,
+        promotion:text
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_sales(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD dateid (any) OPT ANY
+             ADD product (any) OPT ANY
+             ADD ordermethod (any) OPT ANY
+             ADD area (any) OPT ANY
+             ADD promotion (any) OPT ANY
+        )
+        OUTPUTLIST (area, dateid, id, ordermethod, product, promotion
+        )
+        WRAPPER (df bv_sales)
+    );
+
+CREATE OR REPLACE TABLE bv_sales_areas I18N us_pst (
+        id:int,
+        country:text,
+        area:text,
+        description:text
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_sales_areas(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD country (any) OPT ANY
+             ADD area (any) OPT ANY
+             ADD description (any) OPT ANY
+        )
+        OUTPUTLIST (area, country, description, id
+        )
+        WRAPPER (df ds_sales_areas)
+    );
+
+CREATE OR REPLACE TABLE bv_sales_dates I18N us_pst (
+        id:text,
+        fulldate:localdate (sourcetypeid = '91')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_sales_dates(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD fulldate (any) OPT ANY
+        )
+        OUTPUTLIST (fulldate, id
+        )
+        WRAPPER (df bv_sales_dates)
+    );
+
+CREATE OR REPLACE TABLE bv_sales_ordermethods I18N us_pst (
+        id:int,
+        description:text
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_sales_ordermethods(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD description (any) OPT ANY
+        )
+        OUTPUTLIST (description, id
+        )
+        WRAPPER (df bv_sales_ordermethods)
+    );
+
+CREATE OR REPLACE TABLE bv_sales_products I18N us_pst (
+        id:int,
+        name:text,
+        length:int,
+        width:int,
+        height:int,
+        weight:int
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_sales_products(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD name (any) OPT ANY
+             ADD length (any) OPT ANY
+             ADD width (any) OPT ANY
+             ADD height (any) OPT ANY
+             ADD weight (any) OPT ANY
+        )
+        OUTPUTLIST (height, id, length, name, weight, width
+        )
+        WRAPPER (df bv_sales_products)
+    );
+
+# #######################################
+# VIEWS
+# #######################################
+CREATE OR REPLACE VIEW iv_billing_information FOLDER = '/2 - integration' AS SELECT bv_billing.customer_id AS customer_id, bv_billing.billing_id AS billing_id, bv_billing.billing_period_id AS billing_period_id, bv_billing.billing_start_date AS billing_start_date, bv_billing.billing_end_date AS billing_end_date, bv_billing.amount_due AS amount_due, bv_billing.due_date AS due_date, bv_billing.tax_id AS tax_id, bv_billing.ssn AS ssn, bv_billing.phone_center AS phone_center, bv_billing.balance AS balance, bv_billing.package_id AS package_id FROM bv_billing;
+
+CREATE OR REPLACE VIEW iv_crm_personal_data FOLDER = '/2 - integration' AS SELECT bv_crm_client1.client_id AS client_id, bv_crm_client1.surname AS surname, bv_crm_client1.name AS name, bv_crm_client1.client_type AS client_type, bv_crm_client_type1.code AS code, bv_crm_client_type1.type_value AS type_value, bv_crm_address1.client_fid AS client_fid, bv_crm_address1.street AS street, bv_crm_address1.city AS city, bv_crm_address1.state AS state, bv_crm_address1.zip AS zip, bv_crm_address1.primary_phone AS primary_phone FROM (bv_crm_client AS bv_crm_client1 INNER JOIN bv_crm_address AS bv_crm_address1 ON bv_crm_client1.client_id = bv_crm_address1.client_fid ) INNER JOIN bv_crm_client_type AS bv_crm_client_type1 ON bv_crm_client1.client_type = bv_crm_client_type1.code ;
+
+CREATE OR REPLACE VIEW iv_marketing_promotions_normalized FOLDER = '/2 - integration' AS SELECT bv_marketing_promotions.promotionid_0 AS promotionid_0, bv_marketing_promotions.description AS description, bv_marketing_promotions.startdate_0 AS startdate_0, bv_marketing_promotions.enddate_0 AS enddate_0, bv_marketing_promotions.product AS product, bv_marketing_promotions.type AS type, bv_marketing_promotions.discount AS discount, bv_marketing_promotions.channel AS channel, bv_marketing_country_lookup.standardizedarea_0 AS standardizedarea_0 FROM bv_marketing_promotions AS bv_marketing_promotions INNER JOIN bv_marketing_country_lookup AS bv_marketing_country_lookup ON bv_marketing_promotions.area = bv_marketing_country_lookup.marketingarea_0 ;
+
+ALTER VIEW iv_marketing_promotions_normalized
+ LAYOUT (bv_marketing_promotions = [260, 107, 200, 200], bv_marketing_country_lookup = [648, 146, 200, 200]);
+
+CREATE OR REPLACE VIEW iv_sales FOLDER = '/2 - integration' AS SELECT bv_sales.id AS id, bv_sales.promotion AS promotion, bv_sales_areas.country AS country, bv_sales_areas.area AS area, bv_sales_areas.description AS area_description, bv_sales_dates.fulldate AS fulldate, bv_sales_ordermethods.description AS order_method, bv_sales_products.name AS product_name, bv_sales_products.length AS length, bv_sales_products.width AS width, bv_sales_products.height AS height, bv_sales_products.weight AS weight FROM (((bv_sales AS bv_sales INNER JOIN bv_sales_areas AS bv_sales_areas ON bv_sales.area = bv_sales_areas.id ) INNER JOIN bv_sales_ordermethods AS bv_sales_ordermethods ON bv_sales.ordermethod = bv_sales_ordermethods.id ) INNER JOIN bv_sales_dates AS bv_sales_dates ON bv_sales.dateid = bv_sales_dates.id ) INNER JOIN bv_sales_products AS bv_sales_products ON bv_sales.product = bv_sales_products.id ;
+
+ALTER VIEW iv_sales
+ LAYOUT (bv_sales_areas = [305, 125, 200, 200], bv_sales_dates = [308, 269, 200, 200], bv_sales_ordermethods = [670, 95, 200, 200], bv_sales_products = [806, 266, 200, 200], bv_sales_sales = [561, 198, 200, 200]);
+
+CREATE OR REPLACE VIEW iv_client_with_bills FOLDER = '/2 - integration' AS SELECT iv_crm_personal_data1.client_id AS client_id, iv_crm_personal_data1.name AS name, iv_crm_personal_data1.surname AS surname, iv_crm_personal_data1.client_type AS client_type, iv_crm_personal_data1.code AS code, iv_crm_personal_data1.type_value AS type_value, iv_crm_personal_data1.client_fid AS client_fid, iv_crm_personal_data1.street AS street, iv_crm_personal_data1.city AS city, iv_crm_personal_data1.state AS state, iv_crm_personal_data1.zip AS zip, iv_crm_personal_data1.primary_phone AS primary_phone, iv_billing_information1.customer_id AS customer_id, iv_billing_information1.billing_id AS billing_id, iv_billing_information1.billing_period_id AS billing_period_id, iv_billing_information1.billing_start_date AS billing_start_date, iv_billing_information1.billing_end_date AS billing_end_date, iv_billing_information1.amount_due AS amount_due, iv_billing_information1.due_date AS due_date, iv_billing_information1.tax_id AS tax_id, iv_billing_information1.ssn AS ssn, iv_billing_information1.phone_center AS phone_center, iv_billing_information1.balance AS balance, iv_billing_information1.package_id AS package_id FROM iv_crm_personal_data AS iv_crm_personal_data1 INNER JOIN iv_billing_information AS iv_billing_information1 ON iv_crm_personal_data1.client_id = iv_billing_information1.customer_id ;
+
+CREATE OR REPLACE VIEW iv_sales_with_promotions FOLDER = '/2 - integration' AS SELECT iv_sales.id AS id, iv_sales.country AS country, iv_sales.area AS area, iv_sales.area_description AS area_description, iv_sales.fulldate AS fulldate, iv_sales.order_method AS order_method, iv_sales.product_name AS product_name, iv_sales.length AS length, iv_sales.width AS width, iv_sales.height AS height, iv_sales.weight AS weight, iv_marketing_promotions_normalized.description AS promotion_description, iv_marketing_promotions_normalized.startdate_0 AS startdate_0, iv_marketing_promotions_normalized.enddate_0 AS enddate_0, iv_marketing_promotions_normalized.product AS product, iv_marketing_promotions_normalized.type AS type, iv_marketing_promotions_normalized.discount AS discount, iv_marketing_promotions_normalized.channel AS channel, iv_marketing_promotions_normalized.standardizedarea_0 AS standardizedarea_0 FROM iv_sales AS iv_sales LEFT OUTER JOIN iv_marketing_promotions_normalized AS iv_marketing_promotions_normalized ON iv_sales.promotion = iv_marketing_promotions_normalized.promotionid_0 ;
+
+ALTER VIEW iv_sales_with_promotions
+ LAYOUT (iv_sales = [329, 52, 200, 200], iv_marketing_promotions_normalized = [715, 49, 200, 200]);
+
+CREATE OR REPLACE VIEW iv_amount_due_by_client FOLDER = '/2 - integration' AS SELECT client_id AS client_id, name AS name, surname AS surname, sum(cast('float', amount_due)) AS total_amount FROM iv_client_with_bills GROUP BY client_id, name, surname;
+
+CREATE OR REPLACE VIEW iv_customer FOLDER = '/2 - integration'
+    PRIMARY KEY ( 'customer_id' ) AS SELECT iv_client_with_bills.client_type AS customer_type, iv_client_with_bills.primary_phone AS phone, iv_client_with_bills.customer_id AS customer_id, to_localdate('yyyy-MM-dd HH:mm:ss', iv_client_with_bills.due_date) AS billing_due_date, cast('decimal', iv_client_with_bills.balance) AS balance, concat(iv_client_with_bills.name, ' ', iv_client_with_bills.surname) AS full_name, concat(iv_client_with_bills.street, ', ', iv_client_with_bills.city, ', ', iv_client_with_bills.zip, ', ', iv_client_with_bills.state) AS full_address FROM iv_client_with_bills;
+
+ALTER VIEW iv_customer
+ LAYOUT (iv_client_with_bills = [20, 20, 200, 200]);
+
+CREATE OR REPLACE VIEW monthly_sales_by_country FOLDER = '/4 - report views' AS SELECT country AS country, count(*) AS totalsales, getmonth(first(fulldate)) AS month, getyear(first(fulldate)) AS year, first(area) AS area, case WHEN (promotion_description is null ) THEN false ELSE true END AS in_promotion FROM iv_sales_with_promotions GROUP BY country, case WHEN (promotion_description is null ) THEN false ELSE true END, getyear(fulldate), getmonth(fulldate);
+
+ALTER VIEW monthly_sales_by_country
+ LAYOUT (iv_sales_with_promotions = [351, 189, 200, 200]);
+
+CREATE OR REPLACE INTERFACE VIEW customer (
+        customer_id:text,
+        full_name:text,
+        customer_type:text,
+        full_address:text,
+        phone:text,
+        billing_due_date:localdate,
+        balance:decimal
+    )
+    SET IMPLEMENTATION iv_customer
+    FOLDER = '/3 - business entities';
+
+CREATE OR REPLACE VIEW monthly_sales_by_area FOLDER = '/4 - report views' AS SELECT in_promotion AS in_promotion, area AS area, year AS year, month AS month, sum(totalsales) AS totalsales FROM monthly_sales_by_country GROUP BY in_promotion, area, year, month;
+
+ALTER VIEW monthly_sales_by_area
+ LAYOUT (monthly_sales_by_country = [351, 245, 200, 200]);
+
+# #######################################
+# ASSOCIATIONS
+# #######################################
+CREATE OR REPLACE ASSOCIATION bv_crm_client_bv_crm_address REFERENTIAL CONSTRAINT 
+FOLDER = '/1 - connectivity/2 - base views'
+    ENDPOINT bv_crm_address bv_crm_client PRINCIPAL (0,1)
+    ENDPOINT bv_crm_client bv_crm_address (0,*)
+    ADD MAPPING client_id=client_fid;
+
+CREATE OR REPLACE ASSOCIATION bv_crm_client_type_bv_crm_client REFERENTIAL CONSTRAINT 
+FOLDER = '/1 - connectivity/2 - base views'
+    ENDPOINT bv_crm_client bv_crm_client_type PRINCIPAL (0,1)
+    ENDPOINT bv_crm_client_type bv_crm_client (0,*)
+    ADD MAPPING code=client_type;
+
+# #######################################
+# WEBSERVICES
+# #######################################
+CREATE OR REPLACE REST WEBSERVICE customer
+    CONNECTION (
+        CHUNKSIZE = 1000
+        CHUNKTIMEOUT = 1000
+        QUERYTIMEOUT = 900000
+        POOLENABLED = true
+        POOLINITSIZE = 0
+        POOLMAXACTIVE = 30
+    )
+    DEFAULTREPRESENTATION = HTML
+    SUPPORTEDREPRESENTATIONS (HTML, XML, JSON)    AUTHENTICATION (BASIC VDP )
+
+    RESOURCES (
+        VIEW customer FIELDS (
+            customer_id : 'text', 
+            full_name : 'text' OUTPUT_ONLY, 
+            customer_type : 'text' OUTPUT_ONLY, 
+            full_address : 'text' OUTPUT_ONLY, 
+            phone : 'text' OUTPUT_ONLY, 
+            billing_due_date : 'localdate' OUTPUT_ONLY, 
+            balance : 'decimal' OUTPUT_ONLY
+        )
+    )
+    OPTIONS ( NULLVALUESASEMPTYXMLELEMENTS = false
+        ALLOW_CORS_ORIGINS (*) DISABLED
+        PROCESS_FUNCTIONS_IN_SELECT_PARAMETER = true ) 
+    OPENAPI2 ( API_VERSION = '1.0.0' ) 
+    FOLDER = '/5 - data services';
+
+CREATE OR REPLACE SOAP WEBSERVICE customerservice
+    CONNECTION (
+        CHUNKSIZE = 1000
+        CHUNKTIMEOUT = 1000
+        QUERYTIMEOUT = 900000
+        POOLENABLED = true
+        POOLINITSIZE = 0
+        POOLMAXACTIVE = 30
+    )
+    I18N  = us_pst
+    DATETYPEMAPPING DATE
+    NOWRAPARRAYS
+    RAISEFAULTONIDU
+    DONOTAPPLYOUTPUTXSLTTOERRORS
+    AUTHENTICATION (BASIC VDP )
+    OUTPUT 
+        ( STYLE DOCUMENT )
+    OPERATION 'getCOSTUMERByID' (
+        TYPE SELECT
+        SCHEMA VIEW customer
+        VQL = 'SELECT customer_id, full_name, customer_type, full_address, phone, billing_due_date, balance FROM customer ^ExecuteIfIsNotNull("WHERE ",@WHEREEXPRESSION,"") CONTEXT (''i18n'' = ''us_pst''^ExecuteIfIsNotNull(", ",@VERBOSEERRORS,"")^ExecuteIfIsNotNull(", ",@CONTEXTEXPRESSION,""))'
+        INPUTS 'getCOSTUMERByID' (
+            'CUSTOMER_ID' customer_id:'text' '=' 
+        )
+        OUTPUT 
+            'CUSTOMERReturn': Array of ( 'CUSTOMERReturnRow': Register of (
+                customer_id : 'text',
+                full_name : 'text',
+                customer_type : 'text',
+                full_address : 'text',
+                phone : 'text',
+                billing_due_date : 'localdate',
+                balance : 'decimal'
+            ) (
+                    '/balance'='BALANCE',
+                    '/billing_due_date'='BILLING_DUE_DATE',
+                    '/customer_id'='CUSTOMER_ID',
+                    '/customer_type'='CUSTOMER_TYPE',
+                    '/full_address'='FULL_ADDRESS',
+                    '/full_name'='FULL_NAME',
+                    '/phone'='PHONE'))
+    )
+    FOLDER = '/5 - data services';
+
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS
+# #######################################
+# No deployed web services
+# #######################################
+# Closing connection with database tutorial
+# #######################################
+CLOSE;
+
+
+
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+EXIT SINGLE USER MODE;

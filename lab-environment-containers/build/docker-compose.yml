@@ -275,6 +275,7 @@ services:
       - NVIDIA_BASE_URL=${NVIDIA_BASE_URL}
       - GROQ_API_KEY=${GROQ_API_KEY}
       - OLLAMA_API_BASE_URL=${OLLAMA_API_BASE_URL}
+      - CHATBOT_AUTO_GRAPH=1
     command: ["python", "run.py", "${DENODO_AI_SDK_MODE}", "--no-logs"]
       
   # ########################
