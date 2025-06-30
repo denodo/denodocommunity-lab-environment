@@ -146,11 +146,11 @@ services:
       - ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
     environment:
       - DENODO_DEBUG=true
-      - DENODO_KEYSTORE_LOADER_TYPE=FILE
-      - DENODO_KEYSTORE_LOADER_LOCATION=/opt/denodo/conf/denodo-key-custom.keystore
-      - DENODO_KEYSTORE_TYPE=${DENODO_KEYSTORE_TYPE}
-      - DENODO_KEYSTORE_PASSWORD_VALUE=${DENODO_KEYSTORE_PASSWORD_VALUE}
-      - DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
+      #- DENODO_KEYSTORE_LOADER_TYPE=FILE
+      #- DENODO_KEYSTORE_LOADER_LOCATION=/opt/denodo/conf/denodo-key-custom.keystore
+      #- DENODO_KEYSTORE_TYPE=${DENODO_KEYSTORE_TYPE}
+      #- DENODO_KEYSTORE_PASSWORD_VALUE=${DENODO_KEYSTORE_PASSWORD_VALUE}
+      #- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
     healthcheck:
       test: ["CMD-SHELL", "/opt/denodo/bin/ping.sh -t 3000 //localhost:19999 && curl http://localhost:10090/pingSolutionManager || exit 1"]
       interval: 30s
@@ -199,11 +199,11 @@ services:
       - DENODO_INIT_MAX_TIMEOUT=180
       - DENODO_MERGE_CONF=true
       - DENODO_DC_SERVER_NAME=DenodoVDP
-      - DENODO_KEYSTORE_LOADER_TYPE=FILE
-      - DENODO_KEYSTORE_LOADER_LOCATION=/opt/denodo/conf/denodo-key-custom.keystore
-      - DENODO_KEYSTORE_TYPE=${DENODO_KEYSTORE_TYPE}
-      - DENODO_KEYSTORE_PASSWORD_VALUE=${DENODO_KEYSTORE_PASSWORD_VALUE}
-      - DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
+      #- DENODO_KEYSTORE_LOADER_TYPE=FILE
+      #- DENODO_KEYSTORE_LOADER_LOCATION=/opt/denodo/conf/denodo-key-custom.keystore
+      #- DENODO_KEYSTORE_TYPE=${DENODO_KEYSTORE_TYPE}
+      #- DENODO_KEYSTORE_PASSWORD_VALUE=${DENODO_KEYSTORE_PASSWORD_VALUE}
+      #- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
     healthcheck:
       test: ["CMD", "/opt/denodo/bin/ping.sh", "-r", "-t", "5000", "//localhost:9999/admin"]
       interval: 30s
