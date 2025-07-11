@@ -143,7 +143,7 @@ services:
       - "${DENODO_SM_EXTERNAL_WEB_PORT}:19090"
     volumes:
       - "${DENODO_SOL_LIC}:/opt/denodo/conf/denodo.lic"
-      - ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
+      #- ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
     environment:
       - DENODO_DEBUG=true
       #- DENODO_KEYSTORE_LOADER_TYPE=FILE
