@@ -167,8 +167,8 @@ services:
     restart: unless-stopped
     networks:
       - denodo-lab-net
-    volumes:
-      - ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
+    #volumes:
+    #  - ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
     ports:
       - "${DENODO_VDP_EXTERNAL_WEB_PORT}:9090"
       - "${DENODO_VDP_EXTERNAL_ARROWFLIGHTSQL_PORT}:9994"
