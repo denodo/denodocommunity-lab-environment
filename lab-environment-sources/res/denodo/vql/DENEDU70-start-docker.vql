@@ -3,17 +3,6 @@
 ENTER SINGLE USER MODE;
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-# #######################################
-# USER CREATION
-# #######################################
-CREATE OR REPLACE USER local_user 'xd7cuW3MVa+ne3RGCA6xHFiYOjeFzcHT2i0M+tOVC57lEF+prF90NhAHnM8sj0/4shFlTfzMLLNyl9fL+SGwN7VlFcE74h7NcJsn7uybHlgf6hpXORVdBpF8XS45fCpPmM38YbCiuEOw5SWO2evZBGzwWgvDzUh7oLq9GqjXPbsdfbLeqdFZSDYgDjLjfvZQ1GWtNbSbIPhE2cNKjrW0dPI1hZpRWEUBTS2ATxMOGfHHnBYVOSTxVSvGEk3meqpU'  ENCRYPTED HASH SHA512  '';
-
-# #######################################
-# ROLE CREATION
-# #######################################
-# #######################################
-# TAG CREATION
-# #######################################
 
 # 0 ====================================================================
 
@@ -34,6 +23,12 @@ CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
 CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
 
 CREATE OR REPLACE FOLDER '/2 - integration' ;
+
+CREATE OR REPLACE FOLDER '/3 - business entities' ;
+
+CREATE OR REPLACE FOLDER '/4 - report views' ;
+
+CREATE OR REPLACE FOLDER '/5 - data services' ;
 
 CREATE OR REPLACE FOLDER '/6 - associations' ;
 
@@ -60,7 +55,7 @@ CREATE OR REPLACE DATASOURCE CUSTOM ds_invoices
 
 CREATE OR REPLACE DATASOURCE DF ds_connections
     FOLDER = '/1 - connectivity/1 - data sources'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost:1080/logs/@{LOG_DATE}.log'
+    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://webserver/logs/@{LOG_DATE}.log'
     CHECKCERTIFICATES
     AUTHENTICATION OFF
     PROXY OFF
@@ -70,7 +65,7 @@ CREATE OR REPLACE DATASOURCE DF ds_connections
 
 CREATE OR REPLACE DATASOURCE DF ds_old_invoices
     FOLDER = '/1 - connectivity/1 - data sources'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost:1080/excel/old_invoices.csv'
+    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://webserver/excel/old_invoices.csv'
     AUTHENTICATION OFF
     PROXY OFF
     CHARSET = 'Adobe-Standard-Encoding'
@@ -78,38 +73,10 @@ CREATE OR REPLACE DATASOURCE DF ds_old_invoices
     ENDOFLINEDELIMITER = '\n'
     HEADER = TRUE;
 
-CREATE OR REPLACE DATASOURCE JDBC ds_call_center
-    FOLDER = '/1 - connectivity/1 - data sources'
-    DRIVERCLASSNAME = 'org.mariadb.jdbc.Driver'
-    DATABASEURI = 'jdbc:mariadb://localhost:3306/calltracking'
-    USERNAME = 'phone'
-    USERPASSWORD = 'phone'
-    CLASSPATH = 'mariadb-2.7'
-    DATABASENAME = 'Generic'
-    DATABASEVERSION = ''
-    FETCHSIZE = 1000
-    VALIDATIONQUERY = ''
-    INITIALSIZE = 1
-    MAXIDLE = -1
-    MINIDLE = 0
-    MAXACTIVE = 20
-    EXHAUSTEDACTION = 1
-    TESTONBORROW = true
-    TESTONRETURN = false
-    TESTWHILEIDLE = false
-    TIMEBETWEENEVICTION = -1
-    NUMTESTPEREVICTION = 3
-    MINEVICTABLETIME = 1800000
-    POOLPREPAREDSTATEMENTS = false
-    MAXOPENPREPAREDSTATEMENTS = -1
-    DATA_LOAD_CONFIGURATION (
-        BATCHINSERTSIZE = 200
-    );
-
 CREATE OR REPLACE DATASOURCE JDBC ds_historical_orders
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
-    DATABASEURI = 'jdbc:postgresql://localhost:5432/historical_orders'
+    DATABASEURI = 'jdbc:postgresql://postgres:5432/historical_orders'
     USERNAME = 'website_sys'
     USERPASSWORD = 'website'
     CLASSPATH = 'postgresql-12'
@@ -139,7 +106,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_historical_orders
 CREATE OR REPLACE DATASOURCE JDBC ds_human_resources
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
-    DATABASEURI = 'jdbc:postgresql://localhost:5432/human_resources'
+    DATABASEURI = 'jdbc:postgresql://postgres:5432/human_resources'
     USERNAME = 'human_resources'
     USERPASSWORD = 'human'
     CLASSPATH = 'postgresql-12'
@@ -169,7 +136,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_human_resources
 CREATE OR REPLACE DATASOURCE JDBC ds_tpcds
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
-    DATABASEURI = 'jdbc:postgresql://localhost:5432/tpc_ds'
+    DATABASEURI = 'jdbc:postgresql://postgres:5432/tpc_ds'
     USERNAME = 'denodo'
     USERPASSWORD = 'denodo'
     CLASSPATH = 'postgresql-12'
@@ -199,7 +166,7 @@ CREATE OR REPLACE DATASOURCE JDBC ds_tpcds
 CREATE OR REPLACE DATASOURCE JDBC ds_web_orders
     FOLDER = '/1 - connectivity/1 - data sources'
     DRIVERCLASSNAME = 'org.postgresql.Driver'
-    DATABASEURI = 'jdbc:postgresql://localhost:5432/website_sys'
+    DATABASEURI = 'jdbc:postgresql://postgres:5432/website_sys'
     USERNAME = 'website_sys'
     USERPASSWORD = 'website'
     CLASSPATH = 'postgresql-12'
@@ -223,12 +190,13 @@ CREATE OR REPLACE DATASOURCE JDBC ds_web_orders
     PROPERTIES ('escapeSyntaxCallMode'='callIfNoReturn')
     KERBEROSPROPERTIES ('jaasLogin'='false', 'user'='<user>')
     DATA_LOAD_CONFIGURATION (
+        USE_FOR_QUERY_OPTIMIZATION = DATA_MOVEMENT
         BATCHINSERTSIZE = 200
     );
 
 CREATE OR REPLACE DATASOURCE JSON ds_sales
     FOLDER = '/1 - connectivity/1 - data sources'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost:8080/sales-ws/sales/'
+    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://tomcat:8080/sales-ws/sales/'
     HEADERS (
         'Accept'='application/json', 
         'Content-Type'='application/json'
@@ -258,7 +226,7 @@ CREATE OR REPLACE DATASOURCE MONGODB ds_nosql
 
 CREATE OR REPLACE DATASOURCE XML ds_sales_search
     FOLDER = '/1 - connectivity/1 - data sources'
-    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' POST 'http://localhost:8080/sales-ws/sales/'
+    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' POST 'http://tomcat:8080/sales-ws/sales/'
     POSTBODY '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <SalesPostData>
    <customerId>@{cid}</customerId>
@@ -282,6 +250,12 @@ CREATE OR REPLACE DATASOURCE XML ds_sales_search
 ALTER DATABASE denodo_training
   CHARSET DEFAULT;
 
+ALTER DATABASE denodo_training
+  CACHE ON (
+    MAINTENANCE OFF
+    TIMETOLIVE 0
+    DATASOURCE ds_historical_orders DATABASE denodo_training
+  );
 
 # #######################################
 # WRAPPERS
@@ -291,7 +265,7 @@ CREATE OR REPLACE WRAPPER CUSTOM ds_invoices
     DATASOURCENAME=ds_invoices
     PARAMETERS (
       'Type of file' = 'Excel 2007 or later (*.xlsx)',
-      'File location' = ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://localhost:1080/excel/Invoices_2015.xlsx'
+      'File location' = ROUTE HTTP 'http.CommonsHttpClientConnection,120000' GET 'http://webserver/excel/Invoices_2015.xlsx'
         CHECKCERTIFICATES
         AUTHENTICATION OFF
         PROXY OFF,
@@ -347,100 +321,6 @@ CREATE OR REPLACE WRAPPER DF ds_connections
         http_code = 'Column4',
         content_type = 'Column5',
         size = 'Column6'
-    );
-
-CREATE OR REPLACE WRAPPER JDBC bv_cc_agent
-    FOLDER = '/1 - connectivity/2 - base views'
-    DATASOURCENAME=ds_call_center
-    CATALOGNAME='calltracking' 
-    RELATIONNAME='agent' 
-    OUTPUTSCHEMA (
-        agent_id = 'agent_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        agent_code = 'agent_code' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='13', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        agent_name = 'agent_name' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='14', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
-    );
-
-CREATE OR REPLACE WRAPPER JDBC bv_cc_case_definition
-    FOLDER = '/1 - connectivity/2 - base views'
-    DATASOURCENAME=ds_call_center
-    CATALOGNAME='calltracking' 
-    RELATIONNAME='case_definition' 
-    OUTPUTSCHEMA (
-        case_id = 'case_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        date_raised = 'date_raised' :'java.time.LocalDateTime' (OPT) (sourcetyperadix='10', sourcetypesize='19', description='', sourcetypeid='93', sourcetypename='TIMESTAMP')  SORTABLE,
-        date_closed = 'date_closed' :'java.time.LocalDateTime' (OPT) (sourcetyperadix='10', sourcetypesize='19', description='', sourcetypeid='93', sourcetypename='TIMESTAMP')  SORTABLE,
-        case_status = 'case_status' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        case_summary = 'case_summary' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='500', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        case_comments = 'case_comments' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='500', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        customer_code = 'customer_code' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='20', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
-    );
-
-CREATE OR REPLACE WRAPPER JDBC bv_cc_customer
-    FOLDER = '/1 - connectivity/2 - base views'
-    DATASOURCENAME=ds_call_center
-    CATALOGNAME='calltracking' 
-    RELATIONNAME='customer' 
-    OUTPUTSCHEMA (
-        customer_id = 'customer_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        customer_name = 'customer_name' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='21', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        customer_address = 'customer_address' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='27', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        phone_number = 'phone_number' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='17', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        customer_code = 'customer_code' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='12', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        job_title = 'job_title' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='36', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        other_details = 'other_details' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='250', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
-    );
-
-CREATE OR REPLACE WRAPPER JDBC bv_cc_problem
-    FOLDER = '/1 - connectivity/2 - base views'
-    DATASOURCENAME=ds_call_center
-    CATALOGNAME='calltracking' 
-    RELATIONNAME='problem' 
-    OUTPUTSCHEMA (
-        problem_code = 'problem_code' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        problem_description = 'problem_description' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='41', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
-    );
-
-CREATE OR REPLACE WRAPPER JDBC bv_cc_service_call
-    FOLDER = '/1 - connectivity/2 - base views'
-    DATASOURCENAME=ds_call_center
-    CATALOGNAME='calltracking' 
-    RELATIONNAME='service_call' 
-    OUTPUTSCHEMA (
-        call_id = 'call_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        location_id = 'location_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        problem_code = 'problem_code' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        status_code = 'status_code' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        date_ticket_issued = 'date_ticket_issued' :'java.time.LocalDateTime' (OPT) (sourcetyperadix='10', sourcetypesize='19', description='', sourcetypeid='93', sourcetypename='DATETIME')  NOT SORTABLE,
-        date_call_received = 'date_call_received' :'java.time.LocalDateTime' (OPT) (sourcetyperadix='10', sourcetypesize='19', description='', sourcetypeid='93', sourcetypename='DATETIME')  NOT SORTABLE,
-        other_details = 'other_details' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='250', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        caller_phone = 'caller_phone' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='17', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        case_id = 'case_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        agent_id = 'agent_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        customer_code = 'customer_code' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='20', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
-    );
-
-CREATE OR REPLACE WRAPPER JDBC bv_cc_service_location
-    FOLDER = '/1 - connectivity/2 - base views'
-    DATASOURCENAME=ds_call_center
-    CATALOGNAME='calltracking' 
-    RELATIONNAME='service_location' 
-    OUTPUTSCHEMA (
-        id = 'id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        location_id = 'location_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        customer_id = 'customer_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        business_name = 'business_name' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='12', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        service_location = 'service_location' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='22', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE,
-        other_details = 'other_details' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='0', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
-    );
-
-CREATE OR REPLACE WRAPPER JDBC bv_cc_status_code
-    FOLDER = '/1 - connectivity/2 - base views'
-    DATASOURCENAME=ds_call_center
-    CATALOGNAME='calltracking' 
-    RELATIONNAME='status_code' 
-    OUTPUTSCHEMA (
-        code_id = 'code_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', description='', sourcetypeid='4', sourcetypename='INT')  SORTABLE,
-        code_description = 'code_description' :'java.lang.String' (OPT) (sourcetyperadix='10', sourcetypesize='16', description='', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE
     );
 
 CREATE OR REPLACE WRAPPER JDBC bv_employee_subquery
@@ -1052,6 +932,87 @@ CREATE OR REPLACE WRAPPER JDBC bv_wo_storages
     CONSTRAINT 'STORAGES_PK' PRIMARY KEY ( 'ID' )
     INDEX 'STORAGES_PK' OTHER UNIQUE PRIMARY ( 'ID' );
 
+CREATE OR REPLACE WRAPPER JDBC ds_historical_orders_bv_wo_customer
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_historical_orders
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='CUSTOMER' ESCAPE
+    OUTPUTSCHEMA (
+        id = 'ID' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  ESCAPE NOT NULL SORTABLE,
+        customer_code_internal = 'CUSTOMER_CODE_INTERNAL' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  ESCAPE NOT NULL SORTABLE,
+        first_name = 'FIRST_NAME' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='50', sourcetypeid='12', sourcetypename='varchar')  ESCAPE NOT NULL SORTABLE,
+        last_name = 'LAST_NAME' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='100', sourcetypeid='12', sourcetypename='varchar')  ESCAPE SORTABLE,
+        email = 'EMAIL' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='50', sourcetypeid='12', sourcetypename='varchar')  ESCAPE NOT NULL SORTABLE,
+        phone = 'PHONE' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  ESCAPE SORTABLE,
+        main_address = 'MAIN_ADDRESS' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='200', sourcetypeid='12', sourcetypename='varchar')  ESCAPE SORTABLE,
+        main_postcode = 'MAIN_POSTCODE' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  ESCAPE SORTABLE,
+        main_country = 'MAIN_COUNTRY' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='100', sourcetypeid='12', sourcetypename='varchar')  ESCAPE SORTABLE,
+        registered_date = 'REGISTERED_DATE' :'java.time.LocalDateTime' (OPT) (sourcetypedecimals='6', sourcetyperadix='10', sourcetypesize='29', sourcetypeid='93', sourcetypename='timestamp')  ESCAPE NOT NULL SORTABLE
+    );
+
+CREATE OR REPLACE WRAPPER JDBC s_customer_sale
+    FOLDER = '/7 - summaries'
+    DATASOURCENAME=ds_web_orders
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='s_customer_sale' 
+    OUTPUTSCHEMA (
+        customer_code = 'customer_code' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        total_orders = 'total_orders' :'java.lang.Long' (OPT) (sourcetypeid='-5', sourcetypename='BIGINT')  SORTABLE NOT UPDATEABLE
+    );
+
+CREATE OR REPLACE WRAPPER JDBC s_order_count
+    FOLDER = '/7 - summaries'
+    DATASOURCENAME=ds_web_orders
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='s_order_count' 
+    OUTPUTSCHEMA (
+        customer_code = 'customer_code' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='20', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        product_id = 'product_id' :'java.lang.Long' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        main_country = 'main_country' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='100', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        cnt_per_cust_per_product = 'cnt_per_cust_per_product' :'java.lang.Long' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='19', sourcetypeid='-5', sourcetypename='int8')  SORTABLE,
+        cnt_item_per_cust_per_product = 'cnt_item_per_cust_per_product' :'java.lang.Long' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='19', sourcetypeid='-5', sourcetypename='int8')  SORTABLE
+    );
+
+CREATE OR REPLACE WRAPPER JDBC sum1_bv_hr_employees_bv_hr_departments
+    FOLDER = '/7 - summaries'
+    DATASOURCENAME=ds_human_resources
+    RELATIONNAME='sum_10524_bv_hr_departments_bv_8941534999331298360116291660605' 
+    OUTPUTSCHEMA (
+        department_name = 'department_name' :'java.lang.String' (OPT) (sourcetypesize='30', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        location_id = 'location_id' :'java.lang.Integer' (OPT) (sourcetypesize='5', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        employee_id = 'employee_id' :'java.lang.Integer' (OPT) (sourcetypesize='10', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        first_name = 'first_name' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        last_name = 'last_name' :'java.lang.String' (OPT) (sourcetypesize='25', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        email = 'email' :'java.lang.String' (OPT) (sourcetypesize='50', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        phone_number = 'phone_number' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        hire_date = 'hire_date' :'java.time.LocalDate' (OPT) (sourcetypeid='91', sourcetypename='DATE')  SORTABLE NOT UPDATEABLE,
+        job_id = 'job_id' :'java.lang.String' (OPT) (sourcetypesize='10', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        salary = 'salary' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetypesize='8', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        commission_pct = 'commission_pct' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetypesize='2', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        manager_id = 'manager_id' :'java.lang.Integer' (OPT) (sourcetypesize='10', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        department_id = 'department_id' :'java.lang.Integer' (OPT) (sourcetypesize='5', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE
+    );
+
+CREATE OR REPLACE WRAPPER JDBC sum2_bv_hr_employees_bv_hr_departments
+    FOLDER = '/7 - summaries'
+    DATASOURCENAME=ds_human_resources
+    RELATIONNAME='sum_11124_bv_hr_departments_bv_8114087206936507038461944120657' 
+    OUTPUTSCHEMA (
+        department_name = 'department_name' :'java.lang.String' (OPT) (sourcetypesize='30', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        location_id = 'location_id' :'java.lang.Integer' (OPT) (sourcetypesize='5', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        employee_id = 'employee_id' :'java.lang.Integer' (OPT) (sourcetypesize='10', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        first_name = 'first_name' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        last_name = 'last_name' :'java.lang.String' (OPT) (sourcetypesize='25', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        email = 'email' :'java.lang.String' (OPT) (sourcetypesize='50', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        phone_number = 'phone_number' :'java.lang.String' (OPT) (sourcetypesize='20', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        hire_date = 'hire_date' :'java.time.LocalDate' (OPT) (sourcetypeid='91', sourcetypename='DATE')  SORTABLE NOT UPDATEABLE,
+        job_id = 'job_id' :'java.lang.String' (OPT) (sourcetypesize='10', sourcetypeid='12', sourcetypename='VARCHAR')  SORTABLE NOT UPDATEABLE,
+        salary = 'salary' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetypesize='8', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        commission_pct = 'commission_pct' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetypesize='2', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        manager_id = 'manager_id' :'java.lang.Integer' (OPT) (sourcetypesize='10', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE,
+        department_id = 'department_id' :'java.lang.Integer' (OPT) (sourcetypesize='5', sourcetypeid='3', sourcetypename='DECIMAL')  SORTABLE NOT UPDATEABLE
+    );
+
 CREATE OR REPLACE WRAPPER JSON ds_sales
     FOLDER = '/1 - connectivity/2 - base views'
     DATASOURCENAME=ds_sales
@@ -1192,180 +1153,6 @@ CREATE OR REPLACE TYPE ds_sales_salesdata AS ARRAY OF ds_sales_salesdata_salesda
 # #######################################
 # BASE VIEWS
 # #######################################
-CREATE OR REPLACE TABLE bv_cc_agent I18N us_pst (
-        agent_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        agent_code:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '13', description = ''),
-        agent_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '14', description = '')
-    )
-    FOLDER = '/1 - connectivity/2 - base views'
-    CACHE OFF
-    TIMETOLIVEINCACHE DEFAULT
-    ADD SEARCHMETHOD bv_cc_agent(
-        I18N us_pst
-        CONSTRAINTS (
-             ADD agent_id (any) OPT ANY
-             ADD agent_code (any) OPT ANY
-             ADD agent_name (any) OPT ANY
-        )
-        OUTPUTLIST (agent_code, agent_id, agent_name
-        )
-        WRAPPER (jdbc bv_cc_agent)
-    );
-
-CREATE OR REPLACE TABLE bv_cc_case_definition I18N us_pst (
-        case_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        date_raised:timestamp (sourcetypeid = '93', sourcetyperadix = '10', sourcetypesize = '19', description = ''),
-        date_closed:timestamp (sourcetypeid = '93', sourcetyperadix = '10', sourcetypesize = '19', description = ''),
-        case_status:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        case_summary:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '500', description = ''),
-        case_comments:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '500', description = ''),
-        customer_code:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = '')
-    )
-    FOLDER = '/1 - connectivity/2 - base views'
-    CACHE OFF
-    TIMETOLIVEINCACHE DEFAULT
-    ADD SEARCHMETHOD bv_cc_case_definition(
-        I18N us_pst
-        CONSTRAINTS (
-             ADD case_id (any) OPT ANY
-             ADD date_raised (any) OPT ANY
-             ADD date_closed (any) OPT ANY
-             ADD case_status (any) OPT ANY
-             ADD case_summary (any) OPT ANY
-             ADD case_comments (any) OPT ANY
-             ADD customer_code (any) OPT ANY
-        )
-        OUTPUTLIST (case_comments, case_id, case_status, case_summary, customer_code, date_closed, date_raised
-        )
-        WRAPPER (jdbc bv_cc_case_definition)
-    );
-
-CREATE OR REPLACE TABLE bv_cc_customer I18N us_pst (
-        customer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        customer_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '21', description = ''),
-        customer_address:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '27', description = ''),
-        phone_number:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '17', description = ''),
-        customer_code:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '12', description = ''),
-        job_title:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '36', description = ''),
-        other_details:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '250', description = '')
-    )
-    FOLDER = '/1 - connectivity/2 - base views'
-    CACHE OFF
-    TIMETOLIVEINCACHE DEFAULT
-    ADD SEARCHMETHOD bv_cc_customer(
-        I18N us_pst
-        CONSTRAINTS (
-             ADD customer_id (any) OPT ANY
-             ADD customer_name (any) OPT ANY
-             ADD customer_address (any) OPT ANY
-             ADD phone_number (any) OPT ANY
-             ADD customer_code (any) OPT ANY
-             ADD job_title (any) OPT ANY
-             ADD other_details (any) OPT ANY
-        )
-        OUTPUTLIST (customer_address, customer_code, customer_id, customer_name, job_title, other_details, phone_number
-        )
-        WRAPPER (jdbc bv_cc_customer)
-    );
-
-CREATE OR REPLACE TABLE bv_cc_problem I18N us_pst (
-        problem_code:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        problem_description:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '41', description = '')
-    )
-    FOLDER = '/1 - connectivity/2 - base views'
-    CACHE OFF
-    TIMETOLIVEINCACHE DEFAULT
-    ADD SEARCHMETHOD bv_cc_problem(
-        I18N us_pst
-        CONSTRAINTS (
-             ADD problem_code (any) OPT ANY
-             ADD problem_description (any) OPT ANY
-        )
-        OUTPUTLIST (problem_code, problem_description
-        )
-        WRAPPER (jdbc bv_cc_problem)
-    );
-
-CREATE OR REPLACE TABLE bv_cc_service_call I18N us_pst (
-        call_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        location_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        problem_code:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        status_code:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        date_ticket_issued:timestamp (sourcetypeid = '93', sourcetyperadix = '10', sourcetypesize = '19', description = ''),
-        date_call_received:timestamp (sourcetypeid = '93', sourcetyperadix = '10', sourcetypesize = '19', description = ''),
-        other_details:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '250', description = ''),
-        caller_phone:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '17', description = ''),
-        case_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        agent_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        customer_code:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = '')
-    )
-    FOLDER = '/1 - connectivity/2 - base views'
-    CACHE OFF
-    TIMETOLIVEINCACHE DEFAULT
-    ADD SEARCHMETHOD bv_cc_service_call(
-        I18N us_pst
-        CONSTRAINTS (
-             ADD call_id (any) OPT ANY
-             ADD location_id (any) OPT ANY
-             ADD problem_code (any) OPT ANY
-             ADD status_code (any) OPT ANY
-             ADD date_ticket_issued (any) OPT ANY
-             ADD date_call_received (any) OPT ANY
-             ADD other_details (any) OPT ANY
-             ADD caller_phone (any) OPT ANY
-             ADD case_id (any) OPT ANY
-             ADD agent_id (any) OPT ANY
-             ADD customer_code (any) OPT ANY
-        )
-        OUTPUTLIST (agent_id, call_id, caller_phone, case_id, customer_code, date_call_received, date_ticket_issued, location_id, other_details, problem_code, status_code
-        )
-        WRAPPER (jdbc bv_cc_service_call)
-    );
-
-CREATE OR REPLACE TABLE bv_cc_service_location I18N us_pst (
-        id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        location_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        customer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        business_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '12', description = ''),
-        service_location:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '22', description = ''),
-        other_details:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '0', description = '')
-    )
-    FOLDER = '/1 - connectivity/2 - base views'
-    CACHE OFF
-    TIMETOLIVEINCACHE DEFAULT
-    ADD SEARCHMETHOD bv_cc_service_location(
-        I18N us_pst
-        CONSTRAINTS (
-             ADD id (any) OPT ANY
-             ADD location_id (any) OPT ANY
-             ADD customer_id (any) OPT ANY
-             ADD business_name (any) OPT ANY
-             ADD service_location (any) OPT ANY
-             ADD other_details (any) OPT ANY
-        )
-        OUTPUTLIST (business_name, customer_id, id, location_id, other_details, service_location
-        )
-        WRAPPER (jdbc bv_cc_service_location)
-    );
-
-CREATE OR REPLACE TABLE bv_cc_status_code I18N us_pst (
-        code_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        code_description:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '16', description = '')
-    )
-    FOLDER = '/1 - connectivity/2 - base views'
-    CACHE OFF
-    TIMETOLIVEINCACHE DEFAULT
-    ADD SEARCHMETHOD bv_cc_status_code(
-        I18N us_pst
-        CONSTRAINTS (
-             ADD code_id (any) OPT ANY
-             ADD code_description (any) OPT ANY
-        )
-        OUTPUTLIST (code_description, code_id
-        )
-        WRAPPER (jdbc bv_cc_status_code)
-    );
-
 CREATE OR REPLACE TABLE bv_conn_events I18N us_pst (
         log_date:text (extern),
         event_date:text,
@@ -1751,7 +1538,9 @@ CREATE OR REPLACE TABLE bv_product I18N us_pst (
         accessories:products_accessories
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    PRIMARY KEY ( 'productid' )
     CACHE OFF
+    BATCHSIZEINCACHE DEFAULT
     TIMETOLIVEINCACHE DEFAULT
     ADD SEARCHMETHOD products(
         I18N us_pst
@@ -2462,6 +2251,7 @@ CREATE OR REPLACE TABLE bv_wo_customer I18N us_pst (
         OUTPUTLIST (customer_code_internal, email, first_name, id, last_name, main_address, main_country, main_postcode, phone, registered_date
         )
         WRAPPER (jdbc bv_wo_customer)
+        ALTERNATIVE_WRAPPERS (jdbc ds_historical_orders_bv_wo_customer)
     );
 
 CREATE OR REPLACE TABLE bv_wo_delivery I18N us_pst (
@@ -2656,10 +2446,6 @@ CREATE OR REPLACE VIEW iv_employee_income FOLDER = '/2 - integration' AS SELECT 
 ALTER VIEW iv_employee_income
  LAYOUT (bv_hr_employees = [278, 103, 200, 200], bv_hr_jobs = [805, 131, 200, 200]);
 
-CREATE OR REPLACE VIEW iv_employee_sales_by_date FOLDER = '/2 - integration' AS SELECT bv_sales_all.employeeid, count(*) AS total_sales, sum(cast('int', bv_sales_all.productsaleprice)) AS total_price, to_localdate('yyyy/MM/dd', '1970/01/01') as start_date, current_date() as end_date FROM bv_sales_all WHERE to_localdate('yyyy-MM-dd''T''HH:mm:ss', saledate) between to_localdate('yyyy/MM/dd', '1970/01/01') AND current_date() GROUP BY bv_sales_all.employeeid;
- 
-# NOTE: The following query will fail if using an Express license because the View Parameters are not allowed by using this license.
-# You can continue working with the labs as an alternate version of this view has been created in the previous step.
 CREATE OR REPLACE VIEW iv_employee_sales_by_date FOLDER = '/2 - integration' AS SELECT bv_sales_all.employeeid AS employeeid, count(*) AS total_sales, sum(cast('int', bv_sales_all.productsaleprice)) AS total_price, start_date, end_date FROM bv_sales_all WHERE to_localdate('yyyy-MM-dd''T''HH:mm:ss', saledate) between start_date AND end_date GROUP BY bv_sales_all.employeeid USING PARAMETERS ( start_date : localdate to_localdate('yyyy/MM/dd', '1970/01/01'), end_date : localdate current_date());
 
 ALTER VIEW iv_employee_sales_by_date
@@ -2670,23 +2456,40 @@ CREATE OR REPLACE VIEW iv_employee_seniority FOLDER = '/2 - integration' AS SELE
 ALTER VIEW iv_employee_seniority
  LAYOUT (bv_hr_employees = [132, 192, 200, 200]);
 
+ CREATE OR REPLACE VIEW iv_invoices_cast
+    FOLDER = '/2 - integration' AS
+    SELECT bv_invoices.invoice_id AS invoice_id,
+           to_timestamp('EEE MMM dd HH:mm:ss z yyyy', date_invoice) AS date_invoice,
+           bv_invoices.order_id AS order_id,
+           bv_invoices.date_placed AS date_placed,
+           bv_invoices.date_delivered AS date_delivered,
+           bv_invoices.date_closed AS date_closed,
+           bv_invoices.first_name AS first_name,
+           bv_invoices.last_name AS last_name,
+           bv_invoices.email AS email,
+           bv_invoices.address AS address,
+           bv_invoices.country AS country,
+           bv_invoices.postal_code AS postal_code,
+           bv_invoices.phone AS phone,
+           bv_invoices.amount AS amount
+    FROM bv_invoices;
+
+ALTER VIEW iv_invoices_cast
+ LAYOUT (bv_invoices = [20, 20, 200, 200]);
+
 CREATE OR REPLACE VIEW iv_orders_by_customer FOLDER = '/2 - integration' AS SELECT customer_code, count(*) AS total_orders FROM bv_wo_orders GROUP BY customer_code HAVING count(*) > 1;
 
-CREATE OR REPLACE VIEW iv_orders_by_date FOLDER = '/2 - integration' AS SELECT bv_wo_orders.id AS id, bv_wo_orders.customer_code AS customer_code, bv_wo_orders.status AS status, bv_wo_orders.date_placed AS date_placed, bv_wo_orders.date_delivered AS date_delivered, bv_wo_orders.date_closed AS date_closed, to_localdate('yyyy/MM/dd', '1970/01/01') as start_date_placed, current_date() as end_date_placed  FROM bv_wo_orders WHERE date_placed between to_localdate('yyyy/MM/dd', '1970/01/01') AND current_date();
- 
-# NOTE: The following query will fail if using an Express license because the View Parameters are not allowed by using this license.
-# You can continue working with the labs as an alternate version of this view has been created in the previous step.
 CREATE OR REPLACE VIEW iv_orders_by_date FOLDER = '/2 - integration' AS SELECT bv_wo_orders.id AS id, bv_wo_orders.customer_code AS customer_code, bv_wo_orders.status AS status, bv_wo_orders.date_placed AS date_placed, bv_wo_orders.date_delivered AS date_delivered, bv_wo_orders.date_closed AS date_closed, start_date_placed, end_date_placed FROM bv_wo_orders WHERE date_placed between start_date_placed AND end_date_placed USING PARAMETERS ( start_date_placed : timestamp, end_date_placed : timestamp);
 
 ALTER VIEW iv_orders_by_date
  LAYOUT (bv_wo_orders = [20, 20, 200, 200]);
 
-CREATE OR REPLACE VIEW iv_orders_current FOLDER = '/2 - integration' AS SELECT bv_wo_orders.id AS id, bv_wo_orders.customer_code AS customer_code, bv_wo_orders.status AS status, bv_wo_orders.date_placed AS date_placed, bv_wo_orders.date_delivered AS date_delivered, bv_wo_orders.date_closed AS date_closed, bv_wo_order_item.order_id AS order_id, bv_wo_order_item.product_id AS product_id FROM bv_wo_orders AS bv_wo_orders INNER JOIN bv_wo_order_item AS bv_wo_order_item ON bv_wo_orders.id = bv_wo_order_item.order_id ;
+CREATE OR REPLACE VIEW iv_orders_current FOLDER = '/2 - integration' AS SELECT bv_wo_orders.id AS id, bv_wo_orders.customer_code AS customer_code, bv_wo_orders.status AS status, bv_wo_orders.date_placed AS date_placed, bv_wo_orders.date_delivered AS date_delivered, bv_wo_orders.date_closed AS date_closed, bv_wo_order_item.order_id AS order_id, bv_wo_order_item.product_id AS product_id FROM bv_wo_orders AS bv_wo_orders INNER JOIN bv_wo_order_item AS bv_wo_order_item ON bv_wo_orders.id = bv_wo_order_item.order_id  WHERE bv_wo_orders.date_placed > DATE '2015-01-01';
 
 ALTER VIEW iv_orders_current
  LAYOUT (bv_wo_orders = [63, 95, 200, 200], bv_wo_order_item = [334, 144, 200, 200]);
 
-CREATE OR REPLACE VIEW iv_orders_historical FOLDER = '/2 - integration' AS SELECT bv_ho_order_item.id AS id, bv_ho_order_item.order_id AS order_id, bv_ho_order_item.product_id AS product_id, bv_ho_orders.customer_code AS customer_code, bv_ho_orders.status AS status, bv_ho_orders.date_placed AS dateplaced, bv_ho_orders.date_delivered AS datedelivered, bv_ho_orders.date_closed AS dateclosed FROM bv_ho_orders AS bv_ho_orders INNER JOIN bv_ho_order_item AS bv_ho_order_item ON bv_ho_orders.id = bv_ho_order_item.order_id ;
+CREATE OR REPLACE VIEW iv_orders_historical FOLDER = '/2 - integration' AS SELECT bv_ho_order_item.id AS id, bv_ho_order_item.order_id AS order_id, bv_ho_order_item.product_id AS product_id, bv_ho_orders.customer_code AS customer_code, bv_ho_orders.status AS status, bv_ho_orders.date_placed AS dateplaced, bv_ho_orders.date_delivered AS datedelivered, bv_ho_orders.date_closed AS dateclosed FROM bv_ho_orders AS bv_ho_orders INNER JOIN bv_ho_order_item AS bv_ho_order_item ON bv_ho_orders.id = bv_ho_order_item.order_id  WHERE bv_ho_orders.date_placed < DATE '2015-01-01';
 
 ALTER VIEW iv_orders_historical
  LAYOUT (bv_ho_orders = [61, 44, 200, 200], bv_ho_order_item = [411, 63, 200, 200]);
@@ -2711,7 +2514,7 @@ CREATE OR REPLACE VIEW iv_product_stock FOLDER = '/2 - integration' AS SELECT bv
 ALTER VIEW iv_product_stock
  LAYOUT (bv_product = [188, 164, 200, 200], bv_wo_stock = [213, 392, 200, 200]);
 
-CREATE OR REPLACE VIEW iv_product_storage FOLDER = '/2 - integration' AS SELECT bv_product.productid AS product_id, bv_product.productname AS product_name, bv_wo_storages.id AS storage_id, bv_wo_storages.city AS city, count(*) AS amount FROM (bv_product AS bv_product INNER JOIN bv_wo_stock AS bv_wo_stock ON bv_product.productid = bv_wo_stock.product_id ) INNER JOIN bv_wo_storages AS bv_wo_storages ON bv_wo_stock.storage_id = bv_wo_storages.id  GROUP BY bv_product.productid, bv_product.productname, bv_wo_storages.id, bv_wo_storages.city;
+CREATE OR REPLACE VIEW iv_product_storage FOLDER = '/2 - integration' AS SELECT bv_product.productid AS product_id, bv_product.productname AS product_name, bv_wo_storages.id AS storage_id, bv_wo_storages.city AS city, count(*) AS amount FROM (bv_product AS bv_product INNER JOIN bv_wo_stock AS bv_wo_stock ON bv_product.productid = bv_wo_stock.product_id ) INNER JOIN bv_wo_storages AS bv_wo_storages ON bv_wo_stock.storage_id = bv_wo_storages.id  GROUP BY bv_product.productid, bv_product.productname, bv_wo_storages.id, bv_wo_storages.city CONTEXT (DATAMOVEMENTPLAN = bv_product : JDBC ds_web_orders);
 
 ALTER VIEW iv_product_storage
  LAYOUT (bv_product = [188, 164, 200, 200], bv_wo_stock = [213, 392, 200, 200], bv_wo_storages = [648, 305, 200, 200]);
@@ -2726,56 +2529,150 @@ CREATE OR REPLACE VIEW iv_sales_by_product FOLDER = '/2 - integration' AS SELECT
 ALTER VIEW iv_sales_by_product
  LAYOUT (bv_sales_all = [20, 20, 200, 200]);
 
+CREATE OR REPLACE SUMMARY VIEW s_customer_sale (
+        customer_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        total_orders:long
+    )
+    FOLDER = '/7 - summaries'
+    ADD SEARCHMETHOD s_customer_sale(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD customer_code (any) OPT ANY
+             ADD total_orders (any) OPT ANY
+        )
+        OUTPUTLIST (customer_code, total_orders
+        )
+        WRAPPER (jdbc s_customer_sale)
+    )
+AS SELECT bv_wo_orders.customer_code AS customer_code, total_orders AS total_orders FROM (SELECT customer_code, count(*) AS total_orders FROM bv_wo_orders GROUP BY customer_code);
+
+CREATE OR REPLACE SUMMARY VIEW sum1_bv_hr_employees_bv_hr_departments (
+        department_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '30'),
+        location_id:int (sourcetypeid = '5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '5'),
+        employee_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '25'),
+        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '50'),
+        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        hire_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '13'),
+        job_id:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        salary:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '8'),
+        commission_pct:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '2'),
+        manager_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        department_id:int (sourcetypeid = '5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '5')
+    )
+    FOLDER = '/7 - summaries'
+    ADD SEARCHMETHOD sum1_bv_hr_employees_bv_hr_departments(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD department_name (any) OPT ANY
+             ADD location_id (any) OPT ANY
+             ADD employee_id (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD phone_number (any) OPT ANY
+             ADD hire_date (any) OPT ANY
+             ADD job_id (any) OPT ANY
+             ADD salary (any) OPT ANY
+             ADD commission_pct (any) OPT ANY
+             ADD manager_id (any) OPT ANY
+             ADD department_id (any) OPT ANY
+        )
+        OUTPUTLIST (commission_pct, department_id, department_name, email, employee_id, first_name, hire_date, job_id, last_name, location_id, manager_id, phone_number, salary
+        )
+        WRAPPER (jdbc sum1_bv_hr_employees_bv_hr_departments)
+    )
+AS SELECT bv_hr_departments.department_name AS department_name, bv_hr_departments.location_id AS location_id, bv_hr_employees.employee_id AS employee_id, bv_hr_employees.first_name AS first_name, bv_hr_employees.last_name AS last_name, bv_hr_employees.email AS email, bv_hr_employees.phone_number AS phone_number, bv_hr_employees.hire_date AS hire_date, bv_hr_employees.job_id AS job_id, bv_hr_employees.salary AS salary, bv_hr_employees.commission_pct AS commission_pct, bv_hr_employees.manager_id AS manager_id, bv_hr_employees.department_id AS department_id FROM bv_hr_employees AS bv_hr_employees INNER JOIN bv_hr_departments AS bv_hr_departments ON (bv_hr_employees.department_id = bv_hr_departments.department_id AND bv_hr_employees.employee_id = bv_hr_departments.manager_id) ;
+
+CREATE OR REPLACE SUMMARY VIEW sum2_bv_hr_employees_bv_hr_departments (
+        department_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '30'),
+        location_id:int (sourcetypeid = '5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '5'),
+        employee_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '25'),
+        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '50'),
+        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        hire_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '13'),
+        job_id:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        salary:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '8'),
+        commission_pct:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '2'),
+        manager_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        department_id:int (sourcetypeid = '5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '5')
+    )
+    FOLDER = '/7 - summaries'
+    ADD SEARCHMETHOD sum2_bv_hr_employees_bv_hr_departments(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD department_name (any) OPT ANY
+             ADD location_id (any) OPT ANY
+             ADD employee_id (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD phone_number (any) OPT ANY
+             ADD hire_date (any) OPT ANY
+             ADD job_id (any) OPT ANY
+             ADD salary (any) OPT ANY
+             ADD commission_pct (any) OPT ANY
+             ADD manager_id (any) OPT ANY
+             ADD department_id (any) OPT ANY
+        )
+        OUTPUTLIST (commission_pct, department_id, department_name, email, employee_id, first_name, hire_date, job_id, last_name, location_id, manager_id, phone_number, salary
+        )
+        WRAPPER (jdbc sum2_bv_hr_employees_bv_hr_departments)
+    )
+AS SELECT bv_hr_departments.department_name AS department_name, bv_hr_departments.location_id AS location_id, bv_hr_employees.employee_id AS employee_id, bv_hr_employees.first_name AS first_name, bv_hr_employees.last_name AS last_name, bv_hr_employees.email AS email, bv_hr_employees.phone_number AS phone_number, bv_hr_employees.hire_date AS hire_date, bv_hr_employees.job_id AS job_id, bv_hr_employees.salary AS salary, bv_hr_employees.commission_pct AS commission_pct, bv_hr_employees.manager_id AS manager_id, bv_hr_employees.department_id AS department_id FROM bv_hr_employees AS bv_hr_employees INNER JOIN bv_hr_departments AS bv_hr_departments ON (bv_hr_employees.department_id = bv_hr_departments.department_id AND bv_hr_employees.employee_id = bv_hr_departments.manager_id)  WHERE (bv_hr_employees.employee_id > 10 AND bv_hr_employees.salary < 15000);
+
+CREATE OR REPLACE VIEW iv_orders FOLDER = '/2 - integration' AS SELECT id, customer_code, status, date_placed, date_delivered, date_closed, order_id, product_id FROM (SELECT order_id, product_id, date_closed, date_placed, date_delivered, customer_code, status, id FROM iv_orders_current EXTENDED UNION ALL SELECT status, customer_code, id, datedelivered AS date_delivered, dateplaced AS date_placed, product_id, order_id, dateclosed AS date_closed FROM iv_orders_historical);
+
+ALTER VIEW iv_orders
+ LAYOUT (iv_orders_current = [296, 162, 200, 200], iv_orders_historical = [769, 159, 200, 200]);
+
 CREATE OR REPLACE VIEW iv_product_details_flatten FOLDER = '/2 - integration' AS SELECT _id AS _id, index AS index, productid AS productid, productname AS productname, productprice AS productprice, categoryid AS categoryid, categoryname AS categoryname, characteristic_dimensions AS characteristic_dimensions, characteristic_weight AS characteristic_weight, characteristic_details AS characteristic_details, characteristic_color AS characteristic_color, accessories_productid AS accessories_productid, accessories_productprice AS accessories_productprice, accessories_productname AS accessories_productname FROM FLATTEN iv_product_details AS v ( v.accessories);
 
 ALTER VIEW iv_product_details_flatten
  LAYOUT (iv_product_details = [20, 20, 200, 200]);
 
-CREATE OR REPLACE VIEWSTATSUMMARY bv_cc_customer (
-    SET ENABLED = true
-    SET NUMOFROWS = 1001
-    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
-      (customer_id,4.0,1000,0,1001,0),
-      (customer_name,12.913,'Willie Roberts','Aaron Arnold',986,1),
-      (job_title,9.456,'Web Developer IV','',156,1),
-      (customer_code,4.612,'ZYxj9KfdZ6LL','',505,1),
-      (other_details,48.878,'Vivamus tortor. Duis mattis egestas metus. Aenean fermentum.
-','
-',208,1),
-      (phone_number,16.12,'998-(974)689-4553','1-(177)988-8828',1000,1),
-      (customer_address,17.586,'9994 Transport Park','0 Armistice Way',999,1)
-);
+CREATE OR REPLACE VIEW iv_orders_customer_detail FOLDER = '/2 - integration' AS SELECT iv_orders_all.id AS id, iv_orders_all.customer_code AS customer_code, iv_orders_all.status AS status, iv_orders_all.date_placed AS date_placed, iv_orders_all.date_delivered AS date_delivered, iv_orders_all.date_closed AS date_closed, iv_orders_all.order_id AS order_id, iv_orders_all.product_id AS product_id, bv_wo_customer.id AS customerid, bv_wo_customer.customer_code_internal AS customer_code_internal, bv_wo_customer.first_name AS first_name, bv_wo_customer.last_name AS last_name, bv_wo_customer.email AS email, bv_wo_customer.phone AS phone, bv_wo_customer.main_address AS main_address, bv_wo_customer.main_postcode AS main_postcode, bv_wo_customer.main_country AS main_country, bv_wo_customer.registered_date AS registered_date FROM iv_orders AS iv_orders_all INNER JOIN bv_wo_customer AS bv_wo_customer ON iv_orders_all.customer_code = bv_wo_customer.customer_code_internal ;
 
-CREATE OR REPLACE VIEWSTATSUMMARY bv_hr_employees (
-    SET ENABLED = true
-    SET NUMOFROWS = 96
-    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
-      (phone_number,17.0,'998-(333)462-0973','1-(248)526-7040',96,0),
-      (department_id,2.0,110,10,11,1),
-      (manager_id,4.0,92,1,18,1),
-      (job_id,8.0,'ST_MAN','AC_ACCOUNT',19,0),
-      (commission_pct,5.0,0.40,0.10,7,63),
-      (last_name,7.0,'Young','Allen',84,0),
-      (employee_id,4.0,96,1,96,0),
-      (first_name,7.0,'Willie','Aaron',77,0),
-      (salary,5.0,24000.00,2100.00,54,0),
-      (email,18.0,'wrodriguez2b@mail.com','aanderson2m@mail.com',96,0),
-      (hire_date,8.0,'2023-12-09','2010-12-11',96,0)
-);
+ALTER VIEW iv_orders_customer_detail
+ LAYOUT (iv_orders = [147, 176, 200, 200], bv_wo_customer = [515, 169, 200, 200]);
 
-CREATE OR REPLACE VIEWSTATSUMMARY bv_hr_departments (
-    SET ENABLED = true
-    SET NUMOFROWS = 27
-    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
-      (department_name,10.62962962962963,'Treasury','Accounting',27,0),
-      (location_id,4.0,15,1,7,0),
-      (manager_id,4.0,95,1,11,16),
-      (department_id,4.0,270,10,27,0)
-);
+CREATE OR REPLACE SUMMARY VIEW s_order_count (
+        customer_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '20'),
+        product_id:int (sourcetypeid = '-5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        main_country:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '100'),
+        cnt_per_cust_per_product:long (sourcetypeid = '-5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '19'),
+        cnt_item_per_cust_per_product:long (sourcetypeid = '-5', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '19')
+    )
+    FOLDER = '/7 - summaries'
+    ADD SEARCHMETHOD s_order_count(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD customer_code (any) OPT ANY
+             ADD product_id (any) OPT ANY
+             ADD main_country (any) OPT ANY
+             ADD cnt_per_cust_per_product (any) OPT ANY
+             ADD cnt_item_per_cust_per_product (any) OPT ANY
+        )
+        OUTPUTLIST (cnt_item_per_cust_per_product, cnt_per_cust_per_product, customer_code, main_country, product_id
+        )
+        WRAPPER (jdbc s_order_count)
+    )
+AS SELECT customer_code AS customer_code, product_id AS product_id, main_country AS main_country, count(order_id) AS cnt_per_cust_per_product, count(id) AS cnt_item_per_cust_per_product FROM iv_orders_customer_detail GROUP BY customer_code, product_id, main_country;
 
 # #######################################
 # ASSOCIATIONS
 # #######################################
+CREATE OR REPLACE ASSOCIATION a_product_wo_order_item REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_wo_order_item bv_product PRINCIPAL (1)
+    ENDPOINT bv_product bv_wo_order_item (0,*)
+    ADD MAPPING productid=product_id;
+
+ALTER ASSOCIATION a_product_wo_order_item
+ LAYOUT (bv_product = [479, 107, 200, 200], bv_wo_order_item = [666, 128, 200, 200]);
 
 CREATE OR REPLACE ASSOCIATION bv_hr_countries_bv_hr_locations REFERENTIAL CONSTRAINT 
 FOLDER = '/6 - associations'
@@ -2903,6 +2800,253 @@ FOLDER = '/6 - associations'
     ENDPOINT bv_tpcds_time_dim bv_tpcds_web_sales (0,*)
     ADD MAPPING t_time_sk=ws_sold_time_sk;
 
+# #######################################
+# Integrations (Derived views) created on the intermediate course
+# #######################################
+CREATE OR REPLACE VIEW iv_web_orders FOLDER = '/2 - integration' AS SELECT bv_wo_orders.id, bv_wo_orders.customer_code, bv_wo_orders.status, bv_wo_orders.date_placed, bv_wo_orders.date_delivered, bv_wo_orders.date_closed, bv_wo_order_item.order_id, bv_wo_order_item.product_id FROM bv_wo_orders AS bv_wo_orders INNER JOIN bv_wo_order_item AS bv_wo_order_item ON bv_wo_orders.id = bv_wo_order_item.order_id ;
+
+CREATE OR REPLACE VIEW iv_historical_orders FOLDER = '/2 - integration' AS SELECT bv_ho_order_item.id AS id, bv_ho_order_item.order_id AS order_id, bv_ho_order_item.product_id AS product_id, bv_ho_orders.customer_code AS customer_code, bv_ho_orders.status AS status, bv_ho_orders.date_placed AS date_placed, bv_ho_orders.date_delivered AS date_delivered, bv_ho_orders.date_closed AS date_closed FROM bv_ho_orders AS bv_ho_orders INNER JOIN bv_ho_order_item AS bv_ho_order_item ON bv_ho_orders.id = bv_ho_order_item.order_id ;
+
+CREATE OR REPLACE VIEW iv_orders FOLDER = '/2 - integration' AS SELECT id AS id, customer_code AS customer_code, status AS status, date_placed AS date_placed, date_delivered AS date_delivered, date_closed AS date_closed, order_id AS order_id, product_id AS product_id FROM (SELECT id, customer_code, status, date_placed, date_delivered, date_closed, order_id, product_id FROM iv_web_orders EXTENDED UNION ALL SELECT id, customer_code, status, date_placed, date_delivered, date_closed, order_id, product_id FROM iv_historical_orders);
+
+CREATE OR REPLACE VIEW iv_customer_orders_report FOLDER = '/2 - integration' AS SELECT iv_customer_orders.customer_code AS customer_code, iv_customer_orders.first_name AS first_name, iv_customer_orders.last_name AS last_name, iv_customer_orders.status AS status, formatdate('dd-MM-yyyy', iv_customer_orders.date_placed) AS date_placed, iv_customer_orders.date_delivered AS date_delivered, iv_customer_orders.date_closed AS date_closed, iv_customer_orders.order_id AS order_id, iv_customer_orders.productid AS productid, iv_customer_orders.productname AS productname FROM iv_customer_orders;
+
+#CREATE OR REPLACE VIEW iv_all_invoices FOLDER = '/2 - integration' AS SELECT invoice_id AS invoice_id, order_id AS order_id, date_closed AS date_closed, first_name AS first_name, last_name AS last_name, email AS email, address AS address, country AS country, postal_code AS postal_code, phone AS phone, amount AS amount FROM (SELECT invoice_id, order_id, date_closed, first_name, last_name, email, address, country, postal_code, phone, amount FROM bv_invoices SQL UNION SELECT invoice, order, date_closed, name, surname, email, address, country, postal_code, phone, cost FROM bv_old_invoices);
+
+CREATE OR REPLACE VIEW iv_current_customer FOLDER = '/2 - integration' AS SELECT bv_wo_customer.id, bv_wo_customer.customer_code_internal, bv_wo_customer.first_name, bv_wo_customer.last_name, bv_wo_customer.email, bv_wo_customer.phone, bv_wo_customer.main_address, bv_wo_customer.main_postcode, bv_wo_customer.main_country, bv_wo_customer.registered_date FROM bv_wo_customer WHERE registered_date > DATE '2015-01-01';
+
+CREATE OR REPLACE VIEW iv_customer_address FOLDER = '/2 - integration' AS SELECT bv_wo_customer.id, bv_wo_customer.customer_code_internal, bv_wo_customer.first_name, bv_wo_customer.last_name, bv_wo_customer.email, bv_wo_customer.phone, bv_wo_customer.registered_date, register(bv_wo_customer.main_address, bv_wo_customer.main_postcode, bv_wo_customer.main_country) AS address FROM bv_wo_customer;
+
+#CREATE OR REPLACE VIEW iv_customer_calls FOLDER = '/2 - integration' AS SELECT bv_wo_customer.id, bv_wo_customer.customer_code_internal, bv_wo_customer.first_name, bv_wo_customer.last_name, bv_wo_customer.email, bv_wo_customer.phone, bv_wo_customer.main_address, bv_wo_customer.main_postcode, bv_wo_customer.main_country, bv_wo_customer.registered_date, bv_cc_service_call.call_id, bv_cc_service_call.location_id, bv_cc_service_call.problem_code, bv_cc_service_call.status_code, bv_cc_service_call.date_ticket_issued, bv_cc_service_call.date_call_received, bv_cc_service_call.other_details, bv_cc_service_call.caller_phone, bv_cc_service_call.case_id, bv_cc_service_call.agent_id, bv_cc_service_call.customer_code FROM bv_wo_customer AS bv_wo_customer INNER JOIN bv_cc_service_call AS bv_cc_service_call ON bv_wo_customer.customer_code_internal ~ (bv_cc_service_call.customer_code, '0.8') ;
+
+CREATE OR REPLACE VIEW iv_customer_china FOLDER = '/2 - integration'
+    PRIMARY KEY ( 'id' , 'customer_code_internal' ) AS SELECT bv_wo_customer.id, bv_wo_customer.customer_code_internal, bv_wo_customer.first_name, bv_wo_customer.last_name, bv_wo_customer.email, bv_wo_customer.phone, bv_wo_customer.main_address, bv_wo_customer.main_country, bv_wo_customer.registered_date FROM bv_wo_customer WHERE main_country = 'China' ORDER BY registered_date DESC;
+
+CREATE OR REPLACE VIEW iv_customer_info FOLDER = '/2 - integration'
+    PRIMARY KEY ( 'id' ) AS SELECT DISTINCT bv_wo_customer.id, bv_wo_customer.first_name, bv_wo_customer.phone, bv_wo_customer.customer_code_internal AS customer_code, len(bv_wo_customer.first_name) AS name_length FROM bv_wo_customer ORDER BY first_name DESC;
+
+CREATE OR REPLACE VIEW iv_customer_orders FOLDER = '/2 - integration' AS SELECT bv_wo_orders.customer_code, bv_wo_orders.status, bv_wo_orders.date_placed, bv_wo_orders.date_delivered, bv_wo_orders.date_closed, bv_wo_order_item.order_id, bv_product.productid, bv_product.productname, bv_product.productprice, bv_product.category, bv_product.characteristics, bv_wo_customer.first_name, bv_wo_customer.last_name, bv_wo_customer.email, bv_wo_customer.phone, bv_wo_customer.main_address, bv_wo_customer.main_postcode, bv_wo_customer.main_country, bv_wo_customer.registered_date FROM ((bv_wo_orders AS bv_wo_orders INNER JOIN bv_wo_order_item AS bv_wo_order_item ON bv_wo_orders.id = bv_wo_order_item.order_id ) INNER JOIN bv_product AS bv_product ON bv_wo_order_item.product_id = bv_product.productid ) INNER JOIN bv_wo_customer AS bv_wo_customer ON bv_wo_orders.customer_code = bv_wo_customer.customer_code_internal ;
+
+CREATE OR REPLACE VIEW iv_employee_seniority FOLDER = '/2 - integration' AS SELECT bv_hr_employees.employee_id, bv_hr_employees.first_name, bv_hr_employees.last_name, bv_hr_employees.email, bv_hr_employees.phone_number, bv_hr_employees.hire_date, bv_hr_employees.job_id, bv_hr_employees.salary, bv_hr_employees.commission_pct, bv_hr_employees.manager_id, bv_hr_employees.department_id, round(cast(((current_date()-bv_hr_employees.hire_date)/365) AS DECIMAL), 1) AS seniority FROM bv_hr_employees ORDER BY seniority DESC;
+
+#CREATE OR REPLACE VIEW iv_interactions FOLDER = '/2 - integration' AS SELECT case_id, customer_code, interaction_date, agent_id, interaction_ip, interaction_phone, status_code FROM (SELECT customer_code, customer_ip AS interaction_ip, agent_id, status_code, sr_date AS interaction_date, global_case_id AS case_id FROM bv_support_get_all_service_request EXTENDED UNION ALL SELECT call_id AS case_id, customer_code, status_code, date_call_received AS interaction_date, caller_phone AS interaction_phone, agent_id FROM bv_cc_service_call) ORDER BY interaction_date DESC;
+
+CREATE OR REPLACE VIEW iv_invoices_cast FOLDER = '/2 - integration' (
+    date_invoice (sourcetypeid = '12')
+)
+ AS SELECT bv_invoices.invoice_id, to_timestamp('EEE MMM dd HH:mm:ss z yyyy', bv_invoices.date_invoice) AS date_invoice, bv_invoices.order_id, bv_invoices.date_placed, bv_invoices.date_delivered, bv_invoices.date_closed, bv_invoices.first_name, bv_invoices.last_name, bv_invoices.email, bv_invoices.address, bv_invoices.country, bv_invoices.postal_code, bv_invoices.phone, bv_invoices.amount FROM bv_invoices;
+
+CREATE OR REPLACE VIEW iv_orders_by_customer FOLDER = '/2 - integration' AS SELECT customer_code, count(*) AS total_orders FROM bv_wo_orders GROUP BY customer_code HAVING count(*) > 1;
+
+CREATE OR REPLACE VIEW iv_orders_by_date FOLDER = '/2 - integration' AS SELECT bv_wo_orders.id, bv_wo_orders.customer_code, bv_wo_orders.status, bv_wo_orders.date_placed, bv_wo_orders.date_delivered, bv_wo_orders.date_closed, start_date_placed, end_date_placed FROM bv_wo_orders WHERE date_placed between start_date_placed AND end_date_placed USING PARAMETERS ( start_date_placed : timestamp, end_date_placed : timestamp);
+
+CREATE OR REPLACE VIEW iv_people FOLDER = '/2 - integration' AS SELECT employee_id, first_name, last_name, email, hire_date, customer_code FROM (SELECT first_name, email, employee_id, last_name, hire_date FROM bv_hr_employees EXTENDED UNION ALL SELECT customer_code_internal AS customer_code, first_name, email, last_name, id AS employee_id FROM bv_wo_customer) ORDER BY hire_date DESC;
+
+#CREATE OR REPLACE VIEW iv_product_details_array FOLDER = '/2 - integration' AS SELECT (bv_product_details.return).product.code AS code, (bv_product_details.return).product.description AS description, (bv_product_details.return).product.warnings AS warnings, (bv_product_details.return).product.numresults AS numresults, (bv_product_details.return).product.productdetails AS productdetails FROM bv_product_details;
+
+CREATE OR REPLACE VIEW iv_product_storage FOLDER = '/2 - integration' AS SELECT bv_product.productname AS product_name, bv_product.productid AS product_id, bv_wo_storages.city, bv_wo_storages.id AS storage_id, count(*) AS amount FROM (bv_product AS bv_product INNER JOIN bv_wo_stock AS bv_wo_stock ON bv_product.productid = bv_wo_stock.product_id ) INNER JOIN bv_wo_storages AS bv_wo_storages ON bv_wo_stock.storage_id = bv_wo_storages.id  GROUP BY bv_wo_storages.city, bv_wo_storages.id, bv_product.productname, bv_product.productid;
+
+CREATE OR REPLACE VIEW iv_products_in_storages FOLDER = '/2 - integration' AS SELECT bv_product.productname AS product_name, count(*) AS amount FROM (bv_product AS bv_product INNER JOIN bv_wo_stock AS bv_wo_stock ON bv_product.productid = bv_wo_stock.product_id ) INNER JOIN bv_wo_storages AS bv_wo_storages ON bv_wo_stock.storage_id = bv_wo_storages.id  GROUP BY bv_product.productname;
+
+#CREATE OR REPLACE VIEW iv_customer_interactions FOLDER = '/2 - integration' AS SELECT customer_code, nest(agent_id, interaction_date, case_id, interaction_phone, interaction_ip) AS interactions FROM iv_interactions GROUP BY customer_code;
+
+#CREATE OR REPLACE VIEW iv_product_details_array_flatten FOLDER = '/2 - integration' AS SELECT productid, productname, productprice, accessories, (category).categoryid AS categoryid, (category).categoryname AS categoryname, (characteristics).characteristic_dimensions AS characteristic_dimensions, (characteristics).characteristic_weight AS characteristic_weight, (characteristics).characteristic_details AS characteristic_details, (characteristics).characteristic_color AS characteristic_color FROM FLATTEN iv_product_details_array AS v ( v.productdetails);
+
+CREATE OR REPLACE VIEW iv_product_historical_orders FOLDER = '/2 - integration' AS SELECT iv_historical_orders.status AS status, count(*) AS amount, bv_product.productname AS productname FROM iv_historical_orders AS iv_historical_orders INNER JOIN bv_product AS bv_product ON iv_historical_orders.product_id = bv_product.productid  GROUP BY iv_historical_orders.status, bv_product.productname ORDER BY status ASC CONTEXT (DATAMOVEMENTPLAN = bv_product : OFF);
+
+# #######################################
+# INTERFACES created on the intermediate course
+# #######################################
+CREATE OR REPLACE INTERFACE VIEW employee_sales (
+        employeeid:text,
+        total_sales:long,
+        total_price:decimal,
+        start_date:localdate,
+        end_date:localdate
+    )
+    SET IMPLEMENTATION iv_employee_sales_by_date
+    FOLDER = '/4 - report views';
+
+CREATE OR REPLACE INTERFACE VIEW order (
+        customer_code:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '20', description = 'Customer code', sourcetypeid = '-9'),
+        product_id:decimal (description = 'Product id'),
+        id:decimal (description = 'Order id'),
+        status:text,
+        date_placed:timestamp (description = 'Date placed'),
+        date_delivered:text (description = 'Date delivered'),
+        date_closed:text (description = 'Date closed')
+    )
+    SET IMPLEMENTATION iv_orders_current(
+        customer_code = customer_code,
+        product_id = product_id,
+        id = id,
+        status = status,
+        date_placed = date_placed,
+        date_delivered = date_delivered,
+        date_closed = date_closed    
+)
+    FOLDER = '/3 - business entities';
+
+CREATE OR REPLACE INTERFACE VIEW customer (
+        customer_code_internal:text (description = 'Customer code internal'),
+        id:decimal (description = 'Customer id'),
+        complete_name:text (description = 'Complete name'),
+        email:text (description = 'Email'),
+        phone:text (description = 'Phone number'),
+        main_address:text (description = 'Main address'),
+        main_postcode:int (description = 'Main postcode'),
+        main_country:text (description = 'Main country'),
+        registered_date:localdate (description = 'Registered date')
+    )
+    SET IMPLEMENTATION bv_wo_customer(
+        customer_code_internal = customer_code_internal,
+        id = id,
+        complete_name = concat(first_name, ' ', last_name),
+        email = email,
+        phone = phone,
+        main_address = main_address,
+        main_postcode = cast('int', main_postcode),
+        main_country = main_country,
+        registered_date = cast('localdate', registered_date)    
+)
+    FOLDER = '/3 - business entities';
+
+CREATE OR REPLACE INTERFACE VIEW sales (
+        employeeid:text (description = 'Employee id'),
+        productid:text (description = 'Product id'),
+        customerid:text (description = 'Customer id'),
+        saleid:text (description = 'Sale id'),
+        saledate:text (description = 'Sale date'),
+        bundleamount:text (description = 'Bundle amount'),
+        productsaleprice:text (description = 'Product sale price'),
+        totalprice:text (description = 'Total price')
+    )
+    SET IMPLEMENTATION bv_sales_all(
+        employeeid = employeeid,
+        productid = productid,
+        customerid = customerid,
+        saleid = saleid,
+        saledate = saledate,
+        bundleamount = bundleamount,
+        productsaleprice = productsaleprice,
+        totalprice = totalprice    
+)
+    FOLDER = '/3 - business entities';
+
+# #######################################
+# Associations
+# #######################################
+
+CREATE OR REPLACE ASSOCIATION a_employee_sales REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT sales bv_hr_employees PRINCIPAL (1)
+    PRECONDITION job_id like 'SA_%'
+    ENDPOINT employee bv_sales_all (0,*)
+    ADD MAPPING employee_id=employeeid;
+
+CREATE OR REPLACE ASSOCIATION a_hr_dept_employees REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT bv_hr_employees_department_id bv_hr_departments PRINCIPAL (0,1)
+    ENDPOINT bv_hr_departments_department_id bv_hr_employees (0,*)
+    ADD MAPPING department_id=department_id;
+
+# #######################################
+# VIEW STATISTICS
+# #######################################
+
+# #######################################
+# Services
+# #######################################
+
+CREATE OR REPLACE REST WEBSERVICE ws_rest_api
+    CONNECTION (
+        CHUNKSIZE = 1000
+        CHUNKTIMEOUT = 90000
+        QUERYTIMEOUT = 900000
+        POOLENABLED = false
+        POOLINITSIZE = 0
+        POOLMAXACTIVE = 30
+    )
+    DEFAULTREPRESENTATION = HTML
+    SUPPORTEDREPRESENTATIONS (HTML, XML, JSON)    AUTHENTICATION (BASIC VDP )
+
+    RESOURCES (
+        VIEW bv_wo_customer FIELDS (
+            id : 'decimal', 
+            customer_code_internal : 'text', 
+            first_name : 'text', 
+            last_name : 'text', 
+            email : 'text', 
+            phone : 'text', 
+            main_address : 'text', 
+            main_postcode : 'text', 
+            main_country : 'text', 
+            registered_date : 'timestamp'
+        ),
+        VIEW bv_hr_employees FIELDS (
+            employee_id : 'int', 
+            first_name : 'text', 
+            last_name : 'text', 
+            email : 'text', 
+            phone_number : 'text', 
+            hire_date : 'timestamp', 
+            job_id : 'text', 
+            salary : 'decimal', 
+            commission_pct : 'decimal', 
+            manager_id : 'int', 
+            department_id : 'int'
+        ),
+        VIEW bv_wo_orders FIELDS (
+            id : 'decimal', 
+            customer_code : 'text', 
+            status : 'text', 
+            date_placed : 'timestamp', 
+            date_delivered : 'timestamp', 
+            date_closed : 'timestamp'
+        ),
+        VIEW bv_product FIELDS (
+            code : 'text', 
+            description : 'text', 
+            warnings : 'text', 
+            numresults : 'text', 
+            productid : 'int', 
+            productname : 'text', 
+            productprice : 'float', 
+            category : 'bv_product_category', 
+            characteristics : 'bv_product_characteristics', 
+            accessories : 'bv_product_accessories'
+        ),
+        VIEW bv_sales_all FIELDS (
+            productid_0 : 'text', 
+            saleid : 'text', 
+            productid : 'text', 
+            employeeid : 'text', 
+            customerid : 'text', 
+            saledate : 'text', 
+            bundleamount : 'text', 
+            productsaleprice : 'text', 
+            totalprice : 'text'
+        )
+    )
+    ASSOCIATIONS ( a_employee_sales )
+    OPTIONS ( NULLVALUESASEMPTYXMLELEMENTS = false
+        MAX_ROWS_PER_PAGE = 10 ) 
+    OPENAPI2 ( API_VERSION = '1.0.0' ) 
+    FOLDER = '/5 - data services';
+
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS
+# #######################################
+UNDEPLOY IF EXISTS WEBSERVICE ws_rest_api;
+
+DEPLOY WEBSERVICE ws_rest_api LOGIN = 'admin' PASSWORD = 'admin';
+
+# #######################################
+# USER PRIVILEGES
+# #######################################
+# #######################################
+# ROLE PRIVILEGES
+# #######################################
 # #######################################
 # WEBSERVICES
 # #######################################
