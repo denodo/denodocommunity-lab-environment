@@ -17,13 +17,13 @@ The language of the Data Catalog is English by default. You can change the langu
 
 # Disclaimer
 
-This project maintains language files uploaded by the Denodo Commuity of users. 
+This project maintains language files uploaded by the Denodo Community of users. 
 
-**Note:** For the official language packages provided by Denodo, please go to the Denodo User Manual: https://community.denodo.com/docs/html/browse/latest/en/platform/administration/language_of_the_web_tools/language_of_the_web_tools#install-a-language-file-for-data-catalog
+**Note:** For the official language packages provided by Denodo, please go to the Denodo User Manual: https://community.denodo.com/docs/html/browse/latest/en/platform/administration/language_of_the_web_tools/language_of_the_web_tools#changing-the-language-of-the-applications
 
 # Install a Language File for Data Catalog
 
-To change the language of Data Catalog, follow these steps:
+To change the default language of Data Catalog, follow these steps:
 
 * Download the language file from this directory:
   * French: [customLang-fr.properties](./customLang-fr.properties)
@@ -47,7 +47,7 @@ To change the language of Data Catalog, follow these steps:
 
 # Collaborate translating Data Catalog to Other Languages
 
-For others languages, the installation of the Denodo Platform includes a template file. This template contains key-value pairs like this one:
+For others languages, the installation of the Denodo Platform includes a template file in English. This template contains key-value pairs like this one:
 
 ```properties
 login.signIn=Sign in
@@ -55,13 +55,12 @@ login.signIn=Sign in
 You have to translate the value of each pair. In this example, translate `Sign in` to the required language.
 
 
-
 Follow these steps to translate the user interface of Data Catalog:
 
-* Copy the file `<DENODO_HOME>/resources/data-catalog/messages/customLang.properties.template` to a new file.
+* Copy the file `<DENODO_HOME>/resources/data-catalog/messages/customLang.properties.template` to a new file (or use the [English file](./customLang-en.properties) as template).
 
 * Rename it to `customLang-<language ISO code>.properties`. See [ISO Language Codes](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)
 
 * Edit the file and translate the messages. Read the [documentation](https://community.denodo.com/docs/html/browse/latest/en/platform/administration/language_of_the_web_tools/language_of_the_web_tools#considerations-when-translating-the-language-files) for additional considerations. 
 
-* Share it with the Denodo Community :wink:
+* Share it with the Denodo Community by submitting a Pull Request in this project :wink:

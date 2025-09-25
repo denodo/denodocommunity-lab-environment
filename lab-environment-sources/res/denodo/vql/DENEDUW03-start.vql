@@ -541,12 +541,12 @@ CREATE OR REPLACE TABLE bv_bank_customers I18N es_euro (
         customer_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Unique identifier of the customer'),
         first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'First name of the customer'),
         last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Last name of the customer'),
-        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Email address of the customer'),
-        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Phone number of the customer'),
-        address:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Street address of the customer'),
-        city:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'City where the customer resides'),
-        state:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'State where the customer resides'),
-        zip_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Postal code of the customer''s address')
+        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Email address of the customer') TAGS (pii),
+        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Phone number of the customer') TAGS (pii),
+        address:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Street address of the customer') TAGS (pii),
+        city:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'City where the customer resides') TAGS (pii),
+        state:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'State where the customer resides') TAGS (pii),
+        zip_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647', description = 'Postal code of the customer''s address') TAGS (pii)
     )
     FOLDER = '/1 - connectivity/2 - base views'
     CONSTRAINT 'customers_pkey' PRIMARY KEY ( 'customer_id' )

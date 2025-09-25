@@ -11,6 +11,11 @@ ENTER SINGLE USER MODE;
 # #######################################
 CREATE OR REPLACE DATABASE tutorial 'Database for Denodo Community Tutorials';
 
+# #######################################
+# ROLE CREATION
+# #######################################
+CREATE OR REPLACE ROLE restricted 'Role created for the Denodo Tutorials';
+
 CONNECT DATABASE tutorial;
 
 # #######################################
@@ -778,6 +783,34 @@ CREATE OR REPLACE SOAP WEBSERVICE customerservice
 CLOSE;
 
 
+# #######################################
+# Connecting to database admin
+# #######################################
+CONNECT DATABASE ADMIN;
+
+# #######################################
+# USER PRIVILEGES
+# #######################################
+ALTER USER tutorial
+GRANT ROLE allusers,restricted;
+
+# #######################################
+# ROLE PRIVILEGES
+# #######################################
+ALTER ROLE restricted
+GRANT CONNECT ON admin
+GRANT CONNECT, METADATA ON tutorial;
+
+# #######################################
+# RESOURCE MANAGER PLANS
+# #######################################
+# #######################################
+# RESOURCE MANAGER RULES
+# #######################################
+# #######################################
+# Closing connection with database admin
+# #######################################
+CLOSE;
 
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -3,6 +3,15 @@
 ENTER SINGLE USER MODE;
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+# #######################################
+# USER CREATION (tutorial / denodo)
+# #######################################
+CREATE OR REPLACE USER tutorial 'c9Xg9ae9J+lGBYFuB/nsXAM1Ib1THZXQPFfKhxMRonY/Wluh4k1/LCWBSlKA/tDvSrOmbIXq7aH7Wi5rSjJlNCHU64TLk5GIMO2Y4UCeKdIG14VevovfsvqsszouiXwVa6JDD5c4TomKM6TVKdulgBwm8+SKNvrLsRo7JK1g4v5Plgz79qGX4YiBYtErjydsGA8wG7nzwtqabp8jSMk9J4iY2M+x5z8e1Z4MFxu9Y1Gp4BODbVS9wJDZacoBEOvo'  ENCRYPTED HASH SHA512  'User created for the Denodo Tutorials';
+
+# #######################################
+# ROLE CREATION
+# #######################################
+CREATE OR REPLACE ROLE restricted 'Role created for the Denodo Tutorials';
 
 # 0 ====================================================================
 
@@ -830,8 +839,34 @@ DEPLOY WEBSERVICE customer;
 # #######################################
 CLOSE;
 
+# #######################################
+# Connecting to database admin
+# #######################################
+CONNECT DATABASE ADMIN;
 
+# #######################################
+# USER PRIVILEGES
+# #######################################
+ALTER USER tutorial
+GRANT ROLE allusers,restricted;
 
+# #######################################
+# ROLE PRIVILEGES
+# #######################################
+ALTER ROLE restricted
+GRANT CONNECT ON admin
+GRANT CONNECT, METADATA ON tutorial;
+
+# #######################################
+# RESOURCE MANAGER PLANS
+# #######################################
+# #######################################
+# RESOURCE MANAGER RULES
+# #######################################
+# #######################################
+# Closing connection with database admin
+# #######################################
+CLOSE;
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EXIT SINGLE USER MODE;

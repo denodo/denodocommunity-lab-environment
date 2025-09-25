@@ -22,15 +22,11 @@ CREATE OR REPLACE USER reader 'PWbmbzKKfmoSXhtgK8x9/xdlny6XsQnYCXREfPf/oBTSSHVw+
 
 CONNECT DATABASE admin;
 
-SET 'com.denodo.vdb.cache.cacheMaintainerPeriodInSecs' = '2160021600';
+SET 'com.denodo.vdb.cache.cacheMaintainerPeriodInSecs' = '21600';
 
 SET 'com.denodo.vdb.cache.cacheMaintenance' = 'OFF';
 
 SET 'com.denodo.vdb.cache.cacheStatus' = 'ON';
-
-SET 'com.denodo.vdb.cache.jdbc.cacheDataSourceName' = 'vdpcachedatasource';
-
-SET 'com.denodo.vdb.cache.jdbc.cacheDatabaseDataSourceName' = 'admin';
 
 SET 'com.denodo.vdb.cache.jdbc.customCacheDataSourceName' = 'customvdpcachedatasource';
 
@@ -42,10 +38,11 @@ SET 'com.denodo.vdb.cache.jdbc.serverCacheDataSource' = '"admin"."vdpcachedataso
 
 SET 'com.denodo.vdb.cache.timeToLiveInSecs' = '-1';
 
+SET 'com.denodo.vdb.interpreter.execution.SelectAction.costoptimization' = 'true';
+
 UPDATE SCRIPTS;
 
 CLOSE;
-
 
 # 0 ====================================================================
 

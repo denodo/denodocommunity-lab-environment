@@ -214,7 +214,7 @@ services:
     depends_on:
       denodo-sm:
         condition: service_healthy
-    command: ["--vqlserver", "--datacatalog", "--schserver"]
+    command: ["--vqlserver", "--datacatalog", "--schserver", "--schindex"]
   
   denodo-ai-sdk:
     container_name: denodo-ai-sdk
@@ -236,27 +236,36 @@ services:
     environment:
       #- AI_SDK_SSL_CERT: "<path_to_public_cert>"
       #- AI_SDK_SSL_KEY: "<path_to_private_key>"
+      # AI SDK
+      - AI_SDK_ROOT_PATH=${AI_SDK_ROOT_PATH}
       - AI_SDK_VER=${AI_SDK_VER}
       - VDB_NAMES=${VDB_NAMES}
       - VECTOR_STORE=${VECTOR_STORE}
       - CUSTOM_INSTRUCTIONS=${CUSTOM_INSTRUCTIONS}
-      - DATA_CATALOG_URL=http://vdp:9090/denodo-data-catalog/
-      - DATA_CATALOG_METADATA_USER=${DENODO_VDP_ADMIN_USER}
-      - DATA_CATALOG_METADATA_PWD=${DENODO_VDP_ADMIN_PWD}
+      - AI_SDK_DATA_CATALOG_URL=http://${DENODO_VDP_HOSTNAME}:9090/denodo-data-catalog/ 
+      - LLM_PROVIDER=${PROVIDER}
+      - LLM_MODEL=${LLM_MODEL}
+      - LLM_TEMPERATURE=${LLM_TEMPERATURE}
+      - LLM_MAX_TOKENS=${LLM_MAX_TOKENS}
+      - EMBEDDINGS_PROVIDER=${PROVIDER}
+      - EMBEDDINGS_MODEL=${EMB_MODEL}
+      - THINKING_LLM_PROVIDER=${THINKING_LLM_PROVIDER}
+      - THINKING_LLM_MODEL=${THINKING_LLM_MODEL}      
+      - THINKING_LLM_TEMPERATURE=${THINKING_LLM_TEMPERATURE}
+      - THINKING_LLM_MAX_TOKENS=${THINKING_LLM_MAX_TOKENS}
+      # CHATBOT
+      #- CHATBOT_ROOT_PATH=${CHATBOT_ROOT_PATH}
+      - CHATBOT_DATA_CATALOG_URL=../denodo-data-catalog/ 
       - CHATBOT_LLM_PROVIDER=${PROVIDER}
       - CHATBOT_LLM_MODEL=${LLM_MODEL}
       - CHATBOT_EMBEDDINGS_PROVIDER=${PROVIDER}
       - CHATBOT_EMBEDDINGS_MODEL=${EMB_MODEL}
       - CHATBOT_VECTOR_STORE_PROVIDER=${VECTOR_STORE}
+      - CHATBOT_AUTO_GRAPH=1
       - AI_SDK_USERNAME=${DENODO_VDP_ADMIN_USER}
       - AI_SDK_PASSWORD=${DENODO_VDP_ADMIN_PWD}
       - AI_SDK_URL=http://localhost:8008
-      - CHAT_PROVIDER=${PROVIDER}
-      - CHAT_MODEL=${LLM_MODEL}
-      - SQL_GENERATION_PROVIDER=${PROVIDER}
-      - SQL_GENERATION_MODEL=${LLM_MODEL}
-      - EMBEDDINGS_PROVIDER=${PROVIDER}
-      - EMBEDDINGS_MODEL=${EMB_MODEL}
+      # LLM CONFIGURATION
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_ORG_ID=${OPENAI_ORG_ID}
       - OPENAI_PROXY=${OPENAI_PROXY}
@@ -276,7 +285,6 @@ services:
       - NVIDIA_BASE_URL=${NVIDIA_BASE_URL}
       - GROQ_API_KEY=${GROQ_API_KEY}
       - OLLAMA_API_BASE_URL=${OLLAMA_API_BASE_URL}
-      - CHATBOT_AUTO_GRAPH=1
     command: ["python", "run.py", "${DENODO_AI_SDK_MODE}", "--no-logs"]
       
   # ########################

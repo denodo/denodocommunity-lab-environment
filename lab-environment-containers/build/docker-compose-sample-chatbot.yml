@@ -20,6 +20,8 @@ services:
     environment:
       #AI_SDK_SSL_CERT: "<path_to_public_cert>"
       #AI_SDK_SSL_KEY: "<path_to_private_key>"
+      AI_SDK_ROOT_PATH: denodo-ai-sdk
+      CHATBOT_ROOT_PATH: chatbot
       CHATBOT_LLM_PROVIDER: ${PROVIDER}
       CHATBOT_LLM_MODEL: ${LLM_MODEL}
       CHATBOT_EMBEDDINGS_PROVIDER: ${PROVIDER}
@@ -61,6 +63,7 @@ services:
       OLLAMA_API_BASE_URL: ${OLLAMA_API_BASE_URL}
     volumes:
       - "${DENODO_CHATBOT_CONFIG_FILE}:/opt/ai-sdk/sample_chatbot/chatbot_config.env"
+      - "${DENODO_AI_SDK_CONFIG_FILE}:/opt/ai-sdk/api/utils/sdk_config.env"
       
   # ####################################
   # Denodo Express + SAMPLE BANKING DATA
