@@ -1,4 +1,4 @@
-﻿# Generated with Denodo Platform 9.1.1.
+﻿# Generated with Denodo Platform 9.3.1.
 
 ENTER SINGLE USER MODE;
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -14,20 +14,29 @@ CREATE OR REPLACE USER denodo 'TabGFRTVX5QZAs4kw+BqWweQ6miqAlWWJe/bUtUuplLOT8syv
 CREATE OR REPLACE USER analyst 'yd4hTGNRJ4R5fA3Uae+DO+w7iM569+e6VjtgTfEURAJfXyiVrBm6purIDn/e5yrLjZgk23j9G0hWqZbG9yz/CN3DUmIBpOrh'  ENCRYPTED SHA512  'Analyst user';
 
 # #######################################
+# USER CREATION (esmith / Denodo9$)
+# #######################################
+CREATE OR REPLACE USER esmith '2aIdW96MibwgJdyvtpZDxXm5rynA/8vJu8VVvmzVBrzHxPChHwv/G7Z6WUX4Amjs2QBBPqQ9Hr7WSpJ/CYjNhkOu4pLBSOeu'  ENCRYPTED SHA512  'Analyze all financial Data Products to identify patterns in customer defaults and suggest risk mitigation strategies.
+Password for demo: Denodo9$';
+
+# #######################################
 # ROLE CREATION
 # #######################################
 CREATE OR REPLACE ROLE analyst 'Role granted to analyst users to provide them with customer data related to stock holdings and other stock holding information.';
+
+CREATE OR REPLACE ROLE bi_analyst 'Analyze all  Data Products to identify patterns and suggest risk mitigation strategies.';
 
 CREATE OR REPLACE ROLE full_read 'Provides full access to customer data.';
 
 # #######################################
 # TAG CREATION
 # #######################################
-CREATE OR REPLACE TAGS (pii DESCRIPTION = 'This tag is associated with columns or views containing Personal Identifiable Information (PII).', raw DESCRIPTION = 'The views tagged with this tag contain raw, unprocessed data coming directly from underlying systems.', verified DESCRIPTION = 'Views with this tag have been cleaned and reviewed. These views are ready for application access.');
+CREATE OR REPLACE TAGS (pii DESCRIPTION = 'This tag is associated with columns or views containing Personal Identifiable Information (PII).', raw DESCRIPTION = 'The views tagged with this tag contain raw, unprocessed data coming directly from underlying systems.', verified DESCRIPTION = 'Views with this tag have been cleaned and reviewed. These views are ready for application access.', trusted DESCRIPTION = 'Views with this tag have been endorsed by end users. These views are ready for application access.');
 
 CHOWNS (CHOWN admin TAG pii LASTMODIFICATIONUSER admin, 
     CHOWN admin TAG raw LASTMODIFICATIONUSER admin, 
-    CHOWN admin TAG verified LASTMODIFICATIONUSER admin);
+    CHOWN admin TAG verified LASTMODIFICATIONUSER admin, 
+    CHOWN admin TAG trusted LASTMODIFICATIONUSER admin);
 
 # #######################################
 # CONFIGURATION PROPERTIES
@@ -190,7 +199,7 @@ CLOSE;
 # 3 ====================================================================
 
 # #######################################
-# DATABASE of denodo_hol
+# DATABASE of denodo_hol_bank
 # #######################################
 CREATE OR REPLACE DATABASE denodo_hol_bank 'Denodo GenAI workshop - Bank database';
 
@@ -868,6 +877,78 @@ CHOWN admin VIEW bv_ticker_api LASTMODIFICATIONUSER admin;
 # #######################################
 # VIEWS of denodo_hol_bank
 # #######################################
+CREATE OR REPLACE INTERFACE VIEW bank_customers (
+        customer_id:long (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '10', description = 'Represents a unique identifier for each customer in the bank system, facilitating the tracking and management of customer accounts.', sourcetypeid = '-5'),
+        first_name:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', description = 'Stores the first name of the customer, which is essential for personalization and identification purposes.', sourcetypeid = '-9'),
+        last_name:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', description = 'Contains the last name of the customer, helping to uniquely identify individuals within the bank''s customer database.', sourcetypeid = '-9') TAGS (pii),
+        email:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', description = 'Holds the customer''s email address, which is vital for communication and account-related notifications.', sourcetypeid = '-9') TAGS (pii),
+        phone_number:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', description = 'Contains the customer''s phone number, allowing for direct contact and support-related inquiries.', sourcetypeid = '-9') TAGS (pii),
+        address:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', description = 'Represents the residential address of the customer, necessary for account verification and correspondence.', sourcetypeid = '-9') TAGS (pii),
+        city:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', description = 'Indicates the city where the customer resides, useful for demographic analysis and service delivery.', sourcetypeid = '-9'),
+        state:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', description = 'Specifies the state of the customer''s residence, which can impact financial services and regulatory compliance.', sourcetypeid = '-9'),
+        zip_code:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', description = 'Represents the postal code of the customer''s address, important for geographical identification and service localization.', sourcetypeid = '-9')
+    )
+    SET IMPLEMENTATION bv_bank_customers
+    FOLDER = '/3 - business entities';
+
+CREATE OR REPLACE INTERFACE VIEW bank_loanofficers (
+        loan_officer_id:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', description = 'A unique identifier for each loan officer for differentiation and tracking purposes.', sourcetypeid = '4'),
+        first_name:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = 'The first name of the loan officer, such as "Mark", "Emily", "Michael", or "Robert".', sourcetypeid = '-9'),
+        last_name:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = 'The last name of the loan officer, including names like "Johnson", "Williams", "Brown", or "Garcia".', sourcetypeid = '-9'),
+        email:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = 'The email address of the loan officer, examples include "mark.johnson@example.com", "emily.williams@example.com", "michael.brown@example.com", or "robert.garcia@example.com".', sourcetypeid = '-9'),
+        phone_number:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = 'The phone number of the loan officer, such as "555-123-4567", "555-234-5678", "555-345-6789", or "555-789-0123".', sourcetypeid = '-9')
+    )
+    SET IMPLEMENTATION bv_bank_loan_officers
+    FOLDER = '/3 - business entities'
+    DESCRIPTION = 'The bank_loanofficers view is designed to store information about the bank''s loan officers, including their names, contact details, and a unique identifier. This view captures the loan office''s first and last names, email addresses, and phone numbers. It serves as a repository for managing loan officer records, which can be linked to the bank_loans view through an association on the loan_officer_id field.
+
+The bank loan officers'' views could be used to manage and maintain the details of the loan officers within the bank. This view facilitates tracking loan officers'' information, including their contact details, which can be crucial for internal communication and coordination. Additionally, it supports the association with loan records, allowing for efficient management and oversight of the bank0s loan processing activities.' ;
+
+CREATE OR REPLACE INTERFACE VIEW bank_loans (
+        loan_id:int,
+        customer_id:int,
+        loan_amount:double,
+        interest_rate:double,
+        term:int,
+        property_id:int,
+        loan_officer_id:int,
+        status:text
+    )
+    SET IMPLEMENTATION bv_bank_loans
+    FOLDER = '/3 - business entities';
+
+CREATE OR REPLACE INTERFACE VIEW bank_payments (
+        payment_id:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', description = 'A unique identifier for each payment transaction.', sourcetypeid = '4'),
+        loan_id:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', description = 'A reference to the loan for which the payment is made.', sourcetypeid = '4'),
+        payment_amount:double (sourcetypedecimals = '8', sourcetyperadix = '10', sourcetypesize = '8', description = 'The amount of money paid in the transaction.', sourcetypeid = '7'),
+        payment_date:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = 'The date on which the payment was made.', sourcetypeid = '-9')
+    )
+    SET IMPLEMENTATION bv_bank_payments
+    FOLDER = '/3 - business entities'
+    DESCRIPTION = 'bank_payments is designed to record the payments made on loans. It tracks each payment’s amount and date, linking it to the corresponding loan.' ;
+
+CREATE OR REPLACE INTERFACE VIEW bank_properties (
+        property_id:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', description = 'A unique identifier for each property', sourcetypeid = '4'),
+        address:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = 'The street address of the property', sourcetypeid = '-9'),
+        city:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = 'The city in which the property is located.', sourcetypeid = '-9'),
+        state:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = 'The state in which the property is located.', sourcetypeid = '-9'),
+        zip_code:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = 'The postal code for the property’s location.', sourcetypeid = '-9'),
+        property_value:double (sourcetypedecimals = '8', sourcetyperadix = '10', sourcetypesize = '8', description = 'The assessed value of the property in dollars', sourcetypeid = '7')
+    )
+    SET IMPLEMENTATION bv_bank_properties
+    FOLDER = '/3 - business entities'
+    DESCRIPTION = 'bank_properties is designed to hold information for houses associated with loans, such as mortgage loans. It includes details on property locations and valuations.' ;
+
+CREATE OR REPLACE INTERFACE VIEW bank_rates (
+        rate_id:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', description = 'A unique identifier for each interest rate entry.', sourcetypeid = '4'),
+        loan_type:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = 'The type of loan to which the interest rate applies', sourcetypeid = '-9'),
+        term:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', description = 'The term length of the loan in years', sourcetypeid = '4'),
+        interest_rate:double (sourcetypedecimals = '8', sourcetyperadix = '10', sourcetypesize = '8', description = 'The interest rate for the loan, expressed as a percentage.', sourcetypeid = '7')
+    )
+    SET IMPLEMENTATION bv_bank_rates
+    FOLDER = '/3 - business entities'
+    DESCRIPTION = 'bank_rates is designed to store information about the interest rates for each loan type. Interest Rates define the bearing yield of each contract type to be paid within each term.' ;
+
 CREATE OR REPLACE INTERFACE VIEW p_customers (
         customer_id:int,
         first_name:text,
@@ -1066,6 +1147,13 @@ CREATE OR REPLACE INTERFACE VIEW customer_sec_risks_unified (
         ticker_price_rank = pricerank    
 )
     FOLDER = '/3 - business entities'
+    DESCRIPTION = 'Customer Security Holdings with Risk Assessment
+
+The customer_sec_risks_unified view consolidates customer information along with their stock investment details. 
+
+It includes fields such as customer ID, first name, last name, email, phone number, address, city, state, zip code, stock ticker symbols, quantities of stocks purchased, and the value of customer assets. 
+
+Additionally, it provides insights into the stock performance metrics, including ticker closing prices, trading volume, market capitalization rank, turnover rank, volatility rank, and price rank. This view could be used for analyzing customer investment behaviors, assessing risks associated with customer investments, and understanding how different customer demographics correlate with stock purchasing patterns.' 
     TAGS (verified);
 
 # #######################################
@@ -1592,6 +1680,639 @@ CREATE OR REPLACE INTERFACE VIEW service_interactions (
 CLOSE;
 
 # #######################################
+# DATABASE of denodo_hol_bank_demo
+# #######################################
+CREATE OR REPLACE DATABASE denodo_hol_bank_demo 'Database for storing the views for chatbot, irrespective of from different industries';
+
+CONNECT DATABASE denodo_hol_bank_demo;
+
+# #######################################
+# FOLDERS of denodo_hol_bank_demo
+# #######################################
+CREATE OR REPLACE FOLDER '/1 - connectivity' ;
+
+CHOWN admin FOLDER '/1 - connectivity';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+
+CHOWN admin FOLDER '/1 - connectivity/1 - data sources';
+
+CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+
+CHOWN admin FOLDER '/1 - connectivity/2 - base views';
+
+CREATE OR REPLACE FOLDER '/2 - integration' ;
+
+CHOWN admin FOLDER '/2 - integration';
+
+CREATE OR REPLACE FOLDER '/3 - business entities' ;
+
+CHOWN admin FOLDER '/3 - business entities';
+
+# #######################################
+# RESOURCES of denodo_hol_bank_demo
+# #######################################
+# No vault resources in database denodo_hol_bank_demo
+# #######################################
+# LISTENERS JMS of denodo_hol_bank_demo
+# #######################################
+# No listeners jms in database denodo_hol_bank_demo
+# #######################################
+# LISTENERS KAFKA of denodo_hol_bank_demo
+# #######################################
+# No listeners kafka in database denodo_hol_bank_demo
+# #######################################
+# DATASOURCES of denodo_hol_bank_demo
+# #######################################
+CREATE OR REPLACE DATASOURCE JDBC demographics
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.postgresql.Driver'
+    DATABASEURI = 'jdbc:postgresql://postgres:5432/bank'
+    USERNAME = 'denodo'
+    USERPASSWORD = 'denodo'
+    CLASSPATH = 'postgresql-12'
+    DATABASENAME = 'postgresql'
+    DATABASEVERSION = '12'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'Select 1'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    PROPERTIES ('escapeSyntaxCallMode'='callIfNoReturn')
+    KERBEROSPROPERTIES ('jaasLogin'='false', 'user'='<user>')
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+CHOWN admin DATASOURCE JDBC demographics LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE DATASOURCE JDBC retail_banking
+    FOLDER = '/1 - connectivity/1 - data sources'
+    DRIVERCLASSNAME = 'org.postgresql.Driver'
+    DATABASEURI = 'jdbc:postgresql://postgres:5432/bank'
+    USERNAME = 'denodo'
+    USERPASSWORD = 'denodo'
+    CLASSPATH = 'postgresql-12'
+    DATABASENAME = 'postgresql'
+    DATABASEVERSION = '12'
+    FETCHSIZE = 1000
+    VALIDATIONQUERY = 'Select 1'
+    INITIALSIZE = 4
+    MAXIDLE = -1
+    MINIDLE = 0
+    MAXACTIVE = 20
+    EXHAUSTEDACTION = 1
+    TESTONBORROW = true
+    TESTONRETURN = false
+    TESTWHILEIDLE = false
+    TIMEBETWEENEVICTION = -1
+    NUMTESTPEREVICTION = 3
+    MINEVICTABLETIME = 1800000
+    POOLPREPAREDSTATEMENTS = false
+    MAXOPENPREPAREDSTATEMENTS = -1
+    PROPERTIES ('escapeSyntaxCallMode'='callIfNoReturn')
+    KERBEROSPROPERTIES ('jaasLogin'='false', 'user'='<user>')
+    DATA_LOAD_CONFIGURATION (
+        BATCHINSERTSIZE = 200
+    );
+
+CHOWN admin DATASOURCE JDBC retail_banking LASTMODIFICATIONUSER admin;
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE denodo_hol_bank_demo
+  CHARSET DEFAULT;
+
+# #######################################
+# WRAPPERS of denodo_hol_bank_demo
+# #######################################
+CREATE OR REPLACE WRAPPER JDBC bv_bank_customers
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=retail_banking
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='customers' 
+    OUTPUTSCHEMA (
+        customer_id = 'customer_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        first_name = 'first_name' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        last_name = 'last_name' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        email = 'email' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        phone_number = 'phone_number' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        address = 'address' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        city = 'city' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        state = 'state' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        zip_code = 'zip_code' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE
+    )
+    CONSTRAINT 'customers_pkey' PRIMARY KEY ( 'customer_id' )
+    INDEX 'customers_pkey' OTHER UNIQUE PRIMARY ( 'customer_id' );
+
+CHOWN admin WRAPPER JDBC bv_bank_customers LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC bv_bank_loan_officers
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=retail_banking
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='loan_officers' 
+    OUTPUTSCHEMA (
+        loan_officer_id = 'loan_officer_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        first_name = 'first_name' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        last_name = 'last_name' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        email = 'email' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        phone_number = 'phone_number' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE
+    )
+    CONSTRAINT 'loan_officers_pkey' PRIMARY KEY ( 'loan_officer_id' )
+    INDEX 'loan_officers_pkey' OTHER UNIQUE PRIMARY ( 'loan_officer_id' );
+
+CHOWN admin WRAPPER JDBC bv_bank_loan_officers LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC bv_bank_loans
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=retail_banking
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='loans' 
+    OUTPUTSCHEMA (
+        loan_id = 'loan_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        customer_id = 'customer_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        loan_amount = 'loan_amount' :'java.lang.Double' (OPT) (sourcetypedecimals='8', sourcetyperadix='10', sourcetypesize='8', sourcetypeid='7', sourcetypename='float4')  SORTABLE,
+        interest_rate = 'interest_rate' :'java.lang.Double' (OPT) (sourcetypedecimals='8', sourcetyperadix='10', sourcetypesize='8', sourcetypeid='7', sourcetypename='float4')  SORTABLE,
+        term = 'term' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        property_id = 'property_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        loan_officer_id = 'loan_officer_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        status = 'status' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE
+    )
+    CONSTRAINT 'loans_pkey' PRIMARY KEY ( 'loan_id' )
+    CONSTRAINT 'loans_customer_id_fkey' FOREIGN KEY ( 'customer_id' ) 
+    REFERENCES 'public'.'customers'( 'customer_id' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    CONSTRAINT 'loans_loan_officer_id_fkey' FOREIGN KEY ( 'loan_officer_id' ) 
+    REFERENCES 'public'.'loan_officers'( 'loan_officer_id' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    CONSTRAINT 'loans_property_id_fkey' FOREIGN KEY ( 'property_id' ) 
+    REFERENCES 'public'.'properties'( 'property_id' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    INDEX 'loans_pkey' OTHER UNIQUE PRIMARY ( 'loan_id' );
+
+CHOWN admin WRAPPER JDBC bv_bank_loans LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC bv_bank_payments
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=retail_banking
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='payments' 
+    OUTPUTSCHEMA (
+        payment_id = 'payment_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        loan_id = 'loan_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        payment_amount = 'payment_amount' :'java.lang.Double' (OPT) (sourcetypedecimals='8', sourcetyperadix='10', sourcetypesize='8', sourcetypeid='7', sourcetypename='float4')  SORTABLE,
+        payment_date = 'payment_date' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE
+    )
+    CONSTRAINT 'payments_pkey' PRIMARY KEY ( 'payment_id' )
+    CONSTRAINT 'payments_loan_id_fkey' FOREIGN KEY ( 'loan_id' ) 
+    REFERENCES 'public'.'loans'( 'loan_id' )  ON UPDATE NO ACTION  ON DELETE NO ACTION NOT DEFERRABLE 
+    INDEX 'payments_pkey' OTHER UNIQUE PRIMARY ( 'payment_id' );
+
+CHOWN admin WRAPPER JDBC bv_bank_payments LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC bv_bank_properties
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=demographics
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='properties' 
+    OUTPUTSCHEMA (
+        property_id = 'property_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        address = 'address' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        city = 'city' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        state = 'state' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        zip_code = 'zip_code' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        property_value = 'property_value' :'java.lang.Double' (OPT) (sourcetypedecimals='8', sourcetyperadix='10', sourcetypesize='8', sourcetypeid='7', sourcetypename='float4')  SORTABLE
+    )
+    CONSTRAINT 'properties_pkey' PRIMARY KEY ( 'property_id' )
+    INDEX 'properties_pkey' OTHER UNIQUE PRIMARY ( 'property_id' );
+
+CHOWN admin WRAPPER JDBC bv_bank_properties LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC bv_bank_rates_new
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=retail_banking
+    SCHEMANAME='public' ESCAPE
+    RELATIONNAME='rates' 
+    OUTPUTSCHEMA (
+        rate_id = 'rate_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        loan_type = 'loan_type' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        term = 'term' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE,
+        interest_rate = 'interest_rate' :'java.lang.Double' (OPT) (sourcetypedecimals='8', sourcetyperadix='10', sourcetypesize='8', sourcetypeid='7', sourcetypename='float4')  SORTABLE
+    )
+    CONSTRAINT 'rates_pkey' PRIMARY KEY ( 'rate_id' )
+    INDEX 'rates_pkey' OTHER UNIQUE PRIMARY ( 'rate_id' );
+
+CHOWN admin WRAPPER JDBC bv_bank_rates_new LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE WRAPPER JDBC "sqls_bank_rates_29c69f0f-b0d1-4993-b853-4577751925be"
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=retail_banking
+    CATALOGNAME='bank_demo' 
+    SCHEMANAME='dbo' 
+    RELATIONNAME='rates' 
+    OUTPUTSCHEMA (
+        rate_id = 'rate_id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  SORTABLE,
+        loan_type = 'loan_type' :'java.lang.String' (OPT) (sourcetypesize='4000', sourcetypeid='12', sourcetypename='varchar')  SORTABLE,
+        term = 'term' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int')  SORTABLE,
+        interest_rate = 'interest_rate' :'java.lang.Double' (OPT) (sourcetyperadix='2', sourcetypesize='53', sourcetypeid='8', sourcetypename='float')  SORTABLE
+    );
+
+CHOWN admin WRAPPER JDBC "sqls_bank_rates_29c69f0f-b0d1-4993-b853-4577751925be" LASTMODIFICATIONUSER admin;
+
+# #######################################
+# STORED PROCEDURES of denodo_hol_bank_demo
+# #######################################
+# No stored procedures in database denodo_hol_bank_demo
+# #######################################
+# TYPES of denodo_hol_bank_demo
+# #######################################
+# No types in database denodo_hol_bank_demo
+# #######################################
+# MAPS of denodo_hol_bank_demo
+# #######################################
+# No maps in database denodo_hol_bank_demo
+# #######################################
+# BASE VIEWS of denodo_hol_bank_demo
+# #######################################
+CREATE OR REPLACE TABLE bv_bank_customers I18N us_pst (
+        customer_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        address:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        city:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        state:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        zip_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'customers_pkey' PRIMARY KEY ( 'customer_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_bank_customers(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD customer_id (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD phone_number (any) OPT ANY
+             ADD address (any) OPT ANY
+             ADD city (any) OPT ANY
+             ADD state (any) OPT ANY
+             ADD zip_code (any) OPT ANY
+        )
+        OUTPUTLIST (address, city, customer_id, email, first_name, last_name, phone_number, state, zip_code
+        )
+        WRAPPER (jdbc bv_bank_customers)
+    );
+
+CHOWN admin VIEW bv_bank_customers LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_loan_officers I18N us_pst (
+        loan_officer_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        first_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        last_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        email:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        phone_number:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'loan_officers_pkey' PRIMARY KEY ( 'loan_officer_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_bank_loan_officers(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD loan_officer_id (any) OPT ANY
+             ADD first_name (any) OPT ANY
+             ADD last_name (any) OPT ANY
+             ADD email (any) OPT ANY
+             ADD phone_number (any) OPT ANY
+        )
+        OUTPUTLIST (email, first_name, last_name, loan_officer_id, phone_number
+        )
+        WRAPPER (jdbc bv_bank_loan_officers)
+    );
+
+CHOWN admin VIEW bv_bank_loan_officers LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_loans I18N us_pst (
+        loan_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        customer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        loan_amount:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8'),
+        interest_rate:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8'),
+        term:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        property_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        loan_officer_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        status:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'loans_pkey' PRIMARY KEY ( 'loan_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_bank_loans(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD loan_id (any) OPT ANY
+             ADD customer_id (any) OPT ANY
+             ADD loan_amount (any) OPT ANY
+             ADD interest_rate (any) OPT ANY
+             ADD term (any) OPT ANY
+             ADD property_id (any) OPT ANY
+             ADD loan_officer_id (any) OPT ANY
+             ADD status (any) OPT ANY
+        )
+        OUTPUTLIST (customer_id, interest_rate, loan_amount, loan_id, loan_officer_id, property_id, status, term
+        )
+        WRAPPER (jdbc bv_bank_loans)
+    );
+
+CHOWN admin VIEW bv_bank_loans LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_payments I18N us_pst (
+        payment_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        loan_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        payment_amount:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8'),
+        payment_date:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'payments_pkey' PRIMARY KEY ( 'payment_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_bank_payments(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD payment_id (any) OPT ANY
+             ADD loan_id (any) OPT ANY
+             ADD payment_amount (any) OPT ANY
+             ADD payment_date (any) OPT ANY
+        )
+        OUTPUTLIST (loan_id, payment_amount, payment_date, payment_id
+        )
+        WRAPPER (jdbc bv_bank_payments)
+    );
+
+CHOWN admin VIEW bv_bank_payments LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_properties I18N us_pst (
+        property_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        address:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        city:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        state:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        zip_code:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        property_value:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'properties_pkey' PRIMARY KEY ( 'property_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_bank_properties(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD property_id (any) OPT ANY
+             ADD address (any) OPT ANY
+             ADD city (any) OPT ANY
+             ADD state (any) OPT ANY
+             ADD zip_code (any) OPT ANY
+             ADD property_value (any) OPT ANY
+        )
+        OUTPUTLIST (address, city, property_id, property_value, state, zip_code
+        )
+        WRAPPER (jdbc bv_bank_properties)
+    );
+
+CHOWN admin VIEW bv_bank_properties LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_rates I18N us_cst (
+        rate_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        loan_type:text (sourcetypeid = '12', sourcetypesize = '4000'),
+        term:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        interest_rate:double (sourcetypeid = '8', sourcetyperadix = '2', sourcetypesize = '53')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD sqls_bank_rates(
+        I18N us_cst
+        CONSTRAINTS (
+             ADD rate_id (any) OPT ANY
+             ADD loan_type (any) OPT ANY
+             ADD term (any) OPT ANY
+             ADD interest_rate (any) OPT ANY
+        )
+        OUTPUTLIST (interest_rate, loan_type, rate_id, term
+        )
+        WRAPPER (jdbc "sqls_bank_rates_29c69f0f-b0d1-4993-b853-4577751925be")
+    );
+
+CHOWN admin VIEW bv_bank_rates LASTMODIFICATIONUSER admin;
+
+CREATE OR REPLACE TABLE bv_bank_rates_new I18N us_pst (
+        rate_id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        loan_type:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        term:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        interest_rate:double (sourcetypeid = '7', sourcetyperadix = '10', sourcetypedecimals = '8', sourcetypesize = '8')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'rates_pkey' PRIMARY KEY ( 'rate_id' )
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_bank_rates_new(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD rate_id (any) OPT ANY
+             ADD loan_type (any) OPT ANY
+             ADD term (any) OPT ANY
+             ADD interest_rate (any) OPT ANY
+        )
+        OUTPUTLIST (interest_rate, loan_type, rate_id, term
+        )
+        WRAPPER (jdbc bv_bank_rates_new)
+    );
+
+CHOWN admin VIEW bv_bank_rates_new LASTMODIFICATIONUSER admin;
+
+# #######################################
+# VIEWS of denodo_hol_bank_demo
+# #######################################
+CREATE OR REPLACE INTERFACE VIEW bank_underwriting (
+        id:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', sourcetypeid = '4'),
+        loan_id:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', sourcetypeid = '4'),
+        credit:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', sourcetypeid = '4'),
+        emp_status:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', sourcetypeid = '-9'),
+        fin_status:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', sourcetypeid = '-9')
+    )
+    FOLDER = '/3 - business entities';
+
+ALTER VIEW bank_underwriting
+ LAYOUT ("a2ef6a92-5808-46db-8233-4ac318dabca1" = [380, 50, 205, 125]);
+
+CREATE OR REPLACE INTERFACE VIEW bank_customers (
+        id:long,
+        first_name:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', sourcetypeid = '-9'),
+        last_name:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', sourcetypeid = '-9') TAGS (pii),
+        email:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', sourcetypeid = '-9') TAGS (pii),
+        phone_number:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', sourcetypeid = '-9') TAGS (pii),
+        address:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', sourcetypeid = '-9') TAGS (pii),
+        city:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', sourcetypeid = '-9'),
+        state:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', sourcetypeid = '-9'),
+        zip_code:text (sourcetypedecimals = '0', sourcetyperadix = '0', sourcetypesize = '256', sourcetypeid = '-9')
+    )
+    SET IMPLEMENTATION bv_bank_customers(
+        id = customer_id,
+        first_name = first_name,
+        last_name = last_name,
+        email = email,
+        phone_number = phone_number,
+        address = address,
+        city = city,
+        state = state,
+        zip_code = zip_code    
+)
+    FOLDER = '/3 - business entities';
+
+CREATE OR REPLACE INTERFACE VIEW bank_loanofficers (
+        id:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', description = '', sourcetypeid = '4'),
+        first_name:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = '', sourcetypeid = '-9'),
+        last_name:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = '', sourcetypeid = '-9'),
+        email:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = '', sourcetypeid = '-9'),
+        phone_number:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = '', sourcetypeid = '-9')
+    )
+    SET IMPLEMENTATION bv_bank_loan_officers(
+        id = loan_officer_id,
+        first_name = first_name,
+        last_name = last_name,
+        email = email,
+        phone_number = phone_number    
+)
+    FOLDER = '/3 - business entities';
+
+ALTER VIEW bank_loanofficers
+ LAYOUT (bv_bank_loan_officers = [360, 60, 200, 125]);
+
+CREATE OR REPLACE INTERFACE VIEW bank_payments (
+        id:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', description = '', sourcetypeid = '4'),
+        loan_id:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', description = '', sourcetypeid = '4'),
+        amount:double (sourcetypedecimals = '8', sourcetyperadix = '10', sourcetypesize = '8', description = '', sourcetypeid = '7'),
+        date:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = '', sourcetypeid = '-9')
+    )
+    SET IMPLEMENTATION bv_bank_payments(
+        id = payment_id,
+        loan_id = loan_id,
+        amount = payment_amount,
+        date = payment_date    
+)
+    FOLDER = '/3 - business entities';
+
+ALTER VIEW bank_payments
+ LAYOUT (bv_bank_payments = [338, 26, 210, 105]);
+
+CREATE OR REPLACE INTERFACE VIEW bank_rates (
+        id:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', description = '', sourcetypeid = '4'),
+        type:text (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '256', description = '', sourcetypeid = '-9'),
+        term:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', description = '', sourcetypeid = '4'),
+        rate:double (sourcetypedecimals = '8', sourcetyperadix = '10', sourcetypesize = '8', description = '', sourcetypeid = '7')
+    )
+    SET IMPLEMENTATION bv_bank_rates(
+        id = rate_id,
+        type = loan_type,
+        term = term,
+        rate = interest_rate    
+)
+    FOLDER = '/3 - business entities';
+
+ALTER VIEW bank_rates
+ LAYOUT (bv_bank_rates = [300, 56, 200, 105]);
+
+CREATE OR REPLACE VIEW p_bv_bank_loans FOLDER = '/2 - integration' AS SELECT bv_bank_loans.term AS term, bv_bank_loans.status AS status, bv_bank_loans.loan_id AS mortgage_id, bv_bank_loans.customer_id AS customer, bv_bank_loans.loan_amount AS balance, bv_bank_loans.interest_rate AS rate, (bv_bank_loans.property_id+50) AS lo_id, bv_bank_loans.loan_officer_id AS broker_id FROM bv_bank_loans;
+
+CHOWN admin VIEW p_bv_bank_loans LASTMODIFICATIONUSER admin;
+
+ALTER VIEW p_bv_bank_loans
+ LAYOUT (bv_bank_loans = [20, 20, 200, 200]);
+
+CREATE OR REPLACE VIEW p_bv_bank_properties FOLDER = '/2 - integration' AS SELECT (bv_bank_properties.property_id+50) AS property_id, bv_bank_properties.address AS address, bv_bank_properties.city AS city, bv_bank_properties.state AS state, bv_bank_properties.zip_code AS zip_code, bv_bank_properties.property_value AS value FROM bv_bank_properties;
+
+CHOWN admin VIEW p_bv_bank_properties LASTMODIFICATIONUSER admin;
+
+ALTER VIEW p_bv_bank_properties
+ LAYOUT (bv_bank_properties = [20, 20, 200, 200]);
+
+CREATE OR REPLACE INTERFACE VIEW bank_loans (
+        mortgage_id:int,
+        customer:int,
+        balance:double,
+        rate:double,
+        term:int,
+        lo_id:int,
+        broker_id:int,
+        status:text
+    )
+    SET IMPLEMENTATION p_bv_bank_loans
+    FOLDER = '/3 - business entities';
+
+CREATE OR REPLACE INTERFACE VIEW bank_properties (
+        lot_number:int (sourcetypedecimals = '0', sourcetyperadix = '10', sourcetypesize = '10', sourcetypeid = '4'),
+        address:text (sourcetypesize = '4000', sourcetypeid = '12'),
+        city:text (sourcetypesize = '4000', sourcetypeid = '12'),
+        state:text (sourcetypesize = '4000', sourcetypeid = '12'),
+        zip_code:text (sourcetypesize = '4000', sourcetypeid = '12'),
+        fmv:double (sourcetyperadix = '2', sourcetypesize = '53', sourcetypeid = '8')
+    )
+    SET IMPLEMENTATION p_bv_bank_properties(
+        lot_number = property_id,
+        address = address,
+        city = city,
+        state = state,
+        zip_code = zip_code,
+        fmv = value    
+)
+    FOLDER = '/3 - business entities';
+
+# #######################################
+# ASSOCIATIONS of denodo_hol_bank_demo
+# #######################################
+# No associations in database denodo_hol_bank_demo
+# #######################################
+# WEBSERVICES of denodo_hol_bank_demo
+# #######################################
+# No web services in database denodo_hol_bank_demo
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS of denodo_hol_bank_demo
+# #######################################
+# No deployed web services in database denodo_hol_bank_demo
+# #######################################
+# VIEW STATISTICS of denodo_hol_bank_demo
+# #######################################
+CREATE OR REPLACE VIEWSTATSUMMARY bv_bank_customers (
+    SET ENABLED = true
+    SET NUMOFROWS = 100000
+    SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
+      (phone_number,16.14841,'9998927278','(200)224-5253',100000,0),
+      (state,0.01289619505405426,'NY','AL',6,99365),
+      (email,17.67449,'zyoung@test.com','aabbott@mail.com',43568,0),
+      (address,22.4183,'99998 Omar Mission Suite 867','000 Aaron Cove',99998,0),
+      (city,0.055611055344343185,'Winfield','A Coruna',142,99336),
+      (zip_code,4.682403433476395,'6854','1020',229,99767),
+      (last_name,6.076998710632324,'Zuniga','Abbott',1012,0),
+      (first_name,6.030545234680176,'Zoe','Aaron',726,0)
+);
+
+# #######################################
+# Closing connection with database denodo_hol_bank_demo
+# #######################################
+CLOSE;
+
+# #######################################
 # Connecting to database admin
 # #######################################
 CONNECT DATABASE ADMIN;
@@ -1603,7 +2324,10 @@ ALTER USER analyst
 GRANT ROLE allusers,data_catalog_data_preparation,analyst;
 
 ALTER USER denodo
-GRANT ROLE allusers,full_read,data_catalog_data_preparation,manage_policies,data_catalog_editor,manage_tags,assign_tags,use_large_language_model,data_catalog_assisted_query;
+GRANT ROLE allusers,full_read,data_catalog_classifier,data_catalog_data_preparation,manage_policies,data_catalog_editor,manage_tags,assign_tags,use_large_language_model,data_catalog_assisted_query;
+
+ALTER USER esmith
+GRANT ROLE allusers,bi_analyst;
 
 # #######################################
 # ROLE PRIVILEGES
@@ -1611,16 +2335,16 @@ GRANT ROLE allusers,full_read,data_catalog_data_preparation,manage_policies,data
 ALTER ROLE analyst
 GRANT CONNECT ON admin
 GRANT CONNECT ON denodo_hol_bank
-GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_customer_stock_holdings
 GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_customers
 GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_loan_officers
 GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_loans
 GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_payments
 GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_properties
 GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_rates
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_underwriting
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_customer_stock_holdings
 GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_security_metrics
 GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_ticker_api
-GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_underwriting
 GRANT METADATA, EXECUTE ON denodo_hol_bank.customer_assets
 GRANT METADATA, EXECUTE ON denodo_hol_bank.customer_sec_risks_unified
 GRANT METADATA, EXECUTE ON denodo_hol_bank.iv_customer_assets
@@ -1631,7 +2355,30 @@ GRANT METADATA, EXECUTE ON denodo_hol_bank.p_security_metrics
 GRANT METADATA, EXECUTE ON denodo_hol_bank.p_ticker_api
 GRANT METADATA, EXECUTE ON denodo_hol_bank.sd_customer_stock_holdings
 GRANT METADATA, EXECUTE ON denodo_hol_bank.sd_security_metrics
-GRANT METADATA, EXECUTE ON denodo_hol_bank.sd_ticker_api;
+GRANT METADATA, EXECUTE ON denodo_hol_bank.sd_ticker_api
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_customers
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_loanofficers
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_loans
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_payments
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_properties
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_rates;
+
+ALTER ROLE bi_analyst
+GRANT CONNECT ON admin
+GRANT CONNECT ON denodo_hol_bank
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_customers
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_loan_officers
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_loans
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_payments
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_properties
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_rates
+GRANT CONNECT ON denodo_hol_bank_demo
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_customers
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_loanofficers
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_loans
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_payments
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_properties
+GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_rates;
 
 ALTER ROLE full_read
 GRANT CONNECT ON admin
@@ -1661,7 +2408,7 @@ CREATE OR REPLACE GLOBAL_SECURITY_POLICY block_pii
     )
     RESTRICTION (
         FILTER = ''
-        MASKING ANY (pii) WITH (HIDE) (numbers WITH DEFAULT, datetimes WITH DEFAULT, texts WITH DEFAULT) 
+        MASKING ANY (pii) WITH (REDACT) (numbers WITH DEFAULT, datetimes WITH DEFAULT, texts WITH FIRST_4) 
     );
 
 CHOWN admin GLOBAL_SECURITY_POLICY block_pii LASTMODIFICATIONUSER admin;
