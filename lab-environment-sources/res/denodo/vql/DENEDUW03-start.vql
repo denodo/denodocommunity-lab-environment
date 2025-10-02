@@ -2366,12 +2366,12 @@ GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_rates;
 ALTER ROLE bi_analyst
 GRANT CONNECT ON admin
 GRANT CONNECT ON denodo_hol_bank
-GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_customers
-GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_loan_officers
-GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_loans
-GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_payments
-GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_properties
-GRANT METADATA, EXECUTE ON denodo_hol_bank.bv_bank_rates
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bank_customers
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bank_loanofficers
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bank_loans
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bank_payments
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bank_properties
+GRANT METADATA, EXECUTE ON denodo_hol_bank.bank_rates
 GRANT CONNECT ON denodo_hol_bank_demo
 GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_customers
 GRANT METADATA, EXECUTE ON denodo_hol_bank_demo.bank_loanofficers
@@ -2401,7 +2401,7 @@ CLOSE;
 CREATE OR REPLACE GLOBAL_SECURITY_POLICY block_pii
     ENABLED = TRUE
     AUDIENCE (
-        ANY ROLES (analyst)
+        ANY ROLES (analyst, bi_analyst)
     )
     ELEMENTS (
         ALL VIEWS
