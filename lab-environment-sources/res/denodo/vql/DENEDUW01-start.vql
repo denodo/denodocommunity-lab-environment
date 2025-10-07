@@ -947,15 +947,17 @@ CONNECT DATABASE ADMIN;
 # #######################################
 # USER PRIVILEGES
 # #######################################
-# #######################################
-# ROLE PRIVILEGES
-# #######################################
 ALTER USER denodo
-GRANT ROLE assignprivileges,assign_all_roles,assign_tags,create_role,create_temporary_table,create_user,data_catalog_assisted_query,data_catalog_classifier,data_catalog_content_admin,data_catalog_data_preparation,data_catalog_editor,data_catalog_exporter,data_catalog_manager,disable_cache_query,import_tags,manage_listeners,manage_metadata_tables,manage_policies,manage_summaries,manage_tags,scheduler_admin,use_large_language_model
+GRANT ROLE assignprivileges,assign_all_roles,assign_tags,configure_resource_manager,configure_database,create_temporary_table,create_role,create_user,data_catalog_assisted_query,data_catalog_classifier,data_catalog_content_admin,data_catalog_data_preparation,data_catalog_editor,data_catalog_exporter,data_catalog_manager,disable_cache_query,import_tags,jmxadmin,manage_listeners,manage_metadata_tables,manage_policies,manage_summaries,manage_tags,metadata_export,monitor_admin,scheduler_admin,selfserviceexporter,use_large_language_model,data_catalog_admin
+GRANT CONNECT ON admin
 GRANT CONNECT, CREATE_DATA_SERVICE, CREATE_VIEW, CREATE_FOLDER, METADATA, EXECUTE, WRITE ON denodo_hol
 GRANT CONNECT, CREATE_DATA_SERVICE, CREATE_VIEW, CREATE_FOLDER, METADATA, EXECUTE, WRITE ON denodo_hol_cdi_local
 GRANT CONNECT, CREATE_DATA_SERVICE, CREATE_VIEW, CREATE_FOLDER, METADATA, EXECUTE, WRITE ON denodo_hol_cdi_local_solution;
 
+# #######################################
+# ROLE PRIVILEGES
+# #######################################
+# GRANT ROLE assignprivileges,assign_all_roles,assign_tags,create_role,create_temporary_table,create_user,data_catalog_assisted_query,data_catalog_classifier,data_catalog_content_admin,data_catalog_data_preparation,data_catalog_editor,data_catalog_exporter,data_catalog_manager,disable_cache_query,import_tags,manage_listeners,manage_metadata_tables,manage_policies,manage_summaries,manage_tags,scheduler_admin,use_large_language_model
 # #######################################
 # RESOURCE MANAGER PLANS
 # #######################################
