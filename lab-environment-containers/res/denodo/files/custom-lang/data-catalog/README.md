@@ -31,6 +31,10 @@ To change the default language of Data Catalog, follow these steps:
   * Japanese: [customLang-ja.properties](./customLang-ja.properties)
   * Simplified Chinese: [customLang-zh_CN.properties](./customLang-zh_CN.properties)
   * German: [customLang-de.properties](./customLang-de.properties)
+  * Spanish: [customLang-es.properties](./customLang-es.properties)
+  * Italian: [customLang-it.properties](./customLang-it.properties)
+  * Portuguese: [customLang-pt.properties](./customLang-pt.properties)
+  * Catalan: [customLang-cat.properties](./customLang-cat.properties)
 
 * Copy this file to `<DENODO_HOME>/work/data-catalog/`.
 
@@ -42,6 +46,10 @@ To change the default language of Data Catalog, follow these steps:
   * Japanese: `customLang.langAttribute=ja`
   * Simplified Chinese: `customLang.langAttribute=zh_CN`
   * German: `customLang.langAttribute=de`
+  * Spanish: `customLang.langAttribute=es`
+  * Italian: `customLang.langAttribute=it`
+  * Portuguese: `customLang.langAttribute=pt`
+  * Catalan: `customLang.langAttribute=cat`
 
 * Restart Data Catalog.
 
