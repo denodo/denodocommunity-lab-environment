@@ -13,11 +13,11 @@ collaborators:
 
 # Language of the Denodo Web Tools
 
-The language of the Data Catalog, the Design Studio and the administration tool of Scheduler is English by default. You can change the language of these applications. 
+The language of the Data Marketplace, the Design Studio and the administration tool of Scheduler is English by default. You can change the language of these applications. 
 
 See each subfolder for more information:
 
-* [Data Catalog](./data-catalog/README.md)
+* [Data Marketplace / Data Catalog](./data-catalog/README.md)
 * [Design Studio](./design-studio/README.md)
 * [Scheduler Administration Tool](./scheduler/)
 
