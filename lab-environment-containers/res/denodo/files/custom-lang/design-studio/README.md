@@ -19,7 +19,7 @@ The language of the Denodo Design Studio is English by default. You can change t
 
 This project maintains language files uploaded by the Denodo Community of users. 
 
-**Note:** For the official language packages provided by Denodo, please go to the Denodo User Manual: https://community.denodo.com/docs/html/browse/latest/en/platform/administration/language_of_the_web_tools/language_of_the_web_tools#changing-the-language-of-the-applications
+**Note:** For the official language packages provided by Denodo, please go to the **Denodo Platform Administration Guide**: https://community.denodo.com/docs/html/browse/latest/en/platform/administration/language_of_the_web_tools/language_of_the_web_tools#changing-the-language-of-the-applications
 
 ## Install a Language File for Denodo Design Studio
 
@@ -30,10 +30,28 @@ To change the default language of Denodo Design Studio, follow these steps:
   * Simplified Chinese: [customLang-zh_CN.properties](./customLang-zh_CN.properties)
   * German: [customLang-de.properties](./customLang-de.properties)
 
-* Copy this file to `<DENODO_HOME>/work/design-studio/`.
+* If you are logged in to Design Studio, log out first.
 
-* Rename this file to `customLang.properties`.
+* Go to the Preferences page of Design Studio (i.e. https://denodo-server.acme.com:9443/denodo-design-studio/#/web-local-login)
 
+* Click the menu `Configuration > Application settings`.
+
+* In the section `Language`, select the `Default language` and click `Add language` to upload the file of the languages you want to make available to the users.
+
+* * After uploading the language files, they will be available to all the users immediately. That is, once a user logs in, the application will display on the top-right side of the screen a “globe” icon in which the user will be able to choose the preferred language file.
+
+## Alternative way (for Denodo Design Studio versions prior to 9.3)
+
+* Download the language files and copy them to `<DENODO_HOME>/work/design-studio/`.
+
+* The Design Studio determines the application language checking if a language file exists that exactly matches the user’s preferred browser language. 
+  * If no specific language file is found for the user’s preferred languages, the application uses the language defined in customLang.properties (if it exists. If not, the application will default to English).
+
+* Restart Design Studio.
+
+### If you want a language other than English to be the default language
+
+* Download the language files and copy them to `<DENODO_HOME>/work/design-studio/`.
 * Edit the file `<DENODO_HOME>/conf/design-studio/DesignStudioBackend.properties`, search the line with `customLang.langAttribute` and replace the entire line with one of these:
   * Japanese: `customLang.langAttribute=ja`
   * Simplified Chinese: `customLang.langAttribute=zh_CN`

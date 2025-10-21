@@ -19,7 +19,7 @@ The language of the Denodo Scheduler Web Admin is English by default. You can ch
 
 This project maintains language files uploaded by the Denodo Community of users. 
 
-**Note:** For the official language packages provided by Denodo, please go to the Denodo User Manual: https://community.denodo.com/docs/html/browse/latest/en/platform/administration/language_of_the_web_tools/language_of_the_web_tools#changing-the-language-of-the-applications
+**Note:** For the official language packages provided by Denodo, please go to the **Denodo Platform Administration Guide**: https://community.denodo.com/docs/html/browse/latest/en/platform/administration/language_of_the_web_tools/language_of_the_web_tools#changing-the-language-of-the-applications
 
 ## Install a Language File for Denodo Scheduler Web Admin
 
@@ -27,15 +27,32 @@ To change the default language of Denodo Scheduler Web Admin, follow these steps
 
 * Download the language file from this directory:
   * Japanese: [customLang-ja.properties](./customLang-ja.properties)
+  * Simplified Chinese: [customLang-zh_CN.properties](./customLang-zh_CN.properties)
 
-* Copy this file to `<DENODO_HOME>/work/scheduler-webadmintool/customization/`.
 
-* Rename this file to `customLang.properties`.
+* If you are logged in to Scheduler Administration Tool, log out first.
+* Go to the Web configuration of Scheduler (i.e. https://denodo-server.acme.com:9443/webadmin/denodo-scheduler-admin/#/web-local-login).
+* Click `Language` and then, select the `Default language` and click `Add language` to upload the file of the languages you want to make available to the users.
+* After uploading the language files, they will be available to all the users immediately. That is, once a user logs in, the application will display on the top-right side of the screen a “globe” icon in which the user will be able to choose the preferred language file.
 
+## Alternative way (for Denodo Scheduler versions prior to 9.3)
+
+* Download the language files and copy them to `<DENODO_HOME>/work/scheduler-webadmintool/customization/`.
+* The Denodo Scheduler Web Admin determines the application language checking if a language file exists that exactly matches the user’s preferred browser language. 
+  * If no specific language file is found for the user’s preferred languages, the application uses the language defined in customLang.properties (if it exists. If not, the application will default to English).
+
+* Restart Denodo Scheduler Web Admin.
+
+
+### If you want a language other than English to be the default language
+
+* Download the language files and copy them to `<DENODO_HOME>/work/scheduler-webadmintool/customization/`.
 * Edit the file `<DENODO_HOME>/conf/scheduler-webadmintool/ConfigurationParameters.properties`, search the line with `customLang.langAttribute` and replace the entire line with one of these:
   * Japanese: `customLang.langAttribute=ja`
+  * Simplified Chinese: `customLang.langAttribute=zh_CN`
 
-* Restart Design Studio.
+* Restart Denodo Scheduler Administration Tool.
+
 
 
 # Collaborate translating Denodo Scheduler Web Admin to Other Languages
