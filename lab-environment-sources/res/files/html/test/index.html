@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connectivity Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: #f3f4f6; 
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            box-sizing: border-box; 
+        }
+
+        .card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 512px;
+            padding: 3rem; 
+            border-radius: 0.75rem; 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); 
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem; 
+        }
+        .icon-svg {
+            width: 5rem; 
+            height: 5rem; 
+            color: #22c55e; 
+        }
+
+        h1 {
+            font-size: 2.25rem; 
+            font-weight: 700; 
+            color: #111827; 
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.125rem;
+            color: #4b5563; 
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        img {
+            width: -webkit-fill-available;
+            max-width: 200px;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 2rem; 
+            }
+            h1 {
+                font-size: 1.875rem; 
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="icon-container">
+                <svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h1>Connection Successful</h1>
+            <p>
+                If you can read this message, your device has connectivity with the hands-on lab instances.
+            </p>
+            <p style="margin-top: 20px;">
+                Everything is working correctly!
+            </p>
+
+            <p style="margin-top: 70px;">
+                <img src="./denodo-logo.png" alt="denodo logo">
+            </p>            
+        </div>
+    </div>
+</body>
+</html>
+
+            
+
+          
