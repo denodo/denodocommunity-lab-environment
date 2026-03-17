@@ -17,8 +17,8 @@ The language of the Data Marketplace, the Design Studio and the administration t
 
 See each subfolder for more information:
 
-* [Data Marketplace / Data Catalog](./data-catalog/README.md)
-* [Design Studio](./design-studio/README.md)
+* [Data Marketplace / Data Catalog](./data-marketplace/)
+* [Design Studio](./design-studio/)
 * [Scheduler Administration Tool](./scheduler/)
 
 # Disclaimer

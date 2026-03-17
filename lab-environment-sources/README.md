@@ -37,10 +37,13 @@ You will have a directory structure like this:
 │   ├── res
 │   │   ├── db
 │   │   ├── denodo
+│   │   |   ├── vql
+│   │   |   └── zip
 │   │   ├── dfs
 │   │   ├── files
 │   │   |   ├── df
 │   │   |   ├── excel
+│   │   |   ├── images
 │   │   |   ├── json
 │   │   |   └── logs
 │   │   ├── ldap
@@ -60,13 +63,15 @@ Each directory has the files for the specific data source:
 
 | Data source | Vendor | Data sets | Path |
 | ----------- | ----------- | ----------- | ----------- | 
-| database | PostgreSQL | tpc_ds, human_resources, website_sys, historical_orders | [db/postgresql-init.sql](res/db/postgresql-init.sql) |
-| database | MariaDB | tpc_ds, calltracking, sales (tutorial), crm | [db/mariadb-init.sql](res/db/postgresql-init.sql) |
+| database | PostgreSQL | tpc_ds, human_resources, website_sys, historical_orders, bank | [db/postgresql-init.sql](res/db/postgresql-init.sql) |
+| database | MariaDB | tpc_ds, calltracking, sales (tutorial), crm | [db/mariadb-init.sql](res/db/mariadb-init.sql) |
+| vector database | PG Vector | bank, gallery | [db/pgvector-init.sql](res/db/pgvector-init.sql) |
 | denodo monitor logs | Denodo | vdp-queries, vdp-queryblocks | [denodo-monitor/logs/](res/denodo/files/tools/monitor/denodo-monitor/logs/) |
 | Binary files | MS Excel | invoices, marketing promotions, zipcodes | [files/excel/](res/files/excel/) |
 | Delimited files | - | banking | [files/df/](res/files/df/) |
-| Log files | - | logs | [files/logs/](res/files/json/) |
-| JSON files | - | household demographics | [files/json/](res/files/logs/) |
+| Log files | - | logs | [files/logs/](res/files/logs/) |
+| JSON files | - | household demographics | [files/json/](res/files/json/) |
+| Images | jpg | gallery | [files/images/](res/files/images/) |
 | LDIF files | ApacheDS | users, groups | [ldap/](res/ldap/) |
 | NoSQL | MongoDB | product, support, building | [nosql/](res/nosql/mongodb/) |
 | Realm configuration | Keycloak | realm, users, groups | [sso/](res/sso/) |

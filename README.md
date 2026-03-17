@@ -12,7 +12,7 @@ collaborators: Victoria Margret, Ajay Kumar, Sarath Chandran
 
 [Denodo](https://www.denodo.com/) is the leading logical data management platform. It establishes a unified data accessibility framework that provides data consumers with real-time insights from diverse data sources.
 
-This project maintains some sample data sources that can be used to build a **local testing environment** of different technologies that can be used for Denodo training and testing purposes. You cannot use this project for running Denodo in production.
+This project maintains some sample data sources that can be used to build a **local testing environment** of different technologies that can be used for Denodo training and testing purposes. Please note this project is not meant for running Denodo Platform in production.
 
 ## Getting started
 
@@ -22,11 +22,19 @@ To get started, you’ll need to grab the code. If you are familiar with Git, ju
 git clone https://github.com/denodo/denodocommunity-lab-environment.git
 ```
 
-Our recommendation is to launch the data sources as Docker [Containers](./lab-environment-containers/). In order to run the containers, you must [have Docker installed](https://www.docker.com/community-edition#/download).
+Our recommendation is to launch the data sources using Docker Compose following these [instructions](./lab-environment-containers/). In order to run the containers, you must [have Docker installed](https://www.docker.com/community-edition#/download).
 
-If you don't have the option of using Docker, then we provide an alternative way by means of downloading a [Virtual Machine](./lab-environment-vm/) already configured with all the dependencies needed to run the containers (the VM is available for Hyper-V or VirtualBox).
+### Other Alternatives
+
+#### Preconfigured Virtual Machine
+
+If you don't have the option of using Docker, we provide an alternative way by means of downloading a [Virtual Machine](./lab-environment-vm/) already configured with all the dependencies needed to run the containers (the VM is available for Hyper-V or VirtualBox).
+
+#### Local data sources
 
 In case you don't have a VirtualBox of Hyper-V environment, you are still able to use a local installation of the data sources that you can initialize using the scripts provided in the [Data Sources](./lab-environment-sources/) subproject.
+
+## References
 
 Please read the documentation of each subproject to get more information: 
 

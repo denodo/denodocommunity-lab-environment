@@ -31,8 +31,7 @@ services:
       #- ${DENODO_VDP_GRAPHQL_FILES_DIRECTORY}/web.xml:/opt/denodo/resources/apache-tomcat/conf/web.xml
       - ${DENODO_VDP_FILES_DIRECTORY}:/opt/denodo/work/lab-files  
       - "${DENODO_CHATBOT_SAMPLE_DATA_PATH}:/opt/denodo/samples/ai-sdk/sample_chatbot/sample_data"
-      - "${DENODO_DC_CUSTOM_LANG_DIR}/DataCatalogBackend-${DENODO_DC_CUSTOM_LANG}.properties:/denodo/conf/design-studio/DesignStudioBackend.properties"
-      - "${DENODO_DC_CUSTOM_LANG_DIR}/customLang-${DENODO_DC_CUSTOM_LANG}.properties:/opt/denodo/work/data-catalog/customLang.properties"   
+      - "${DENODO_DC_CUSTOM_LANG_DIR}/customLang-${DENODO_CUSTOM_LANG}.properties:/opt/denodo/work/data-catalog/customLang.properties"   
       - denodo-vdp-metadata:/opt/denodo/metadata
       #- ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
     ports:
@@ -77,8 +76,7 @@ services:
     networks:        
       - denodo-lab-net 
     volumes:
-      - "${DENODO_DS_CUSTOM_LANG_DIR}/DesignStudioBackend-${DENODO_DS_CUSTOM_LANG}.properties:/denodo/conf/design-studio/DesignStudioBackend.properties"
-      - "${DENODO_DS_CUSTOM_LANG_DIR}/customLang-${DENODO_DS_CUSTOM_LANG}.properties:/opt/denodo/work/design-studio/customLang.properties" 
+      - "${DENODO_DS_CUSTOM_LANG_DIR}/customLang-${DENODO_CUSTOM_LANG}.properties:/opt/denodo/work/design-studio/customLang.properties" 
     ports:
       - "${DENODO_DS_EXTERNAL_WEB_PORT}:9090"
     environment:
@@ -104,6 +102,7 @@ services:
     volumes:
       - "${DENODO_SA_LIC}:/opt/denodo/conf/denodo.lic"
       - "${DENODO_SCHED_INIT_ZIP_DIR}:/container-entrypoint-init/" 
+      - "${DENODO_SCHED_CUSTOM_LANG_DIR}/customLang-${DENODO_CUSTOM_LANG}.properties:/opt/denodo/work/design-studio/customLang.properties" 
       #- ${DENODO_SCHED_METADATA_VOLUME}:/opt/denodo/metadata/
       #- ${DENODO_SCHED_INDEX_VOLUME}:/opt/denodo/work/arn/data/index/
       ##- ${DENODO_KEYSTORE}:/opt/denodo/conf/denodo-key-custom.keystore
@@ -330,6 +329,25 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "${ANALYTICAL_DB_PORT}:5432"
+
+  # Vector Database
+  ds-pgvector:
+    container_name: denodocommunity-lab-environment-pgvector
+    image: ${VECTOR_DB_VERSION}
+    profiles: ["all","ds","ds-vector"]
+    hostname: ${VECTOR_DB_HOSTNAME}
+    restart: unless-stopped
+    networks:
+      - denodo-lab-net   
+    volumes:   
+      - ${VECTOR_DB_INIT_SCRIPT}:/docker-entrypoint-initdb.d/init.sql
+      - ${VECTOR_DB_DATA_DIRECTORY}:/mnt
+      - vector-lab-env:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${VECTOR_DB_PWD}
+      - POSTGRES_DB=postgres
+    ports:
+      - "${VECTOR_DB_PORT}:5432"
  
   # Application server
   ds-tomcat:
@@ -626,4 +644,6 @@ volumes:
   denodo-vdp-metadata:
     driver: local
   minio-lab-env:
+    driver: local
+  vector-lab-env: 
     driver: local

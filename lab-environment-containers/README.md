@@ -192,17 +192,20 @@ In the table below you can find the list of available profiles that you can use 
 
 | Profile name | List of Containers |
 | ----------- | ----------- | 
-| ds | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, Tomcat, Apache HTTP, MongoDB, and LDAP. And this **Application**: GraphQL client. |
-| denodo | Profile for launching these **Denodo servers and tools**: Virtual DataPort server, Design Studio, Data Catalog, and a PostgreSQL* database to be used as external metadata and cache database. |
+| ds | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, PGvector, Tomcat, Apache HTTP, MongoDB, and LDAP. And this **Application**: GraphQL client. |
+| ds-minimal | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, and Apache HTTP. |
+| denodo | Profile for launching these **Denodo servers and tools**: Virtual DataPort server, Design Studio, Data Marketplace, and a PostgreSQL* database to be used as external metadata and cache database. |
 | denodo-sched | Profile for launching **Denodo Scheduler**: it includes a Denodo Scheduler server, a Denodo Index server, and the Scheduler Web Administration Tool. |
-| ai | Profile for launching a **Denodo AI-ready** environment: Denodo AI SDK, Virtual DataPort server, Design Studio, Data Catalog, and a PostgreSQL* database to be used as external metadata and cache database. |
-| denodo-ai-sdk | Profile for launching **Denodo AI SDK**: it launches only the Denodo AI SDK endpoint (ensure you have configured the path to your Data Catalog server in the `docker-compose.yml` file). |
+| ai | Profile for launching a **Denodo AI-ready** environment: Denodo AI SDK, Virtual DataPort server, Design Studio, Data Marketplace, and a PostgreSQL* database to be used as external metadata and cache database. |
+| denodo-ai-sdk | Profile for launching **Denodo AI SDK**: it launches only the Denodo AI SDK endpoint (ensure you have configured the path to an existing Data Marketplace server in the `docker-compose.yml` file). |
 | sso | Profile for launching a **Keycloak** server that can be used to test Single Sign-On in Denodo (it includes an LDAP server and a PostgreSQL* used as an external metadata database). |
 | notebook | Profile for launching a **JupyterLab** notebook that can be used to test a Python client for connecting to Denodo. |
+| ds-dfs | Profile for launching the MinIO S3-compatible object storage **Data Source**. |
 | git | Profile for launching a **GitLab** server that can be used testing Version Control System with Denodo. |
 | util-mongo-express | Profile for launching **Mongo Express** as a web-based MongoDB administration interface. |
 | util-graphql | Profile for launching **GraphQL Playground** as a web-based GraphQL client interface. |
 | util-dbclient | Profile for launching **Cloudbeaver** as a web-based database administration interface. |
+| reverse-proxy | Profile for launching an nginx reverse proxy to make all the containerized web applications listen in the standard http/https ports (80/443). |
 | all | Profile for launching all the available containers (**We strongly recommend not to use this profile**). |
 
 \* The associated container for this PostgreSQL database is shared among all the Denodo servers and Keycloak.
@@ -252,6 +255,8 @@ In the table below you can find the name of all the containers included by defau
 | ds-mariadb | denodocommunity-lab-environment-mariadb | mariadb:11.3.2 | mariadb | **MariaDB** database. While running this container for the first time, the SQL files from the project directory will be executed (see [Sources](../lab-environment-sources/README.md)) It is to be noted that this process only happens once. You can use `root`/`admin` as default user/password and **localhost:3306** as default host/port number for this data source. |
 | ds-mongo | denodocommunity-lab-environment-mongo | mongo:7.0.8* | mongo | **MongoDB** NoSQL database initialized with a support data set. This server will be launched at host/port **localhost:27017** and the default credentials are `mongoadmin`/`admin`. |
 | ds-httpd | denodocommunity-lab-environment-httpd | httpd:2.4.59 | webserver | **Apache HTTP** server which contains MS Excel, JSON and log files. By default it is listening at http://localhost:1080/ |
+| ds-dfs | denodocommunity-lab-environment-minio | minio:RELEASE.2024-12-18T13-15-44Z | minio | **MinIO** S3-compatible object storage. It includes the *denodo* and *tutorial* buckets (see [buckets](../lab-environment-sources/res/dfs/buckets/)). The default username and password will be `denodo`/`denodo123`. This container runs in the host **localhost** and port number **9000**. |
+| ds-vector | denodocommunity-lab-environment-pgvector | pgvector:pg17 | vector | **PG Vector** database. While running this container for the first time, the SQL files from the sources project will be imported (see [Sources](../lab-environment-sources/README.md)). It is to be noted that this process only happens once. The default username and password will be `postgres`/`admin`. This container runs in the host **localhost** and port number **25432**. |
 
 \* You can change the MongoDB version to **4.4.18** if you see this error when starting the container: `MongoDB 5.0+ requires a CPU with AVX support`
 
@@ -266,22 +271,23 @@ In the table below you can find the name of all the containers included by defau
 
 ## Utilities
 
-| Service name | Container name | Image | Description |
-|---------|---------|---------|------------|
-| util-mongo-express | denodocommunity-lab-environment-mongo-express | mongo-express:1.0.2 | Web-based **MongoDB admin** interface, it is listening at http://localhost:8111/ by default. Use the following default credentials: `admin`/`pass`. |
-| util-cloudbeaver | denodocommunity-lab-environment-cloudbeaver | dbeaver/cloudbeaver:23.2.2 | **Cloudbeaver container**: This container has CloudBeaver which is a web-based database management tool. This tool runs on http://localhost:8978/#/ |
-| util-graphql-playground | denodocommunity-lab-environment-graphql-playground | imega/graphql-playground:0.0.3 | **GraphQL container**: GraphQL Playground is a graphical, interactive, in-browser GraphQL IDE. This is available at http://localhost:4000/graphql. |
-| util-notebook | denodocommunity-lab-environment-notebook | datascience-notebook:2024-03-14 | Web-based **JupyterLab** notebook that can be used to test a Python client for connecting to Denodo. This is available at http://localhost:8888/notebook/. Use the following default token: `denodo` |
+| Service name | Container name | Image | Hostname | Description |
+|---------|---------|---------|---------|------------|
+| util-mongo-express | denodocommunity-lab-environment-mongo-express | mongo-express:1.0.2 | mongo-express | Web-based **MongoDB admin** interface, it is listening at http://localhost:8111/ by default. Use the following default credentials: `admin`/`pass`. |
+| util-cloudbeaver | denodocommunity-lab-environment-cloudbeaver | dbeaver/cloudbeaver:23.2.2 | cloudbeaver | **Cloudbeaver container**: This container has CloudBeaver which is a web-based database management tool. This tool runs on http://localhost:8978/#/ |
+| util-graphql-playground | denodocommunity-lab-environment-graphql-playground | imega/graphql-playground:0.0.3 | graphql-playground | **GraphQL container**: GraphQL Playground is a graphical, interactive, in-browser GraphQL IDE. This is available at http://localhost:4000/graphql. |
+| util-notebook | denodocommunity-lab-environment-notebook | datascience-notebook:2024-03-14 | notebook | Web-based **JupyterLab** notebook that can be used to test a Python client for connecting to Denodo. This is available at http://localhost:8888/notebook/. Use the following default token: `denodo` |
+| nginx-proxy | denodocommunity-lab-environment-reverseproxy | nginx:1.27.2 | proxy | **nginx** reverse proxy. This is available at http://localhost/ and configured in the [nginx.conf](./res/nginx/nginx.conf) file. |
 
 ## Denodo
 
-| Service name | Container name | Image | Description |
-| ----------- | ----------- | ----------- | ----------- |
-| denodo-vdp | denodocommunity-lab-environment-vdp | denodo-platform:latest | It deploys the **Denodo Virtual DataPort** server and the **Denodo Data Catalog** using the license file configured in the `.env` file. By default, the Data Catalog is listening at http://localhost:9090/denodo-data-catalog |
-| denodo-ds | denodocommunity-lab-environment-ds | denodo-platform:latest | It deploys the **Denodo Design Studio** web application. By default it is listening at http://localhost:19090/denodo-design-studio/?uri=//vdp:9999/#/ (**Note**: it does not need a Denodo license to run). |
-| denodo-sched | denodocommunity-lab-environment-sched | denodo-platform:latest | It deploys the **Denodo Scheduler** using the license file configured in the `.env` file, the **Denodo Index Server** using the license file configured in the `.env` file, and the **Denodo Scheduler Administration** web application. By default it is listening at http://localhost:39090/webadmin/denodo-scheduler-admin/ |
-| denodo-postgres | denodocommunity-lab-environment-metadata | postgres:12-alpine | **PostgreSQL** database used as Denodo and Keycloak external metadata database. The default username and password will be `denodo`/`denodo`. |
-| denodo-ai-sdk | denodo-ai-sdk | ai-sdk:latest | **Denodo AI SDK** server. It needs connectivity with a Denodo Data Catalog. By default, it is listening at http://localhost:8008/docs/. |
+| Service name | Container name | Image | Hostname | Description |
+| ----------- | ----------- | ----------- | ----------- | ----------- |
+| denodo-vdp | denodocommunity-lab-environment-vdp | denodo-platform:latest | vdp | It deploys the **Denodo Virtual DataPort** server and the **Denodo Data Marketplace** using the license file configured in the `.env` file. By default, the Data Marketplace is listening at http://localhost:9090/denodo-data-catalog |
+| denodo-ds | denodocommunity-lab-environment-ds | denodo-platform:latest | design-studio | It deploys the **Denodo Design Studio** web application. By default it is listening at http://localhost:19090/denodo-design-studio/?uri=//vdp:9999/#/ (**Note**: it does not need a Denodo license to run). |
+| denodo-sched | denodocommunity-lab-environment-sched | denodo-platform:latest | sched | It deploys the **Denodo Scheduler** using the license file configured in the `.env` file, the **Denodo Index Server** using the license file configured in the `.env` file, and the **Denodo Scheduler Administration** web application. By default it is listening at http://localhost:39090/webadmin/denodo-scheduler-admin/ |
+| denodo-postgres | denodocommunity-lab-environment-metadata | postgres:12-alpine | metadata | **PostgreSQL** database used as Denodo and Keycloak external metadata database. The default username and password will be `denodo`/`denodo`. |
+| denodo-ai-sdk | denodo-ai-sdk | ai-sdk:latest | ai-sdk | **Denodo AI SDK** server. It needs connectivity with a Denodo Data Marketplace. By default, it is listening at http://localhost:8008/docs/. |
 
 # Licenses of the containers
 
@@ -299,6 +305,8 @@ The Denodo Community Lab Environment docker compose script downloads containers 
 * GraphQL Playground: MIT License https://github.com/graphql/graphql-playground/blob/main/LICENSE
 * JupyterLab: https://github.com/jupyterlab/jupyterlab/blob/main/LICENSE
 * Nginx: https://nginx.org/LICENSE
+* MinIO: GNU AGPL v3 license https://www.gnu.org/licenses/agpl-3.0.en.html 
+* PGVector: The PostgreSQL Licence https://github.com/pgvector/pgvector/blob/master/LICENSE
 
 ## Denodo Community Lab Environment License
 

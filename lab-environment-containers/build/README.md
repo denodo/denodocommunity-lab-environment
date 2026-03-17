@@ -40,10 +40,10 @@ $ docker compose --profile ds up
 
 | Profile name | List of Containers |
 | ----------- | ----------- | 
-| ds | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, Tomcat, Apache HTTP, MongoDB, and LDAP. And this **Application**: GraphQL client. |
-| denodo | Profile for launching these **Denodo servers and tools**: Virtual DataPort server, Design Studio, Data Catalog, and a PostgreSQL* database to be used as external metadata and cache database. |
+| ds | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, PGVector, Tomcat, Apache HTTP, MongoDB, and LDAP. And this **Application**: GraphQL client. |
+| denodo | Profile for launching these **Denodo servers and tools**: Virtual DataPort server, Design Studio, Data Marketplace, and a PostgreSQL* database to be used as external metadata and cache database. |
 | denodo-sched | Profile for launching **Denodo Scheduler**: it includes a Denodo Scheduler server, a Denodo Index server, and the Scheduler Web Administration Tool. |
-| ai | Profile for launching **Denodo AI SDK**: it includes the Denodo AI SDK\*\*, a Virtual DataPort server, Data Catalog, Design Studio and a PostgreSQL\* database to be used as cache database. |
+| ai | Profile for launching **Denodo AI SDK**: it includes the Denodo AI SDK\*\*, a Virtual DataPort server, Data Marketplace, Design Studio and a PostgreSQL\* database to be used as cache database. |
 | sso | Profile for launching a **Keycloak** server that can be used to test Single Sign-On in Denodo (it includes an LDAP server and a PostgreSQL* used as an external metadata database). |
 | notebook | Profile for launching a **JupyterLab** notebook that can be used to test a Python client for connecting to Denodo. |
 | git | Profile for launching a **GitLab** server that can be used testing Version Control System with Denodo. |
@@ -133,10 +133,10 @@ In the `.env` file you can configure a specific version of Denodo Platform in th
 DENODO_VERSION=harbor.open.denodo.com/denodo-express/denodo-platform:latest
 ```
 
-For example, if you have a Denodo subscription license, you can use this to launch a Denodo 9.2.1 container:
+For example, if you have a Denodo subscription license, you can use this to launch a Denodo 9.4.0 container:
 
 ```properties
-DENODO_VERSION=harbor.open.denodo.com/denodo-9/images/denodo-platform:9.2.1
+DENODO_VERSION=harbor.open.denodo.com/denodo-9/images/denodo-platform:9.4.0
 ```
 
 #### Denodo AI SDK
@@ -146,10 +146,10 @@ DENODO_VERSION=harbor.open.denodo.com/denodo-9/images/denodo-platform:9.2.1
 DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-express/ai-sdk:latest
 ```
 
-For example, if you have a Denodo subscription license, you can use this to use the version v0.8.1 of the Denodo AI SDK:
+For example, if you have a Denodo subscription license, you can use this to use the version v1.0 of the Denodo AI SDK:
 
 ```properties
-DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-connects-9/images/ai-sdk:v0.8.1
+DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-connects-9/images/ai-sdk:v1.0
 ```
 **Note: Running the Denodo AI SDK container**: In case you want to try the Denodo AI SDK, please read the [Building an AI Chatbot with Denodo in Minutes](https://community.denodo.com/tutorials/browse/chatbot/index) tutorial, which explains how to use a specific environment with some precreated views in Denodo to be used by the AI SDK and the Sample Chatbot.
 
@@ -158,27 +158,32 @@ DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-connects-9/images/ai-sdk:v0.
 
 The folder [custom-lang](../res/denodo/files/custom-lang/) of this project contains the localization files of the Denodo web applications. 
 
-You can edit the `***_LANG` property to use one of the configured languages (English is the default language).
+You can edit the `DENODO_CUSTOM_LANG` property to use one of the configured languages (English is the default language).
 
 ```properties
 # Language of the Web Tools
 # =============================
+# Design Studio
 DENODO_DS_CUSTOM_LANG_DIR=../res/denodo/files/custom-lang/design-studio
-DENODO_DS_CUSTOM_LANG=en
-DENODO_DC_CUSTOM_LANG_DIR=../res/denodo/files/custom-lang/data-catalog
-DENODO_DC_CUSTOM_LANG=en
+# Data Marketplace
+DENODO_DC_CUSTOM_LANG_DIR=../res/denodo/files/custom-lang/data-marketplace
+# Scheduler
+DENODO_SCHED_CUSTOM_LANG_DIR=../res/denodo/files/custom-lang/scheduler
+DENODO_CUSTOM_LANG=en
 ```
 
 For example, if inside the folder `../res/denodo/files/custom-lang/design-studio` you have these files:
 * customLang-de.properties
 * customLang-fr.properties
 * customLang-ja.properties
+* ...
 
 You can configure this to have the Design Studio in French:
 ```properties
-DENODO_DS_CUSTOM_LANG=fr
+DENODO_CUSTOM_LANG=fr
 ```
 
 Of course, you can add more languages! You can simply add new files in these directories, following the documentation:
 * [Design Studio](../res/denodo/files/custom-lang/design-studio/README.md) 
-* [Data Catalog](../res/denodo/files/custom-lang/data-catalog/README.md) 
+* [Data Marketplace](../res/denodo/files/custom-lang/data-marketplace/README.md) 
+* [Scheduler Administration Tool](../res/denodo/files/custom-lang/scheduler/README.md) 
