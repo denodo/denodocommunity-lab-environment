@@ -4962,8 +4962,9 @@ CONNECT DATABASE ADMIN;
 # #######################################
 # USER PRIVILEGES
 # #######################################
+
 ALTER USER denodo
-GRANT ROLE allusers,data_catalog_manager,data_catalog_assisted_query,data_catalog_classifier,data_catalog_editor,data_catalog_data_preparation
+GRANT ROLE allusers,data_catalog_manager,data_catalog_assisted_query,data_catalog_classifier,data_catalog_editor,data_catalog_data_preparation,scheduler_admin,use_large_language_model
 GRANT CONNECT ON admin
 GRANT CONNECT, CREATE, CREATE_DATA_SOURCE, CREATE_DATA_SERVICE, CREATE_VIEW, CREATE_FOLDER, METADATA, EXECUTE ON denodo_hol
 GRANT METADATA, EXECUTE ON denodo_hol.bv_call_center
