@@ -582,6 +582,29 @@ services:
         aliases:
           - ${HOST_ALIAS}
 
+  util-n8n:
+    container_name: denodocommunity-lab-environment-ai-worklow
+    image: n8nio/n8n:1.123.21
+    profiles: ["all","util-n8n"]
+    hostname: n8n
+    networks:
+      - denodo-lab-net
+    restart: unless-stopped
+    volumes:
+      - ../../lab-environment-sources/res/workflow/:/home/node/.n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=denodo
+      - N8N_BASIC_AUTH_PASSWORD=denodo
+      - N8N_HIDE_USAGE_PAGE=true
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - GENERIC_TIMEZONE=UTC
+      - TZ=UTC
+
   # Nginx reverse proxy
   nginx-proxy:
     container_name: denodocommunity-lab-environment-reverseproxy
@@ -646,4 +669,6 @@ volumes:
   minio-lab-env:
     driver: local
   vector-lab-env: 
+    driver: local
+  n8n-lab-env: 
     driver: local

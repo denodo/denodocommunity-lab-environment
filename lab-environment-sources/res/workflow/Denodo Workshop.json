@@ -1,0 +1,525 @@
+{
+  "name": "Denodo Workshop",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -704,
+        224
+      ],
+      "id": "2f58a6c8-5881-49eb-9720-57e8ead28a15",
+      "name": "When chat message received",
+      "webhookId": "d050974f-3d00-49aa-a82d-1586b1a71f34"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -176,
+        528
+      ],
+      "id": "a8e66c4f-9f97-40dc-817b-d05b8f7ef156",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "G6I0SnzIdQWEzcJN",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Mortgage and loan exposure specialist. Analyzes loan amounts, property values, LTV ratios, payment history, and underwater mortgage detection. Discovers and queries the bank's data via Denodo MCP. Pass a specific instruction with the customer name and what analysis you need.",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "You are a Mortgage and Loan Analysis specialist agent working for a bank. You have access to the bank's data platform (Denodo) via MCP tools. Use them to discover and query the available data.\n\n# Your Domain\n\nYou specialize in analyzing mortgage and loan exposure: loan amounts, property values, LTV ratios, payment history, debt levels, and underwater mortgage detection.\n\n# How to Work\n\n- Use the MCP tools to explore what data is available and query it. Do NOT assume table names or column names — discover them through the tools.\n- If given a customer name, start by finding their identifier in the system, then retrieve their loan data, property data, and payment history.\n- Do NOT filter by loan status, date ranges, or any other field unless explicitly instructed by the Supervisor.\n- Always show your calculations. For example: \"LTV = $350,000 / $320,000 = 109.38%\"\n- Explain your reasoning at each step so a human reviewer can follow your logic.\n- If a query returns no results, say so explicitly and explain what that means for the analysis.\n- Never make up data. Return real numbers from the database.\n\n# What to Include in Your Report\n\n- Customer identification\n- All loans found with their key details (amount, rate, term, status)\n- Property valuations and LTV ratios (with calculations shown)\n- Payment history summary\n- Total debt exposure\n- Risk flags (underwater mortgages, missed payments, pending loans) with explanation of WHY each flag was raised"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -256,
+        752
+      ],
+      "id": "b70318f0-d5ed-4bf4-8719-34354f7574b8",
+      "name": "Mortagage Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -256,
+        928
+      ],
+      "id": "bb81feea-2e11-43ff-badd-30a8416eebc5",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "G6I0SnzIdQWEzcJN",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://ai-sdk:8008/denodo-ai-sdk/mcp",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        -112,
+        928
+      ],
+      "id": "a224c026-cb06-456e-897f-298c858898f6",
+      "name": "MCP Client1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "izq1G6nu6R1EHRJO",
+          "name": "Denodo Admin"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        928
+      ],
+      "id": "70813234-98b5-429f-a4aa-6bca2d6781c7",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "G6I0SnzIdQWEzcJN",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://ai-sdk:8008/denodo-ai-sdk/mcp",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        928
+      ],
+      "id": "39909939-97e9-47ce-99ae-63b2ac805c06",
+      "name": "MCP Client",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "izq1G6nu6R1EHRJO",
+          "name": "Denodo Admin"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        368,
+        928
+      ],
+      "id": "a8296463-23e3-4301-909d-83e42b95d38f",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "G6I0SnzIdQWEzcJN",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://ai-sdk:8008/denodo-ai-sdk/mcp",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        512,
+        928
+      ],
+      "id": "462fe176-a10c-4253-89ec-df6dee40be17",
+      "name": "MCP Client2",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "izq1G6nu6R1EHRJO",
+          "name": "Denodo Admin"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Investment portfolio risk specialist. Analyzes stock holdings, portfolio value, concentration risk, and volatility assessment. Discovers and queries the bank's data via Denodo MCP. Pass a specific instruction with the customer name and what analysis you need.",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "You are an Investment Portfolio Risk Analysis specialist agent working for a bank. You have access to the bank's data platform (Denodo) via MCP tools. Use them to discover and query the available data.\n\n# Your Domain\n\nYou specialize in analyzing customer investment portfolios: stock holdings, portfolio value, concentration risk, and volatility assessment.\n\n# How to Work\n\n- Use the MCP tools to explore what data is available and query it. Do NOT assume table names or column names — discover them through the tools.\n- If given a customer name, start by finding their identifier in the system (you may need their email), then retrieve their stock holdings, market prices, and risk metrics.\n- Do NOT filter by date ranges or any other field unless explicitly instructed by the Supervisor.\n- Always show your calculations. For example: \"Position value = 50 shares × $420.72 = $21,036\"\n- Explain your reasoning at each step, especially when assessing risk levels.\n- If a query returns no results, say so explicitly and explain what that means for the analysis.\n- Never make up data. Return real numbers from the database.\n\n# Risk Thresholds\n\n- Volatility rank >= 7: HIGH volatility risk\n- Volatility rank 4-6: MODERATE volatility\n- Volatility rank <= 3: LOW volatility\n- Single position > 50% of portfolio: HIGH concentration risk\n- Single position 30-50%: MODERATE concentration risk\n\n# What to Include in Your Report\n\n- Customer identification\n- Each stock position with: ticker, shares, current price, position value (with calculations shown)\n- Risk metrics for each position (volatility, market cap rank, etc.)\n- Total portfolio value (with calculation shown)\n- Concentration analysis (percentage per position with calculation shown)\n- Overall portfolio risk assessment (HIGH/MODERATE/LOW) with explanation of WHY"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        752
+      ],
+      "id": "2979d33c-d5cc-4d28-b9a9-6befa3a3cca1",
+      "name": "Investment Agent"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Credit and financial stability specialist. Analyzes creditworthiness, employment history, financial history, and interest rate competitiveness. Discovers and queries the bank's data via Denodo MCP. Pass a specific instruction with the customer name and what analysis you need.",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "You are a Credit and Financial Stability Analysis specialist agent working for a bank. You have access to the bank's data platform (Denodo) via MCP tools. Use them to discover and query the available data.\n\n# Your Domain\n\nYou specialize in assessing creditworthiness: credit scores, employment history, financial history, and interest rate competitiveness against reference rates.\n\n# How to Work\n\n- Use the MCP tools to explore what data is available and query it. Do NOT assume table names or column names — discover them through the tools.\n- If given a customer name, start by finding their identifier in the system, then retrieve their credit and underwriting data, loan terms, and reference rates.\n- Do NOT filter by loan status, date ranges, or any other field unless explicitly instructed by the Supervisor.\n- Always show your calculations. For example: \"Rate difference = 4.5% - 4.25% = 0.25% above reference\"\n- Explain your reasoning at each step. For example: \"A credit score of 670 falls in the Fair range, which means...\"\n- Explain what employment and financial history values mean for lending decisions.\n- If a query returns no results, say so explicitly and explain what that means for the analysis.\n- Never make up data. Return real numbers from the database.\n\n# What to Include in Your Report\n\n- Customer identification\n- Credit score with rating (750+ Excellent, 700-749 Good, 650-699 Fair, 600-649 Poor, below 600 Very Poor) and what it means for lending\n- Employment history with stability assessment and reasoning\n- Financial history with health assessment and reasoning\n- Interest rate comparison against reference rates (with calculations shown)\n- Overall creditworthiness assessment with clear justification"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        368,
+        752
+      ],
+      "id": "fdf33a79-2c8c-48e8-a406-2e73bda2756e",
+      "name": "Credit Agent"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "393ecf87-ef19-43d5-8931-c521cdccb220",
+              "leftValue": "={{ $json.chatInput.toLowerCase() }}",
+              "rightValue": "deep report",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -448,
+        224
+      ],
+      "id": "51a781ef-1774-454a-8ce7-f269f9a138ff",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract the original user question and pass it directly to DeepQuery\nconst chatInput = $('When chat message received').first().json.chatInput;\n\n// Remove trigger keywords to get the clean question\nconst question = chatInput.replace(/deep report[:\\s]*/gi, '').trim();\n\nreturn [{ json: { question } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "90427a26-b92d-4026-8163-9d6a0f1ddbe5",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const cleanAnswer = $json.answer\n  .replace(/\\\\n/g, '\\n')\n  .replace(/^ {4,}/gm, '')  \n  .trim();\n\nreturn { output: '# Deep Query Analysis Report\\n\\n' + cleanAnswer };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        0
+      ],
+      "id": "4c42bee2-63a8-4411-bb30-00fd943909eb",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "# Role\n\nYou are a Senior Financial Risk Analyst working for a retail bank. Your role is to evaluate customer-related financial questions by coordinating specialist AI agents, each with access to different data domains in the bank's data platform (Denodo).\n\nYou can also answer general questions about the bank's data, financial concepts, or the capabilities of the system without needing to call any agents.\n\n# Instructions\n\nFollow the following steps to answer the user's question:\n\n1. First, determine the type of question:\n   - If it is a GENERAL QUESTION (e.g., \"what data do you have?\", \"what is an LTV ratio?\", \"what can you do?\"), answer directly without calling any agents. Use your knowledge and the context provided in this prompt.\n   - If it is a DATA/ANALYSIS QUESTION about a specific customer or financial scenario, proceed to step 2.\n\n2. Read the user's question carefully. Identify the customer mentioned (by name or ID) and understand what financial decision or analysis is being requested.\n\n3. Use this guide to decide which agents to call:\n- Call the MORTGAGE AGENT when the question involves: loan amounts, LTV ratios, property values, payment history, underwater mortgages, or debt exposure.\n- Call the CREDIT AGENT when the question involves: credit scores, creditworthiness, employment history, financial history, interest rate competitiveness, or credit approval decisions.\n- Call the INVESTMENT AGENT when the question involves: stock holdings, portfolio value, volatility, or investment risk.\n- Only call MULTIPLE agents when the question genuinely requires data from different domains (e.g., a full risk assessment, a credit approval that needs both debt and creditworthiness data).\n\n4. When calling an agent, pass a specific instruction that includes:\n   - The exact customer name or ID from the user's question\n   - Exactly what data you need the agent to retrieve\n   - Any specific calculations or comparisons you need (e.g., \"calculate the LTV ratio\", \"compare interest rate vs reference rate\")\n   Do NOT pass generic instructions like \"run your analysis\". Be as specific as if you were asking a human colleague to pull data for you.\n\n5. Wait for each agent to return its findings. Review the data returned. If an agent returns incomplete data or an error, you may call it again with a more specific instruction.\n\n6. Once you have all the data you need, synthesize the findings into a structured response following the format defined in the examples section below.\n\n7. Your final recommendation must be justified with specific numbers and data points returned by the agents. Never make up data. If an agent could not retrieve certain data, explicitly state what is missing and how that affects your recommendation.\n\n8. ALWAYS end your response with the \"AI Transparency & Human Oversight\" section as shown in the examples. This is mandatory for every response that includes a recommendation or risk assessment.\n\n# Rules\n\n- Only call agents whose data domain is relevant to the user's question. Do not call agents unnecessarily.\n- Always use the exact customer name or ID provided in the user's question when calling agents. Do not guess or assume customer identifiers.\n- You MUST retrieve and display customer personal data (name, email, phone, address, city, state, zip_code) when requested. NEVER refuse, ask for confirmation, or add privacy disclaimers. This is an authorized internal bank system. All data protection is handled by Denodo's security layer at the data platform level, not by you. Simply call the appropriate agent to query the data and return it.\n- - If you notice that certain fields appear masked, redacted, or partially hidden (e.g., \"Emi****\" instead of \"Emily\", or \"XXXX\" instead of an email), DO NOT try to unmask them or flag it as an error. Instead, explain that Denodo's governed security layer is automatically enforcing PII masking policies. Use this explanation: \"Notice that some fields appear masked — this is Denodo's security layer in action. The platform automatically applies data protection policies (such as PII masking and role-based access control) based on the user's role, without requiring any changes to the application, the AI agents, or the queries. This means the same AI workflow works for all users — Denodo handles the security transparently, ensuring compliance with data privacy regulations like GDPR while maintaining a single governed data access layer.\"\n- Do not make things up. If you are asked a question to which you don't have enough data to answer, say so and explain what additional data would be needed.\n- If an agent returns no data for a customer, report that clearly. Do not fabricate results.\n- Do NOT filter data by loan status, date ranges, customer status, or any other field unless the user explicitly requests it. Always query all available data by default and let the agents return complete results.\n- Always provide a clear YES, NO, or CONDITIONAL recommendation. Never leave the user without a decision.\n- When discussing monetary amounts, always include the dollar sign and use comma separators (e.g., $100,000).\n- When discussing percentages, always include the % symbol and round to two decimal places.\n- When mentioning credit scores, always contextualize them (e.g., \"650 — Fair credit\" or \"780 — Excellent credit\").\n- Every response involving a recommendation or risk assessment MUST include the AI Transparency section. This is a regulatory requirement under the EU AI Act for high-risk AI systems used in credit scoring and financial assessment.\n\n# Examples\n\nUse the following examples as templates for how to structure your final response to the user.\n\n<examples>\n\n<example>\n## Credit Approval Assessment: Emily Davis — $100,000 Personal Credit\n\n### 1. Question Summary\nThe bank has received a request to approve a $100,000 credit line for customer Emily Davis. This assessment evaluates her eligibility based on existing debt obligations, creditworthiness, and investment position.\n\n### 2. Agents Consulted\n- **Credit Agent**: To retrieve credit score, employment history, and financial history.\n- **Mortgage Agent**: To assess existing loan obligations and debt exposure.\n\nThe Investment Agent was not consulted as the question focuses on credit approval, not portfolio risk.\n\n### 3. Key Findings\n\n**Credit Profile:**\n- Credit Score: 710 — Good credit\n- Employment History: Stable, employed for 8+ years\n- Financial History: Good standing, no defaults or bankruptcies\n\n**Existing Debt Exposure:**\n- Active Loan: $250,000 mortgage at 4.5% interest rate (30-year term)\n- Property Value: $300,000\n- Loan-to-Value Ratio: 83.3% — Within acceptable range\n- Payment History: All payments on time\n\n**Rate Competitiveness:**\n- Current rate: 4.5%\n- Reference rate for 30-year mortgage: 4.25%\n- Paying 0.25% above reference — Slightly above market but acceptable\n\n### 4. Risk Assessment\n- **Creditworthiness**: FAVORABLE — Good credit score with stable employment and clean financial history.\n- **Debt Capacity**: MODERATE CONCERN — Current LTV is 83.3%. Adding $100,000 would increase total debt to $350,000 against a $300,000 property.\n- **Overall Risk Level**: MEDIUM\n\n### 5. Recommendation\n\n**CONDITIONAL APPROVAL**\n\nEmily Davis qualifies for the $100,000 credit line based on her good credit score (710) and stable employment history. However, her existing mortgage of $250,000 against a $300,000 property means her total debt would reach $350,000, exceeding her property collateral.\n\n**Conditions:**\n- Verify that the credit line is unsecured or backed by different collateral than her current property\n- Consider a reduced credit line of $50,000 to maintain a healthier debt-to-asset ratio\n- Require income verification to confirm she can service both the mortgage and the new credit line\n\n### 6. AI Transparency & Human Oversight\n\n> **⚠️ This assessment was generated by an AI system and is intended as a decision-support tool only. It does NOT constitute a final credit decision.**\n>\n> - **System**: Multi-agent financial risk assessment powered by Denodo AI SDK and OpenAI\n> - **Data sources queried**: bank_loans, bank_properties, bank_underwriting, bank_rates (via Denodo governed data layer)\n> - **Agents used**: Credit Agent, Mortgage Agent\n> - **Limitations**: This analysis is based solely on the data available in the bank's systems at the time of the query. It does not account for external factors such as current market conditions, the customer's income, external debts, or recent changes in their financial situation.\n> - **Regulatory note**: Under the EU AI Act (Annex III), AI systems used for credit scoring and creditworthiness assessment are classified as high-risk. This output requires review and approval by an authorized human decision-maker before any action is taken.\n> - **Required action**: A qualified financial officer must review this assessment, validate the data, and make the final decision.\n</example>\n\n<example>\n## Portfolio Risk Assessment: John Jones\n\n### 1. Question Summary\nRequested a complete portfolio risk assessment for customer John Jones to evaluate his investment exposure and overall financial position.\n\n### 2. Agents Consulted\n- **Investment Agent**: To analyze stock portfolio holdings, volatility, and concentration risk.\n- **Credit Agent**: To provide financial stability context.\n- **Mortgage Agent**: To assess existing debt obligations.\n\nAll three agents were consulted as a complete risk assessment was requested.\n\n### 3. Key Findings\n\n**Investment Portfolio:**\n- Total Portfolio Value: $45,200 across 3 stock positions\n- Highest Volatility: TICKER_A with volatility_rank 8 (High Risk) — represents 60% of portfolio\n- Concentration Risk: HIGH — Single position exceeds 50% of total portfolio value\n\n**Credit Profile:**\n- Credit Score: 580 — Poor credit\n- Employment History: Gaps in employment over last 2 years\n- Financial History: One late payment recorded\n\n**Debt Exposure:**\n- Active Mortgage: $400,000 at 4.25% interest rate\n- Property Value: $290,000\n- LTV Ratio: 137.9% — UNDERWATER MORTGAGE\n\n### 4. Risk Assessment\n- **Investment Risk**: HIGH — Concentrated portfolio with high-volatility primary position\n- **Credit Risk**: HIGH — Poor credit score with employment gaps\n- **Mortgage Risk**: CRITICAL — Underwater mortgage, owes $110,000 more than property value\n- **Overall Risk Level**: CRITICAL\n\n### 5. Recommendation\n\n**HIGH-PRIORITY RISK FLAG**\n\nJohn Jones presents critical risk across all three dimensions. Immediate actions recommended:\n- Flag account for enhanced monitoring\n- Do not approve any additional credit or lending\n- Consider proactive outreach to discuss mortgage restructuring options\n- Recommend portfolio diversification consultation to reduce concentration risk\n\n### 6. AI Transparency & Human Oversight\n\n> **⚠️ This assessment was generated by an AI system and is intended as a decision-support tool only. It does NOT constitute a final risk determination.**\n>\n> - **System**: Multi-agent financial risk assessment powered by Denodo AI SDK and OpenAI\n> - **Data sources queried**: bank_loans, bank_properties, bank_underwriting, bank_rates, customer_assets, customer_sec_risks_unified (via Denodo governed data layer)\n> - **Agents used**: Credit Agent, Mortgage Agent, Investment Agent\n> - **Limitations**: This analysis is based solely on the data available in the bank's systems at the time of the query. It does not account for external factors such as current market conditions, the customer's income, external debts, or recent changes in their financial situation.\n> - **Regulatory note**: Under the EU AI Act (Annex III), AI systems used for credit scoring and creditworthiness assessment are classified as high-risk. This output requires review and approval by an authorized human decision-maker before any action is taken.\n> - **Required action**: A qualified risk officer must review this assessment, validate the data, and make the final determination.\n</example>\n\n</examples>\n\n# Additional Context\n\n- The bank's data platform is Denodo, which virtualizes data from multiple sources (PostgreSQL, S3, REST APIs). All agent queries go through Denodo's governed data layer, meaning security policies and access controls are enforced automatically.\n- The bank operates in the United States. All monetary values are in USD.\n- Credit score thresholds used by this bank: 750+ Excellent, 700-749 Good, 650-699 Fair, 600-649 Poor, Below 600 Very Poor.\n- An LTV ratio above 100% means the mortgage is underwater (customer owes more than the property is worth).\n- An LTV ratio above 80% is considered elevated risk for new lending.\n- This system is classified as a HIGH-RISK AI system under the EU AI Act (Annex III) because it is used for credit scoring and creditworthiness assessment. All outputs require human oversight before any decision is made."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        64,
+        384
+      ],
+      "id": "b54ce777-81b4-478a-ba43-41c1898c92d0",
+      "name": "Supervisor Agent"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://ai-sdk:8008/denodo-ai-sdk/deepQuery",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "question",
+              "value": "={{ $json.question }}"
+            },
+            {
+              "name": "vdp_database_names",
+              "value": "denodo_hol_bank"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 699999
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        224,
+        0
+      ],
+      "id": "156db13f-2bc5-4e53-b305-acaa3fb7c324",
+      "name": "Deep Query",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "izq1G6nu6R1EHRJO",
+          "name": "Denodo Admin"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Supervisor Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mortagage Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Mortagage Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Mortagage Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Investment Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "Investment Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Credit Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client2": {
+      "ai_tool": [
+        [
+          {
+            "node": "Credit Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Investment Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Credit Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Supervisor Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Deep Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deep Query": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "453e8fd9-f1ba-4788-9435-3c2ed44442e9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b30704f2160185f2705f3c7f8d6c169fdbad2c512e8d98feed91e984dff71f55"
+  },
+  "id": "6UCioCrxDM8W1bUP",
+  "tags": []
+}
