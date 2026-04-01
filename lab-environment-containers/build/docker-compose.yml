@@ -60,8 +60,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 360s
-      start_interval: 360s
+      start_period: 480s
+      start_interval: 480s
     command: ["--vqlserver", "--datacatalog"]
     tty: true
     stdin_open: true
@@ -77,6 +77,7 @@ services:
       - denodo-lab-net 
     volumes:
       - "${DENODO_DS_CUSTOM_LANG_DIR}/customLang-${DENODO_CUSTOM_LANG}.properties:/opt/denodo/work/design-studio/customLang.properties" 
+      - "${DENODO_DS_CUSTOM_LANG_DIR}/DesignStudioBackend-${DENODO_CUSTOM_LANG}.properties:/denodo/conf/design-studio/DesignStudioBackend.properties"
     ports:
       - "${DENODO_DS_EXTERNAL_WEB_PORT}:9090"
     environment:
@@ -223,9 +224,9 @@ services:
     restart: unless-stopped
     networks:
       - denodo-lab-net 
-    depends_on:
-      denodo-vdp:
-        condition: service_healthy
+    #depends_on:
+    #  denodo-vdp:
+    #    condition: service_healthy
     #volumes:
     #  - "${DENODO_CHATBOT_CONFIG_FILE}:/opt/ai-sdk/sample_chatbot/chatbot_config.env"
     #  - "${DENODO_AI_SDK_CONFIG_FILE}:/opt/ai-sdk/api/utils/sdk_config.env"
