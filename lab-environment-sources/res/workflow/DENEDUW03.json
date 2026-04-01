@@ -1,5 +1,5 @@
 {
-  "name": "Denodo Workshop",
+  "name": "Denodo GenAI hands-on lab",
   "nodes": [
     {
       "parameters": {
@@ -9,9 +9,9 @@
       "typeVersion": 1.4,
       "position": [
         -704,
-        224
+        208
       ],
-      "id": "2f58a6c8-5881-49eb-9720-57e8ead28a15",
+      "id": "045cacbe-1222-49ba-93c7-78eb5661dbdf",
       "name": "When chat message received",
       "webhookId": "d050974f-3d00-49aa-a82d-1586b1a71f34"
     },
@@ -19,9 +19,9 @@
       "parameters": {
         "model": {
           "__rl": true,
-          "value": "gpt-4o",
+          "value": "o4-mini",
           "mode": "list",
-          "cachedResultName": "gpt-4o"
+          "cachedResultName": "o4-mini"
         },
         "builtInTools": {},
         "options": {}
@@ -29,15 +29,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        -176,
-        528
+        -256,
+        624
       ],
-      "id": "a8e66c4f-9f97-40dc-817b-d05b8f7ef156",
+      "id": "c1052a43-3a89-4706-9d2a-65f6f1b4416c",
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "G6I0SnzIdQWEzcJN",
-          "name": "OpenAi account"
+          "id": "KGPp9Q857POsFIU3",
+          "name": "OpenAI account 2"
         }
       }
     },
@@ -52,19 +52,19 @@
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 2.2,
       "position": [
-        -256,
-        752
+        -128,
+        624
       ],
-      "id": "b70318f0-d5ed-4bf4-8719-34354f7574b8",
+      "id": "ffb7c480-f52a-4232-b05f-ec23c66495a4",
       "name": "Mortagage Agent"
     },
     {
       "parameters": {
         "model": {
           "__rl": true,
-          "value": "gpt-4o",
+          "value": "gpt-4o-mini",
           "mode": "list",
-          "cachedResultName": "gpt-4o"
+          "cachedResultName": "gpt-4o-mini"
         },
         "responsesApiEnabled": false,
         "options": {}
@@ -72,15 +72,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        -256,
-        928
+        -112,
+        832
       ],
-      "id": "bb81feea-2e11-43ff-badd-30a8416eebc5",
+      "id": "e297a64a-5b7c-4a30-8b2f-79f1df226604",
       "name": "OpenAI Chat Model1",
       "credentials": {
         "openAiApi": {
-          "id": "G6I0SnzIdQWEzcJN",
-          "name": "OpenAi account"
+          "id": "KGPp9Q857POsFIU3",
+          "name": "OpenAI account 2"
         }
       }
     },
@@ -93,15 +93,15 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
       "typeVersion": 1.2,
       "position": [
-        -112,
-        928
+        32,
+        832
       ],
-      "id": "a224c026-cb06-456e-897f-298c858898f6",
+      "id": "d1b4bc52-4f50-4bd2-acde-27133b4dcb76",
       "name": "MCP Client1",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "izq1G6nu6R1EHRJO",
-          "name": "Denodo Admin"
+          "id": "5q5jLEHlOKHVMQEH",
+          "name": "User Denodo"
         }
       }
     },
@@ -109,9 +109,9 @@
       "parameters": {
         "model": {
           "__rl": true,
-          "value": "gpt-4o",
+          "value": "gpt-4o-mini",
           "mode": "list",
-          "cachedResultName": "gpt-4o"
+          "cachedResultName": "gpt-4o-mini"
         },
         "responsesApiEnabled": false,
         "options": {}
@@ -119,15 +119,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        80,
-        928
+        160,
+        832
       ],
-      "id": "70813234-98b5-429f-a4aa-6bca2d6781c7",
+      "id": "b22b2f29-9e15-46ab-b206-d1abca67e5c6",
       "name": "OpenAI Chat Model2",
       "credentials": {
         "openAiApi": {
-          "id": "G6I0SnzIdQWEzcJN",
-          "name": "OpenAi account"
+          "id": "KGPp9Q857POsFIU3",
+          "name": "OpenAI account 2"
         }
       }
     },
@@ -140,15 +140,15 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
       "typeVersion": 1.2,
       "position": [
-        224,
-        928
+        320,
+        832
       ],
-      "id": "39909939-97e9-47ce-99ae-63b2ac805c06",
+      "id": "0e2fc486-4123-489d-bbd8-696be7c39c27",
       "name": "MCP Client",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "izq1G6nu6R1EHRJO",
-          "name": "Denodo Admin"
+          "id": "5q5jLEHlOKHVMQEH",
+          "name": "User Denodo"
         }
       }
     },
@@ -156,9 +156,9 @@
       "parameters": {
         "model": {
           "__rl": true,
-          "value": "gpt-4o",
+          "value": "gpt-4o-mini",
           "mode": "list",
-          "cachedResultName": "gpt-4o"
+          "cachedResultName": "gpt-4o-mini"
         },
         "responsesApiEnabled": false,
         "options": {}
@@ -166,15 +166,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        368,
-        928
+        448,
+        832
       ],
-      "id": "a8296463-23e3-4301-909d-83e42b95d38f",
+      "id": "b64887f0-ce92-4eb7-8a49-26f205d064db",
       "name": "OpenAI Chat Model3",
       "credentials": {
         "openAiApi": {
-          "id": "G6I0SnzIdQWEzcJN",
-          "name": "OpenAi account"
+          "id": "KGPp9Q857POsFIU3",
+          "name": "OpenAI account 2"
         }
       }
     },
@@ -187,15 +187,15 @@
       "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
       "typeVersion": 1.2,
       "position": [
-        512,
-        928
+        592,
+        832
       ],
-      "id": "462fe176-a10c-4253-89ec-df6dee40be17",
+      "id": "67d325ae-7cb8-4d32-9213-6c2f00e3ac96",
       "name": "MCP Client2",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "izq1G6nu6R1EHRJO",
-          "name": "Denodo Admin"
+          "id": "5q5jLEHlOKHVMQEH",
+          "name": "User Denodo"
         }
       }
     },
@@ -210,10 +210,10 @@
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 2.2,
       "position": [
-        80,
-        752
+        160,
+        624
       ],
-      "id": "2979d33c-d5cc-4d28-b9a9-6befa3a3cca1",
+      "id": "a52573ea-a9a0-4e27-93f7-ff659bcc910f",
       "name": "Investment Agent"
     },
     {
@@ -227,10 +227,10 @@
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 2.2,
       "position": [
-        368,
-        752
+        448,
+        624
       ],
-      "id": "fdf33a79-2c8c-48e8-a406-2e73bda2756e",
+      "id": "ef067905-41c1-4fd3-a10f-16e9da2cc535",
       "name": "Credit Agent"
     },
     {
@@ -260,10 +260,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -448,
-        224
+        -480,
+        208
       ],
-      "id": "51a781ef-1774-454a-8ce7-f269f9a138ff",
+      "id": "596c2f54-c0fe-4d06-ad0b-e3e531d13083",
       "name": "If"
     },
     {
@@ -273,10 +273,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        0,
-        0
+        -80,
+        80
       ],
-      "id": "90427a26-b92d-4026-8163-9d6a0f1ddbe5",
+      "id": "d118409a-cf4b-44d6-865f-b3b82a601ec2",
       "name": "Code in JavaScript"
     },
     {
@@ -287,10 +287,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        432,
-        0
+        400,
+        80
       ],
-      "id": "4c42bee2-63a8-4411-bb30-00fd943909eb",
+      "id": "63a07a86-22ba-44fc-9eb8-5c1a4e9dd4f5",
       "name": "Code in JavaScript1"
     },
     {
@@ -302,10 +302,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3,
       "position": [
-        64,
-        384
+        32,
+        400
       ],
-      "id": "b54ce777-81b4-478a-ba43-41c1898c92d0",
+      "id": "98414d77-db39-48d2-91f7-4f9052df313e",
       "name": "Supervisor Agent"
     },
     {
@@ -334,15 +334,15 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        224,
-        0
+        192,
+        80
       ],
-      "id": "156db13f-2bc5-4e53-b305-acaa3fb7c324",
+      "id": "53e68af9-36aa-4215-9219-97cd5a041fb4",
       "name": "Deep Query",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "izq1G6nu6R1EHRJO",
-          "name": "Denodo Admin"
+          "id": "5q5jLEHlOKHVMQEH",
+          "name": "User Denodo"
         }
       }
     }
@@ -513,13 +513,14 @@
   },
   "active": false,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate"
   },
-  "versionId": "453e8fd9-f1ba-4788-9435-3c2ed44442e9",
+  "versionId": "20f6796d-afaa-487e-bbd8-976bb55f7e18",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "b30704f2160185f2705f3c7f8d6c169fdbad2c512e8d98feed91e984dff71f55"
+    "instanceId": "7400b70d34d3a1186a9505d73ad25882464e996b534ac756a35d383137e7adca"
   },
-  "id": "6UCioCrxDM8W1bUP",
+  "id": "YrDTbGGFz0bNfo0O",
   "tags": []
 }

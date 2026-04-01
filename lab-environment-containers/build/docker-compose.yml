@@ -241,7 +241,7 @@ services:
       - VDB_NAMES=${VDB_NAMES}
       - VECTOR_STORE=${VECTOR_STORE}
       - CUSTOM_INSTRUCTIONS=${CUSTOM_INSTRUCTIONS}
-      - AI_SDK_DATA_CATALOG_URL=http://${DENODO_VDP_HOSTNAME}:9090/denodo-data-catalog/ 
+      - AI_SDK_DATA_MARKETPLACE_URL=http://${DENODO_VDP_HOSTNAME}:9090/denodo-data-catalog/ 
       - LLM_PROVIDER=${PROVIDER}
       - LLM_MODEL=${LLM_MODEL}
       - LLM_TEMPERATURE=${LLM_TEMPERATURE}
@@ -288,7 +288,7 @@ services:
       - NVIDIA_BASE_URL=${NVIDIA_BASE_URL}
       - GROQ_API_KEY=${GROQ_API_KEY}
       - OLLAMA_API_BASE_URL=${OLLAMA_API_BASE_URL}
-    command: ["python", "run.py", "${DENODO_AI_SDK_MODE}", "--no-logs", "--timeout", "90"]
+    command: ["python", "run.py", "${DENODO_AI_SDK_MODE}", "--mcp", "--no-logs", "--timeout", "90"]
       
   # ########################
   # Data Sources
@@ -584,26 +584,23 @@ services:
 
   util-n8n:
     container_name: denodocommunity-lab-environment-ai-worklow
-    image: n8nio/n8n:1.123.21
+    image: ${WORKFLOW_VERSION}
     profiles: ["all","util-n8n"]
-    hostname: n8n
+    hostname: ${WORKFLOW_HOSTNAME}
     networks:
       - denodo-lab-net
     restart: unless-stopped
     volumes:
-      - ../../lab-environment-sources/res/workflow/:/home/node/.n8n
+      - ${WORKFLOW_DIRECTORY}:/home/node/.n8n
     ports:
-      - "5678:5678"
-    environment:
-      - N8N_BASIC_AUTH_ACTIVE=true
-      - N8N_BASIC_AUTH_USER=denodo
-      - N8N_BASIC_AUTH_PASSWORD=denodo
+      - "${WORKFLOW_EXTERNAL_PORT}:5678"
+    environment:     
       - N8N_HIDE_USAGE_PAGE=true
-      - N8N_HOST=0.0.0.0
+      - N8N_PROXY_HOPS=1
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
       - GENERIC_TIMEZONE=UTC
-      - TZ=UTC
+      - N8N_DEFAULT_LOCALE=en
 
   # Nginx reverse proxy
   nginx-proxy:
