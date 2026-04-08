@@ -224,9 +224,9 @@ services:
     restart: unless-stopped
     networks:
       - denodo-lab-net 
-    #depends_on:
-    #  denodo-vdp:
-    #    condition: service_healthy
+    depends_on:
+      denodo-vdp:
+        condition: service_healthy
     #volumes:
     #  - "${DENODO_CHATBOT_CONFIG_FILE}:/opt/ai-sdk/sample_chatbot/chatbot_config.env"
     #  - "${DENODO_AI_SDK_CONFIG_FILE}:/opt/ai-sdk/api/utils/sdk_config.env"
