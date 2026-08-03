@@ -27,7 +27,7 @@ To change the default language of Data Marketplace, follow these steps:
 
 * Download the language file from this directory:
   * French: [customLang-fr.properties](./customLang-fr.properties)
-  * Québec French: [customLang-fr_CA.properties](./customLang-fr_CA.properties)
+  * French (Canada): [customLang-fr_CA.properties](./customLang-fr_CA.properties)
   * Japanese: [customLang-ja.properties](./customLang-ja.properties)
   * Chinese: [customLang-zh.properties](./customLang-zh.properties)
   * Italian: [customLang-it.properties](./customLang-it.properties) 
@@ -55,7 +55,7 @@ To change the default language of Data Marketplace, follow these steps:
 * Download the language files and copy them to `<DENODO_HOME>/work/data-catalog/`.
 * Edit the file `<DENODO_HOME>/conf/data-catalog/DataCatalogBackend.properties`, search the line with `customLang.langAttribute` and replace the entire line with one of these:
   * French: `customLang.langAttribute=fr`
-  * Québec French: `customLang.langAttribute=fr_CA`
+  * French (Canada): `customLang.langAttribute=fr_CA`
   * Japanese: `customLang.langAttribute=ja`
   * Chinese: `customLang.langAttribute=zh`
   * German: `customLang.langAttribute=de`
@@ -64,7 +64,7 @@ To change the default language of Data Marketplace, follow these steps:
   * Portuguese: `customLang.langAttribute=pt`
   * Catalan: `customLang.langAttribute=ca`
   * Basque: `customLang.langAttribute=eu`
-* Restart Data Catalog.
+* Restart Data Marketplace.
 
 
 # Collaborate translating Data Marketplace to Other Languages

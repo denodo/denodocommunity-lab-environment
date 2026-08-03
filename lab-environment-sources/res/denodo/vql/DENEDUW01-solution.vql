@@ -3,6 +3,24 @@
 ENTER SINGLE USER MODE;
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+# #######################################
+# USER CREATION (end_user / denodo)
+# #######################################
+CREATE OR REPLACE USER end_user 'TabGFRTVX5QZAs4kw+BqWweQ6miqAlWWJe/bUtUuplLOT8syvZv3lZAYmyYpZkbz/weKJYt6Jda9MuZzWhMh1Iwu+ypPV7If'  ENCRYPTED SHA512  '';
+
+# #######################################
+# ROLE CREATION
+# #######################################
+CREATE OR REPLACE ROLE analyst 'This role is created for the analysts group';
+
+# #######################################
+# TAG CREATION
+# #######################################
+CREATE OR REPLACE TAG confidential
+    DESCRIPTION = 'This tag is used to flag sensitive and confidential personal information (SPI) like names and email addresses.';
+
+CHOWN denodo TAG confidential LASTMODIFICATIONUSER denodo;
+
 # 2 ====================================================================
 
 # #######################################
@@ -17,9 +35,9 @@ CONNECT DATABASE denodo_hol_cdi_local_solution;
 # #######################################
 CREATE OR REPLACE FOLDER '/1 - Connectivity' ;
 
-CREATE OR REPLACE FOLDER '/1 - connectivity/1 - data sources' ;
+CREATE OR REPLACE FOLDER '/1 - Connectivity/1 - data sources' ;
 
-CREATE OR REPLACE FOLDER '/1 - connectivity/2 - base views' ;
+CREATE OR REPLACE FOLDER '/1 - Connectivity/2 - base views' ;
 
 CREATE OR REPLACE FOLDER '/2 - Integration' ;
 
@@ -438,12 +456,26 @@ CREATE OR REPLACE TABLE store_sales I18N es_euro (
 # #######################################
 # VIEWS of denodo_hol_cdi_local_solution
 # #######################################
-CREATE OR REPLACE VIEW customer_data FOLDER = '/2 - integration' AS SELECT customer.c_customer_sk AS c_customer_sk, customer.c_customer_id AS c_customer_id, customer.c_current_cdemo_sk AS c_current_cdemo_sk, customer.c_current_hdemo_sk AS c_current_hdemo_sk, customer.c_current_addr_sk AS c_current_addr_sk, customer.c_first_shipto_date_sk AS c_first_shipto_date_sk, customer.c_first_sales_date_sk AS c_first_sales_date_sk, customer.c_salutation AS c_salutation, customer.c_first_name AS c_first_name, customer.c_last_name AS c_last_name, customer.c_preferred_cust_flag AS c_preferred_cust_flag, customer.c_birth_day AS c_birth_day, customer.c_birth_month AS c_birth_month, customer.c_birth_year AS c_birth_year, customer.c_birth_country AS c_birth_country, customer.c_login AS c_login, customer.c_email_address AS c_email_address, customer.c_last_review_date AS c_last_review_date, customer_address.ca_address_sk AS ca_address_sk, customer_address.ca_address_id AS ca_address_id, customer_address.ca_street_number AS ca_street_number, customer_address.ca_street_name AS ca_street_name, customer_address.ca_street_type AS ca_street_type, customer_address.ca_suite_number AS ca_suite_number, customer_address.ca_city AS ca_city, customer_address.ca_county AS ca_county, customer_address.ca_state AS ca_state, customer_address.ca_zip AS ca_zip, customer_address.ca_country AS ca_country, customer_address.ca_gmt_offset AS ca_gmt_offset, customer_address.ca_location_type AS ca_location_type, customer_demographics.cd_demo_sk AS cd_demo_sk, customer_demographics.cd_gender AS cd_gender, customer_demographics.cd_marital_status AS cd_marital_status, customer_demographics.cd_education_status AS cd_education_status, customer_demographics.cd_purchase_estimate AS cd_purchase_estimate, customer_demographics.cd_credit_rating AS cd_credit_rating, customer_demographics.cd_dep_count AS cd_dep_count, customer_demographics.cd_dep_employed_count AS cd_dep_employed_count, customer_demographics.cd_dep_college_count AS cd_dep_college_count FROM (customer AS customer INNER JOIN customer_address AS customer_address ON customer.c_current_addr_sk = customer_address.ca_address_sk ) INNER JOIN customer_demographics AS customer_demographics ON customer.c_current_cdemo_sk = customer_demographics.cd_demo_sk ;
+CREATE OR REPLACE VIEW customer_data FOLDER = '/2 - integration' (
+    c_first_name TAGS (confidential),
+    c_last_name TAGS (confidential),
+    c_email_address TAGS (confidential)
+ )
+ AS SELECT customer.c_customer_sk AS c_customer_sk, customer.c_customer_id AS c_customer_id, customer.c_current_cdemo_sk AS c_current_cdemo_sk, customer.c_current_hdemo_sk AS c_current_hdemo_sk, customer.c_current_addr_sk AS c_current_addr_sk, customer.c_first_shipto_date_sk AS c_first_shipto_date_sk, customer.c_first_sales_date_sk AS c_first_sales_date_sk, customer.c_salutation AS c_salutation, customer.c_first_name AS c_first_name, customer.c_last_name AS c_last_name, customer.c_preferred_cust_flag AS c_preferred_cust_flag, customer.c_birth_day AS c_birth_day, customer.c_birth_month AS c_birth_month, customer.c_birth_year AS c_birth_year, customer.c_birth_country AS c_birth_country, customer.c_login AS c_login, customer.c_email_address AS c_email_address, customer.c_last_review_date AS c_last_review_date, customer_address.ca_address_sk AS ca_address_sk, customer_address.ca_address_id AS ca_address_id, customer_address.ca_street_number AS ca_street_number, customer_address.ca_street_name AS ca_street_name, customer_address.ca_street_type AS ca_street_type, customer_address.ca_suite_number AS ca_suite_number, customer_address.ca_city AS ca_city, customer_address.ca_county AS ca_county, customer_address.ca_state AS ca_state, customer_address.ca_zip AS ca_zip, customer_address.ca_country AS ca_country, customer_address.ca_gmt_offset AS ca_gmt_offset, customer_address.ca_location_type AS ca_location_type, customer_demographics.cd_demo_sk AS cd_demo_sk, customer_demographics.cd_gender AS cd_gender, customer_demographics.cd_marital_status AS cd_marital_status, customer_demographics.cd_education_status AS cd_education_status, customer_demographics.cd_purchase_estimate AS cd_purchase_estimate, customer_demographics.cd_credit_rating AS cd_credit_rating, customer_demographics.cd_dep_count AS cd_dep_count, customer_demographics.cd_dep_employed_count AS cd_dep_employed_count, customer_demographics.cd_dep_college_count AS cd_dep_college_count FROM (customer AS customer INNER JOIN customer_address AS customer_address ON customer.c_current_addr_sk = customer_address.ca_address_sk ) INNER JOIN customer_demographics AS customer_demographics ON customer.c_current_cdemo_sk = customer_demographics.cd_demo_sk ;
 
 ALTER VIEW customer_data
  LAYOUT (customer = [20, 20, 200, 225], customer_address = [510, 200, 200, 225], customer_demographics = [860, 40, 200, 205]);
 
-CREATE OR REPLACE VIEW sales_by_customer FOLDER = '/2 - integration' DESCRIPTION = 'This view calculates the total sales by each customer.'  AS SELECT customer_data.c_first_name AS c_first_name, customer_data.c_last_name AS c_last_name, customer_data.c_email_address AS c_email_address, customer_data.c_customer_sk AS c_customer_sk, customer_data.ca_country AS ca_country, sum(store_sales.ss_sales_price) AS total_sales FROM customer_data AS customer_data INNER JOIN store_sales AS store_sales ON customer_data.c_customer_sk = store_sales.ss_customer_sk  GROUP BY customer_data.c_customer_sk, customer_data.c_first_name, customer_data.c_last_name, customer_data.c_email_address, customer_data.ca_country ORDER BY c_email_address ASC;
+CREATE OR REPLACE VIEW sales_by_customer FOLDER = '/2 - integration' DESCRIPTION = 'The sales_by_customer view provides a comprehensive overview of customer sales data, including essential customer information such as first names, last names, email addresses, and associated country details. Specifically, it includes fields for the customer''s first and last names, which enhance personalization in customer interactions, alongside their email addresses for potential communication. The view also incorporates a unique customer identifier to streamline data management. Most importantly, it captures the total sales attributed to each customer, reflecting their purchasing behavior and overall contribution to sales. 
+This view is designed to analyze customer purchasing behavior and aggregate sales data, facilitating targeted marketing efforts and personalized customer engagement.'  (
+    ca_country (description = 'Represents the country associated with the customer, indicating their geographical location. It includes values like "United States".'),
+    c_email_address (description = 'Captures the email address of customers for communication purposes. Currently, there are no sample values available.') TAGS (confidential),
+    c_last_name (description = 'Details the last names of customers, providing insight into their identity. It includes values like "Garcia", "Gonzales", and "Phillips".') TAGS (confidential),
+    c_first_name (description = 'Describes the first names of customers, which are essential for personalization in interactions. It includes values like "Albert", "Angel", and "Bernard".') TAGS (confidential),
+    c_customer_sk (description = 'Serves as a unique identifier for each customer, facilitating data organization and retrieval.'),
+    total_sales (description = 'Indicates the total sales amount attributed to each customer, reflecting their purchasing behavior.')
+ )
+ AS SELECT customer_data.ca_country AS ca_country, customer_data.c_email_address AS c_email_address, customer_data.c_last_name AS c_last_name, customer_data.c_first_name AS c_first_name, customer_data.c_customer_sk AS c_customer_sk, sum(store_sales.ss_sales_price) AS total_sales FROM store_sales AS store_sales INNER JOIN customer_data AS customer_data ON store_sales.ss_customer_sk = customer_data.c_customer_sk  GROUP BY customer_data.c_customer_sk, customer_data.c_first_name, customer_data.c_last_name, customer_data.c_email_address, customer_data.ca_country ORDER BY c_email_address ASC;
 
 ALTER VIEW sales_by_customer
  LAYOUT (customer_data = [58, 17, 200, 200], store_sales = [333, 16, 200, 200]);
@@ -471,6 +503,146 @@ FOLDER = '/6 - associations'
     ENDPOINT customer customer_demographics PRINCIPAL (0,1)
     ENDPOINT customer_demographics customer (0,*)
     ADD MAPPING cd_demo_sk=c_current_cdemo_sk;
+
+CREATE OR REPLACE ASSOCIATION customer_sales_association REFERENTIAL CONSTRAINT 
+FOLDER = '/6 - associations'
+    ENDPOINT store_sales customer_data PRINCIPAL (1)
+    ENDPOINT customer_data store_sales (0,*)
+    ADD MAPPING c_customer_sk=ss_customer_sk;
+
+ALTER ASSOCIATION customer_sales_association
+ LAYOUT (customer_data = [0, 200, 200, 200], store_sales = [200, 200, 200, 200]);
+
+# #######################################
+# METRIC VIEWS
+# #######################################
+CREATE OR REPLACE METRIC VIEW customer_sales_metric
+    FOLDER = '/3 - business entities and metrics'
+    DESCRIPTION = 'The customer_sales_metric view is designed to encapsulate various metrics related to customer sales data. It includes essential fields such as customer keys, demographic information, sales dates, addresses, and overall sales performance. Key fields provide insights into customer identity, including customer IDs, names, and demographic details like gender, marital status, and education level. The view also captures sales-specific metrics, such as sold date, time, item information, and total sales amounts, thereby enabling a comprehensive analysis of customer purchase behavior and sales trends. This view can be utilized for analyzing customer purchasing patterns, understanding demographic influences on sales, and generating reports on sales performance across different customer segments.' 
+     (
+    c_customer_sk (description = 'Represents a unique identifier for each customer within the customer database, allowing for precise tracking of customer-related metrics.'),
+    c_customer_id (description = 'Serves as an alternative identifier for customers, facilitating easier integration with other systems or datasets.'),
+    c_current_cdemo_sk (description = 'Links to the current customer demographic information, providing insights into customer characteristics for analytical purposes.'),
+    c_current_hdemo_sk (description = 'Refers to the current household demographic information, enabling understanding of household dynamics and purchasing behavior.'),
+    c_current_addr_sk (description = 'Points to the current address of the customer, essential for geographic and postal analysis of customer behavior.'),
+    c_first_shipto_date_sk (description = 'Indicates the date of the first shipment to the customer, marking the beginning of their purchasing history.'),
+    c_first_sales_date_sk (description = 'Marks the date of the first sale made to the customer, providing a timeline reference for analyzing customer engagement.'),
+    c_salutation (description = 'Contains the salutation for the customer, reflecting their preferred form of address and enhancing personalized communication.'),
+    c_first_name (description = 'Represents the customer''s first name, essential for direct marketing efforts and personalized customer interactions.'),
+    c_last_name (description = 'Holds the customer''s last name, crucial for identifying customers and tailoring communication strategies.'),
+    c_preferred_cust_flag (description = 'Indicates whether the customer is identified as a preferred customer, guiding targeted marketing initiatives.'),
+    c_birth_day (description = 'Reflects the customer''s birth day, useful for demographic analysis and personalized marketing efforts.'),
+    c_birth_month (description = 'Indicates the customer''s birth month, allowing for targeted promotions and customer appreciation campaigns.'),
+    c_birth_year (description = 'Contains the customer''s birth year, contributing to demographic profiling and age analysis.'),
+    c_birth_country (description = 'Denotes the customer''s country of birth, providing insights into geographic distribution and cultural influences on purchasing behavior.'),
+    c_login (description = 'Represents the customer''s online login identifier, crucial for tracking digital engagement and interaction with online services.'),
+    c_email_address (description = 'Contains the customer''s email address, fundamental for digital communication and marketing outreach.'),
+    c_last_review_date (description = 'Indicates the last date the customer reviewed a product or service, providing insights into customer engagement and feedback patterns.'),
+    ca_address_sk (description = 'Links to the address record, supporting geographic and logistical analysis in customer sales metrics.'),
+    ca_address_id (description = 'Serves as an alternative identifier for customer addresses, aiding in data integration and address tracking.'),
+    ca_street_number (description = 'Indicates the street number of the customer''s address, essential for precise location identification.'),
+    ca_street_name (description = 'Represents the name of the street where the customer resides, contributing to geographic analysis and logistics.'),
+    ca_street_type (description = 'Denotes the type of street (e.g., avenue, road) of the customer''s address, providing additional context for location analysis.'),
+    ca_suite_number (description = 'Specifies any suite number at the customer''s address, important for identifying specific locations within larger buildings.'),
+    ca_city (description = 'Contains the city of the customer''s address, vital for regional marketing and demographic analysis.'),
+    ca_county (description = 'Denotes the county of the customer''s address, contributing to geographic and demographic segmentation.'),
+    ca_state (description = 'Represents the state of the customer''s address, relevant for regional sales analysis and marketing strategies.'),
+    ca_zip (description = 'Indicates the postal code of the customer''s address, essential for geographic targeting in marketing campaigns.'),
+    ca_country (description = 'Shows the country of the customer''s address, crucial for international sales analysis and cultural understanding.'),
+    ca_location_type (description = 'Specifies the type of location (e.g., apartment, single family) for the customer, aiding in demographic analysis and market segmentation.'),
+    cd_demo_sk (description = 'Links to the customer demographic record, providing insights into customer characteristics and preferences.'),
+    cd_gender (description = 'Indicates the gender of the customer, important for demographic profiling and targeted marketing strategies.'),
+    cd_marital_status (description = 'Denotes the marital status of the customer, contributing to demographic insights and targeted communication strategies.'),
+    cd_education_status (description = 'Reflects the education level of the customer, useful for understanding demographic trends and tailoring marketing messages.'),
+    cd_purchase_estimate (description = 'Indicates the estimated purchase potential of the customer, assisting in sales forecasting and marketing strategies.'),
+    cd_credit_rating (description = 'Represents the customer''s credit rating, relevant for understanding purchasing behavior and risk assessment.'),
+    cd_dep_count (description = 'Indicates the number of dependents of the customer, providing insights into household composition and potential purchasing power.'),
+    cd_dep_employed_count (description = 'Denotes the number of employed dependents, contributing to understanding household income and spending capacity.'),
+    cd_dep_college_count (description = 'Indicates the number of dependents attending college, useful for targeting education-related products and services.'),
+    ss_sold_date_sk (description = 'Marks the date when a sale was made, crucial for analyzing sales trends over time and understanding customer behavior.'),
+    ss_sold_time_sk (description = 'Indicates the time of the sale, assisting in temporal analysis of purchasing patterns and peak sales periods.'),
+    ss_item_sk (description = 'Links to the specific item sold, essential for inventory management and product performance analysis.'),
+    ss_customer_sk (description = 'References the customer involved in the sale, allowing for sales performance analysis of individual customers.'),
+    ss_cdemo_sk (description = 'Links to the customer demographic information related to the sale, aiding in demographic analysis of purchasing patterns.'),
+    ss_hdemo_sk (description = 'Refers to the household demographic data associated with the sale, providing insight into household purchasing behavior.'),
+    ss_addr_sk (description = 'Links to the address associated with the sale, important for geographic sales analysis.'),
+    ss_store_sk (description = 'Identifies the store where the sale took place, crucial for analyzing store performance and sales distribution.'),
+    ss_promo_sk (description = 'Links to promotional details applicable to the sale, assisting in evaluating the effectiveness of marketing campaigns.'),
+    ss_ticket_number (description = 'Represents the unique identifier for each transaction, essential for tracking individual sales records.'),
+    ss_quantity (description = 'Indicates the quantity of items sold in the transaction, important for inventory control and sales performance analysis.'),
+    customer_total_sales (description = 'Represents the total sales attributed to a customer, providing a comprehensive measure of customer value and purchasing behavior.')
+ )
+SOURCES (
+        store_sales AS store_sales,
+        customer_data AS customer_data    
+    )
+    ASSOCIATIONS (
+        customer_data store_sales customer_sales_association    
+    )
+    DIMENSIONS (
+        customer_data(
+            c_customer_sk AS customer_data.c_customer_sk,
+            c_customer_id AS customer_data.c_customer_id,
+            c_current_cdemo_sk AS customer_data.c_current_cdemo_sk,
+            c_current_hdemo_sk AS customer_data.c_current_hdemo_sk,
+            c_current_addr_sk AS customer_data.c_current_addr_sk,
+            c_first_shipto_date_sk AS customer_data.c_first_shipto_date_sk,
+            c_first_sales_date_sk AS customer_data.c_first_sales_date_sk,
+            c_salutation AS customer_data.c_salutation,
+            c_first_name AS customer_data.c_first_name,
+            c_last_name AS customer_data.c_last_name,
+            c_preferred_cust_flag AS customer_data.c_preferred_cust_flag,
+            c_birth_day AS customer_data.c_birth_day,
+            c_birth_month AS customer_data.c_birth_month,
+            c_birth_year AS customer_data.c_birth_year,
+            c_birth_country AS customer_data.c_birth_country,
+            c_login AS customer_data.c_login,
+            c_email_address AS customer_data.c_email_address,
+            c_last_review_date AS customer_data.c_last_review_date,
+            ca_address_sk AS customer_data.ca_address_sk,
+            ca_address_id AS customer_data.ca_address_id,
+            ca_street_number AS customer_data.ca_street_number,
+            ca_street_name AS customer_data.ca_street_name,
+            ca_street_type AS customer_data.ca_street_type,
+            ca_suite_number AS customer_data.ca_suite_number,
+            ca_city AS customer_data.ca_city,
+            ca_county AS customer_data.ca_county,
+            ca_state AS customer_data.ca_state,
+            ca_zip AS customer_data.ca_zip,
+            ca_country AS customer_data.ca_country,
+            ca_location_type AS customer_data.ca_location_type,
+            cd_demo_sk AS customer_data.cd_demo_sk,
+            cd_gender AS customer_data.cd_gender,
+            cd_marital_status AS customer_data.cd_marital_status,
+            cd_education_status AS customer_data.cd_education_status,
+            cd_purchase_estimate AS customer_data.cd_purchase_estimate,
+            cd_credit_rating AS customer_data.cd_credit_rating,
+            cd_dep_count AS customer_data.cd_dep_count,
+            cd_dep_employed_count AS customer_data.cd_dep_employed_count,
+            cd_dep_college_count AS customer_data.cd_dep_college_count
+        ),
+        store_sales(
+            ss_sold_date_sk AS store_sales.ss_sold_date_sk,
+            ss_sold_time_sk AS store_sales.ss_sold_time_sk,
+            ss_item_sk AS store_sales.ss_item_sk,
+            ss_customer_sk AS store_sales.ss_customer_sk,
+            ss_cdemo_sk AS store_sales.ss_cdemo_sk,
+            ss_hdemo_sk AS store_sales.ss_hdemo_sk,
+            ss_addr_sk AS store_sales.ss_addr_sk,
+            ss_store_sk AS store_sales.ss_store_sk,
+            ss_promo_sk AS store_sales.ss_promo_sk,
+            ss_ticket_number AS store_sales.ss_ticket_number,
+            ss_quantity AS store_sales.ss_quantity
+        )    
+    )
+    METRICS (
+        customer_total_sales AS sum(store_sales.ss_sales_price)    
+    )
+;
+
+ALTER VIEW customer_sales_metric
+ LAYOUT (customer_data = [76, 37, 40, 80], store_sales = [478, 39, 40, 80]);
+
 # #######################################
 # WEBSERVICES of denodo_hol_cdi_local_solution
 # #######################################
@@ -486,72 +658,72 @@ CREATE OR REPLACE VIEWSTATSUMMARY customer (
     SET ENABLED = true
     SET NUMOFROWS = 30500
     SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
-      (c_customer_sk,4.0,30500,1,30500,0),
+      (c_birth_month,4.0,12,1,12,1038),
+      (c_birth_country,8.6948,'ZIMBABWE','AFGHANISTAN',211,1046),
       (c_customer_id,16.0,'AAAAAAAAPPPGAAAA','AAAAAAAAAAABAAAA',30500,0),
-      (c_current_cdemo_sk,4.0,1920750,0,29236,0),
-      (c_current_hdemo_sk,4.0,7200,0,7077,0),
+      (c_last_name,6.1241,'Zuniga','Aaron',4381,1067),
+      (c_current_cdemo_sk,4.0,899926,3,28865,1016),
+      (c_birth_day,4.0,31,1,31,1083),
+      (c_email_address,27.4717,'Zoraida.Poole@locCA9mOEp0xCV.com','Aaron.Bailey@t4hR8VhA5Eh3h.com',29482,1018),
+      (c_first_shipto_date_sk,4.0,2452678,2449028,3650,1018),
+      (c_login,null,null,null,0,30500),
+      (c_last_review_date,7.0,'2452648','2452283',366,1036),
+      (c_current_hdemo_sk,4.0,7200,1,7076,1034),
+      (c_birth_year,4.0,1992,1924,69,1040),
       (c_current_addr_sk,4.0,49997,1,22848,0),
-      (c_first_shipto_date_sk,4.0,2452678,0,3651,0),
-      (c_first_sales_date_sk,4.0,2452648,0,3651,0),
-      (c_salutation,3.1275,'Sir','',7,0),
-      (c_first_name,5.6467,'Zoraida','',2849,0),
-      (c_last_name,5.9099,'Zuniga','',4382,0),
-      (c_preferred_cust_flag,0.9653,'Y','',3,0),
-      (c_birth_day,4.0,31,0,32,0),
-      (c_birth_month,4.0,12,0,13,0),
-      (c_birth_year,4.0,1992,0,70,0),
-      (c_birth_country,8.3967,'ZIMBABWE','',212,0),
-      (c_login,0.0,'','',1,0),
-      (c_email_address,26.5548,'Zoraida.Poole@locCA9mOEp0xCV.com','',29483,0),
-      (c_last_review_date,6.7622,'2452648','',367,0)
+      (c_first_name,5.8492,'Zoraida','Aaron',2848,1056),
+      (c_first_sales_date_sk,4.0,2452648,2448998,3650,1094),
+      (c_customer_sk,4.0,30500,1,30500,0),
+      (c_preferred_cust_flag,1.0,'Y','N',2,1059),
+      (c_salutation,3.241,'Sir','Dr.',6,1068)
 );
 
 CREATE OR REPLACE VIEWSTATSUMMARY customer_address (
     SET ENABLED = true
     SET NUMOFROWS = 50000
     SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
-      (ca_address_sk,4.0,50000,1,50000,0),
-      (ca_address_id,16.0,'AAAAAAAAPPPLAAAA','AAAAAAAAAAABAAAA',50000,0),
-      (ca_street_number,2.8062,'999','',1001,0),
-      (ca_street_name,8.4501,'Woodland Woodland','',6902,0),
-      (ca_street_type,4.0803,'Wy','',21,0),
-      (ca_suite_number,7.6498,'Suite Y','',76,0),
-      (ca_city,8.6713,'Youngstown','',696,0),
       (ca_county,13.5514,'Ziebach County','',1847,0),
-      (ca_state,1.938,'WY','',52,0),
-      (ca_zip,4.8461,'99981','',3693,0),
+      (ca_street_number,2.8062,'999','',1001,0),
+      (ca_address_id,16.0,'AAAAAAAAPPPLAAAA','AAAAAAAAAAABAAAA',50000,0),
+      (ca_street_type,4.0803,'Wy','',21,0),
+      (ca_gmt_offset,48.0,-5.00,-10.00,6,1556),
+      (ca_location_type,8.7297,'single family','',4,0),
+      (ca_city,8.6713,'Youngstown','',696,0),
       (ca_country,12.6035,'United States','',2,0),
-      (ca_gmt_offset,48.0,0.00,-10.00,7,0),
-      (ca_location_type,8.7297,'single family','',4,0)
+      (ca_suite_number,7.6498,'Suite Y','',76,0),
+      (ca_address_sk,4.0,50000,1,50000,0),
+      (ca_state,1.938,'WY','',52,0),
+      (ca_street_name,8.4501,'Woodland Woodland','',6902,0),
+      (ca_zip,4.8461,'99981','',3693,0)
 );
 
 CREATE OR REPLACE VIEWSTATSUMMARY store_sales (
     SET ENABLED = true
-    SET NUMOFROWS = 36163
+    SET NUMOFROWS = 36162
     SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
-      (ss_sold_date_sk,4.0,null,null,1347,1519),
-      (ss_sold_time_sk,4.0,null,null,2906,1538),
-      (ss_item_sk,4.0,null,null,13994,0),
-      (ss_customer_sk,4.0,null,null,2962,1503),
-      (ss_cdemo_sk,4.0,null,null,3001,1542),
-      (ss_hdemo_sk,4.0,null,null,2465,1582),
-      (ss_addr_sk,4.0,null,null,2919,1514),
-      (ss_store_sk,4.0,null,null,6,1559),
-      (ss_promo_sk,4.0,null,null,300,1535),
-      (ss_ticket_number,4.0,null,null,3004,0),
-      (ss_quantity,4.0,null,null,100,1601),
-      (ss_wholesale_cost,6.0,null,null,9415,1549),
-      (ss_list_price,6.0,null,null,14130,1556),
-      (ss_sales_price,6.0,null,null,10166,1572),
-      (ss_ext_discount_amt,3.0,null,null,5607,1490),
-      (ss_ext_sales_price,6.0,null,null,29142,1554),
-      (ss_ext_wholesale_cost,6.0,null,null,31274,1533),
-      (ss_ext_list_price,7.0,null,null,32306,1500),
-      (ss_ext_tax,6.0,null,null,13655,1520),
-      (ss_coupon_amt,3.0,null,null,5607,1490),
-      (ss_net_paid,6.0,null,null,29572,1580),
-      (ss_net_paid_inc_tax,6.0,null,null,31170,1571),
-      (ss_net_profit,6.0,null,null,30700,1597)
+      (ss_quantity,4.0,100,1,99,1561),
+      (ss_addr_sk,4.0,49990,9,2895,1458),
+      (ss_ticket_number,4.0,3005,1,3033,0),
+      (ss_sales_price,16.0,193.86,0.00,10691,1558),
+      (ss_net_profit,16.0,7987.00,-9753.89,31791,1567),
+      (ss_list_price,16.0,199.92,1.03,14786,1564),
+      (ss_sold_date_sk,4.0,2452642,2450816,1347,1516),
+      (ss_item_sk,4.0,18000,1,14319,0),
+      (ss_store_sk,4.0,10,1,6,1528),
+      (ss_wholesale_cost,16.0,100.00,1.00,9552,1594),
+      (ss_coupon_amt,16.0,15389.98,0.00,6450,1443),
+      (ss_promo_sk,4.0,300,1,306,1570),
+      (ss_ext_list_price,16.0,18888.52,1.29,32578,1495),
+      (ss_ext_sales_price,16.0,17255.70,0.00,29934,1558),
+      (ss_ext_discount_amt,16.0,15389.98,0.00,6450,1443),
+      (ss_ext_tax,16.0,1530.00,0.00,14921,1573),
+      (ss_cdemo_sk,4.0,1920630,1825,3022,1567),
+      (ss_net_paid_inc_tax,16.0,18020.53,0.00,31768,1558),
+      (ss_sold_time_sk,4.0,75573,28873,2956,1549),
+      (ss_hdemo_sk,4.0,7200,5,2394,1552),
+      (ss_customer_sk,4.0,99965,58,2969,1534),
+      (ss_ext_wholesale_cost,16.0,9997.00,1.16,31973,1531),
+      (ss_net_paid,16.0,17255.70,0.00,29949,1573)
 );
 
 CREATE OR REPLACE VIEWSTATSUMMARY customer_demographics (
@@ -559,14 +731,14 @@ CREATE OR REPLACE VIEWSTATSUMMARY customer_demographics (
     SET NUMOFROWS = 913200
     SET STATS (fieldname, avgsize, maxvalue, minvalue, numofdistinctvalues, numofnullvalues) VALUES 
       (cd_purchase_estimate,4.0,10000,500,20,0),
-      (cd_education_status,9.5714,'Unknown','2 yr Degree',7,0),
-      (cd_credit_rating,6.9987,'Unknown','Good',4,0),
-      (cd_dep_college_count,4.0,3,0,4,0),
       (cd_dep_count,4.0,6,0,7,0),
+      (cd_dep_college_count,4.0,3,0,4,0),
       (cd_demo_sk,4.0,913200,1,913200,0),
       (cd_gender,1.0,'M','F',2,0),
+      (cd_dep_employed_count,4.0,6,0,7,0),
       (cd_marital_status,1.0,'W','D',5,0),
-      (cd_dep_employed_count,4.0,6,0,7,0)
+      (cd_credit_rating,6.9987,'Unknown','Good',4,0),
+      (cd_education_status,9.5714,'Unknown','2 yr Degree',7,0)
 );
 
 # #######################################
@@ -583,14 +755,21 @@ CONNECT DATABASE ADMIN;
 # USER PRIVILEGES
 # #######################################
 ALTER USER denodo
-GRANT ROLE assignprivileges,assign_all_roles,assign_tags,configure_resource_manager,configure_database,create_temporary_table,create_role,create_user,data_catalog_assisted_query,data_catalog_classifier,data_catalog_content_admin,data_catalog_data_preparation,data_catalog_editor,data_catalog_exporter,data_catalog_manager,disable_cache_query,import_tags,jmxadmin,manage_listeners,manage_metadata_tables,manage_policies,manage_summaries,manage_tags,metadata_export,monitor_admin,scheduler_admin,selfserviceexporter,use_large_language_model,data_catalog_admin
+GRANT ROLE   assignprivileges,assign_all_roles,assign_tags,configure_resource_manager,configure_database,create_temporary_table,create_role,create_user,data_catalog_assisted_query,data_catalog_classifier,data_catalog_content_admin,data_catalog_data_preparation,data_catalog_editor,data_catalog_exporter,data_catalog_manager,disable_cache_query,import_tags,jmxadmin,manage_listeners,manage_metadata_tables,manage_policies,manage_summaries,manage_tags,metadata_export,monitor_admin,scheduler_admin,selfserviceexporter,use_large_language_model,data_catalog_admin
 GRANT CONNECT ON admin
 GRANT CONNECT, CREATE_DATA_SERVICE, CREATE_VIEW, CREATE_FOLDER, METADATA, EXECUTE, WRITE ON denodo_hol_cdi_local_solution;
+
+ALTER USER end_user
+GRANT ROLE allusers,analyst;
 
 # #######################################
 # ROLE PRIVILEGES
 # #######################################
-# GRANT ROLE assignprivileges,assign_all_roles,assign_tags,create_role,create_temporary_table,create_user,data_catalog_assisted_query,data_catalog_classifier,data_catalog_content_admin,data_catalog_data_preparation,data_catalog_editor,data_catalog_exporter,data_catalog_manager,disable_cache_query,import_tags,manage_listeners,manage_metadata_tables,manage_policies,manage_summaries,manage_tags,scheduler_admin,use_large_language_model
+ALTER ROLE analyst
+GRANT CONNECT ON denodo_hol
+GRANT METADATA, EXECUTE ON denodo_hol_cdi_local_solution.customer_data
+GRANT METADATA, EXECUTE ON denodo_hol_cdi_local_solution.sales_by_customer;
+
 # #######################################
 # RESOURCE MANAGER PLANS
 # #######################################
@@ -601,6 +780,24 @@ GRANT CONNECT, CREATE_DATA_SERVICE, CREATE_VIEW, CREATE_FOLDER, METADATA, EXECUT
 # Closing connection with database admin
 # #######################################
 CLOSE;
+
+# #######################################
+# POLICY CREATION
+# #######################################
+CREATE OR REPLACE GLOBAL_SECURITY_POLICY mask_confidential_data
+    ENABLED = TRUE
+    AUDIENCE (
+        ANY ROLES (analyst)
+    )
+    ELEMENTS (
+        ALL VIEWS
+    )
+    RESTRICTION (
+        FILTER = ''
+        MASKING ANY (confidential) WITH (HIDE) (numbers WITH DEFAULT, datetimes WITH DEFAULT, texts WITH DEFAULT) 
+    );
+
+CHOWN denodo GLOBAL_SECURITY_POLICY mask_confidential_data LASTMODIFICATIONUSER denodo;
 
 # #######################################
 # POLICY CREATION
