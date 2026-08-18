@@ -1982,14 +1982,6 @@ ALTER VIEW iv_customer_j_address
 
 CHOWN admin VIEW iv_customer_j_address LASTMODIFICATIONUSER admin;
 
-CREATE OR REPLACE VIEW iv_inventory_2001_item FOLDER = '/2 - integration' DESCRIPTION = 'The iv_inventory_2001_item view provides a comprehensive overview of inventory data from the year 2001. It includes various fields related to inventory management, such as the date associated with inventory records, the specific warehouse where items are stored, and the quantity of items available in stock. Each item is uniquely identified, allowing for efficient tracking and management. The view also encompasses important details such as item identifiers, current selling prices, brand information, classification codes, and descriptions of categories, sizes, and colors. This structured data can help businesses understand their stock levels, optimize warehouse operations, and enhance inventory control processes.' 
-    PRIMARY KEY ( 'date_sk' , 'warehouse_sk' , 'item_sk' ) AS SELECT iv_inventory.date_sk AS date_sk, iv_inventory.warehouse_sk AS warehouse_sk, iv_inventory.quantity_on_hand AS quantity_on_hand, iv_item.item_sk AS item_sk, iv_item.item_id AS item_id, iv_item.current_price AS current_price, iv_item.brand_id AS brand_id, iv_item.brand AS brand, iv_item.class_id AS class_id, iv_item.class AS class, iv_item.category_id AS category_id, iv_item.category AS category, iv_item.manufact_id AS manufact_id, iv_item.manufact AS manufact, iv_item.size AS size, iv_item.color AS color, iv_item.units AS units FROM (iv_inventory AS iv_inventory INNER JOIN bv_date_dim AS bv_date_dim ON iv_inventory.date_sk = bv_date_dim.d_date_sk ) INNER JOIN iv_item AS iv_item ON iv_inventory.item_sk = iv_item.item_sk  WHERE bv_date_dim.d_year = 2001;
-
-ALTER VIEW iv_inventory_2001_item
- LAYOUT (iv_inventory = [240, 180, 200, 105], bv_date_dim = [560, 310, 200, 225], iv_item = [570, 40, 200, 225]);
-
-CHOWN admin VIEW iv_inventory_2001_item LASTMODIFICATIONUSER admin;
-
 CREATE OR REPLACE VIEW same_store_sales_by_year FOLDER = '/4 - report views' DESCRIPTION = 'The same_store_sales_by_year view presents data on the annual sales performance of specific stores. It includes fields such as the year, a unique store identifier, the name of the store, the city where the store is located, and total sales figures. This information is structured to facilitate comparisons of sales performance over the years, allowing for insights into trends and growth in specific locations. This view could be used for analyzing sales trends over time, assessing the performance of different stores, and making data-driven decisions related to marketing and inventory management.' 
     PRIMARY KEY ( 'year' , 'store_sk' ) (
     total_sales (description = 'Represents the total sales figures for each store, providing insights into financial performance and trends over time.')
@@ -4439,14 +4431,6 @@ ALTER VIEW iv_customer_j_address
 
 CHOWN admin VIEW iv_customer_j_address LASTMODIFICATIONUSER admin;
 
-CREATE OR REPLACE VIEW iv_inventory_2001_item FOLDER = '/2 - integration'
-    PRIMARY KEY ( 'date_sk' , 'warehouse_sk' , 'item_sk' ) AS SELECT iv_inventory.date_sk AS date_sk, iv_inventory.warehouse_sk AS warehouse_sk, iv_inventory.quantity_on_hand AS quantity_on_hand, iv_item.item_sk AS item_sk, iv_item.item_id AS item_id, iv_item.current_price AS current_price, iv_item.brand_id AS brand_id, iv_item.brand AS brand, iv_item.class_id AS class_id, iv_item.class AS class, iv_item.category_id AS category_id, iv_item.category AS category, iv_item.manufact_id AS manufact_id, iv_item.manufact AS manufact, iv_item.size AS size, iv_item.color AS color, iv_item.units AS units FROM (iv_inventory AS iv_inventory INNER JOIN bv_date_dim AS bv_date_dim ON iv_inventory.date_sk = bv_date_dim.d_date_sk ) INNER JOIN iv_item AS iv_item ON iv_inventory.item_sk = iv_item.item_sk  WHERE bv_date_dim.d_year = 2001;
-
-ALTER VIEW iv_inventory_2001_item
- LAYOUT (iv_inventory = [240, 180, 200, 105], bv_date_dim = [560, 310, 200, 225], iv_item = [570, 40, 200, 225]);
-
-CHOWN admin VIEW iv_inventory_2001_item LASTMODIFICATIONUSER admin;
-
 CREATE OR REPLACE VIEW same_store_sales_by_year FOLDER = '/4 - report views'
     PRIMARY KEY ( 'year' , 'store_sk' ) AS SELECT bv_date_dim.d_year AS year, iv_store.store_sk AS store_sk, iv_store.store_name AS store_name, iv_store.city AS city, sum(iv_store_sales.sales_price) AS total_sales FROM (iv_store_sales AS iv_store_sales INNER JOIN bv_date_dim AS bv_date_dim ON iv_store_sales.sold_date_sk = bv_date_dim.d_date_sk ) INNER JOIN iv_store AS iv_store ON iv_store_sales.store_sk = iv_store.store_sk  GROUP BY bv_date_dim.d_year, iv_store.store_sk, iv_store.store_name, iv_store.city;
 
@@ -5086,30 +5070,11 @@ ALTER USER denodo
 GRANT ROLE allusers,data_catalog_manager,data_catalog_assisted_query,data_catalog_classifier,data_catalog_editor,data_catalog_data_preparation,scheduler_admin,use_large_language_model
 GRANT CONNECT ON admin
 GRANT CONNECT, CREATE, CREATE_DATA_SOURCE, CREATE_DATA_SERVICE, CREATE_VIEW, CREATE_FOLDER, METADATA, EXECUTE ON denodo_hol
-GRANT METADATA, EXECUTE ON denodo_hol.bv_call_center
-GRANT METADATA, EXECUTE ON denodo_hol.bv_catalog_page
-GRANT METADATA, EXECUTE ON denodo_hol.bv_catalog_sales
-GRANT METADATA, EXECUTE ON denodo_hol.bv_customer
-GRANT METADATA, EXECUTE ON denodo_hol.bv_customer_address
-GRANT METADATA, EXECUTE ON denodo_hol.bv_date_dim
-GRANT METADATA, EXECUTE ON denodo_hol.bv_inventory
-GRANT METADATA, EXECUTE ON denodo_hol.bv_item
-GRANT METADATA, EXECUTE ON denodo_hol.bv_ship_mode
-GRANT METADATA, EXECUTE ON denodo_hol.bv_store
-GRANT METADATA, EXECUTE ON denodo_hol.bv_store_sales
-GRANT METADATA, EXECUTE ON denodo_hol.bv_time_dim
-GRANT METADATA, EXECUTE ON denodo_hol.bv_warehouse
-GRANT METADATA, EXECUTE ON denodo_hol.bv_web_page
-GRANT METADATA, EXECUTE ON denodo_hol.bv_web_sales
-GRANT METADATA, EXECUTE ON denodo_hol.bv_web_site
-GRANT METADATA, EXECUTE ON denodo_hol.iv_catalog_sales
-GRANT METADATA, EXECUTE ON denodo_hol.iv_customer
-GRANT METADATA, EXECUTE ON denodo_hol.iv_customer_address
-GRANT METADATA, EXECUTE ON denodo_hol.iv_customer_j_address
-GRANT METADATA, EXECUTE ON denodo_hol.iv_store
-GRANT METADATA, EXECUTE ON denodo_hol.iv_store_sales
-GRANT METADATA, EXECUTE ON denodo_hol.iv_web_sales
-GRANT METADATA, EXECUTE ON denodo_hol.total_sales_by_customer_and_store;
+GRANT CONNECT ON denodo_hol_dg_local
+GRANT METADATA ON DATASOURCE jdbc denodo_hol_dg_local.ds_tpcds_store
+GRANT METADATA ON DATASOURCE jdbc denodo_hol_dg_local.ds_tpcds_sales
+GRANT METADATA ON DATASOURCE jdbc denodo_hol_dg_local.ds_tpcds_warehouse
+GRANT METADATA ON DATASOURCE jdbc denodo_hol_dg_local.ds_tpcds_customer;
 
 ALTER USER reader
 GRANT ROLE allusers
