@@ -961,39 +961,40 @@ CHOWN admin WRAPPER JDBC bv_web_site LASTMODIFICATIONUSER admin;
 # BASE VIEWS of denodo_hol
 # #######################################
 CREATE OR REPLACE TABLE bv_call_center I18N us_pst (
-        cc_call_center_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cc_call_center_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        cc_rec_start_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cc_rec_end_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cc_closed_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cc_open_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cc_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        cc_class:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        cc_employees:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cc_sq_ft:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cc_hours:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        cc_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = ''),
-        cc_mkt_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cc_mkt_class:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        cc_mkt_desc:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
-        cc_market_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = ''),
-        cc_division:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cc_division_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        cc_company:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cc_company_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        cc_street_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cc_street_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
-        cc_street_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '15', description = ''),
-        cc_suite_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cc_city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
-        cc_county:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '30', description = ''),
-        cc_state:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = ''),
-        cc_zip:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cc_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        cc_gmt_offset:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = ''),
-        cc_tax_percentage:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = '')
+        cc_call_center_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents a unique identifier for each call center in the dataset.'),
+        cc_call_center_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Identifies the call center with unique values such as "AAAAAAAABAAAAAAA" and "AAAAAAAACAAAAAAA".'),
+        cc_rec_start_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the starting date for the record, with examples like "1998-01-01" and "2001-01-01".'),
+        cc_rec_end_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = 'Specifies the end date of the record, with an example of "2000-01-01".'),
+        cc_closed_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Links to the date when the call center was closed if applicable.'),
+        cc_open_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Connects to the date when the call center was opened, represented by values like "2450806" and "2450952".'),
+        cc_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = 'Denotes the name of the call center, with examples including "Mid Atlantic" and "NY Metro".'),
+        cc_class:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = 'Categorizes the call center based on its size, with categories like "large" and "medium".'),
+        cc_employees:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents the number of employees working at the call center, with examples such as "1", "2", and "6".'),
+        cc_sq_ft:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the total square footage of the call center, with values like "649" and "1138".'),
+        cc_hours:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Defines the operational hours of the call center, for instance, "8AM-4PM".'),
+        cc_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = 'Identifies the manager of the call center, with names such as "Bob Belcher" and "Larry Mccray".'),
+        cc_mkt_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'References the marketing identifier associated with the call center, with examples like "2" and "6".'),
+        cc_mkt_class:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = 'Describes the marketing class related to the call center.'),
+        cc_mkt_desc:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = 'Provides additional description for the marketing aspects of the call center.'),
+        cc_market_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = 'Denotes the market manager in charge, with names like "Julius Durham" and "Matthew Clifton".'),
+        cc_division:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the division to which the call center belongs, represented by identifiers such as "1" and "3".'),
+        cc_division_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = 'Specifies the name of the division, with examples including "ese" and "ought".'),
+        cc_company:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'References the company associated with the call center, using identifiers like "2" and "3".'),
+        cc_company_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = 'Indicates the name of the company tied to the call center.'),
+        cc_street_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Specifies the street number for the call center''s location, with examples like "463" and "730".'),
+        cc_street_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = 'Identifies the name of the street where the call center is located, such as "Ash Hill" and "Center Hill".'),
+        cc_street_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '15', description = 'Describes the type of street, with examples like "Boulevard" and "RD".'),
+        cc_suite_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Specifies any suite number associated with the call center, with values like "Suite 0" and "Suite 70".'),
+        cc_city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = 'Indicates the city where the call center is based, such as "Midway".'),
+        cc_county:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '30', description = 'Identifies the county in which the call center operates, e.g., "Williamson County".'),
+        cc_state:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = 'Specifies the state where the call center is located, represented by abbreviations like "TN".'),
+        cc_zip:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the ZIP code for the call center''s address, with an example of "31904".'),
+        cc_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = 'Specifies the country of the call center''s location, indicated as "United States".'),
+        cc_gmt_offset:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = 'Represents the GMT offset for the call center''s location, such as "-5.00".'),
+        cc_tax_percentage:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = 'Indicates the tax percentage applicable to the call center, with examples like "0.01" and "0.05".')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_call_center view provides a comprehensive overview of call centers within a dataset. It includes key identifiers such as the unique call center key and ID, as well as operational details like the opening and closing dates, names, classes, and employee counts. The view captures geographical information, including street addresses, cities, counties, states, and ZIP codes, along with operational hours and tax percentages applicable to each center. This data is essential for analyzing the structure and performance of call centers, facilitating comparisons across various metrics. This view can be utilized for analyzing call center operations, performance metrics, and geographical distribution, aiding in decision-making for management and marketing strategies.'
     PRIMARY KEY ( 'cc_call_center_sk' )
     CACHE OFF
     BATCHSIZEINCACHE DEFAULT
@@ -1041,17 +1042,18 @@ CREATE OR REPLACE TABLE bv_call_center I18N us_pst (
 CHOWN admin VIEW bv_call_center LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_catalog_page I18N us_pst (
-        cp_catalog_page_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cp_catalog_page_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        cp_start_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cp_end_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cp_department:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        cp_catalog_number:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cp_catalog_page_number:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        cp_description:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
-        cp_type:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = '')
+        cp_catalog_page_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Serves as a unique identifier for each catalog page, facilitating the organization and retrieval of related information.'),
+        cp_catalog_page_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Represents the unique ID assigned to each catalog page, with examples such as "AAAAAAAAAFAAAAAA", "AAAAAAAAGCAAAAAA", and "AAAAAAAAJDAAAAAA".'),
+        cp_start_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the starting date for the catalog page, which helps in tracking the validity period of the catalog.'),
+        cp_end_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Specifies the end date for the catalog page, allowing for the management of its lifespan and relevance.'),
+        cp_department:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = 'Identifies the department associated with the catalog page, such as "DEPARTMENT", enabling easier categorization of content.'),
+        cp_catalog_number:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents a numerical identifier for the catalog, assisting in unique identification and reference.'),
+        cp_catalog_page_number:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the page number of the catalog, with examples of "38", "57", and "80", aiding in the navigation of catalog content.'),
+        cp_description:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = 'Provides textual details about the catalog page, enhancing understanding of its content, though currently no specific descriptions are available.'),
+        cp_type:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = 'Classifies the catalog page type, with examples including "bi-annual", which aids in determining the frequency of catalog updates.')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_catalog_page view is designed to provide structured information about various catalog pages, each uniquely identified by a primary key. It includes fields such as a unique catalog page ID, the start and end dates for the catalog''s validity, the department associated with the catalog, and its catalog number. Additional details regarding the catalog page number and type, such as whether it is bi-annual, further enhance the categorization and management of catalog content. However, specific descriptions of the catalog pages are currently unavailable. This view could be utilized for managing catalog information, tracking the validity of catalog pages, and facilitating the organization of content by department and type.'
     PRIMARY KEY ( 'cp_catalog_page_sk' )
     CACHE OFF
     BATCHSIZEINCACHE DEFAULT
@@ -1077,42 +1079,43 @@ CREATE OR REPLACE TABLE bv_catalog_page I18N us_pst (
 CHOWN admin VIEW bv_catalog_page LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_catalog_sales I18N us_pst (
-        cs_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_sold_time_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_ship_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_bill_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_bill_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_bill_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_bill_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_ship_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_ship_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_ship_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_ship_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_call_center_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_catalog_page_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_ship_mode_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_warehouse_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_promo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_order_number:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_quantity:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        cs_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_ext_discount_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_ext_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_ext_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_ext_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_ext_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_coupon_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_ext_ship_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_net_paid:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_net_paid_inc_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_net_paid_inc_ship:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_net_paid_inc_ship_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        cs_net_profit:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = '')
+        cs_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the date on which the sale occurred, providing a key reference for sales tracking and analysis.'),
+        cs_sold_time_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the specific time when the sale was finalized, allowing for precise temporal analysis of sales activities.'),
+        cs_ship_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Denotes the date when the order was shipped, which is crucial for evaluating delivery timelines and customer satisfaction.'),
+        cs_bill_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Identifies the customer who was billed for the transaction, essential for billing relationships and customer account management.'),
+        cs_bill_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'References a demographic profile related to the billed customer, aiding in understanding customer characteristics and preferences.'),
+        cs_bill_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Links to household demographic information of the billing customer, providing insights into household behavior and trends.'),
+        cs_bill_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Points to the billing address, which is important for shipping, invoicing, and tax calculations.'),
+        cs_ship_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the customer to whom the product was shipped, important for tracking customer satisfaction and delivery success.'),
+        cs_ship_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Links to the demographic profile of the shipping customer, useful for market analysis and targeted marketing strategies.'),
+        cs_ship_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Associates with household demographic data for the shipping customer, enriching customer profile insights.'),
+        cs_ship_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Identifies the shipping address for the order, critical for ensuring accurate and timely deliveries.'),
+        cs_call_center_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the call center associated with the order, important for customer service and support purposes.'),
+        cs_catalog_page_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Identifies the catalog page associated with the item sold, useful for analyzing product placements and marketing effectiveness.'),
+        cs_ship_mode_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the shipping mode used for the delivery, helping assess logistics efficiency and cost management.'),
+        cs_warehouse_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Points to the warehouse from which the product was shipped, essential for inventory management and supply chain operations.'),
+        cs_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Uniquely identifies the item sold, essential for inventory tracking and sales reporting.'),
+        cs_promo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Links to promotional details associated with the sale, important for analyzing marketing effectiveness.'),
+        cs_order_number:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the order number for the sale, which is crucial for order tracking and customer service interactions.'),
+        cs_quantity:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Specifies the quantity of items sold, key for inventory management and sales performance analysis.'),
+        cs_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the cost at which items were purchased, essential for calculating profit margins.'),
+        cs_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the standard price of the item before any discounts or promotions, important for pricing strategies.'),
+        cs_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Denotes the actual sale price of the item after any applicable discounts, critical for revenue analysis.'),
+        cs_ext_discount_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Details the total discount applied to the sale, important for understanding discounting strategies.'),
+        cs_ext_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the extended sales price of the order, providing a total revenue figure for analysis.'),
+        cs_ext_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the total wholesale cost for the items sold, critical for evaluating overall profitability.'),
+        cs_ext_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Denotes the total list price for the order, useful for assessing pricing strategies and potential revenue.'),
+        cs_ext_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the amount of tax applied to the sale, critical for accounting and compliance purposes.'),
+        cs_coupon_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the total amount of any coupons applied to the sale, important for promotional analysis.'),
+        cs_ext_ship_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the total cost of shipping for the order, important for logistics and customer pricing transparency.'),
+        cs_net_paid:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the final amount paid by the customer after all adjustments, key for financial reporting.'),
+        cs_net_paid_inc_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the net amount paid including tax, essential for understanding the total customer expenditure.'),
+        cs_net_paid_inc_ship:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the total amount paid including shipping costs, important for full cost transparency.'),
+        cs_net_paid_inc_ship_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Denotes the total amount paid including shipping and tax, crucial for comprehensive financial analysis.'),
+        cs_net_profit:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the profit made from the sale after all expenses, critical for assessing business performance.')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_catalog_sales view encapsulates detailed information regarding sales transactions, including dates, times, customer details, shipping modes, and financial metrics associated with sales. Each record in this view includes various identifiers such as sold date and time, ship date, customer IDs, and item details that facilitate comprehensive sales analysis. Key numerical fields such as quantities sold, prices, costs, discounts, and final amounts paid provide essential insights into sales performance, customer behavior, and profitability. This view also links to several demographic and logistical data points, enabling a holistic understanding of the sales landscape. This view can be utilized for in-depth sales analysis, tracking customer purchasing behavior, evaluating profitability, and assessing the effectiveness of marketing strategies.'
     CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'cs_item_sk' , 'cs_order_number' )
     CACHE OFF
     BATCHSIZEINCACHE DEFAULT
@@ -1164,26 +1167,27 @@ CREATE OR REPLACE TABLE bv_catalog_sales I18N us_pst (
 CHOWN admin VIEW bv_catalog_sales LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_customer I18N us_pst (
-        c_customer_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        c_customer_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        c_current_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        c_current_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        c_current_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        c_first_shipto_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        c_first_sales_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        c_salutation:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        c_first_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        c_last_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '30', description = ''),
-        c_preferred_cust_flag:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
-        c_birth_day:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        c_birth_month:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        c_birth_year:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        c_birth_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        c_login:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '13', description = ''),
-        c_email_address:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        c_last_review_date:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = '')
+        c_customer_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents a unique identifier for each customer, essential for distinguishing individual records within the customer database.'),
+        c_customer_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Denotes a unique customer identification code. Sample values include "AAAAAAAAFAAAAAAA", "AAAAAAAAFDAAAAAA", "AAAAAAAAKFAAAAAA".'),
+        c_current_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Identifies the current customer demographics associated with each customer, facilitating a detailed understanding of customer profiles.'),
+        c_current_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents the current household demographics for the customer, providing insights into their household composition and characteristics.'),
+        c_current_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the current address of the customer, which is vital for correspondence and service delivery.'),
+        c_first_shipto_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Marks the date when the first shipment was made to the customer, offering insights into their purchasing behavior.'),
+        c_first_sales_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the date of the customer''s initial purchase, which helps in analyzing customer loyalty and engagement over time.'),
+        c_salutation:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the salutation of the customer, such as "Mr." or "Sir", contributing to personalized communication. Sample values include "Mr.", "Sir".'),
+        c_first_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Captures the customer''s first name, crucial for personalized interactions. Sample values include "Nathan", "Paul", "Robert".'),
+        c_last_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '30', description = 'Records the last name of the customer, important for identification purposes. Sample values include "Higgins", "Moran", "Pond".'),
+        c_preferred_cust_flag:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = 'Indicates whether the customer is preferred, influencing how they are targeted in marketing efforts. Sample values include "N", "Y".'),
+        c_birth_day:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Denotes the day of birth of the customer, essential for age verification and targeted marketing campaigns.'),
+        c_birth_month:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Captures the month of birth of the customer, which can assist in personalized outreach and promotions.'),
+        c_birth_year:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Records the year of birth of the customer, providing age-related demographic insights for better targeting.'),
+        c_birth_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = 'Identifies the country of birth of the customer, which is useful for understanding geographic demographics. Sample values include "FIJI", "GABON", "GUYANA".'),
+        c_login:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '13', description = 'Logs the customer’s login information, essential for account access and security.'),
+        c_email_address:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = 'Stores the email address of the customer, a key channel for communication and marketing outreach.'),
+        c_last_review_date:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Captures the most recent review date associated with the customer, which helps in tracking customer engagement. Sample values include "2452447", "2452469", "2452637". ')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_customer view represents a comprehensive dataset of customer information, crucial for understanding customer demographics and engagement. It includes fields such as a unique customer identifier, customer ID, current demographics, household demographics, and current address details. Additionally, it captures important metrics such as the dates of first shipments and sales, salutation, first and last names, preferred customer status, birth details, and contact information. This data forms a foundation for effective customer relationship management, enabling personalized marketing and service delivery. This view can be utilized for analyzing customer demographics, tracking purchasing behavior, and enhancing targeted marketing efforts.'
     PRIMARY KEY ( 'c_customer_sk' )
     CACHE OFF
     BATCHSIZEINCACHE DEFAULT
@@ -1218,21 +1222,22 @@ CREATE OR REPLACE TABLE bv_customer I18N us_pst (
 CHOWN admin VIEW bv_customer LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_customer_address I18N us_pst (
-        ca_address_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        ca_address_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        ca_street_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ca_street_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
-        ca_street_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '15', description = ''),
-        ca_suite_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ca_city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
-        ca_county:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '30', description = ''),
-        ca_state:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = ''),
-        ca_zip:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ca_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        ca_gmt_offset:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = ''),
-        ca_location_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = '')
+        ca_address_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents a unique identifier for each address entry in the customer address database.'),
+        ca_address_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Denotes a unique alphanumeric identifier for the address, with examples including "AAAAAAAAFEAAAAAA" and "AAAAAAAALAAAAAAA".'),
+        ca_street_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the street number of the address, with samples like "189" and "809" showing typical entries.'),
+        ca_street_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = 'Specifies the name of the street associated with the address, including examples such as "13th 2nd" and "Central ".'),
+        ca_street_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '15', description = 'Identifies the type of street, with types including "Drive" and "Street" as examples.'),
+        ca_suite_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Details any suite number associated with the address, with entries like "Suite 470" and "Suite H" as examples.'),
+        ca_city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = 'Indicates the city where the address is located, with examples including "Glendale" and "Springdale".'),
+        ca_county:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '30', description = 'Defines the county associated with the address, with instances such as "Forsyth County" and "Scott County".'),
+        ca_state:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = 'Specifies the state where the address is located, with examples like "KY" and "MT".'),
+        ca_zip:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Contains the ZIP code for the address, with examples such as "28883" and "68252".'),
+        ca_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = 'Identifies the country of the address, with "United States" being a common entry.'),
+        ca_gmt_offset:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = 'Represents the GMT offset for the address location, examples include "-7.00" and "-5.00".'),
+        ca_location_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Describes the type of location, with instances like "single family" indicating the nature of the address.')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_customer_address view provides a comprehensive representation of customer addresses in a database. Each entry is uniquely identified by a primary key, ca_address_sk, ensuring that all address records can be accurately referenced. Key attributes include ca_address_id, a unique alphanumeric identifier, and various details such as street numbers, street names, suite numbers, cities, counties, states, ZIP codes, and country information. Additionally, the view captures the GMT offset and location type, providing insights into geographical information related to the addresses. This collection of data is crucial for managing customer locations effectively, with examples ranging from single-family homes to condominiums across different U.S. states and counties. The bv_customer_address view can be utilized for analyzing customer distribution, managing shipping logistics, and enhancing customer relationship management through accurate address records.'
     PRIMARY KEY ( 'ca_address_sk' )
     CACHE OFF
     BATCHSIZEINCACHE DEFAULT
@@ -1262,36 +1267,37 @@ CREATE OR REPLACE TABLE bv_customer_address I18N us_pst (
 CHOWN admin VIEW bv_customer_address LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_date_dim I18N us_pst (
-        d_date_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_date_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        d_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_month_seq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_week_seq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_quarter_seq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_year:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_dow:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_moy:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_dom:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_qoy:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_fy_year:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_fy_quarter_seq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_fy_week_seq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_day_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '9', description = ''),
-        d_quarter_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '6', description = ''),
-        d_holiday:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
-        d_weekend:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
-        d_following_holiday:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
-        d_first_dom:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_last_dom:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_same_day_ly:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_same_day_lq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        d_current_day:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
-        d_current_week:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
-        d_current_month:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
-        d_current_quarter:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
-        d_current_year:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = '')
+        d_date_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents a unique identifier for each date entry, facilitating efficient data retrieval and organization.'),
+        d_date_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Contains a unique string identifier for each date, ensuring distinct representation across various data sets. Sample values include "AAAAAAAAABKNECAA", "AAAAAAAAKOJNECAA", and "AAAAAAAANOJNECAA".'),
+        d_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the actual calendar date, formatted for clarity and ease of use in analysis.'),
+        d_month_seq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Denotes the sequential number of the month in the year, assisting in monthly trend analysis.'),
+        d_week_seq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Identifies the sequential week number within the year, useful for weekly performance evaluations.'),
+        d_quarter_seq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the quarter sequence of the year, enabling quarterly business assessments and reporting.'),
+        d_year:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the year corresponding to the date, facilitating annual reporting and historical comparisons.'),
+        d_dow:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Specifies the day of the week as a number, aiding in weekly pattern recognition and analysis.'),
+        d_moy:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the month of the year as a numerical value, supporting monthly aggregation of data.'),
+        d_dom:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the day of the month, which is critical for daily and monthly reporting.'),
+        d_qoy:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Denotes the quarter of the year, valuable for quarterly financial assessments and reviews.'),
+        d_fy_year:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the fiscal year corresponding to the date, important for fiscal planning and analysis.'),
+        d_fy_quarter_seq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Identifies the fiscal quarter sequence, essential for aligning financial reports with fiscal periods.'),
+        d_fy_week_seq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Specifies the week number within the fiscal year, aiding in fiscal performance evaluation.'),
+        d_day_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '9', description = 'Provides the name of the day, enhancing readability of date-related data. Sample values include "Saturday ", "Tuesday  ".'),
+        d_quarter_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '6', description = 'Indicates the name of the quarter, useful for reporting on quarterly performance. Sample values include "1900Q1", "1900Q2".'),
+        d_holiday:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = 'Indicates whether the date is a holiday, providing context for business operations. Sample values include "N".'),
+        d_weekend:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = 'Specifies if the date falls on a weekend, which is significant for operational planning. Sample values include "N", "Y".'),
+        d_following_holiday:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = 'Indicates if there is a holiday following the date, useful for scheduling and planning purposes. Sample values include "N".'),
+        d_first_dom:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the first day of the month, important for monthly report generation.'),
+        d_last_dom:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the last day of the month, crucial for end-of-month reporting.'),
+        d_same_day_ly:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the corresponding day in the previous year, vital for year-over-year comparisons.'),
+        d_same_day_lq:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the corresponding day in the last quarter, aiding in quarter-over-quarter analysis.'),
+        d_current_day:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = 'Specifies if the date is the current day, relevant for real-time data tracking. Sample values include "N".'),
+        d_current_week:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = 'Indicates if the date is part of the current week, useful for week-specific analysis. Sample values include "N".'),
+        d_current_month:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = 'Specifies if the date falls within the current month, aiding in monthly assessments. Sample values include "N".'),
+        d_current_quarter:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = 'Indicates if the date is within the current quarter, important for quarterly analysis. Sample values include "N".'),
+        d_current_year:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = 'Specifies if the date is within the current year, crucial for annual reporting. Sample values include "N".')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_date_dim view is a comprehensive date dimension table that organizes various date-related attributes into a structured format. It includes a unique identifier for each date entry, which ensures efficient data retrieval and organization. The table contains calendar dates, month sequences, week sequences, quarter sequences, and year indicators, which collectively facilitate trend analysis and reporting. Additional attributes like day of the week, month of the year, and fiscal year details enhance the usability of the data for various analytical purposes. Specific fields also denote holidays, weekends, and the current status of each date, providing context for operational planning and business analysis. This view could be used for time-based analysis, such as sales trends over specific periods, holiday effects on business operations, and fiscal reporting by aligning date-related data with financial performance metrics.'
     CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'd_date_sk' )
     CACHE OFF
     BATCHSIZEINCACHE DEFAULT
@@ -1337,12 +1343,13 @@ CREATE OR REPLACE TABLE bv_date_dim I18N us_pst (
 CHOWN admin VIEW bv_date_dim LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_inventory I18N us_pst (
-        inv_date_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        inv_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        inv_warehouse_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
-        inv_quantity_on_hand:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10')
+        inv_date_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the specific date associated with the inventory record, allowing for tracking and management of stock levels over time. It reflects the day on which the inventory details were recorded, facilitating historical analysis of inventory trends.'),
+        inv_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents the unique identifier for each item in the inventory, enabling precise tracking of stock across various warehouses. This field is essential for inventory management as it links items to their respective details and facilitates effective inventory planning.'),
+        inv_warehouse_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Identifies the specific warehouse where the inventory is stored, providing crucial information for logistics and supply chain management. This field helps in understanding inventory distribution and aids in optimizing warehouse operations.'),
+        inv_quantity_on_hand:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Denotes the quantity of items currently available in stock, which is vital for inventory control and forecasting. This field helps businesses assess stock levels to prevent shortages and manage restocking effectively.')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_inventory view provides a comprehensive overview of inventory records, detailing essential data points such as the specific date associated with each inventory entry, a unique identifier for each item, the warehouse location where the inventory is stored, and the quantity of each item currently on hand. This structured representation is crucial for effective inventory management, enabling businesses to track stock levels over time, manage logistics efficiently, and optimize supply chain operations. The date field allows for historical analysis, while the warehouse and item identifiers facilitate precise tracking and planning of inventory. The bv_inventory view can be used for inventory management, logistics optimization, and stock level forecasting, enabling businesses to make informed decisions regarding inventory control and supply chain strategies.'
     CONSTRAINT 'inventory_pkey' PRIMARY KEY ( 'inv_date_sk' , 'inv_item_sk' , 'inv_warehouse_sk' )
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
@@ -1362,30 +1369,31 @@ CREATE OR REPLACE TABLE bv_inventory I18N us_pst (
 CHOWN admin VIEW bv_inventory LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_item I18N us_pst (
-        i_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        i_item_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        i_rec_start_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        i_rec_end_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        i_item_desc:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '200', description = ''),
-        i_current_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        i_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        i_brand_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        i_brand:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        i_class_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        i_class:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        i_category_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        i_category:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        i_manufact_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        i_manufact:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        i_size:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        i_formulation:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        i_color:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        i_units:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        i_container:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        i_manager_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        i_product_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = '')
+        i_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Serves as the unique identifier for each item in the inventory, enabling efficient tracking and management.'),
+        i_item_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Represents the unique identifier assigned to each item, which may include values like "AAAAAAAAFCAAAAAA", "AAAAAAAANDAAAAAA", and "AAAAAAAAOCAAAAAA".'),
+        i_rec_start_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the starting date for the record''s validity period.'),
+        i_rec_end_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = 'Specifies the ending date for the record''s validity period.'),
+        i_item_desc:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '200', description = 'Provides a description of the item, allowing for better understanding and categorization.'),
+        i_current_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Shows the current selling price of the item, with examples including "0.50", "2.42", and "98.66".'),
+        i_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the cost price at which the item is purchased, with values such as "0.22", "0.87", and "85.83".'),
+        i_brand_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Identifies the brand of the item, with examples like "2001002", "6012007", and "10006011".'),
+        i_brand:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = 'Indicates the brand name associated with the item, enhancing brand recognition.'),
+        i_class_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents the classification code for the item, which helps in categorizing the inventory.'),
+        i_class:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = 'Describes the class to which the item belongs, aiding in its classification.'),
+        i_category_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Identifies the category of the item, facilitating organization and retrieval.'),
+        i_category:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = 'Specifies the category name for the item, which is essential for inventory categorization.'),
+        i_manufact_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents the unique identifier for the manufacturer of the item, such as "252", "489", and "785".'),
+        i_manufact:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = 'Indicates the manufacturer''s name, providing insight into the source of the product.'),
+        i_size:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Represents the size of the item, with examples like "N/A" and "petite".'),
+        i_formulation:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Describes the formulation of the item, with instances such as "115838salmon36529828" and "83227powder377577506".'),
+        i_color:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Specifies the color of the item, including hues like "gainsboro" and "rose".'),
+        i_units:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the unit of measurement for the item, with examples like "Bundle" and "Case".'),
+        i_container:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Describes the type of container for the item, which can impact storage and handling.'),
+        i_manager_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents the identifier for the manager responsible for the item, aiding in accountability.'),
+        i_product_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = 'Specifies the product name, contributing to product identification.')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_item view contains a comprehensive dataset of items within an inventory system, where each item is uniquely identified by an integer key (i_item_sk). This view includes various attributes of the items such as their unique identifiers (i_item_id), availability dates (i_rec_start_date and i_rec_end_date), descriptions (i_item_desc), pricing information (i_current_price and i_wholesale_cost), and details about their brand, classification, and category. Additionally, it captures the manufacturer''s identity (i_manufact and i_manufact_id), size, formulation, color, measurement units, container type, manager responsible, and product name, allowing users to gain a well-rounded understanding of the inventory items. The data includes examples from numerous items, showcasing a range of prices and characteristics, making it an invaluable resource for effective inventory management and sales analysis. The bv_item view is essential for inventory management, sales tracking, and product categorization within a business context.'
     PRIMARY KEY ( 'i_item_sk' )
     CACHE OFF
     BATCHSIZEINCACHE DEFAULT
@@ -1424,14 +1432,15 @@ CREATE OR REPLACE TABLE bv_item I18N us_pst (
 CHOWN admin VIEW bv_item LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_ship_mode I18N us_pst (
-        sm_ship_mode_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        sm_ship_mode_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        sm_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '30', description = ''),
-        sm_code:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        sm_carrier:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        sm_contract:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = '')
+        sm_ship_mode_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents a unique identifier for the shipping mode, facilitating efficient tracking and management of various shipping types.'),
+        sm_ship_mode_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Denotes the shipping mode identifier, which may include values like "AAAAAAAADAAAAAAA", "AAAAAAAADBAAAAAA", and "AAAAAAAAFAAAAAAA" that help in distinguishing different shipping methods.'),
+        sm_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '30', description = 'Indicates the type of shipping service offered, with examples such as "EXPRESS", "LIBRARY", and "OVERNIGHT", reflecting the speed and nature of the service.'),
+        sm_code:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Consists of codes representing shipping modes, like "AIR" and "BIKE", which streamline categorization and processing of shipment types.'),
+        sm_carrier:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Identifies the shipping carriers involved in the delivery process, featuring examples such as "AIRBORNE", "DHL", and "HARMSTORF", which are crucial for logistics management.'),
+        sm_contract:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Represents contractual agreements related to shipping, containing identifiers like "6Hzzp4JkzjqD8MGXLCDa", "HVDFCcQ", and "fop0bcSd91J26IVpR", essential for overseeing shipping obligations.')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_ship_mode view provides detailed information about various shipping modes used in logistics and transportation. It includes fields such as a unique identifier for each shipping mode, shipping mode identifiers, types of shipping services, codes representing different shipment methods, carriers involved in the delivery process, and contractual agreements related to shipping. This structured data facilitates efficient tracking and management of shipping options, allowing businesses to categorize and process shipments effectively. The bv_ship_mode view could be utilized for analyzing and optimizing shipping strategies, helping businesses select appropriate shipping methods based on speed, type, and carrier while managing contracts efficiently.'
     PRIMARY KEY ( 'sm_ship_mode_sk' )
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
@@ -1453,37 +1462,38 @@ CREATE OR REPLACE TABLE bv_ship_mode I18N us_pst (
 CHOWN admin VIEW bv_ship_mode LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_store I18N us_est (
-        s_store_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        s_store_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        s_rec_start_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        s_rec_end_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        s_closed_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        s_store_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        s_number_employees:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        s_floor_space:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        s_hours:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        s_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = ''),
-        s_market_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        s_geography_class:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
-        s_market_desc:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
-        s_market_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = ''),
-        s_division_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        s_division_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        s_company_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        s_company_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        s_street_number:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        s_street_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
-        s_street_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '15', description = ''),
-        s_suite_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        s_city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
-        s_county:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '30', description = ''),
-        s_state:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = ''),
-        s_zip:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        s_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        s_gmt_offset:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = ''),
-        s_tax_precentage:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = '')
+        s_store_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents a unique identifier for each store in the database.'),
+        s_store_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Identifies the store with a unique alphanumeric code, including values like "AAAAAAAACAAAAAAA", "AAAAAAAAEAAAAAAA", and "AAAAAAAAKAAAAAAA".'),
+        s_rec_start_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = 'Denotes the date when the record for the store became effective.'),
+        s_rec_end_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the date when the record for the store ceased to be effective.'),
+        s_closed_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Stores the date when the store was closed, represented as a specific key value.'),
+        s_store_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = 'Reflects the name of the store, with examples like "able", "ese", and "ought".'),
+        s_number_employees:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents the total number of employees working at the store.'),
+        s_floor_space:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the total area of the store, typically measured in square feet.'),
+        s_hours:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Details the operating hours of the store, including entries such as "8AM-12AM" and "8AM-4PM".'),
+        s_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = 'Names the individual who manages the store, with examples like "Edwin Adams" and "Robert Thompson".'),
+        s_market_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Refers to the market category the store belongs to, with values such as "4", "6", and "8".'),
+        s_geography_class:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = 'Classifies the store''s geographical location, which may be noted as "Unknown".'),
+        s_market_desc:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = 'Provides a brief description of the market, with examples like "Events develop i...".'),
+        s_market_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = 'Identifies the manager responsible for overseeing the market, including names like "David Lamontagne" and "Dustin Kelly".'),
+        s_division_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the division to which the store is assigned, represented by an integer value.'),
+        s_division_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = 'Denotes the name of the division, which may be listed as "Unknown".'),
+        s_company_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Refers to the unique identifier of the company owning the store.'),
+        s_company_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = 'Describes the name of the company, often noted as "Unknown".'),
+        s_street_number:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the street number of the store''s location, with samples like "255", "27", and "337".'),
+        s_street_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = 'Details the name of the street where the store is situated, including names like "College", "Lake", and "Sycamore".'),
+        s_street_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '15', description = 'Specifies the type of street, such as "Boulevard", "Dr.", or "Ln".'),
+        s_suite_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents any suite number associated with the store location, such as "Suite 100" or "Suite 260".'),
+        s_city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = 'Names the city where the store is located, with examples like "Fairview" and "Midway".'),
+        s_county:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '30', description = 'Indicates the county within which the store operates, such as "Williamson County".'),
+        s_state:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = 'Specifies the state where the store is based, noted as "TN".'),
+        s_zip:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Lists the ZIP code for the store''s location, with entries like "31904".'),
+        s_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = 'Identifies the country where the store is situated, typically noted as "United States".'),
+        s_gmt_offset:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = 'Indicates the time zone offset for the store''s operating location.'),
+        s_tax_precentage:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = 'Represents the applicable sales tax percentage for transactions at the store.')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_store view represents a detailed record of various stores, each identified by a unique store key. It includes essential information such as store IDs, operational dates, closure dates, and the number of employees, as well as geographical details like street address, city, county, state, and country. The view also documents operational specifics such as hours of operation and sales tax percentages, alongside descriptions of the market the store belongs to and the individuals managing the stores. The bv_store view could be used for analyzing store performance, managing inventory, and planning operational strategies based on geographical and temporal data.'
     PRIMARY KEY ( 's_store_sk' )
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
@@ -1528,31 +1538,32 @@ CREATE OR REPLACE TABLE bv_store I18N us_est (
 CHOWN admin VIEW bv_store LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_store_sales I18N us_pst (
-        ss_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ss_sold_time_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ss_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ss_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ss_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ss_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ss_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ss_store_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ss_promo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ss_ticket_number:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ss_quantity:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ss_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ss_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ss_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ss_ext_discount_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ss_ext_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ss_ext_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ss_ext_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ss_ext_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ss_coupon_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ss_net_paid:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ss_net_paid_inc_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ss_net_profit:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = '')
+        ss_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the date on which the sale occurred, providing a metric for tracking sales performance over time.'),
+        ss_sold_time_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the specific time of day when the sale was made, allowing for analysis of peak sales periods.'),
+        ss_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Identifies the specific item that was sold, essential for inventory management and sales reporting.'),
+        ss_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Links to the customer who made the purchase, aiding in customer relationship management and targeted marketing.'),
+        ss_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Relates to the customer demographic, providing insights into customer segments and preferences.'),
+        ss_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Associates with household demographic information, useful for understanding household purchasing behaviors.'),
+        ss_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Links to the address of the customer, valuable for analyzing geographical sales trends and shipping logistics.'),
+        ss_store_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Identifies the store where the sale occurred, critical for performance assessment of individual store locations.'),
+        ss_promo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Links to promotional campaigns associated with the sale, enabling analysis of promotional effectiveness.'),
+        ss_ticket_number:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the unique identifier for each sales transaction, important for transaction tracking and audits.'),
+        ss_quantity:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the number of units sold in the transaction, essential for inventory control and sales volume assessment.'),
+        ss_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the cost of the item from the supplier''s perspective, crucial for profit margin calculations.'),
+        ss_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Denotes the original price of the item as listed, important for price strategy evaluations.'),
+        ss_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the final selling price of the item after any discounts, key for revenue analysis.'),
+        ss_ext_discount_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the total amount discounted on the sale, important for financial reporting and discount strategy.'),
+        ss_ext_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the extended sales price for the transaction, including volumes sold, vital for revenue tracking.'),
+        ss_ext_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Denotes the total cost incurred for the wholesale purchase, essential for cost management.'),
+        ss_ext_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the total list price for all items sold in the transaction, significant for sales analysis.'),
+        ss_ext_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the total tax charged on the sale, crucial for financial compliance and revenue calculation.'),
+        ss_coupon_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the total value of any coupons applied, important for analyzing promotional effectiveness.'),
+        ss_net_paid:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the net amount paid by the customer after all deductions, vital for revenue calculations.'),
+        ss_net_paid_inc_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the total amount paid including taxes, critical for financial reporting.'),
+        ss_net_profit:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the profit made from the transaction after all expenses, essential for performance evaluation.')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_store_sales view provides detailed information about sales transactions occurring at various store locations. It captures key aspects such as the date and time of sale, item identifiers, customer links, and financial details like sales price, discounts, and profits. Each transaction is uniquely identified by a ticket number, while additional fields provide insights into customer demographics and promotional activities. This comprehensive structure aids in tracking sales performance, understanding customer behavior, and assessing the effectiveness of marketing strategies. This view is essential for analyzing sales trends over time, evaluating store performance, and deriving insights for inventory management and customer relationship strategies.'
     CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'ss_item_sk' , 'ss_ticket_number' )
     CACHE OFF
     BATCHSIZEINCACHE DEFAULT
@@ -1593,18 +1604,19 @@ CREATE OR REPLACE TABLE bv_store_sales I18N us_pst (
 CHOWN admin VIEW bv_store_sales LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_time_dim I18N us_pst (
-        t_time_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        t_time_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        t_time:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        t_hour:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        t_minute:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        t_second:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        t_am_pm:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = ''),
-        t_shift:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        t_sub_shift:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        t_meal_time:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = '')
+        t_time_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents a unique identifier for each time record, facilitating efficient time-related data analysis and reporting.'),
+        t_time_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Serves as a textual representation of the time, incorporating various formats and standards. It includes values like "AAAAAAAABBAAAAAA", "AAAAAAAAECAAAAAA", and "AAAAAAAALEAAAAAA".'),
+        t_time:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Denotes the specific time in a numerical format, ensuring clarity in time tracking and reporting.'),
+        t_hour:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the hour component of the time, essential for time segmentation and analysis.'),
+        t_minute:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the minute portion of the time, crucial for precise scheduling and event coordination. It includes values like "0", and "1".'),
+        t_second:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Captures the seconds in the time measurement, aiding in high-resolution timing needs. It includes values like "14", "16", and "35".'),
+        t_am_pm:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = 'Specifies whether the time is in the morning or evening, enhancing clarity in time representation. It includes values like "AM".'),
+        t_shift:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Identifies the work shift during which the time falls, important for workforce planning and operational management. It includes values like "third".'),
+        t_sub_shift:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Provides details on more specific timing divisions, such as night or day shifts, assisting in detailed labor analysis. It includes values like "night".'),
+        t_meal_time:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '20', description = 'Indicates designated meal times, which can influence scheduling and productivity. It includes blank values.')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_time_dim view provides a structured representation of various time-related data. It includes detailed fields such as a unique identifier for each time record, a textual representation of the time, and components that denote the specific hour, minute, and second. Additionally, it includes indicators for AM/PM, work shifts, meal times, and sub-shifts, facilitating efficient time-related data analysis and reporting. Each field is designed to enhance clarity in time tracking and scheduling, making it a vital resource for businesses and organizations that rely on precise timing information. The bv_time_dim view serves to enhance time-related data analysis and reporting, particularly in contexts such as workforce planning and operational management. By providing detailed breakdowns of time, it supports effective scheduling and coordination of events.'
     CONSTRAINT 'PRIMARY' PRIMARY KEY ( 't_time_sk' )
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
@@ -1630,22 +1642,23 @@ CREATE OR REPLACE TABLE bv_time_dim I18N us_pst (
 CHOWN admin VIEW bv_time_dim LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_warehouse I18N us_est (
-        w_warehouse_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        w_warehouse_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        w_warehouse_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        w_warehouse_sq_ft:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        w_street_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        w_street_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
-        w_street_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '15', description = ''),
-        w_suite_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        w_city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
-        w_county:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '30', description = ''),
-        w_state:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = ''),
-        w_zip:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        w_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        w_gmt_offset:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = '')
+        w_warehouse_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents a unique identifier for each warehouse entry, ensuring distinct records are maintained.'),
+        w_warehouse_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Identifies the warehouse with codes such as "AAAAAAAABAAAAAAA", "AAAAAAAADAAAAAAA", and "AAAAAAAAEAAAAAAA".'),
+        w_warehouse_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = 'Names the warehouse, with examples including "Bad cards must make.", "Conventional childr", and "Doors canno".'),
+        w_warehouse_sq_ft:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the size of the warehouse in square feet, with values like 294242, 621234, and 977787.'),
+        w_street_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Specifies the street number associated with the warehouse, including "368", "534", and "651".'),
+        w_street_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = 'Denotes the street name where the warehouse is located, featuring names like "6th ", "Ash Laurel", and "Wilson Elm".'),
+        w_street_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '15', description = 'Classifies the type of street, with entries such as "Dr.", "Drive", and "Parkway".'),
+        w_suite_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the suite number within the warehouse address, such as "Suite 0", "Suite 470", and "Suite 80".'),
+        w_city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = 'Refers to the city of the warehouse, with examples like "Fairview".'),
+        w_county:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '30', description = 'Specifies the county of the warehouse, noted as "Williamson County".'),
+        w_state:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = 'Identifies the state where the warehouse is located, represented as "TN".'),
+        w_zip:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Provides the zip code of the warehouse location, such as "35709     ".'),
+        w_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = 'Indicates the country of the warehouse, which is "United States".'),
+        w_gmt_offset:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = 'Specifies the GMT offset for the warehouse''s location, listed as "-5.00".')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_warehouse view provides a comprehensive overview of warehouse locations and their associated attributes. It includes unique identifiers for each warehouse, along with details such as the warehouse name, size in square feet, and address components such as street number, street name, suite number, city, county, state, zip code, and country. Additionally, the view captures the GMT offset relevant to each warehouse''s geographical location, ensuring accurate time zone representation. This structured data allows for effective management and analysis of warehouse properties, facilitating logistical operations and strategic planning. The bv_warehouse view serves as a vital resource for inventory management and sales operations, linking warehouses to their respective inventory and sales channels. It supports efficient decision-making related to logistics, distribution, and market analysis.'
     PRIMARY KEY ( 'w_warehouse_sk' )
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
@@ -1675,22 +1688,23 @@ CREATE OR REPLACE TABLE bv_warehouse I18N us_est (
 CHOWN admin VIEW bv_warehouse LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_web_page I18N us_pst (
-        wp_web_page_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        wp_web_page_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        wp_rec_start_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        wp_rec_end_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        wp_creation_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        wp_access_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        wp_autogen_flag:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = ''),
-        wp_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        wp_url:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
-        wp_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        wp_char_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        wp_link_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        wp_image_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        wp_max_ad_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = '')
+        wp_web_page_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents a unique identifier for each web page, serving as a key reference in the dataset.'),
+        wp_web_page_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Identifies the web page with values like "AAAAAAAACAAAAAAA", "AAAAAAAAIAAAAAAA", and "AAAAAAAAOAAAAAAA".'),
+        wp_rec_start_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the date when the record became effective, providing context for data validity.'),
+        wp_rec_end_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = 'Specifies the end date for the record''s validity, marking when the data is no longer applicable.'),
+        wp_creation_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Links to the date when the web page was created, essential for tracking content age.'),
+        wp_access_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Records the date of the last access to the web page, highlighting user engagement over time.'),
+        wp_autogen_flag:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '1', description = 'Indicates whether the web page was automatically generated, with values such as "N" and "Y".'),
+        wp_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Refers to the identifier for the customer associated with the web page, facilitating user-centric analysis.'),
+        wp_url:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = 'Houses the web page''s URL, exemplified by "http://www.foo.com".'),
+        wp_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = 'Describes the type of web page, though no specific examples are available.'),
+        wp_char_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Counts the number of characters in the web page content, with instances like "1564", "3128", and "5676".'),
+        wp_link_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Details the number of links on the web page, with counts such as "4", "13", and "19".'),
+        wp_image_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the number of images included in the web page, with values like "3", "5", and "6".'),
+        wp_max_ad_count:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Specifies the maximum number of advertisements that can appear on the web page, with examples like "0", "3", and "4".')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_web_page view provides a structured representation of web pages, encapsulating key attributes that define each page''s characteristics. It includes a unique identifier for each web page, along with its specific ID, which can take the form of strings like "AAAAAAAACAAAAAAA". The view captures essential dates, such as when records become effective, when they end, and when the web page was created and last accessed. Additionally, it indicates if the web page was generated automatically, associates it with a customer through an identifier, and includes the URL of the page. Other important metrics captured are the character count of the content, the number of links present, the count of images included, and the maximum number of advertisements that can appear on the page. This comprehensive dataset allows for a detailed analysis of web pages, enhancing our understanding of their structure and usage over time. The bv_web_page view could be used for analyzing web page performance, tracking user engagement, and assessing the characteristics of web content in relation to customer interactions.'
     PRIMARY KEY ( 'wp_web_page_sk' )
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
@@ -1720,42 +1734,43 @@ CREATE OR REPLACE TABLE bv_web_page I18N us_pst (
 CHOWN admin VIEW bv_web_page LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_web_sales I18N us_pst (
-        ws_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_sold_time_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_ship_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_bill_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_bill_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_bill_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_bill_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_ship_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_ship_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_ship_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_ship_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_web_page_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_web_site_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_ship_mode_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_warehouse_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_promo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_order_number:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_quantity:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        ws_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_ext_discount_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_ext_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_ext_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_ext_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_ext_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_coupon_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_ext_ship_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_net_paid:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_net_paid_inc_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_net_paid_inc_ship:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_net_paid_inc_ship_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = ''),
-        ws_net_profit:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = '')
+        ws_sold_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the unique identifier for the date when sales occurred, facilitating tracking of sales trends over time.'),
+        ws_sold_time_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the unique identifier for the time when sales transactions took place, allowing for detailed analysis of sales patterns throughout the day.'),
+        ws_ship_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Serves as the unique identifier for the date on which products are shipped, essential for managing logistics and delivery timelines.'),
+        ws_item_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Identifies each product sold, providing insight into inventory management and sales performance of specific items.'),
+        ws_bill_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the unique identifier for customers billed for the transaction, crucial for understanding customer demographics and billing patterns.'),
+        ws_bill_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Serves as the unique identifier for customer demographics related to billing, aiding in segmentation analysis.'),
+        ws_bill_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the unique identifier for household demographics associated with billing, important for market analysis.'),
+        ws_bill_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the unique identifier for billing addresses, essential for correct invoice generation and delivery management.'),
+        ws_ship_customer_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Identifies the customer to whom the shipment is made, critical for fulfillment and customer service operations.'),
+        ws_ship_cdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the unique identifier for demographic data related to shipping customers, useful for targeted marketing.'),
+        ws_ship_hdemo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the unique identifier for household demographics linked to shipping, aiding in consumer insights.'),
+        ws_ship_addr_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Serves as the unique identifier for shipping addresses, which is vital for order fulfillment processes.'),
+        ws_web_page_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Identifies the web page where the sales occurred, useful for analyzing the effectiveness of online platforms.'),
+        ws_web_site_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the unique identifier for the website involved in the transactions, crucial for performance assessment of web sales channels.'),
+        ws_ship_mode_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the unique identifier for the shipping method used, important for logistics and shipping cost analysis.'),
+        ws_warehouse_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Identifies the warehouse from which the products were shipped, essential for inventory management and tracking.'),
+        ws_promo_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Serves as the unique identifier for promotional campaigns applied to sales, allowing for evaluation of marketing strategies.'),
+        ws_order_number:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Represents the unique number assigned to each order, facilitating order tracking and management.'),
+        ws_quantity:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the quantity of products sold, providing insights into sales volume and inventory requirements.'),
+        ws_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the cost incurred to acquire products at wholesale prices, important for profitability analysis.'),
+        ws_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the standard price at which products are offered, crucial for pricing strategy assessments.'),
+        ws_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the final selling price of the products, impacted by discounts and promotions, significant for revenue analysis.'),
+        ws_ext_discount_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the total amount of discounts applied to the sale, essential for understanding pricing strategies.'),
+        ws_ext_sales_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the aggregated sales price after all applicable discounts, critical for revenue calculations.'),
+        ws_ext_wholesale_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the total cost incurred for items at wholesale rates, vital for determining overall cost structures.'),
+        ws_ext_list_price:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the total list price for all items in the transaction, useful for pricing strategy evaluations.'),
+        ws_ext_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the total tax applied to the transaction, essential for financial reporting and compliance.'),
+        ws_coupon_amt:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the total amount deducted through coupons, important for understanding promotional impacts.'),
+        ws_ext_ship_cost:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the total shipping costs incurred for the transaction, vital for logistical cost analysis.'),
+        ws_net_paid:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the net amount paid by the customer after discounts, taxes, and shipping, crucial for profitability assessments.'),
+        ws_net_paid_inc_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the net amount paid including taxes, important for understanding the complete financial picture of transactions.'),
+        ws_net_paid_inc_ship:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the net amount including shipping costs, essential for total revenue calculations.'),
+        ws_net_paid_inc_ship_tax:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Indicates the net payment including both shipping and tax, crucial for comprehensive financial evaluations.'),
+        ws_net_profit:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '7', description = 'Represents the profit made from the sale after all costs, taxes, and discounts, essential for assessing business performance.')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_web_sales view provides a comprehensive overview of web sales transactions, capturing critical aspects such as the sale date and time, shipping details, customer information, and financial metrics. Key fields include identifiers for sold items, customer demographics, billing and shipping addresses, and various sales and cost amounts. With this data, it becomes possible to analyze sales trends over time, assess customer behavior, and manage logistics effectively. The view incorporates data from different dimensions, allowing for detailed insights into inventory management, promotional effectiveness, and overall profitability. This view could be used to analyze sales performance on the web, understand customer demographics and behavior, evaluate the effectiveness of promotions, and optimize logistics and inventory management.'
     CONSTRAINT 'PRIMARY' PRIMARY KEY ( 'ws_item_sk' , 'ws_order_number' )
     CACHE OFF
     BATCHSIZEINCACHE DEFAULT
@@ -1807,34 +1822,35 @@ CREATE OR REPLACE TABLE bv_web_sales I18N us_pst (
 CHOWN admin VIEW bv_web_sales LASTMODIFICATIONUSER admin;
 
 CREATE OR REPLACE TABLE bv_web_site I18N us_pst (
-        web_site_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        web_site_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = ''),
-        web_rec_start_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        web_rec_end_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        web_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        web_open_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        web_close_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        web_class:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        web_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = ''),
-        web_mkt_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        web_mkt_class:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        web_mkt_desc:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = ''),
-        web_market_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = ''),
-        web_company_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = ''),
-        web_company_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = ''),
-        web_street_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        web_street_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
-        web_street_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '15', description = ''),
-        web_suite_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        web_city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = ''),
-        web_county:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '30', description = ''),
-        web_state:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = ''),
-        web_zip:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = ''),
-        web_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = ''),
-        web_gmt_offset:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = ''),
-        web_tax_percentage:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = '')
+        web_site_sk:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents the unique identifier for each website entry.'),
+        web_site_id:text (notnull, sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '16', description = 'Identifies the website with values like "AAAAAAAAABAAAAAA", "AAAAAAAAEAAAAAAA", and "AAAAAAAAKAAAAAAA".'),
+        web_rec_start_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the start date for the website record, reflecting when it began being active.'),
+        web_rec_end_date:localdate (sourcetypeid = '91', sourcetyperadix = '10', sourcetypesize = '10', description = 'Denotes the end date for the website record, marking when it ceased to be active.'),
+        web_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = 'Refers to the name of the website, with examples such as "site_0", "site_1", and "site_2".'),
+        web_open_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Specifies the date key when the website was opened, providing a timestamp for its launch.'),
+        web_close_date_sk:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the date key when the website was closed, documenting its shutdown.'),
+        web_class:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = 'Describes the classification of the website, currently noted as "Unknown".'),
+        web_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = 'Identifies the manager responsible for the website, including names like "Dwight Aaron" and "Harold Wilson".'),
+        web_mkt_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Represents the marketing identifier associated with the website.'),
+        web_mkt_class:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '50', description = 'Defines the marketing class of the website, with examples such as "Hard new suggestions might contain nat".'),
+        web_mkt_desc:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '100', description = 'Provides a description of the marketing strategy employed, such as "Companies grow cells. Apart true eyes u".'),
+        web_market_manager:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '40', description = 'Names the manager overseeing the market activities of the website, with examples like "Albert Leung" and "Frank Cooper".'),
+        web_company_id:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10', description = 'Indicates the identifier for the company owning the website.'),
+        web_company_name:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '50', description = 'Specifies the name of the company, though currently no values are provided.'),
+        web_street_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Details the street number for the website''s physical address, such as "409", "805", and "841".'),
+        web_street_name:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = 'Mention the street name, including examples like "Hill Hill", "Lake ", and "West Cedar".'),
+        web_street_type:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '15', description = 'Describes the type of street, with examples such as "Blvd", "Ct.", and "Dr.". '),
+        web_suite_number:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Indicates the suite number as part of the address, with values like "Suite 370" and "Suite D".'),
+        web_city:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '60', description = 'Refers to the city where the website''s physical presence is located, currently "Midway".'),
+        web_county:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '30', description = 'Specifies the county associated with the website''s address, noted as "Williamson County".'),
+        web_state:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '2', description = 'Indicates the state where the site operates, currently "TN".'),
+        web_zip:text (sourcetypeid = '1', sourcetyperadix = '10', sourcetypesize = '10', description = 'Provides the zip code for the website''s location, noted as "31904".'),
+        web_country:text (sourcetypeid = '12', sourcetyperadix = '10', sourcetypesize = '20', description = 'Identifies the country of operation, listed as "United States".'),
+        web_gmt_offset:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = 'Specifies the GMT offset for the website''s operational time zone.'),
+        web_tax_percentage:decimal (sourcetypeid = '3', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5', description = 'Indicates the tax percentage applicable to the website''s transactions.')
     )
     FOLDER = '/1 - connectivity/2 - base views'
+    DESCRIPTION = 'The bv_web_site view provides a comprehensive repository of information regarding various websites. Each entry is uniquely identified by a key and includes fields that capture essential attributes such as website ID, name, operational dates (both start and end), classifications, and management details. The view contains specific data points like the street address, city, county, state, zip code, and country where the website operates. Additionally, it outlines marketing-related identifiers and strategies associated with each website, allowing for a detailed understanding of the website''s market presence and operational dynamics. The bv_web_site view can be utilized for analyzing website activity, tracking website management, and understanding the geographical distribution and marketing strategies of various websites.'
     PRIMARY KEY ( 'web_site_sk' )
     CACHE OFF
     TIMETOLIVEINCACHE DEFAULT
@@ -1878,7 +1894,7 @@ CHOWN admin VIEW bv_web_site LASTMODIFICATIONUSER admin;
 # #######################################
 # VIEWS of denodo_hol
 # #######################################
-CREATE OR REPLACE VIEW iv_catalog_sales FOLDER = '/2 - integration'
+CREATE OR REPLACE VIEW iv_catalog_sales FOLDER = '/2 - integration' DESCRIPTION = 'The iv_catalog_sales view provides a detailed overview of sales transactions, capturing essential information such as the dates and times when sales occurred, shipping details, customer billing information, and product specifics. Each entry includes crucial identifiers for customers, addresses, call centers, and items sold, along with metrics like quantity sold, list prices, and sales prices. This view serves as a comprehensive resource for tracking sales performance, managing inventory, and analyzing sales trends over time. This view can be used for analyzing sales performance, tracking customer transactions, and improving inventory management.' 
     PRIMARY KEY ( 'item_sk' , 'order_number' ) AS SELECT bv_catalog_sales.cs_sold_date_sk AS sold_date_sk, bv_catalog_sales.cs_sold_time_sk AS sold_time_sk, bv_catalog_sales.cs_ship_date_sk AS ship_date_sk, bv_catalog_sales.cs_bill_customer_sk AS bill_customer_sk, bv_catalog_sales.cs_bill_addr_sk AS bill_addr_sk, bv_catalog_sales.cs_ship_customer_sk AS ship_customer_sk, bv_catalog_sales.cs_ship_addr_sk AS ship_addr_sk, bv_catalog_sales.cs_call_center_sk AS call_center_sk, bv_catalog_sales.cs_catalog_page_sk AS catalog_page_sk, bv_catalog_sales.cs_warehouse_sk AS warehouse_sk, bv_catalog_sales.cs_item_sk AS item_sk, bv_catalog_sales.cs_order_number AS order_number, bv_catalog_sales.cs_quantity AS quantity, bv_catalog_sales.cs_list_price AS list_price, bv_catalog_sales.cs_sales_price AS sales_price FROM bv_catalog_sales;
 
 CHOWN admin VIEW iv_catalog_sales LASTMODIFICATIONUSER admin;
@@ -1886,7 +1902,7 @@ CHOWN admin VIEW iv_catalog_sales LASTMODIFICATIONUSER admin;
 ALTER VIEW iv_catalog_sales
  LAYOUT (bv_catalog_sales = [20, 20, 200, 105]);
 
-CREATE OR REPLACE VIEW iv_customer FOLDER = '/2 - integration'
+CREATE OR REPLACE VIEW iv_customer FOLDER = '/2 - integration' DESCRIPTION = 'The iv_customer view represents a comprehensive dataset containing detailed information about customers. It features a unique identifier for each customer, known as customer_sk, which is essential for distinguishing individual records within the customer database. Additionally, it includes customer_id, a unique identification code that maps to each customer. The view offers insights into customers'' current addresses, first names, last names, and preferred customer status, which indicates their importance in marketing strategies. Furthermore, it captures demographic information such as birth days, months, years, and countries, which are vital for targeted marketing campaigns and understanding geographic demographics. The iv_customer view also facilitates account access and security by logging customers'' login information and storing their email addresses, serving as a key communication channel. This view can be used for customer segmentation, targeted marketing campaigns, and personalized communication strategies based on demographic data and customer preferences.' 
     PRIMARY KEY ( 'customer_sk' ) AS SELECT bv_customer.c_customer_sk AS customer_sk, bv_customer.c_customer_id AS customer_id, bv_customer.c_current_addr_sk AS current_addr_sk, bv_customer.c_first_name AS first_name, bv_customer.c_last_name AS last_name, bv_customer.c_preferred_cust_flag AS preferred_cust_flag, bv_customer.c_birth_day AS birth_day, bv_customer.c_birth_month AS birth_month, bv_customer.c_birth_year AS birth_year, bv_customer.c_birth_country AS birth_country, bv_customer.c_login AS login, bv_customer.c_email_address AS email_address FROM bv_customer WHERE (c_first_name is not null  AND c_current_addr_sk is not null );
 
 CHOWN admin VIEW iv_customer LASTMODIFICATIONUSER admin;
@@ -1894,7 +1910,7 @@ CHOWN admin VIEW iv_customer LASTMODIFICATIONUSER admin;
 ALTER VIEW iv_customer
  LAYOUT (bv_customer = [20, 20, 262, 385]);
 
-CREATE OR REPLACE VIEW iv_customer_address FOLDER = '/2 - integration'
+CREATE OR REPLACE VIEW iv_customer_address FOLDER = '/2 - integration' DESCRIPTION = 'The iv_customer_address view provides a comprehensive representation of customer addresses within the database. It includes several fields that capture important details about each address, such as a unique identifier for the address entry, alphanumeric address IDs, street numbers, street names, and the type of street. Additionally, the view specifies the city, county, state, ZIP code, and country associated with each address, ensuring a clear understanding of the location. For example, addresses such as "576 4th Avenue, Sumner, Clark County, MO, 20519, United States" exemplify the structured information contained within this view. This view could be utilized for managing and retrieving customer address information efficiently, aiding in tasks such as shipping, location-based services, and demographic analysis.' 
     PRIMARY KEY ( 'address_sk' ) AS SELECT bv_customer_address.ca_address_sk AS address_sk, bv_customer_address.ca_address_id AS address_id, bv_customer_address.ca_street_number AS street_number, bv_customer_address.ca_street_name AS street_name, bv_customer_address.ca_street_type AS street_type, bv_customer_address.ca_city AS city, bv_customer_address.ca_county AS county, bv_customer_address.ca_state AS state, bv_customer_address.ca_zip AS zip, bv_customer_address.ca_country AS country FROM bv_customer_address WHERE ca_state is not null ;
 
 CHOWN admin VIEW iv_customer_address LASTMODIFICATIONUSER admin;
@@ -1902,15 +1918,12 @@ CHOWN admin VIEW iv_customer_address LASTMODIFICATIONUSER admin;
 ALTER VIEW iv_customer_address
  LAYOUT (bv_customer_address = [20, 20, 200, 105]);
 
-CREATE OR REPLACE VIEW iv_inventory FOLDER = '/2 - integration'
+CREATE OR REPLACE VIEW iv_inventory FOLDER = '/2 - integration' DESCRIPTION = 'The iv_inventory view provides a comprehensive overview of inventory records, capturing essential details such as the date of the inventory entry, unique item identifiers, warehouse locations, and the quantity of items on hand. It effectively reflects the dynamics of stock levels over time, allowing businesses to analyze inventory trends and make informed decisions regarding stock management. The fields included are designed to facilitate precise tracking and management of inventory across various warehouses, providing critical insights into inventory distribution and availability. This view can be used for monitoring stock levels, analyzing inventory trends over time, and aiding in effective inventory management and logistics planning.' 
     PRIMARY KEY ( 'date_sk' , 'item_sk' , 'warehouse_sk' ) AS SELECT bv_inventory.inv_date_sk AS date_sk, bv_inventory.inv_item_sk AS item_sk, bv_inventory.inv_warehouse_sk AS warehouse_sk, bv_inventory.inv_quantity_on_hand AS quantity_on_hand FROM bv_inventory;
 
 CHOWN admin VIEW iv_inventory LASTMODIFICATIONUSER admin;
 
-ALTER VIEW iv_inventory
- LAYOUT (bv_inventory = [20, 20, 234, 105]);
-
-CREATE OR REPLACE VIEW iv_item FOLDER = '/2 - integration'
+CREATE OR REPLACE VIEW iv_item FOLDER = '/2 - integration' DESCRIPTION = 'The iv_item view provides a comprehensive overview of items within an inventory system, characterized by a unique identifier (item_sk) for each item, allowing for effective tracking and management. It includes various attributes such as item_id, which serves as a secondary unique identifier, and current_price, reflecting the selling price of items. Additional fields such as brand_id and brand help to identify the brand associated with each item, while class_id and class facilitate categorization. The view also captures details about the item''s category through category_id and category, along with manufacturing details indicated by manufact_id and manufact. Furthermore, it describes physical characteristics such as size and color, with units indicating the measurement used for the items. The inclusion of actual field values offers practical examples, enriching the understanding of the inventory''s composition. The iv_item view could be used for managing inventory, tracking product details, and analyzing sales data based on item attributes.' 
     PRIMARY KEY ( 'item_sk' ) AS SELECT bv_item.i_item_sk AS item_sk, bv_item.i_item_id AS item_id, bv_item.i_current_price AS current_price, bv_item.i_brand_id AS brand_id, bv_item.i_brand AS brand, bv_item.i_class_id AS class_id, bv_item.i_class AS class, bv_item.i_category_id AS category_id, bv_item.i_category AS category, bv_item.i_manufact_id AS manufact_id, bv_item.i_manufact AS manufact, bv_item.i_size AS size, bv_item.i_color AS color, bv_item.i_units AS units FROM bv_item;
 
 CHOWN admin VIEW iv_item LASTMODIFICATIONUSER admin;
@@ -1918,7 +1931,7 @@ CHOWN admin VIEW iv_item LASTMODIFICATIONUSER admin;
 ALTER VIEW iv_item
  LAYOUT (bv_item = [20, 20, 200, 105]);
 
-CREATE OR REPLACE VIEW iv_store FOLDER = '/2 - integration'
+CREATE OR REPLACE VIEW iv_store FOLDER = '/2 - integration' DESCRIPTION = 'The iv_store view provides a comprehensive overview of store-related data, including unique identifiers, names, and operational details. It features fields such as store_sk, a unique identifier crucial for tracking stores, and store_name, which reflects the brand identity of the store. Additional attributes include the number of employees, total floor space, operating hours, and managerial details. The view also encompasses location-specific data, including street number, street name, city, county, state, ZIP code, and country, offering a complete picture of each store''s operational footprint. The iv_store view can be utilized for analyzing store performance, managing inventory, and optimizing operations across various locations. It serves as a vital resource for decision-making processes related to store management and performance evaluation.' 
     PRIMARY KEY ( 'store_sk' ) AS SELECT bv_store.s_store_sk AS store_sk, bv_store.s_store_id AS store_id, bv_store.s_store_name AS store_name, bv_store.s_number_employees AS number_employees, bv_store.s_floor_space AS floor_space, bv_store.s_hours AS hours, bv_store.s_manager AS manager, bv_store.s_street_number AS street_number, bv_store.s_street_name AS street_name, bv_store.s_street_type AS street_type, bv_store.s_suite_number AS suite_number, bv_store.s_city AS city, bv_store.s_county AS county, bv_store.s_state AS state, bv_store.s_zip AS zip, bv_store.s_country AS country FROM bv_store;
 
 CHOWN admin VIEW iv_store LASTMODIFICATIONUSER admin;
@@ -1926,7 +1939,7 @@ CHOWN admin VIEW iv_store LASTMODIFICATIONUSER admin;
 ALTER VIEW iv_store
  LAYOUT (bv_store = [20, 20, 200, 105]);
 
-CREATE OR REPLACE VIEW iv_store_sales FOLDER = '/2 - integration'
+CREATE OR REPLACE VIEW iv_store_sales FOLDER = '/2 - integration' DESCRIPTION = 'The iv_store_sales view provides a comprehensive overview of sales transactions, capturing essential details about each sale made in a retail environment. It includes fields that track the date and time of sales, allowing for temporal analysis, and identifies specific items sold, which is crucial for inventory management. The view also links to customer information and addresses, facilitating insights into customer behavior and geographic trends. Each transaction is uniquely identified by a ticket number, and key metrics such as quantity sold, list price, and sales price are included, enabling detailed revenue and performance assessments across different stores. This view can be used for analyzing sales performance over time, understanding customer purchasing behaviors, optimizing inventory management, and evaluating the effectiveness of pricing strategies.' 
     PRIMARY KEY ( 'item_sk' , 'ticket_number' ) AS SELECT bv_store_sales.ss_sold_date_sk AS sold_date_sk, bv_store_sales.ss_sold_time_sk AS sold_time_sk, bv_store_sales.ss_item_sk AS item_sk, bv_store_sales.ss_customer_sk AS customer_sk, bv_store_sales.ss_addr_sk AS addr_sk, bv_store_sales.ss_store_sk AS store_sk, bv_store_sales.ss_ticket_number AS ticket_number, bv_store_sales.ss_quantity AS quantity, bv_store_sales.ss_list_price AS list_price, bv_store_sales.ss_sales_price AS sales_price FROM bv_store_sales;
 
 CHOWN admin VIEW iv_store_sales LASTMODIFICATIONUSER admin;
@@ -1934,7 +1947,7 @@ CHOWN admin VIEW iv_store_sales LASTMODIFICATIONUSER admin;
 ALTER VIEW iv_store_sales
  LAYOUT (bv_store_sales = [20, 20, 289, 485]);
 
-CREATE OR REPLACE VIEW iv_warehouse FOLDER = '/2 - integration'
+CREATE OR REPLACE VIEW iv_warehouse FOLDER = '/2 - integration' DESCRIPTION = 'The iv_warehouse view provides detailed information about various warehouse entries. Each entry is identified by a unique warehouse_sk, which serves as the primary key, ensuring distinct records are maintained. Additional fields include warehouse_id, which contains specific identifiers for each warehouse; warehouse_name, which gives the names of the warehouses; and warehouse_sq_ft, indicating their sizes in square feet. The view also details the location of each warehouse with fields such as street_number, street_name, street_type, suite_number, city, county, state, zip, and country. Furthermore, it includes gmt_offset, which specifies the time zone offset for the warehouse''s location. This view could be used for managing warehouse logistics, tracking warehouse locations, and analyzing warehouse sizes and identifiers for operational efficiency.' 
     PRIMARY KEY ( 'warehouse_sk' ) AS SELECT bv_warehouse.w_warehouse_sk AS warehouse_sk, bv_warehouse.w_warehouse_id AS warehouse_id, bv_warehouse.w_warehouse_name AS warehouse_name, bv_warehouse.w_warehouse_sq_ft AS warehouse_sq_ft, bv_warehouse.w_street_number AS street_number, bv_warehouse.w_street_name AS street_name, bv_warehouse.w_street_type AS street_type, bv_warehouse.w_suite_number AS suite_number, bv_warehouse.w_city AS city, bv_warehouse.w_county AS county, bv_warehouse.w_state AS state, bv_warehouse.w_zip AS zip, bv_warehouse.w_country AS country, bv_warehouse.w_gmt_offset AS gmt_offset FROM bv_warehouse;
 
 CHOWN admin VIEW iv_warehouse LASTMODIFICATIONUSER admin;
@@ -1942,7 +1955,7 @@ CHOWN admin VIEW iv_warehouse LASTMODIFICATIONUSER admin;
 ALTER VIEW iv_warehouse
  LAYOUT (bv_warehouse = [20, 20, 200, 105]);
 
-CREATE OR REPLACE VIEW iv_web_sales FOLDER = '/2 - integration'
+CREATE OR REPLACE VIEW iv_web_sales FOLDER = '/2 - integration' DESCRIPTION = 'The iv_web_sales view captures detailed information about web-based sales transactions. It includes various fields such as the unique identifiers for the dates and times when sales occurred, along with identifiers for items sold, customers billed, shipping addresses, and payment methods. This comprehensive view also tracks details regarding the web pages and websites involved in the sales, shipping modes, and warehouse identifiers, thereby facilitating in-depth analysis of sales trends, customer behavior, and logistics management. The presence of both list and sales prices allows for effective pricing strategy assessments and revenue analysis. This view can be utilized for analyzing sales trends over time, understanding customer demographics, and evaluating the performance of online sales channels, logistics management, and pricing strategies.' 
     PRIMARY KEY ( 'item_sk' , 'order_number' ) AS SELECT bv_web_sales.ws_sold_date_sk AS sold_date_sk, bv_web_sales.ws_sold_time_sk AS sold_time_sk, bv_web_sales.ws_ship_date_sk AS ship_date_sk, bv_web_sales.ws_item_sk AS item_sk, bv_web_sales.ws_bill_customer_sk AS bill_customer_sk, bv_web_sales.ws_bill_addr_sk AS bill_addr_sk, bv_web_sales.ws_ship_customer_sk AS ship_customer_sk, bv_web_sales.ws_ship_addr_sk AS ship_addr_sk, bv_web_sales.ws_web_page_sk AS web_page_sk, bv_web_sales.ws_web_site_sk AS web_site_sk, bv_web_sales.ws_ship_mode_sk AS ship_mode_sk, bv_web_sales.ws_warehouse_sk AS warehouse_sk, bv_web_sales.ws_order_number AS order_number, bv_web_sales.ws_quantity AS quantity, bv_web_sales.ws_list_price AS list_price, bv_web_sales.ws_sales_price AS sales_price FROM bv_web_sales;
 
 CHOWN admin VIEW iv_web_sales LASTMODIFICATIONUSER admin;
@@ -1950,15 +1963,18 @@ CHOWN admin VIEW iv_web_sales LASTMODIFICATIONUSER admin;
 ALTER VIEW iv_web_sales
  LAYOUT (bv_web_sales = [20, 20, 306, 474]);
 
-CREATE OR REPLACE VIEW holiday_web_sales_by_year FOLDER = '/4 - report views'
-    PRIMARY KEY ( 'year' ) AS SELECT bv_date_dim.d_year AS year, sum(iv_web_sales.sales_price) AS total_sales FROM iv_web_sales AS iv_web_sales INNER JOIN bv_date_dim AS bv_date_dim ON iv_web_sales.sold_date_sk = bv_date_dim.d_date_sk  WHERE bv_date_dim.d_holiday = 'Y' GROUP BY bv_date_dim.d_year;
+CREATE OR REPLACE VIEW holiday_web_sales_by_year FOLDER = '/4 - report views' DESCRIPTION = 'The holiday_web_sales_by_year view provides a structured representation of annual online sales data. It includes two key fields: the year, which indicates the specific calendar year, and total_sales, which reflects the overall sales figures for that year. This view enables businesses to track their sales performance over different years, facilitating historical comparisons and annual reporting. This view can be used for analyzing trends in annual sales, evaluating business performance over time, and making informed decisions based on historical sales data.' 
+    PRIMARY KEY ( 'year' ) (
+    total_sales (description = 'Represents the cumulative sales figures for the specified year, providing insights into business performance over time.')
+ )
+ AS SELECT bv_date_dim.d_year AS year, sum(iv_web_sales.sales_price) AS total_sales FROM iv_web_sales AS iv_web_sales INNER JOIN bv_date_dim AS bv_date_dim ON iv_web_sales.sold_date_sk = bv_date_dim.d_date_sk  WHERE bv_date_dim.d_holiday = 'Y' GROUP BY bv_date_dim.d_year;
 
 ALTER VIEW holiday_web_sales_by_year
  LAYOUT (iv_web_sales = [90, 230, 200, 225], bv_date_dim = [510, 60, 200, 225]);
 
 CHOWN admin VIEW holiday_web_sales_by_year LASTMODIFICATIONUSER admin;
 
-CREATE OR REPLACE VIEW iv_customer_j_address FOLDER = '/2 - integration'
+CREATE OR REPLACE VIEW iv_customer_j_address FOLDER = '/2 - integration' DESCRIPTION = 'The iv_customer_j_address view provides a comprehensive representation of customer address information, capturing key details necessary for effective communication and service delivery. Each record is uniquely identified by the customer_sk, which serves as a vital reference for distinguishing individual customers within the database. The view includes fields such as customer_id, first_name, and last_name, enabling personalized interactions with customers. Important demographic information is also included, such as birth_day, birth_month, birth_year, and birth_country, which can assist in targeted marketing efforts based on age and geographic data. Additionally, the view stores essential address details, including street_number, street_name, city, county, state, zip, and country, ensuring accurate location information for all customers. The inclusion of flags like preferred_cust_flag indicates customer preferences, which can inform marketing strategies and customer relationship management initiatives. The iv_customer_j_address view can be utilized for customer relationship management (CRM) purposes, enabling businesses to personalize marketing strategies, improve customer service, and accurately target customers based on demographic and geographic information.' 
     PRIMARY KEY ( 'customer_sk' ) AS SELECT iv_customer.customer_sk AS customer_sk, iv_customer.customer_id AS customer_id, iv_customer.current_addr_sk AS current_addr_sk, iv_customer.first_name AS first_name, iv_customer.last_name AS last_name, iv_customer.preferred_cust_flag AS preferred_cust_flag, iv_customer.birth_day AS birth_day, iv_customer.birth_month AS birth_month, iv_customer.birth_year AS birth_year, iv_customer.birth_country AS birth_country, iv_customer.login AS login, iv_customer.email_address AS email_address, iv_customer_address.address_sk AS address_sk, iv_customer_address.address_id AS address_id, iv_customer_address.street_number AS street_number, iv_customer_address.street_name AS street_name, iv_customer_address.street_type AS street_type, iv_customer_address.city AS city, iv_customer_address.county AS county, iv_customer_address.state AS state, iv_customer_address.zip AS zip, iv_customer_address.country AS country FROM iv_customer AS iv_customer INNER JOIN iv_customer_address AS iv_customer_address ON iv_customer.current_addr_sk = iv_customer_address.address_sk ;
 
 ALTER VIEW iv_customer_j_address
@@ -1966,7 +1982,7 @@ ALTER VIEW iv_customer_j_address
 
 CHOWN admin VIEW iv_customer_j_address LASTMODIFICATIONUSER admin;
 
-CREATE OR REPLACE VIEW iv_inventory_2001_item FOLDER = '/2 - integration'
+CREATE OR REPLACE VIEW iv_inventory_2001_item FOLDER = '/2 - integration' DESCRIPTION = 'The iv_inventory_2001_item view provides a comprehensive overview of inventory data from the year 2001. It includes various fields related to inventory management, such as the date associated with inventory records, the specific warehouse where items are stored, and the quantity of items available in stock. Each item is uniquely identified, allowing for efficient tracking and management. The view also encompasses important details such as item identifiers, current selling prices, brand information, classification codes, and descriptions of categories, sizes, and colors. This structured data can help businesses understand their stock levels, optimize warehouse operations, and enhance inventory control processes.' 
     PRIMARY KEY ( 'date_sk' , 'warehouse_sk' , 'item_sk' ) AS SELECT iv_inventory.date_sk AS date_sk, iv_inventory.warehouse_sk AS warehouse_sk, iv_inventory.quantity_on_hand AS quantity_on_hand, iv_item.item_sk AS item_sk, iv_item.item_id AS item_id, iv_item.current_price AS current_price, iv_item.brand_id AS brand_id, iv_item.brand AS brand, iv_item.class_id AS class_id, iv_item.class AS class, iv_item.category_id AS category_id, iv_item.category AS category, iv_item.manufact_id AS manufact_id, iv_item.manufact AS manufact, iv_item.size AS size, iv_item.color AS color, iv_item.units AS units FROM (iv_inventory AS iv_inventory INNER JOIN bv_date_dim AS bv_date_dim ON iv_inventory.date_sk = bv_date_dim.d_date_sk ) INNER JOIN iv_item AS iv_item ON iv_inventory.item_sk = iv_item.item_sk  WHERE bv_date_dim.d_year = 2001;
 
 ALTER VIEW iv_inventory_2001_item
@@ -1974,25 +1990,33 @@ ALTER VIEW iv_inventory_2001_item
 
 CHOWN admin VIEW iv_inventory_2001_item LASTMODIFICATIONUSER admin;
 
-CREATE OR REPLACE VIEW same_store_sales_by_year FOLDER = '/4 - report views'
-    PRIMARY KEY ( 'year' , 'store_sk' ) AS SELECT bv_date_dim.d_year AS year, iv_store.store_sk AS store_sk, iv_store.store_name AS store_name, iv_store.city AS city, sum(iv_store_sales.sales_price) AS total_sales FROM (iv_store_sales AS iv_store_sales INNER JOIN bv_date_dim AS bv_date_dim ON iv_store_sales.sold_date_sk = bv_date_dim.d_date_sk ) INNER JOIN iv_store AS iv_store ON iv_store_sales.store_sk = iv_store.store_sk  GROUP BY bv_date_dim.d_year, iv_store.store_sk, iv_store.store_name, iv_store.city;
+CREATE OR REPLACE VIEW same_store_sales_by_year FOLDER = '/4 - report views' DESCRIPTION = 'The same_store_sales_by_year view presents data on the annual sales performance of specific stores. It includes fields such as the year, a unique store identifier, the name of the store, the city where the store is located, and total sales figures. This information is structured to facilitate comparisons of sales performance over the years, allowing for insights into trends and growth in specific locations. This view could be used for analyzing sales trends over time, assessing the performance of different stores, and making data-driven decisions related to marketing and inventory management.' 
+    PRIMARY KEY ( 'year' , 'store_sk' ) (
+    total_sales (description = 'Represents the total sales figures for each store, providing insights into financial performance and trends over time.')
+ )
+ AS SELECT bv_date_dim.d_year AS year, iv_store.store_sk AS store_sk, iv_store.store_name AS store_name, iv_store.city AS city, sum(iv_store_sales.sales_price) AS total_sales FROM (iv_store_sales AS iv_store_sales INNER JOIN bv_date_dim AS bv_date_dim ON iv_store_sales.sold_date_sk = bv_date_dim.d_date_sk ) INNER JOIN iv_store AS iv_store ON iv_store_sales.store_sk = iv_store.store_sk  GROUP BY bv_date_dim.d_year, iv_store.store_sk, iv_store.store_name, iv_store.city;
 
 ALTER VIEW same_store_sales_by_year
  LAYOUT (iv_store_sales = [20, 20, 200, 225], bv_date_dim = [20, 275, 200, 225], iv_store = [20, 530, 200, 225]);
 
 CHOWN admin VIEW same_store_sales_by_year LASTMODIFICATIONUSER admin;
 
-CREATE OR REPLACE VIEW store_by_total_sales FOLDER = '/4 - report views'
-    PRIMARY KEY ( 'store_sk' ) AS SELECT iv_store.store_sk AS store_sk, sum(iv_store_sales.sales_price) AS total_sales FROM iv_store_sales AS iv_store_sales INNER JOIN iv_store AS iv_store ON iv_store_sales.store_sk = iv_store.store_sk  GROUP BY iv_store.store_sk ORDER BY total_sales DESC;
+CREATE OR REPLACE VIEW store_by_total_sales FOLDER = '/4 - report views' DESCRIPTION = 'The store_by_total_sales view provides an overview of sales data across different stores, represented by a unique store identifier (store_sk) and the corresponding total sales amount (total_sales). This view is designed to facilitate the analysis of store performance based on total sales figures, making it an essential tool for evaluating the financial outcomes of individual stores. This view can be utilized for assessing the sales performance of each store, identifying trends in sales data, and making informed business decisions regarding inventory, marketing strategies, and operational improvements.' 
+    PRIMARY KEY ( 'store_sk' ) (
+    total_sales (description = 'Indicates the overall sales amount for each store, providing essential insight into the financial performance of the stores. This metric is vital for evaluating business outcomes and identifying sales trends, assisting decision-makers in strategic planning.')
+ )
+ AS SELECT iv_store.store_sk AS store_sk, sum(iv_store_sales.sales_price) AS total_sales FROM iv_store_sales AS iv_store_sales INNER JOIN iv_store AS iv_store ON iv_store_sales.store_sk = iv_store.store_sk  GROUP BY iv_store.store_sk ORDER BY total_sales DESC;
 
 ALTER VIEW store_by_total_sales
  LAYOUT (iv_store_sales = [110, 120, 200, 225], iv_store = [500, 130, 200, 225]);
 
 CHOWN admin VIEW store_by_total_sales LASTMODIFICATIONUSER admin;
 
-CREATE OR REPLACE VIEW total_sales_by_customer_and_store
-    FOLDER = '/4 - report views'
-    PRIMARY KEY('customer_sk', 'store_sk') AS
+CREATE OR REPLACE VIEW total_sales_by_customer_and_store FOLDER = '/4 - report views' DESCRIPTION = 'The total_sales_by_customer_and_store view provides a detailed overview of sales transactions categorized by individual customers and the stores where these transactions took place. It includes essential fields such as a unique customer identifier, their first and last names for personalized engagement, and detailed address information, including street number, street name, city, county, state, ZIP code, and country. Additionally, the view captures the store identifier where each sale occurred and the total price of the sale. This structured data allows for comprehensive analysis and understanding of sales patterns across different customers and stores. This view could be used for analyzing customer purchasing behavior across various store locations, assessing store performance, and tailoring marketing strategies based on customer demographics and sales data.' 
+    PRIMARY KEY ( 'customer_sk' , 'store_sk' ) (
+    total_price (description = 'Represents the total price of the sale, providing insight into transaction values.')
+ )
+ AS 
     SELECT iv_customer_j_address.customer_sk AS customer_sk,
            iv_customer_j_address.first_name AS first_name,
            iv_customer_j_address.last_name AS last_name,
@@ -2027,6 +2051,54 @@ ALTER VIEW total_sales_by_customer_and_store
  LAYOUT (iv_customer_j_address = [220, 130, 200, 225], iv_store_sales = [540, 130, 200, 225]);
 
 CHOWN admin VIEW total_sales_by_customer_and_store LASTMODIFICATIONUSER admin;
+
+# #######################################
+# METRICS of denodo_hol
+# #######################################
+
+CREATE OR REPLACE METRIC VIEW mv_store_sales_analysis
+    FOLDER = '/4 - report views'
+    DESCRIPTION = 'Metric view summarizing store sales performance across dimensions.' 
+     (
+    total_sales_amount (description = 'Represents the total sales revenue generated, a critical metric for assessing overall financial performance.'),
+    total_units_sold (description = 'Indicates the total number of units sold, essential for inventory planning and operational efficiency.'),
+    average_sales_price (description = 'Calculates the average price at which products were sold, providing insights into pricing strategy and market positioning.'),
+    total_net_profit (description = 'Sum of net profits from sales, highlighting profitability and financial health of the store.')
+ )
+SOURCES (
+        item AS bv_item,
+        date_dim AS bv_date_dim,
+        store AS bv_store,
+        sales AS bv_store_sales    
+    )
+    ASSOCIATIONS (
+        sales store bv_store_bv_store_sales RIGHT,
+        sales date_dim bv_date_dim_bv_store_sales RIGHT,
+        sales item bv_item_bv_store_sales RIGHT    
+    )
+    DIMENSIONS (
+        time_dim(
+            sales_year AS date_dim.d_year,
+            quarter_name AS date_dim.d_quarter_name
+        ),
+        location_dim(
+            store_name AS store.s_store_name,
+            city AS store.s_city,
+            state AS store.s_state
+        ),
+        product_category AS item.i_category    
+    )
+    METRICS (
+        total_sales_amount AS sum(sales.ss_sales_price),
+        total_units_sold AS sum(sales.ss_quantity),
+        average_sales_price AS avg(sales.ss_sales_price),
+        total_net_profit AS sum(sales.ss_net_profit)    
+    )
+;
+
+ALTER VIEW mv_store_sales_analysis
+ LAYOUT (bv_store_sales = [262, 273, 40, 80], bv_store = [879, 206, 40, 80], bv_date_dim = [593, 126, 40, 80], bv_item = [750, 408, 40, 80]);
+
 
 # #######################################
 # ASSOCIATIONS of denodo_hol
@@ -4428,6 +4500,53 @@ ALTER VIEW total_sales_by_customer_and_store
  LAYOUT (iv_customer_j_address = [220, 130, 200, 225], iv_store_sales = [540, 130, 200, 225]);
 
 CHOWN admin VIEW total_sales_by_customer_and_store LASTMODIFICATIONUSER admin;
+
+# #######################################
+# METRICS of denodo_hol_dg_local
+# #######################################
+
+CREATE OR REPLACE METRIC VIEW mv_store_sales_analysis
+    FOLDER = '/4 - report views'
+    DESCRIPTION = 'Metric view summarizing store sales performance across dimensions.' 
+     (
+    total_sales_amount (description = 'Represents the total sales revenue generated, a critical metric for assessing overall financial performance.'),
+    total_units_sold (description = 'Indicates the total number of units sold, essential for inventory planning and operational efficiency.'),
+    average_sales_price (description = 'Calculates the average price at which products were sold, providing insights into pricing strategy and market positioning.'),
+    total_net_profit (description = 'Sum of net profits from sales, highlighting profitability and financial health of the store.')
+ )
+SOURCES (
+        item AS bv_item,
+        date_dim AS bv_date_dim,
+        store AS bv_store,
+        sales AS bv_store_sales    
+    )
+    ASSOCIATIONS (
+        sales store bv_store_bv_store_sales RIGHT,
+        sales date_dim bv_date_dim_bv_store_sales RIGHT,
+        sales item bv_item_bv_store_sales RIGHT    
+    )
+    DIMENSIONS (
+        time_dim(
+            sales_year AS date_dim.d_year,
+            quarter_name AS date_dim.d_quarter_name
+        ),
+        location_dim(
+            store_name AS store.s_store_name,
+            city AS store.s_city,
+            state AS store.s_state
+        ),
+        product_category AS item.i_category    
+    )
+    METRICS (
+        total_sales_amount AS sum(sales.ss_sales_price),
+        total_units_sold AS sum(sales.ss_quantity),
+        average_sales_price AS avg(sales.ss_sales_price),
+        total_net_profit AS sum(sales.ss_net_profit)    
+    )
+;
+
+ALTER VIEW mv_store_sales_analysis
+ LAYOUT (bv_store_sales = [262, 273, 40, 80], bv_store = [879, 206, 40, 80], bv_date_dim = [593, 126, 40, 80], bv_item = [750, 408, 40, 80]);
 
 # #######################################
 # ASSOCIATIONS of denodo_hol_dg_local

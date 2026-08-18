@@ -41,7 +41,7 @@ CREATE OR REPLACE FOLDER '/1 - Connectivity/2 - base views' ;
 
 CREATE OR REPLACE FOLDER '/2 - Integration' ;
 
-CREATE OR REPLACE FOLDER '/3 - Business Entities' ;
+CREATE OR REPLACE FOLDER '/3 - Business Entities and Metrics' ;
 
 CREATE OR REPLACE FOLDER '/4 - Report Views' ;
 
