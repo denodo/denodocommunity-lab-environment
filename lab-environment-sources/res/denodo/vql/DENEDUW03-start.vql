@@ -2408,7 +2408,7 @@ CREATE OR REPLACE GLOBAL_SECURITY_POLICY block_pii
     )
     RESTRICTION (
         FILTER = ''
-        MASKING ANY (pii) WITH (REDACT) (numbers WITH DEFAULT, datetimes WITH DEFAULT, texts WITH REDACT) 
+        MASKING ANY (pii) WITH (REDACT) (numbers WITH DEFAULT, datetimes WITH DEFAULT, texts WITH HIDE) 
     );
 
 CHOWN admin GLOBAL_SECURITY_POLICY block_pii LASTMODIFICATIONUSER admin;
