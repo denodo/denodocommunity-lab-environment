@@ -57,11 +57,11 @@ services:
       #- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
     healthcheck:
       test: ["CMD", "/opt/denodo/bin/ping.sh", "-r", "-t", "5000", "//localhost:9999/admin"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
-      retries: 3
+      retries: 6
       start_period: 480s
-      start_interval: 480s
+      start_interval: 30s
     command: ["--vqlserver", "--datacatalog"]
     tty: true
     stdin_open: true
@@ -85,10 +85,11 @@ services:
       - DENODO_MERGE_CONF=true
     healthcheck:
       test: curl --fail http://localhost:9090/denodo-design-studio/ || exit 1
-      interval: 60s
-      retries: 5
-      start_period: 20s
+      interval: 10s
       timeout: 10s
+      retries: 6
+      start_period: 120s      
+      start_interval: 30s
     command: --designstudio 
 
   # Denodo Scheduler server
@@ -123,10 +124,11 @@ services:
       ##- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
     healthcheck:
       test: ["CMD-SHELL", "/opt/denodo/tools/scheduler/ping.sh -t 3000 -h localhost -p 8000 || exit 1"]
-      interval: 6s
-      timeout: 700s
-      retries: 35
-      start_period: 60s
+      interval: 10s
+      timeout: 10s
+      retries: 6
+      start_period: 240s      
+      start_interval: 30s
     command: --schserver --schindex --schadmin
     tty: true
     stdin_open: true
@@ -153,10 +155,11 @@ services:
       #- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
     healthcheck:
       test: ["CMD-SHELL", "/opt/denodo/bin/ping.sh -t 3000 //localhost:19999 && curl http://localhost:10090/pingSolutionManager || exit 1"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
-      start_period: 360s
+      interval: 10s
+      timeout: 10s
+      retries: 6
+      start_period: 360s      
+      start_interval: 30s
     command: ["--lmserver", "--smserver", "--smadmin"]
 
   denodo-sm-env:
@@ -206,11 +209,11 @@ services:
       #- DENODO_KEYSTORE_KEY_ALIAS=${DENODO_KEYSTORE_KEY_ALIAS}
     healthcheck:
       test: ["CMD", "/opt/denodo/bin/ping.sh", "-r", "-t", "5000", "//localhost:9999/admin"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
-      retries: 3
-      start_period: 360s
-      start_interval: 360s
+      retries: 6
+      start_period: 480s
+      start_interval: 30s
     depends_on:
       denodo-sm:
         condition: service_healthy

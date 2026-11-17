@@ -103,16 +103,37 @@ HTTPSERVER_EXTERNAL_PORT=1080
 
 ### Configure access to Denodo containers
 
-Denodo Containers are available in Harbor (https://harbor.open.denodo.com). You need to configure the access to this registry from your docker installation to be able to download and start the Denodo containers. 
+#### Configure the Denodo License
+
+For starting the Denodo containers, the first thing to consider is that you need a valid Denodo license. If you don't have one, you can download a Denodo Developer Tier license. Just go to the Denodo Community Site (https://community.denodo.com/denodo-platform-developer-tier/) and download your license. 
+
+**Note**: If you don't have a Denodo account, just register on the Community Site to obtain one.
+
+Furthermore, in the `.env` file of the project you have to configure the path to the Denodo license you have downloaded (`DENODO_SA_LIC` parameter) and the specific Denodo container you want to use for starting the Denodo Platform (`DENODO_VERSION` parameter) and the Denodo AI SDK (`DENODO_AI_SDK_VERSION` parameter):
+
+```properties
+##########
+# Denodo #
+##########
+# For Denodo Customers:     DENODO_VERSION=harbor.open.denodo.com/denodo-9/images/denodo-platform:latest
+# For Denodo Express Users: DENODO_VERSION=harbor.open.denodo.com/denodo-express/denodo-platform:latest
+DENODO_VERSION=harbor.open.denodo.com/denodo-express/denodo-platform:latest
+# For Denodo Customers:     DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-connects-9/images/ai-sdk:latest
+# For Denodo Express Users: DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-express/ai-sdk:latest
+DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-express/ai-sdk:latest
+# Full Path to your Denodo Standalone license file
+DENODO_SA_LIC=../res/denodo/license/
+```
+
+#### Denodo Container Repository (Harbor)
+
+Denodo Containers are available in Harbor (https://harbor.open.denodo.com). You need to configure the access to this registry from your Docker installation to be able to download and start the Denodo containers. 
 
 You can find the complete user guide at [Denodo Container Registry Quick Start Guide](https://community.denodo.com/docs/html/document/latest/en/Denodo%20Container%20Registry%20Quick%20Start%20Guide) but check the following steps of this Readme for a quick set up.
 
 #### Sign In
+
 With your Denodo User Account you can sign in https://harbor.open.denodo.com to navigate the repositories available to you.
-
-Use the **Login via OIDC Provider** button that appears on the Harbor login page.
-
-![Denodo Harbor repository login](./res/img/harbor_login.png)
 
 #### Create a CLI Secret
 
@@ -139,25 +160,7 @@ $ docker login harbor.open.denodo.com
 Username: <denodo_account_username>
 Password: <registry_profile_secret>
 ```
-#### Configure the Denodo License
 
-For starting the Denodo containers, you need a valid Denodo license. If you don't have one, you can download a Denodo Express licese which is free forever. Just go to the Denodo Community Site (https://community.denodo.com/express/) and download your license. 
-
-Furthermore, in the `.env` file you have to configure the path to the Denodo license you have downloaded (`DENODO_SA_LIC` parameter) and the specific Denodo container you want to use for starting the Denodo Platform (`DENODO_VERSION` parameter) and the Denodo AI SDK (`DENODO_AI_SDK_VERSION` parameter):
-
-```properties
-##########
-# Denodo #
-##########
-# For Denodo Customers:     DENODO_VERSION=harbor.open.denodo.com/denodo-9/images/denodo-platform:latest
-# For Denodo Express Users: DENODO_VERSION=harbor.open.denodo.com/denodo-express/denodo-platform:latest
-DENODO_VERSION=harbor.open.denodo.com/denodo-express/denodo-platform:latest
-# For Denodo Customers:     DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-connects-9/images/ai-sdk:latest
-# For Denodo Express Users: DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-express/ai-sdk:latest
-DENODO_AI_SDK_VERSION=harbor.open.denodo.com/denodo-express/ai-sdk:latest
-# Full Path to your Denodo Standalone license file
-DENODO_SA_LIC=../res/denodo/license/
-```
 
 ## How to start the Denodo Community Lab Environment containers
 
@@ -193,7 +196,7 @@ In the table below you can find the list of available profiles that you can use 
 | Profile name | List of Containers |
 | ----------- | ----------- | 
 | ds | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, PGvector, Tomcat, Apache HTTP, MongoDB, and LDAP. And this **Application**: GraphQL client. |
-| ds-minimal | Profile for launching these **Data Sources**: MariaDB, PostgreSQL, and Apache HTTP. |
+| ds-minimal | Profile for launching only these **Data Sources**: MariaDB, PostgreSQL, and Apache HTTP. |
 | denodo | Profile for launching these **Denodo servers and tools**: Virtual DataPort server, Design Studio, Data Marketplace, and a PostgreSQL* database to be used as external metadata and cache database. |
 | denodo-sched | Profile for launching **Denodo Scheduler**: it includes a Denodo Scheduler server, a Denodo Index server, and the Scheduler Web Administration Tool. |
 | ai | Profile for launching a **Denodo AI-ready** environment: Denodo AI SDK, Virtual DataPort server, Design Studio, Data Marketplace, and a PostgreSQL* database to be used as external metadata and cache database. |
@@ -212,7 +215,7 @@ In the table below you can find the list of available profiles that you can use 
 
 ## Running containers of different profiles at the same time
 
-Sometimes you will need to start services from different profiles. For example, you may want to launch teh Denodo Platform and the data sources, in that case you can run the following command:
+Sometimes you will need to start services from different profiles. For example, you may want to launch the Denodo Platform + the sample data sources, in that case you can run the following command:
 
 ```bash
 $ docker compose --profile ds  --profile denodo up 

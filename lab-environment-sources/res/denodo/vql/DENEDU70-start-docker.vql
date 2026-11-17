@@ -209,7 +209,7 @@ CREATE OR REPLACE DATASOURCE JSON ds_sales
 CREATE OR REPLACE DATASOURCE MONGODB ds_nosql
     FOLDER = '/1 - connectivity/1 - data sources'
     CONNECTION (
-        HOST = 'localhost'
+        HOST = 'mongo'
         PORT = 27017
     )
     AUTHENTICATION (

@@ -8,8 +8,8 @@ Current supported version:
 
 | Version  | Supported          | Description        |
 | -------- | ------------------ | ------------------ |
-| (master) | :white_check_mark: | Added support for Denodo Platform 9.5 and Denodo AI SDK v1.2 |
-| v3.2.0   | :white_check_mark: | Added support for Denodo Platform 9.4 and Denodo AI SDK v1.0 |
+| v3.3.1   | :white_check_mark: | Added support for Denodo Platform 9.5 and Denodo AI SDK v1.2 |
+| v3.2.0   | :x:                | Added support for Denodo Platform 9.4 and Denodo AI SDK v1.0 |
 | v3.1.0   | :x:                | Added support for Denodo Platform 9.3 and Denodo AI SDK v0.10 |
 | v3.0.1   | :x:                | Added support for Denodo Platform 9.2.1 and Denodo AI SDK v0.8.1 |
 | v3.0.0   | :x:                | Added support for Denodo Platform 9.1.0 and Denodo AI SDK v0.3 |
